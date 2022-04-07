@@ -201,6 +201,11 @@ function CheckRegister() {
 }
 
 
+function SaveUpdate() {
+  
+}
+
+
 function CheckMember() {
   NewDate();
   dbBootMember.where('EmpID','==',parseFloat(sessionStorage.getItem("EmpID")))
