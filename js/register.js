@@ -34,7 +34,7 @@ $(document).ready(function () {
   sessionStorage.setItem("EmpTable", 0);
   sessionStorage.setItem("EmpSize", '');
 
-  
+  /*
   var str = "";
   var sLineID = "Ua6b6bf745bd9bfd01a180de1a05c23b3";
   var sLineName = "Website";
@@ -47,15 +47,15 @@ $(document).ready(function () {
   str += '<div class="NameLine">'+ sessionStorage.getItem("LineName")+'</div>';
   $("#MyProfile").html(str);  
   Connect_DB();
-  
+  */
 
-  //main()
+  main()
 });
 
 
 
 async function main() {
-  await liff.init({ liffId: "1656865573-oOG66mOA" });
+  await liff.init({ liffId: "1656865573-90d55LPe" });
   document.getElementById("isLoggedIn").append(liff.isLoggedIn());
   if(liff.isLoggedIn()) {
     getUserProfile();
