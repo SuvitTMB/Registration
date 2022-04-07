@@ -6,6 +6,7 @@
 .form_wrapper {
   background: #fff;
   max-width: 340px;
+  width:95%;
   /*max-width: 100%;*/
   box-sizing: border-box;
   padding: 25px;
