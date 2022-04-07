@@ -30,7 +30,7 @@ var FinalRoundSplit = parts[1]; // 004  //String part1 เก็บค่าpart
 
 
 $(document).ready(function () {
-  sessionStorage.clear();
+  //sessionStorage.clear();
   sessionStorage.setItem("EmpTable", 0);
   sessionStorage.setItem("EmpSize", '');
 
