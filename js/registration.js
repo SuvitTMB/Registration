@@ -39,7 +39,7 @@ $(document).ready(function () {
   sessionStorage.setItem("PreRegister", 1);
   sessionStorage.setItem("EmpMember", 0);
   
-
+/*
   var str = "";
   var sLineID = "Ua6b6bf745bd9bfd01a180de1a05c23b3";
   var sLineName = "Website";
@@ -54,15 +54,15 @@ $(document).ready(function () {
   Connect_DB();
   //CheckUserRegister();
   //CheckBootCampOpen();
-  
+*/  
 
-  //main()
+  main()
 });
 
 
 
 async function main() {
-  await liff.init({ liffId: "1656865573-d86OODkJ" });
+  await liff.init({ liffId: "1656865573-pzdDD5zQ" });
   document.getElementById("isLoggedIn").append(liff.isLoggedIn());
   if(liff.isLoggedIn()) {
     getUserProfile();
