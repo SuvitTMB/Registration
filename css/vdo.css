@@ -5,9 +5,9 @@
 
 .form_wrapper {
   background: #fff;
-  max-width: 340px;
-  width:100%;
-  /*max-width: 100%;*/ 
+  max-width: 360px;
+  width:95%;
+  /*max-width: 100%;*/
   box-sizing: border-box;
   padding: 25px;
   margin: 8% auto 0;
@@ -31,7 +31,7 @@
 .form_wrapper h2 {
   font-size: 1.5em;
   line-height: 1.5em;
-  margin: 0; 
+  margin: 0;
 }
 .form_wrapper .title_container {
   text-align: center;
@@ -69,7 +69,7 @@
   left: 0;
   top: 0;
   color: #333;
-  height: 100%; 
+  height: 100%;
   border-right: 1px solid #cccccc;
   text-align: center;
   width: 30px;

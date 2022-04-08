@@ -57,7 +57,7 @@
     padding: 5px 25px;
     background-color: #0056ff;
     color: #ffffff;
-    font-size: 11px
+    font-size: 11px;
     cursor: pointer;
     min-width:140px !important;
     letter-spacing: 2px;
@@ -176,7 +176,7 @@ input[type="radio"]:checked + label:after {
     background-color: #f68b1f;
     border-color: #f68b1f;    
     color: #ffffff;
-    font-size: 11px
+    font-size: 11px;
     cursor: pointer;
     min-width:120px;
     letter-spacing: 2px;
@@ -245,7 +245,7 @@ input[type="radio"]:checked + label:after {
     background-color: #0056ff;
     border-color: #fff;    
     color: #ffffff;
-    font-size: 11px
+    font-size: 11px;
     cursor: pointer;
     min-width:80%;
     letter-spacing: 2px;
@@ -279,7 +279,7 @@ input[type="radio"]:checked + label:after {
     background-color: #f68b1f;
     border-color: #fff;    
     color: #ffffff;
-    font-size: 11px
+    font-size: 11px;
     cursor: pointer;
     min-width:80%;
 }
@@ -347,7 +347,7 @@ input[type="radio"]:checked + label:after {
     padding: 5px 25px;
     background-color: #002d63;
     color: #ffffff;
-    font-size: 11px
+    font-size: 11px;
     cursor: pointer;
     min-width:140px !important;
     letter-spacing: 2px;
@@ -386,7 +386,7 @@ input[type="radio"]:checked + label:after {
     padding: 5px 25px;
     background-color: #ff0000;
     color: #ffffff;
-    font-size: 11px
+    font-size: 11px;
     cursor: pointer;
     min-width:140px !important;
     letter-spacing: 2px;

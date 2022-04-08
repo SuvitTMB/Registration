@@ -427,10 +427,10 @@ body {
   /*border-radius: 50%;*/
 }
 .profile-txt {
-  padding:12px;color:#0056ff; font-weight: 600; font-size: 14px;
+  padding:12px;color:#0056ff; font-weight: 600; font-size:13px;
 }
 .profile-txt1 {
-  padding:8px; font-weight: 600; color:#002d63; font-size:13px;
+  padding:8px; font-weight: 600; color:#002d63; font-size:12px;
 }
 .iconlink {
   padding:10px;color:#fff;float: left;width:24%; cursor: pointer;
