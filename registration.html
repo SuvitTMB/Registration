@@ -275,8 +275,8 @@ var a = ImageTools.resize(this.files[i], {
 console.log(a);
 */
 
-      var uploadTask = firebase.storage().ref('test/'+ImgName).put(files[i]);
-      var storage = firebase.storage().ref('test/'+ImgName);
+      var uploadTask = firebase.storage().ref('Registration/'+ImgName).put(files[i]);
+      var storage = firebase.storage().ref('Registration/'+ImgName);
       var upload = storage.put(files[i]);
       upload.on(
         "state_changed",
