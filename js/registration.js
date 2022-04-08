@@ -156,7 +156,7 @@ function CheckBootCampOpen() {
     if(xRound!="") {
       var str1 = "";
       str1 += '<div class="title-head">ttb Registration System</div>';
-      str1 += '<div style="color:#ff0000; font-weight: 600;font-size: 14px;">"ระบบลงทะเบียนล่วงหน้า"</div>';
+      str1 += '<div style="color:#ff0000; font-weight: 600;font-size: 12px;">"ระบบลงทะเบียนล่วงหน้า"</div>';
       if(simg_pre!=null && simg_pre!="") {
         str1 += '<div style="margin-top:-1px;"><img src ="'+simg_pre+'" style="width:100%; max-width:240px;"></div>';
       } else {
@@ -387,15 +387,15 @@ function WaitingPage() {
     });
     //alert(xEmpType);
     str +='<div class="title_container"><div class="title-head">ttb Registration System</div></div>';
-    str +='<div style="color:#ff0000; font-weight: 600;font-size: 14px;margin-top:-15px;">ยืนยันการลงทะเบียนล่วงหน้า</div>';
+    str +='<div style="color:#ff0000; font-weight: 600;font-size: 12px;margin-top:-15px;">ยืนยันการลงทะเบียนล่วงหน้า</div>';
     str +='<div class="profile-txt" style="font-size:12px;margin-top:-10px;">'+ sessionStorage.getItem("CampName") +'</div>';
     str +='<div><img src="'+ sessionStorage.getItem("LinePicture") +'" class="profile-member"></div>';
     str +='<div class="profile-txt">'+ sessionStorage.getItem("LineName") +'</div>';
     str +='<div><div style="padding-top:15px;color:#f68b1f;font-weight: 600;">คุณ'+sessionStorage.getItem("EmpName")+'</div>';
     //if(xEmpType!="") {
-    //  str +='<div class="profile-txt1" style="line-height: 1.2;color:#0056ff;">ยินดีต้อนรับผู้เข้าอบรมสู่ BBD Bootcamp<br>หลักสูตร BBD Specialist Bootcamp<br><font color="#0056ff">รุ่น '+xEmpType+'</font></div>';
+    //  str +='<div class="profile-txt1" style="line-height: 1.3;color:#0056ff;">ยินดีต้อนรับผู้เข้าอบรมสู่ BBD Bootcamp<br>หลักสูตร BBD Specialist Bootcamp<br><font color="#0056ff">รุ่น '+xEmpType+'</font></div>';
     //} else {
-      str +='<div class="profile-txt1" style="line-height: 1.2;color:#ff0000;">ได้ลงทะเบียนล่วงหน้าเพื่อเข้าร่วมงาน<br><font color="#0056ff">'+ sessionStorage.getItem("CampName") +'</font><br>เรียบร้อยแล้ว</div>';
+      str +='<div class="profile-txt1" style="line-height: 1.3;color:#ff0000;">ได้ลงทะเบียนล่วงหน้าเพื่อเข้าร่วมงาน<br><font color="#0056ff">'+ sessionStorage.getItem("CampName") +'</font><br>เรียบร้อยแล้ว</div>';
     //}
     //alert("sPreDateTime="+sPreDateTime);
     if(sPreDateTime!="") {
@@ -440,6 +440,7 @@ function showRegister() {
   var str = "";
   var sCountID = 0;
   str +='<div class="title-head">ttb Registration System</div>';
+  str += '<div style="color:#ff0000; font-weight: 600;font-size: 12px;">"ระบบลงทะเบียนล่วงหน้า"</div>';
   str +='<div class="profile-txt" style="font-size:12px;margin-top:-10px;">'+ sessionStorage.getItem("CampName") +'</div>';
 
   str +='<div id="DisplayCountRegister" style="margin-bottom: 15px;"></div>';

@@ -44,6 +44,11 @@ function GetAllCampaigns() {
           "CampStatus": value[4]
       }
     });
+    //console.log(json);
+    //var SearchJob = "CYC/CYB#4";
+    //console.log(JSON.stringify(json)); // need string
+    //var filterJob = json.filter(item => item.EmpType.indexOf(SearchJob) > -1);
+    //console.log("Job Name === "+filterJob[0].CampName);
   });
 }
 
@@ -64,6 +69,7 @@ function GetUserRegister() {
       filterJob = json.filter(item => item.CampRound.indexOf(doc.data().CampRound) > -1);
       //alert(filterJob[0].CampStatus+"==="+doc.data().CampRound);
       if(filterJob[0].CampStatus==1) {
+        //str += '<tr><td style="line-height: 1.3;">';
         str += '<div onclick="OpenATK(\''+ doc.id +'\')" style="margin-top:8px;">';
         if(doc.data().DateTime!="") { 
           str += '<div class="box-numberON"><img src="./img/Register.png" style="width:40px;margin-top:12px;"><div style="margin-top:2px;font-size:10px;">ลงทะเบียน</div></div>';

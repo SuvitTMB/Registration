@@ -30,7 +30,7 @@ var FinalRoundSplit = parts[1]; // 004  //String part1 เก็บค่าpart
 
 
 $(document).ready(function () {
-  //sessionStorage.clear();
+  sessionStorage.clear();
   sessionStorage.setItem("EmpTable", 0);
   sessionStorage.setItem("EmpSize", '');
 
@@ -47,7 +47,7 @@ $(document).ready(function () {
   str += '<div class="NameLine">'+ sessionStorage.getItem("LineName")+'</div>';
   $("#MyProfile").html(str);  
   Connect_DB();
-  */
+  */  
 
   main()
 });
@@ -138,11 +138,13 @@ function CheckBootCampOpen() {
       //sLINERegister = doc.data().LINERegister;
       //sessionStorage.setItem("EmpID", doc.data().EmpID);
       sessionStorage.setItem("CampName", doc.data().CampName);
+      //alert(xRound);
     });
     if(xRound!="") { 
       var str1 = "";
       str1 += '<div class="title-head">ttb Registration System</div>';
-      str1 += '<div style="color:#ff0000; font-weight: 600;font-size: 14px;">"ระบบลงทะเบียนล่วงหน้า"</div>';
+      //str1 += '<div style="color:#ff0000; font-weight: 600;font-size: 14px;">"ระบบลงทะเบียนล่วงหน้า"</div>';
+      str1 += '<div style="color:#0056ff; font-weight: 600;font-size: 12px;">"ระบบลงทะเบียนกิจกรรม"</div>';
       if(simg_reg!=null && simg_reg!="") {
         str1 += '<div style="margin-top:-1px;"><img src ="'+simg_reg+'" style="width:100%; max-width:240px;"></div>';
       } else {
@@ -152,6 +154,7 @@ function CheckBootCampOpen() {
       str += '<div class="btn-t1" style="margin-top:20px;width:270px;cursor:pointer;" onclick="CheckData()">คลิกลงทะเบียน<br>'+sCheckOpen+'</div>';
       $("#gotoLink").html(str);  
       $("#DisplayRound").html(sCheckOpen);
+      CheckData();
       CheckRegister();
     } else {
       RegisterClose();
@@ -186,12 +189,15 @@ function CheckRegister() {
       document.getElementById('myTimer').style.display='block';
     });
     if(EidBootRegister=="") {
+      CheckMember();
       document.getElementById('loading').style.display='none';
       document.getElementById('gotoLink').style.display='block';
     } else {
       if(sessionStorage.getItem("LineID")!=null && sessionStorage.getItem("LineID")!=null ) {
         if(sessionStorage.getItem("DateTime")=="") {
           SaveUpdate();
+        //} else {
+        //  alert("Date Time not null");
         }
       }
       CheckMember();
@@ -200,20 +206,18 @@ function CheckRegister() {
   });
 }
 
-
-function SaveUpdate() {
-  
-}
-
-
+//xRound//
 function CheckMember() {
+  //alert("(L212)Checkmember == "+sessionStorage.getItem("EmpID")+"==="+sCampRound);
   NewDate();
+  //dbBootMember.where('EmpID','==',sessionStorage.getItem("EmpID"))
   dbBootMember.where('EmpID','==',parseFloat(sessionStorage.getItem("EmpID")))
   .where('EmpType','==',sCampRound)
   .limit(1)
   .get().then((snapshot)=> {
     snapshot.forEach(doc=> {
       EidBootMember = doc.id;
+      //alert("L221="+EidBootMember);
       xEmpType = doc.data().EmpType;
       //sessionStorage.setItem("EmpID", doc.data().EmpID);
       sessionStorage.setItem("EmpName", doc.data().EmpName);
@@ -222,6 +226,7 @@ function CheckMember() {
       sessionStorage.setItem("TimeRegister", doc.data().TimeRegister);
       sessionStorage.setItem("EmpMember", 1);
       sessionStorage.setItem("EmpSize", doc.data().EmpSize);
+
       if(doc.data().StatusRegister==0) {
         dbBootMember.doc(EidBootMember).update({
           LineID : sessionStorage.getItem("LineID"),
@@ -233,6 +238,39 @@ function CheckMember() {
       }
     });
   });
+}
+
+
+
+
+function SaveUpdate() {
+  //alert("Save Member");
+  var eSpace = "";
+  var eEmpGroup = "other";
+  var TimeStampDate = Math.round(Date.now() / 1000);
+  NewDate();
+  sDateTime = dateString;
+  sessionStorage.setItem("CheckPass", sDateTime);
+
+  dbBootRegister.doc(EidBootRegister).update({
+    LineID : sessionStorage.getItem("LineID"),
+    LineName : sessionStorage.getItem("LineName"),
+    LinePicture : sessionStorage.getItem("LinePicture"),
+    StatusRegister : 1,
+    TimeStamp : TimeStampDate,
+    TimegetBox : eSpace,
+    DateTime : dateString
+  });
+  //alert("Save Done");
+  //alert("EidBootMember="+EidBootMember);
+  if(EidBootMember!="") {
+    dbBootMember.doc(EidBootMember).update({
+      StatusRegister : 1,
+      TimeIN : dateString,
+      //TimeRegister : "",
+      TimeStampRec : TimeStampDate
+    });
+  }
 }
 
 
@@ -272,7 +310,7 @@ function WaitingPage() {
     snapshot.forEach(doc=> {
       EidBootMember = doc.id;
       xEmpType = doc.data().EmpType;
-      sessionStorage.setItem("EmpID", doc.data().EmpID);
+      //sessionStorage.setItem("EmpID", doc.data().EmpID);
       sessionStorage.setItem("EmpName", doc.data().EmpName);
       sessionStorage.setItem("EmpMember", 1);
     });
@@ -282,9 +320,9 @@ function WaitingPage() {
     str +='<div class="profile-txt">'+ sessionStorage.getItem("LineName") +'</div>';
     str +='<div><div style="padding-top:15px;color:#f68b1f;font-weight: 600;">คุณ'+sessionStorage.getItem("EmpName")+'</div>';
     if(xEmpType!="") {
-      str +='<div class="profile-txt1" style="line-height: 1.2;color:#0056ff;">ได้ลงทะเบียนเพื่อเข้าร่วมงาน<br><font color="#0056ff">'+sessionStorage.getItem("CampName")+'</font><br>เรียบร้อยแล้ว</div>';
+      str +='<div class="profile-txt1" style="line-height: 1.3;color:#ff0000;">ได้ลงทะเบียนเพื่อเข้าร่วมกิจกรรม<br><font color="#0056ff">'+sessionStorage.getItem("CampName")+'</font><br><font color="#ff0000">เรียบร้อยแล้ว</font></div>';
     } else {
-      str +='<div class="profile-txt1" style="line-height: 1.2;">ได้ลงทะเบียนเพื่อเข้าร่วมงาน<br><font color="#0056ff">'+sessionStorage.getItem("CampName")+'</font><br>เรียบร้อยแล้ว</div>';
+      str +='<div class="profile-txt1" style="line-height: 1.3;color:#ff0000;">ได้ลงทะเบียนเพื่อเข้าร่วมกิจกรรม<br><font color="#0056ff">'+sessionStorage.getItem("CampName")+'</font><br><font color="#ff0000">เรียบร้อยแล้ว</font></div>';
     }
     if(sDateTime!="") {
       str +='<div style="color:#999;font-size:11px;font-weight: 300;">ลงทะเบียนเมื่อ : '+ sDateTime +'</div>';
@@ -432,6 +470,18 @@ function SaveData() {
       DateTime : dateString
     });
   }
+  //alert("EidBootMember="+EidBootMember);
+ 
+  if(EidBootMember!="") {
+    dbBootMember.doc(EidBootMember).update({
+      StatusRegister : 1,
+      TimeIN : dateString,
+      //TimeRegister : "",
+      TimeStampRec : TimeStampDate
+    });
+  }
+  
+
   WaitingPage();
 }
 

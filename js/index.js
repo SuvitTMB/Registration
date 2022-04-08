@@ -65,45 +65,35 @@ function Connect_DB() {
   firebase.initializeApp(firebaseConfig);
   db = firebase.firestore().collection("CheckProfile");
   dbBootCamp = firebase.firestore().collection("BootCamp");
-  CheckEmpID();
 }
-
-
-function CheckEmpID() {
-  db.where('lineID','==',sessionStorage.getItem("LineID"))
-  .limit(1)
-  .get().then((snapshot)=> {
-    snapshot.forEach(doc=> {
-      sessionStorage.setItem("EmpID", doc.data().empID);
-      //alert(doc.data().empID);
-    });
-  });
-}
-
 
 
 sCheckRec = 0;
 function CheckData() {
-  var SumRegister = 0;
-  var str = '';
-  var filterJob = '';
-  dbBootCamp.where('CampStatus','==',1)
-  .orderBy('CampName','asc')
+  //document.getElementById('BootCampLoading').style.display='none';
+  //document.getElementById('myRegister').style.display='block';
+  db.where('lineID','==',sessionStorage.getItem("LineID"))
   .get().then((snapshot)=> {
     snapshot.forEach(doc=> {
-      SumRegister = SumRegister+1;
-        //str += '<tr><td style="line-height: 1.3;">';
-        str += '<div onclick="OpenATK(\''+ doc.id +'\')" style="margin-top:8px;">';
-        str += '<div class="box-numberON"><img src="./img/Register.png" style="width:40px;margin-top:12px;"><div style="margin-top:2px;font-size:10px;">ลงทะเบียน</div></div>';
-        str += '<div class="box-regON"><font color="#0056ff">'+ doc.data().CampName +'</font><br>กิจกรรมวันที่ '+ doc.data().TrainingDays +'<br>สถานที่ '+ doc.data().Hotel +'</div>';
-        str += '</div>';
-        str += '</div>';
+      //Eid = doc.id;
+      //sDateRegister = doc.data().DateRegister;
+      sessionStorage.setItem("EmpID", doc.data().empID);
+      sessionStorage.setItem("EmpName", doc.data().empName);
+      sessionStorage.setItem("EmpPhone", doc.data().empPhone);
+      sessionStorage.setItem("EmpGroup", doc.data().empRH);
+      //document.getElementById("txtEmpID").value = doc.data().empID;
+      //document.getElementById("txtEmpName").value = doc.data().empName;
+      //document.getElementById("txtEmpGroup").value = doc.data().empRH;
+      sCheckRec = 1;
+      //alert(sCheckRec);
     });
-    //str += '</tbody></table>';
-    $("#DisplaySumRegister").html("<div class='btn-t3' style='font-size:12px;'>ลงทะเบียนแล้วรวม "+SumRegister+" รายการ</div>");
-    $("#DisplayOpenRegister").html(str);
+    //$("#test *").attr("disabled", "disabled").off('click');
+    if(sCheckRec==1) {
+      CheckOpenRegister();
+    } else {
+      alert("noooooo");
+    }
   });
-
 }
 
 
