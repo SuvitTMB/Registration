@@ -68,7 +68,7 @@ function GetUserRegister() {
       SumRegister = SumRegister+1;
       filterJob = json.filter(item => item.CampRound.indexOf(doc.data().CampRound) > -1);
       //alert(filterJob[0].CampStatus+"==="+doc.data().CampRound);
-      if(filterJob[0].CampStatus==1) {
+      if(filterJob[0].CampStatus==1 || filterJob[0].CampStatus==2) {
         //str += '<tr><td style="line-height: 1.3;">';
         str += '<div onclick="OpenATK(\''+ doc.id +'\')" style="margin-top:8px;">';
         if(doc.data().DateTime!="") { 
