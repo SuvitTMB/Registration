@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Theme Made By www.w3schools.com -->
+  <title>LINE Retail Society</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-PW7HPDW');</script>
+  <!-- End Google Tag Manager -->
+  <link href="./img/favicom.ico" rel="icon">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+  <link href='css/ekachon.css' rel="stylesheet" type="text/css">
+  <link href='css/button.css' rel="stylesheet" type="text/css">
+  <link href='css/style.css' rel="stylesheet" type="text/css">
+  <link href='css/vdo.css' rel="stylesheet" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link href='css/w3.css' rel="stylesheet" type="text/css">
+
+    <script src="https://static.line-scdn.net/liff/edge/versions/2.12.0/sdk.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.5.0/firebase-storage.js"></script>
+
+
+  <style type="text/css">
+    @media (min-width: 768px) { margin-left:0px; }
+    .form-control { 
+      text-align: left; font-size: 400 !important; font-size: 12px !important; color:#0056ff;
+      background-color: #f2f4f6;
+    }
+  </style>
+</head>
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PW7HPDW"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+
+  <div class="navbar1">
+    <center>
+      <div style="max-width:400px;">
+        <div class="iconlink" onClick="window.location='bootcamp.html';">
+          <div style="width:28px;"><img src="./img/regis.png" style="width:22px;"></div>
+          <div style="font-size: 11px;">ลงทะเบียน</div>
+        </div>
+        <div class="iconlink" onClick="window.location='vaccine-b.html';" style="background-color: #002d63;">
+          <div style="width:28px;"><img src="./img/syringe.png" style="width:22px;"></div>
+          <div style="font-size: 11px;">วัคซีน</div>
+        </div>
+        <div class="iconlink" onClick="window.location='history-b.html';">
+          <div style="width:28px;"><img src="./img/checked.png" style="width:22px;"></div>
+          <div style="font-size: 11px;">ประวัติ</div>
+        </div>
+        <div class="iconlink" onClick="window.location='howto-b.html';">
+          <div style="width:28px;"><img src="./img/howto.png" style="width:22px;"></div>
+          <div style="font-size: 11px;">วิธีใช้</div>
+        </div>
+      </div>
+    </center>
+  </div>
+
+
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#myPage" onclick="location.href='bootcamp.html'" style="font-size: 13px;">ttb   Registration System</a>
+      </div>
+    </div>
+  </nav>
+
+
+
+  <main id="main">
+    <section id="team" class="team section-bg" style="background-color: #002d63;margin-top:51px;height: 115px;">
+      <div class="container">
+        <div class="section-title">
+          <center>
+            <div class="h3div" style="color:#fff;margin:30px auto 20px auto;">ประวัติการฉีดวัคซีนของคุณ
+              <div style="font-weight: 400; color:#fff; font-size: 11px;">เราจะเก็บทุก ๆ ข้อมูลการฉีดวัคซีนของคุณไว้ที่นี่ 
+                <br>เพื่อที่จะสามารถแสดงผลการฉีดวัคซีนได้ทันที</div>
+            </div>
+          </center>
+        </div>
+      </div>
+    </section>
+    <div class="clr"></div>
+  </main>
+
+
+  <main id="detail">
+    <div class="container" style="margin-top:10px;">
+      <div class="row">
+        <center>
+          <div class="btn-t1" style="font-size: 11px;" onclick="AddNewVaccina()">เพิ่มประวัติวัคซีน</div>
+          <div class="btn-t2" style="font-size: 11px;" onclick="VaccineUser()">เพิ่มตารางวัคซีน</div>
+        </center>
+        <div style="margin-top:25px;">
+          <center><div class="header-Vaccina">ข้อมูลประวัติการฉีดวัคซีนของคุณ</div></center>
+          <div style="width:90%; margin:auto;">
+            <div id="DisplayVaccine"></div>
+          </div>
+        </div>
+        <div class="clr"></div>
+      </div>
+    </div>
+  </main>
+  <!-- End #main -->
+
+  <div id="id01" class="w3-modal w3-animate-opacity">
+    <div class="w3-modal-content w3-card-4">
+      <div class="w3-container" style="min-height:300px;padding:24px;width:100%;">
+        <!--<div id="NewVaccina"></div>-->
+        <div>
+          <center><div class="btn-t3">เพิ่มประวัติการฉีดวัคซีน</div></center>
+          <div class="txt-form" style="margin-top:25px;">คุณฉีดวัคซีนเข็มที่</div>
+          <div>
+            <select id="txtNoVaccine" class="form-control" placeholder="วัคซีนเข็มที่" required/>
+              <option></option>
+              <option value="1">เข็มที่ 1</option>
+              <option value="2">เข็มที่ 2</option>
+              <option value="3">เข็มที่ 3</option>
+              <option value="4">เข็มที่ 4</option>
+              <option value="5">เข็มที่ 5</option>
+              <option value="6">เข็มที่ 6</option>
+              <option value="7">เข็มที่ 7</option>
+              <option value="8">เข็มที่ 8</option>
+              <option value="9">เข็มที่ 9</option>
+              <option value="10">เข็มที่ 10</option>
+            </select>
+          </div>
+          <div class="txt-form">เลือกชนิดวัคซีนที่คุณฉีด</div>
+          <div>
+            <select id="txtNameVaccine" class="form-control" placeholder="เลือกวัคซีนที่คุณฉีด" required/>
+              <option placeholder="เลือกวัคซีนที่คุณฉีด"></option>
+              <option value="Sinovac">1. วัคซีนซิโนแวค (Sinovac) </option>
+              <option value="Sinopharm">2. วัคซีนซิโนฟาร์ม (Sinopharm)</option>
+              <option value="AstraZeneca">3. วัคซีนแอสตร้าเซนเนก้า (AstraZeneca)</option>
+              <option value="Pfizer">4. วัคซีนไฟเซอร์ (Pfizer)</option>
+              <option value="Moderna">5. วัคซีนโมเดอร์นา (Moderna)</option>
+            </select>
+          </div>
+          <div class="txt-form">สถานที่ฉีดวัคซีน</div>
+          <div class="input_field" style="width:100% !important;"> 
+            <input required type="text" class="form-control" id="txtPlace" placeholder="สถานที่ฉีดวัคซีน"/>
+          </div>         
+          <div class="txt-form">ฉีดวัคซีนเมื่อวันที่</div>
+          <div class="input_field" style="width:100% !important;"> 
+            <div><input type="date" class="form-control" id="txtDate"></div>
+          </div>
+        </div>
+        <center>
+          <div class="btn-t1" onclick="ClickSaveVaccine()" type="submit" id="test" style="margin-top:20px;">บันทึกข้อมูล</div>
+          <div class="btn-t2" onclick="CloseAll()" type="submit" id="test" style="margin-top:20px;">ยกเลิก</div>
+        </center>
+      </div>
+      <div class="clr" style="height: 20px;"></div>
+    </div>
+    <div style="height: 90px;"></div>
+  </div>
+
+  <div id="id02" class="w3-modal w3-animate-opacity">
+    <div class="w3-modal-content w3-card-4">
+      <div class="w3-container" style="min-height:300px;padding:24px;width:100%;text-align:center;">
+        <div id="DisplayUser"></div>
+        <div class="header-Vaccina">Upload Files ภาพแสดงการฉีดวัคซีน</div>
+        <input id="imageFile" name="imageFile" type="file" class="imageFile"  accept="image/*"   /> 
+        <img src="" id="preview" style="width:100%;margin:10px auto;" >
+        <img src="" id="output">
+        <!--<input type="button" value="บันทึกรายการ"  onclick="ResizeImage()"/> -->
+        <div class="btn-t1" onclick="ResizeImage()"/>บันทึกรายการ</div>
+
+        <div onclick="CloseAll()" class="btn-t2">ปิดหน้าต่าง</div>
+      </div>
+    </div>
+    <div class="clr" style="height: 70px;"></div>
+  </div>
+
+
+  <div id="id03" class="w3-modal w3-animate-opacity">
+    <div class="w3-modal-content w3-card-4">
+      <div class="w3-container" style="min-height:300px;padding:24px;width:100%;text-align:center;">
+        <div id="DisplayUser"></div>
+        <div class="header-Vaccina">แสดงเอกสารการฉีดวัคซีนของคุณ</div>
+        <center><div id="DisplayVaccineUser" style="max-width: 450px;"></div></center>
+        <!--
+        <input id="imageFile" name="imageFile" type="file" class="imageFile"  accept="image/*"   /> 
+        <img src="" id="preview" style="width:100%;margin:10px auto;display: none;" >
+        <img src="" id="output">
+        <div value="บันทึกรายการ" onclick="ResizeImage()"/></div>
+        -->
+        <div onclick="LoadNewVaccine()" class="btn-t2">โหลดรูปใหม่</div>
+        <div onclick="CloseAll()" class="btn-t2">ปิดหน้าต่าง</div>
+      </div>
+    </div>
+    <div class="clr" style="height: 70px;"></div>
+  </div>
+
+
+<footer class="container-fluid text-center">
+  <a href="#myPage" title="To Top"><span class="glyphicon glyphicon-chevron-up"></span></a>
+  <div style="font-size:12px;font-weight: 600;margin-bottom: 50px;">@<font color="green">LINE</font> <font color="#002d63">Retail</font> <font color="#0056ff">So</font><font color="#f68b1f">ciety</font></div>
+</footer>
+
+<script src="./js/vaccine.js"></script>
+
+</body>
+</html>
