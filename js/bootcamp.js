@@ -642,6 +642,26 @@ function getWelcomePack() {
 
 
 
+function OpenRegister(x) {
+  var str = "";
+  dbBootRegister.where(firebase.firestore.FieldPath.documentId(), "==", x)
+  .get().then((snapshot)=> {
+  snapshot.forEach(doc=> {
+      str += '<div style="margin-top:0px;"><img src=\''+ doc.data().LinePicture +'\' class="img-member-true" style="width:120px;height:120px;border-radius:50%;box-shadow: 0px 0px 6px 5px rgba(178,178,178,0.17);">';
+      str += '<div class="txt-member1" style="padding-top: 6px;color:#f68b1f">'+doc.data().LineName+'</div>';
+      str += '<div style="margin-top:20px;font-size:13px;font-weight: 600;color:#0056ff;">คุณ'+doc.data().EmpName+'</div>';
+      str += '<div style="color:#002d63;">ลงทะเบียนกิจกรรม<br>'+sessionStorage.getItem("CampName")+'</div>';
+      str += '<div style="color:#999;font-size:11px;">ลงทะเบียนเมื่อ '+doc.data().DateTime+'</div>';
+    });
+    $("#DisplayUser").html(str);  
+    document.getElementById("id01").style.display = "block";
+  });
+}
+
+function CloseAll() {
+  document.getElementById('id01').style.display='none';
+}
+
 
 
 
