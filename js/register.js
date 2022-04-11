@@ -30,11 +30,11 @@ var FinalRoundSplit = parts[1]; // 004  //String part1 เก็บค่าpart
 
 
 $(document).ready(function () {
-  sessionStorage.clear();
   sessionStorage.setItem("EmpTable", 0);
   sessionStorage.setItem("EmpSize", '');
 
   /*
+  sessionStorage.clear();
   var str = "";
   var sLineID = "Ua6b6bf745bd9bfd01a180de1a05c23b3";
   var sLineName = "Website";
