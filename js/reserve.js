@@ -19,6 +19,8 @@ var sCampRound = "";
 var sDateTime = ""; 
 var sLINERegister = "";
 var sATK = "";
+//var xRound = "khaoyai"; 
+//var xRound = "WB-Q2";
 var xRound = "";
 var parts = [];
 var parts1 = [];
@@ -53,7 +55,7 @@ $(document).ready(function () {
 
 
 async function main() {
-  await liff.init({ liffId: "1656865573-827vvn60" });
+  await liff.init({ liffId: "1656865573-ZXevv9AB" });
   document.getElementById("isLoggedIn").append(liff.isLoggedIn());
   if(liff.isLoggedIn()) {
     getUserProfile();
@@ -123,7 +125,7 @@ function CheckEmpID() {
 
 function CheckBootCampOpen() {
   var str = "";
-  dbBootCamp.where('CampStatus','==',2)
+  dbBootCamp.where('CampStatus','==',3)
   .limit(1)
   .get().then((snapshot)=> {
     snapshot.forEach(doc=> {
@@ -204,20 +206,15 @@ function CheckRegister() {
   });
 }
 
-//xRound//
 function CheckMember() {
-  //alert("(L212)Checkmember == "+sessionStorage.getItem("EmpID")+"==="+sCampRound);
   NewDate();
-  //dbBootMember.where('EmpID','==',sessionStorage.getItem("EmpID"))
   dbBootMember.where('EmpID','==',parseFloat(sessionStorage.getItem("EmpID")))
   .where('EmpType','==',sCampRound)
   .limit(1)
   .get().then((snapshot)=> {
     snapshot.forEach(doc=> {
       EidBootMember = doc.id;
-      //alert("L221="+EidBootMember);
       xEmpType = doc.data().EmpType;
-      //sessionStorage.setItem("EmpID", doc.data().EmpID);
       sessionStorage.setItem("EmpName", doc.data().EmpName);
       //sessionStorage.setItem("EmpGroup", doc.data().EmpBranch);
       sessionStorage.setItem("EmpTable", doc.data().EmpTable);
@@ -326,16 +323,10 @@ function WaitingPage() {
       str +='<div style="color:#999;font-size:11px;font-weight: 300;">ลงทะเบียนเมื่อ : '+ sDateTime +'</div>';
     }
     if(sessionStorage.getItem("ATKimg")!=null) {
-      str +='<div class="btn-t3" onclick="showATK()" style="margin-top:10px;width:230px;font-size:11px;">แสดงผล ATK ก่อนเข้างาน</div>';
+      str +='<div class="btn-t4" onclick="showATK()" style="margin-top:10px;width:230px;font-size:11px;">แสดงผล ATK ก่อนเข้างาน</div>';
     } else {
-      str +='<div class="btn-t3" style="margin-top:10px;width:230px;background:#ddd;cursor:default;color:#999;font-size:11px;">แสดงผล ATK ก่อนเข้างาน</div>';
+      str +='<div class="btn-t4" style="margin-top:10px;width:230px;background:#ddd;cursor:default;color:#999;font-size:11px;">แสดงผล ATK ก่อนเข้างาน</div>';
     }
-    if(sessionStorage.getItem("EmpMember")==1 && FinalRoundSplit==undefined) {
-      str +='<div class="btn-t4" onclick="WelcomePack()" style="margin-top:10px;width:230px;">คลิกเพื่อรับ Welcome Pack</div>';
-    } else {
-      str +='<div class="btn-t0" style="margin-top:10px;width:230px;">คลิกเพื่อรับ Welcome Pack</div>';
-    }
-
     str +='<div class="btn-t1" onclick="showRegister()" style="margin-top:10px;width:230px;font-size:11px;">ดูข้อมูลผู้ลงทะเบียน</div>';
     str +='</div></center>';
     $("#MyWating").html(str);    
@@ -345,8 +336,8 @@ function WaitingPage() {
 
 
 function CheckData() {
-  document.getElementById('BootCampLoading').style.display='none';
   //alert("Check Data");
+  document.getElementById('BootCampLoading').style.display='none';
   db.where('lineID','==',sessionStorage.getItem("LineID"))
   .get().then((snapshot)=> {
     snapshot.forEach(doc=> {
@@ -362,8 +353,8 @@ function CheckData() {
       document.getElementById("txtEmpGroup").value = doc.data().empRH;
       WaitingPage();
     });
-    document.getElementById('myRegister').style.display='block';
     $("#test *").attr("disabled", "disabled").off('click');
+    document.getElementById('myRegister').style.display='block';
     OpenForm();
   });
 }
@@ -502,13 +493,6 @@ function showATK() {
   str +='<div style="color:#0056ff;font-weight: 600;margin-top:15px;">คุณ'+sessionStorage.getItem("EmpName")+'</div>';
   str +='<div style="color:#0056ff;">สังกัด : '+sessionStorage.getItem("EmpGroup")+'</div>';
   str +='<div style="color:#999;font-size:11px;font-weight: 300;">ลงทะเบียนเมื่อ : '+sDateTime+'</div>';
-  str +='<div class="btn-t00" style="margin-top:10px;width:230px;font-size:11px;">แสดงผล ATK ก่อนเข้างาน</div>';
-  if(sessionStorage.getItem("EmpMember")==1 && FinalRoundSplit==undefined) {
-    str +='<div class="btn-t4" onclick="WelcomePack()" style="margin-top:10px;width:230px;">คลิกเพื่อรับ Welcome Pack</div>';
-  } else {
-    str +='<div class="btn-t0" style="margin-top:10px;width:230px;">คลิกเพื่อรับ Welcome Pack</div>';
-    //str +='<div class="btn-t4" style="margin-top:10px;width:230px;background:#ddd;cursor:default;color:#999;">คลิกเพื่อรับ Welcome Pack</div>';
-  }
   str +='<div class="btn-t1" onclick="showRegister()" style="margin-top:10px;width:230px;font-size:11px;">ดูข้อมูลผู้ลงทะเบียน</div>';
   $("#MyWating").html(str);    
 }
@@ -534,15 +518,8 @@ function showRegister() {
       str += '<div class="clr txt-member" style="font-size:10px;line-height:1.2;">'+ doc.data().LineName +'</div></div>';
     });
     if(sessionStorage.getItem("ATKimg")!=null) {
-      str +='<div class="btn-t3" onclick="showATK()" style="margin-top:10px;width:230px;font-size:11px;">แสดงผล ATK ก่อนเข้างาน</div>';
+      str +='<div class="btn-t4" onclick="showATK()" style="margin-top:10px;width:250px;font-size:11px;">แสดงผล ATK ก่อนเข้างาน</div>';
     }
-    if(sessionStorage.getItem("EmpMember")==1 && FinalRoundSplit==undefined) {
-      str +='<div class="btn-t4" onclick="WelcomePack()" style="margin-top:10px;width:230px;">คลิกเพื่อรับ Welcome Pack</div>';
-    } else {
-      str +='<div class="btn-t0" style="margin-top:10px;width:230px;">คลิกเพื่อรับ Welcome Pack</div>';
-      //str +='<div class="btn-t4" style="margin-top:10px;width:230px;background:#ddd;cursor:default;color:#999;">คลิกเพื่อรับ Welcome Pack</div>';
-    }
-    str +='<div class="btn-t00" style="margin-top:10px;width:230px;font-size:11px;">ดูข้อมูลผู้ลงทะเบียน</div>';
     $("#MyWating").html(str);    
     $("#DisplayCountRegister").html("<div>จำนวนลงทะเบียน : "+sCountID+" คน</div>");  
   });
@@ -555,90 +532,6 @@ function RegisterClose() {
   //alert(sessionStorage.getItem("EmpID"));
 }
 
-
-
-function getEid() {
-  dbBootRegister.where('LineID','==',sessionStorage.getItem("LineID"))
-  .where('CampRound','==',xRound)
-  .limit(1)
-  .get().then((snapshot)=> {
-    snapshot.forEach(doc=> {
-      EidBootRegister = doc.id;
-    });
-    //alert("===="+EidBootRegister);
-  });
-}
-
-
-
-function WelcomePack() {
-  getEid();
-  //alert("EidBootRegister==="+EidBootRegister);
-  var str = "";
-  str +='<div class="title_container"><div class="title-head">BBD CAMPUS Specialist Program 2022';
-  str +='<div style="font-size:13px;color:#f68b1f;">แสดงหน้านี้เพื่อรับกล่อง Welcome Pack</div></div></div>';
-  str +='<div class="profile-txt" style="margin-top:-25px;font-size:12px;">สำหรับผู้เข้าอบรม : '+ sessionStorage.getItem("CampName") +'</div>';
-  if(sessionStorage.getItem("EmpTable")==0) {
-    if(sessionStorage.getItem("EmpSize")!="") {
-      str +='<div style="margin:10px;"><img src="./img/Size-'+ sessionStorage.getItem("EmpSize") +'.jpg" style="width:260px;"></div>';
-    } else {
-      str +='<div style="margin:10px;"><img src="./img/Size.jpg" style="width:260px;"></div>';
-    }
-    //str +='<div style="margin-top:-10px;"><img src="./img/box-git.gif" style="width:370px;"></div>';
-    str +='<div id="ClickWelcomePack">';    
-    str +='<div onclick="getWelcomePack()" class="btn-t4" style="margin-top:0px;width:270px;">สำหรับเจ้าหน้าที่กดเท่านั้น<br>ยืนยันการรับ Welcome Pack</div>';
-    str +='<div style="color:#ff0000;padding:8px;">ห้ามกดปุ่มรับ Welcome Pack เองนะครับ</div>';
-    str +='</div>';
-    str +='<div style="padding:30px;display: none;" id="loadingPack"><img src="./img/loading.gif"><div style="padding-top:15px;color:#f68b1f;">L o a d i n g</div></div>';
-  } else {
-    str +='<div style="margin-top:-10px;"><img src="./img/brown-bear.gif" style="width:370px;"></div>';
-    str +='<div style="margin-top:5px;color:#fff;font-weight: 600;padding:12px;background-color: #002d63;border-radius:5px;">ท่านได้ทำการรับ Welcome Pack ไปแล้ว<br>เมื่อวันที่ '+sessionStorage.getItem("TimeRegister")+'</div>';
-  }
-  str +='<div><img src="'+ sessionStorage.getItem("LinePicture") +'" class="profile-member" style="width:60px;"></div>';
-  str +='<div style="color:#0056ff;font-weight: 600;margin-top:15px;">คุณ'+sessionStorage.getItem("EmpName")+'</div>';
-  str +='<div style="color:#0056ff;">สังกัด : '+sessionStorage.getItem("EmpGroup")+'</div>';
-  str +='<div style="color:#999;font-size:11px;font-weight: 300;">ลงทะเบียนเมื่อ : '+sDateTime+'</div>';
-  if(sessionStorage.getItem("ATKimg")!=null) {
-    str +='<div class="btn-t3" onclick="showATK()" style="margin-top:10px;width:230px;">แสดงผล ATK ก่อนเข้างาน</div>';
-  }
-  if(sessionStorage.getItem("EmpMember")==1 && FinalRoundSplit==undefined) {
-    str +='<div class="btn-t00" style="margin-top:10px;width:230px;">คลิกเพื่อรับ Welcome Pack</div>';
-  } else {
-    str +='<div class="btn-t0" style="margin-top:10px;width:230px;">คลิกเพื่อรับ Welcome Pack</div>';
-  }
-
-
-  //str +='<div class="btn-t0" style="margin-top:10px;width:230px;">คลิกเพื่อรับ Welcome Pack</div>';
-  str +='<div class="btn-t1" onclick="showRegister()" style="margin-top:10px;width:230px;font-size:11px;">ดูข้อมูลผู้ลงทะเบียน</div>';
-
-  //str +='<div class="btn-t1" onclick="gotowebsite()" style="margin-top:10px;width:230px;">3. ดูรายละเอียดเว็บไซต์</div>';
-  //str +='<div class="btn-t1" onclick="RegisterLINE()" style="margin-top:10px;width:230px;">4. สมัครเป็นสมาชิกของ<br>LINE Retail Society</div>';
-  $("#MyWating").html(str);    
-}
-
-
-
-function getWelcomePack() {
-  NewDate();
-  document.getElementById('ClickWelcomePack').style.display='none';
-  document.getElementById('loadingPack').style.display='block';
-  //alert(sessionStorage.getItem("EmpTable"));
-  if(FinalRoundSplit==undefined) {
-    if(sessionStorage.getItem("EmpTable")==0) {
-      dbBootMember.doc(EidBootMember).update({
-        EmpTable : 1,
-        TimeRegister : dateString
-      });
-      dbBootRegister.doc(EidBootRegister).update({
-        EmpMember : 1,
-        TimegetBox : dateString
-      });
-      sessionStorage.setItem("EmpTable", 1);
-      sessionStorage.setItem("TimeRegister", dateString);
-    }
-  }
-  WelcomePack();
-}
 
 
 
@@ -661,11 +554,6 @@ function OpenRegister(x) {
 function CloseAll() {
   document.getElementById('id01').style.display='none';
 }
-
-
-
-
-
 
 
 function NewDate() {
