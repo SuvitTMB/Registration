@@ -31,7 +31,7 @@ var FinalRoundSplit = parts[1]; // 004  //String part1 เก็บค่าpart
 var EmpSize = "";
 
 $(document).ready(function () {
-  /*
+  
   //sessionStorage.clear();
   sessionStorage.setItem("EmpTable", 0);
   sessionStorage.setItem("EmpSize", '');
@@ -49,9 +49,9 @@ $(document).ready(function () {
   str += '<div class="NameLine">'+ sessionStorage.getItem("LineName")+'</div>';
   $("#MyProfile").html(str);  
   Connect_DB();
-  */
+  
 
-  main()
+  //main()
 });
 
 
