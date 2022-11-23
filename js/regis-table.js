@@ -56,7 +56,7 @@ $(document).ready(function () {
 
 
 async function main() {
-  await liff.init({ liffId: "1656865573-oOG66mOA" });
+  await liff.init({ liffId: "1656865573-kxNDDv8E" });
   document.getElementById("isLoggedIn").append(liff.isLoggedIn());
   if(liff.isLoggedIn()) {
     getUserProfile();
@@ -134,7 +134,7 @@ function CheckBootCampOpen() {
       xRound = doc.data().EmpType;
       sEmpType = doc.data().EmpType;
       sCheckOpen = doc.data().CampName;
-      sCampRound = doc.data().CampRound;
+      sCampRound = doc.data().CampRound;m
       simg_reg = doc.data().img_reg;
       EmpSize = doc.data().EmpSize;
       //sLINERegister = doc.data().LINERegister;
