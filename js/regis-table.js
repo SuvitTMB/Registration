@@ -135,7 +135,7 @@ function CheckBootCampOpen() {
       xRound = doc.data().EmpType;
       sEmpType = doc.data().EmpType;
       sCheckOpen = doc.data().CampName;
-      sCampRound = doc.data().CampRound;m
+      sCampRound = doc.data().CampRound;
       simg_reg = doc.data().img_reg;
       EmpSize = doc.data().EmpSize;
       //sLINERegister = doc.data().LINERegister;
