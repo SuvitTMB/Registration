@@ -56,8 +56,10 @@
 
   </style>
 </head>
-
-<body id="body1" data-spy="scroll" data-target=".navbar" data-offset="60" style="background: url(outing.jpg) no-repeat center center fixed;-webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;  ">
+<!--
+  <body id="body1" data-spy="scroll" data-target=".navbar" data-offset="60" style="background: url(outing.jpg) no-repeat center center fixed;-webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;  ">
+-->
+<body id="body1" data-spy="scroll" data-target=".navbar" data-offset="60" style="background-color: #f68b1f;">
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PW7HPDW"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!--
@@ -158,9 +160,9 @@
                 <div>สังกัด <font color="#ff0000">(ไม่ได้เป็นพนักงาน ttb เลือก บุคคลภายนอกธนาคาร)</font></div>
                 <div class="input_field select_option">
                   <select id="txtEmpGroup" class="form-control" style="font: 400 12px ekachon-regular !important;" required/>
-                    <option></option>
-                    <option value="ttb bank">พนักงาน ttb bank</option>
-                    <option value="OTHER-Outsider">บุคคลภายนอกธนาคาร</option>
+                    <option id="a1"></option>
+                    <option id="a2" value="ttb bank">พนักงาน ttb bank</option>
+                    <option id="a3" value="OTHER-Outsider">บุคคลภายนอกธนาคาร</option>
                   </select>
                   <div class="select_arrow"></div>
                 </div>
@@ -212,7 +214,7 @@
   <!--<div id="isLoggedIn" style="color:#f68b1f;"></div>-->
   <footer class="tm-footer">
       <center>
-        <div id="isLoggedIn" style="color:#000;"></div>
+        <div id="isLoggedIn" style="color:#f68b1f;"></div>
         <div style="color:#fff;font-size: 12px;">@LINE Retail Society</div>
       </center>
   </footer>
