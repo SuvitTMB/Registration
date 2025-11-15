@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบลงทะเบียน</title>
+    <!-- โหลด Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Sarabun', sans-serif; 
+            background-color: #ffffff; 
+        }
+        /* (คงไว้) Style สำหรับ Edit Modal Inputs */
+        #editEmployeeModal input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db; /* gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            margin-top: 0.25rem;
+        }
+         /* (คงไว้) Style สำหรับ Dropdown ฟ้าอ่อน */
+        select.light-blue-bg {
+             background-color: #ffffff; 
+             padding-left: 0.75rem; /* px-3 */
+             padding-right: 0.75rem; /* px-3 */
+             padding-top: 0.5rem; /* py-2 */
+             padding-bottom: 0.5rem; /* py-2 */
+        }
+         /* (คงไว้) Style หัวตารางสีเทา */
+        thead.table-header-gray {
+             background-color: #e5e7eb; /* gray-200 */
+        }
+        /* (เพิ่ม) Style สำหรับ Textbox รางวัลพิเศษ */
+        #specialRewardLimitInput {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            text-align: center;
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            color: #166534; /* green-800 */
+        }
+        
+        /* (เพิ่ม) Style สำหรับ Modal รายละเอียดพนักงาน */
+        #detailEmployeeModal input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            margin-top: 0.25rem;
+            background-color: #f9fafb; /* gray-50 */
+            cursor: default;
+        }
+    </style>
+    <!-- Chart.js CDN --><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+</head>
+<body class="flex flex-col items-center min-h-screen py-10 bg-white">
+
+    <div class="w-[90%] max-w-6xl p-0 bg-white rounded-lg"> 
+        <!-- Header --><div class="flex flex-col items-center mb-6 pt-6 px-8"> 
+            <div class="text-center">
+                <h1 class="text-2xl font-bold" style="color: #0056ff;">ระบบลงทะเบียน</h1>
+            </div>
+            <div class="text-center mt-2">
+                <p id="currentDateTime" class="text-sm text-gray-600 font-medium"></p>
+            </div>
+        </div>
+        
+        <!-- Tab Navigation (แก้ไข: ลบแท็บ 'ข้อมูลจัดกลุ่ม' และเปลี่ยนชื่อแท็บ) --><div class="mb-6 border-b border-gray-200 px-8"> 
+            <nav class="-mb-px flex space-x-1" aria-label="Tabs"> 
+                <button id="tab-dashboard" class="whitespace-nowrap py-3 px-3 border-b-2 font-medium text-sm text-gray-700 bg-gray-300 border-blue-600">
+                    ข้อมูล Dashboard
+                </button>
+                <button id="tab-team-list" class="whitespace-nowrap py-3 px-3 border-b-2 font-medium text-sm text-gray-500 bg-gray-100 border-transparent hover:text-gray-700 hover:border-gray-300">
+                    ข้อมูลผู้ลงทะเบียน <!-- (แก้ไข) เปลี่ยนชื่อ -->
+                </button>
+                <!-- (ลบ) แท็บ 'ข้อมูลจัดกลุ่ม' -->
+                
+                <button id="tab-employee-list" class="whitespace-nowrap py-3 px-3 border-b-2 font-medium text-sm text-gray-500 bg-gray-100 border-transparent hover:text-gray-700 hover:border-gray-300">
+                    ข้อมูลผู้ได้รับรางวัล <!-- (แก้ไข) เปลี่ยนชื่อเป็นข้อมูลผู้ได้รับรางวัล -->
+                </button>
+                
+                <button id="tab-register" class="whitespace-nowrap py-3 px-3 border-b-2 font-medium text-sm text-gray-500 bg-gray-100 border-transparent hover:text-gray-700 hover:border-gray-300">
+                    ลงทะเบียนเข้าร่วมงาน
+                </button>
+            </nav>
+        </div>
+
+        <!-- Dashboard Content --><div id="dashboard-content" class="px-8 pb-8"> 
+            
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold text-gray-800">ภาพรวมผู้ลงทะเบียน</h2>
+                <button id="randomizeButton" class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                    สุ่มเลือกผู้ร่วมงาน
+                </button>
+            </div>
+            
+            <div class="flex flex-col lg:flex-row gap-6 mb-8">
+                
+                <!-- กล่องที่ 1 (40%) --><div class="lg:w-2/5"> 
+                     <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 flex flex-col items-center justify-center h-full">
+                         <p class="text-gray-600 text-sm mb-4">สัดส่วนผู้ลงทะเบียน</p>
+                         <div class="relative w-64 h-64"> 
+                             <canvas id="registrationBreakdownChart"></canvas>
+                             <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                 <span id="breakdownCenterTotal" class="text-3xl font-bold text-gray-900">0</span>
+                                 <span class="text-sm text-gray-500">ผู้ลงทะเบียน</span>
+                             </div>
+                         </div>
+                     </div>
+                </div>
+
+                <!-- กล่องที่ 2 (60%) : กราฟวงกลมและสรุปยอด --><div class="lg:w-3/5"> 
+                    <div class="flex gap-6 h-full">
+                         
+                         <div class="w-2/3 bg-white p-6 rounded-lg shadow-sm border border-gray-200 flex flex-col items-center justify-center"> 
+                            <p class="text-gray-600 text-sm mb-4">เป้าหมายผู้ลงทะเบียน</p>
+                            <div class="relative w-64 h-64"> 
+                                <canvas id="registrationDonutChart"></canvas>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                    <span id="donutPercentage" class="text-3xl font-bold text-gray-900">0%</span>
+                                    <span class="text-sm text-gray-500">ผู้เข้าร่วมกิจกรรม</span>
+                                </div>
+                            </div>
+                        </div>
+                         
+                         <div class="w-1/3 flex flex-col justify-between space-y-2"> 
+                            <!-- จำนวนเป้าหมาย --><div class="h-1/4 bg-blue-50 p-3 rounded-lg flex flex-col justify-center items-center text-center"> 
+                                <p class="text-blue-700 text-xs">จำนวนเป้าหมาย</p> 
+                                <p id="targetCount" class="text-lg font-bold text-blue-800 mt-1">0</p> 
+                            </div>
+                            <!-- ผู้เข้าร่วมกิจกรรม --><div class="h-1/4 bg-green-50 p-3 rounded-lg flex flex-col justify-center items-center text-center"> 
+                                <p class="text-green-700 text-xs">ผู้เข้าร่วมกิจกรรม</p> 
+                                <p id="participantsCountBox" class="text-lg font-bold text-green-800 mt-1">0</p> 
+                            </div>
+                             <!-- ผู้ร่วมงาน --><div class="h-1/4 bg-yellow-50 p-3 rounded-lg flex flex-col justify-center items-center text-center">
+                                <p class="text-yellow-700 text-xs">ผู้ร่วมงาน</p>
+                                <p id="attendeesCount" class="text-lg font-bold text-yellow-800 mt-1">0</p>
+                            </div>
+                            <!-- จำนวนคงเหลือ --><div class="h-1/4 bg-red-50 p-3 rounded-lg flex flex-col justify-center items-center text-center"> 
+                                <p class="text-red-700 text-xs">จำนวนคงเหลือ</p> 
+                                <p id="remainingCount" class="text-lg font-bold text-red-800 mt-1">0</p> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- สรุปข้อมูลผู้ลงทะเบียน --><div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                     <h2 class="text-lg font-semibold text-gray-800">สรุปข้อมูลผู้ลงทะเบียนตามสังกัด (Chief)</h2>
+                 </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6"> 
+                    <!-- กล่องซ้าย: กราฟแท่ง 1 -->
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <p class="text-gray-600 text-sm mb-4">กราฟแสดงข้อมูลสถิติ (ส่วนที่ 1)</p>
+                        <div class="h-[25rem]"> 
+                            <canvas id="teamBarChart1"></canvas> 
+                        </div>
+                    </div>
+                    <!-- กล่องขวา: กราฟแท่ง 2 -->
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                         <p class="text-gray-600 text-sm mb-4">กราฟแสดงข้อมูลสถิติ (ส่วนที่ 2)</p>
+                        <div class="h-[25rem]"> 
+                            <canvas id="teamBarChart2"></canvas> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- สรุปข้อมูลผู้ร่วมงานและรายชื่อล่าสุด (แก้ไขคอลัมน์) --><h2 class="text-lg font-semibold text-gray-800 mb-4">สรุปข้อมูลผู้ร่วมงานและรายชื่อล่าสุด (50 รายการล่าสุด)</h2>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm">
+                        <thead class="table-header-gray"> 
+                            <tr>
+                                <th class="px-4 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">ชื่อ-นามสกุล (รหัสพนักงาน)</th>
+                                <th class="px-4 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">Chief</th> <!-- (แก้ไข) เปลี่ยนเป็น Chief -->
+                                <th class="px-4 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">รางวัล</th> <!-- (แก้ไข) เปลี่ยนเป็น รางวัล (เช็ค DateReward) -->
+                                <th class="px-4 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">รับแล้ว</th> <!-- (แก้ไข) เปลี่ยนเป็น รับแล้ว (เช็ค ConfirmReward) -->
+                                <th class="px-4 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">เวลาที่ลงทะเบียน</th>
+                                <th class="px-4 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">ลบรายการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="latestRegistrationsTableBody" class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td colspan="6" class="p-6 text-center text-gray-500">กำลังโหลดข้อมูล...</td> <!-- (แก้ไข) Colspan เป็น 6 -->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- ปุ่ม Download CSV --><div class="mt-6 text-center">
+                <button id="downloadCsvButton" class="px-5 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                    Download File CSV (ผู้ลงทะเบียน)
+                </button>
+            </div>
+            
+        </div>
+
+        <!-- Register Content --><div id="register-content" class="hidden pb-8 px-6">
+             <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 flex flex-col items-center">
+                <h2 class="text-xl font-semibold text-gray-800 text-center mb-6">สแกน QR Code เพื่อลงทะเบียนเข้าร่วมงาน</h2>
+                <img 
+                    src="./images/QRcode-CRSG.png" 
+                    alt="QR Code ลงทะเบียน" 
+                    class="rounded-lg shadow-md border border-gray-200" 
+                    style=" width:40%;"
+                >
+             </div>
+        </div>
+
+
+        <!-- (แก้ไข) Team List Content (ปรับปรุงใหม่ทั้งหมด) -->
+        <div id="team-list-content" class="hidden pb-8 px-0"> 
+            <div class="bg-white overflow-hidden"> 
+                <!-- Top Stats/Actions Bar (แก้ไข: ปรับปรุงกล่อง) -->
+                <div class="px-6 py-4 border-b grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+                    <!-- Stat 1: ลงทะเบียนล่วงหน้า -->
+                    <div class="bg-blue-50 p-4 rounded-lg text-center">
+                        <p class="text-sm text-blue-700">ลงทะเบียนล่วงหน้า</p> <!-- (แก้ไข) ชื่อ -->
+                        <p id="managerEmployeeCount" class="text-2xl font-bold text-blue-900 mt-1">0</p>
+                    </div>
+                    
+                    <!-- Stat 2: จำนวนผู้ที่จะได้รับรางวัลพิเศษ (Textbox) -->
+                    <div class="bg-green-50 p-4 rounded-lg text-center">
+                        <p class="text-sm text-green-700">จำนวนผู้ที่จะได้รับรางวัลพิเศษ</p>
+                        <!-- (แก้ไข) เปลี่ยนเป็น Textbox -->
+                        <input type="number" id="specialRewardLimitInput" class="mt-1" value="0">
+                    </div>
+                    
+                    <!-- Stat 3: ผู้รับรางวัลแล้ว (สีส้ม) -->
+                    <div class="bg-orange-50 p-4 rounded-lg text-center"> <!-- (แก้ไข) สีส้ม -->
+                        <p class="text-sm text-orange-700">ผู้รับรางวัลแล้ว</p> <!-- (แก้ไข) ชื่อ -->
+                        <p id="rewardedCountElem" class="text-2xl font-bold text-orange-900 mt-1">0</p> <!-- (แก้ไข) ID ใหม่ -->
+                    </div>
+                </div>
+
+                <!-- Team Member Table Section (แก้ไข: ปรับปรุงตาราง) -->
+                 <div class="p-6">
+                     <div class="flex justify-between items-center mb-4">
+                         <h3 class="text-lg font-semibold">ข้อมูลพนักงานที่ร่วมกิจกรรม</h3> <!-- (แก้ไข) ชื่อ -->
+                         <!-- NEW: Reward Control Button --><button id="rewardControlButton" class="px-4 py-2 text-sm font-medium text-white rounded-md shadow-md transition duration-150 ease-in-out">
+                             กำลังโหลดสถานะ...
+                         </button>
+                     </div>
+                     <div class="overflow-x-auto border rounded-lg">
+                        <table class="min-w-full text-sm">
+                            <thead class="table-header-gray">
+                                <tr>
+                                    <!-- (แก้ไข) คอลัมน์ -->
+                                    <th class="px-4 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">ลำดับ</th>
+                                    <th class="px-4 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">ชื่อ-นามสกุล (รหัสพนักงาน)</th>
+                                    <th class="px-4 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">สายงาน</th>
+                                    <th class="px-4 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">สังกัด</th>
+                                    <th class="px-4 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">สถานะ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="participantsTableBody" class="divide-y divide-gray-200"> <!-- (แก้ไข) ID ใหม่ -->
+                                <tr>
+                                    <td colspan="5" class="p-6 text-center text-gray-500">กำลังโหลดข้อมูล...</td> <!-- (แก้ไข) colspan="5" -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                 </div>
+            </div>
+        </div>
+        
+        <!-- Employee List Content -->
+        <!-- (แก้ไข) เปลี่ยนชื่อแท็บเป็น ข้อมูลผู้ได้รับรางวัล และเพิ่มกล่องค้นหา, ลบ Filter -->
+        <div id="employee-list-content" class="hidden pb-8 px-0"> 
+             <div class="bg-white overflow-hidden"> 
+                <div class="px-6 py-4 border-b flex justify-between items-center"> 
+                    <div>
+                        <h2 class="text-xl font-semibold">ข้อมูลผู้ได้รับรางวัล</h2>
+                        <p class="text-sm text-gray-600">แสดงรายชื่อพนักงานที่ได้รับรางวัล (50 รายการต่อหน้า)</p>
+                    </div>
+                    <!-- กล่องค้นหา -->
+                    <div class="flex items-center">
+                        <label for="awardedSearchInput" class="text-sm font-medium mr-2">ค้นหาชื่อ-นามสกุล:</label> 
+                        <input type="text" id="awardedSearchInput" placeholder="ชื่อพนักงาน" class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm p-2 w-64">
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto p-6"> 
+                    <table class="min-w-full text-sm">
+                        <thead class="table-header-gray"> 
+                            <tr>
+                                
+                                <th class="px-4 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">ลำดับที่</th>
+                                <th class="px-4 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">รหัส</th> 
+                                <th class="px-4 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">ชื่อ-นามสกุล</th> 
+                                <th class="px-4 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">สังกัด (Chief)</th> 
+                                <th class="px-4 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">เวลาที่สุ่ม</th> 
+                                <th class="px-4 py-3 text-left font-medium text-gray-600 uppercase tracking-wider">จัดการ</th> 
+                            </tr>
+                        </thead>
+                        <tbody id="awardedListTableBody" class="divide-y divide-gray-200"> 
+                            <tr>
+                                <td colspan="6" class="p-6 text-center text-gray-500">กำลังโหลดข้อมูล...</td> 
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination Controls -->
+                <div id="awardedPaginationControls" class="flex justify-center p-6 border-t border-gray-200">
+                    <!-- Controls will be rendered here -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- *** Modal สำหรับสุ่มเลือก *** --><div id="randomizeModal" class="hidden fixed inset-0 z-40 overflow-y-auto bg-gray-600 bg-opacity-75 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-3xl mx-4">
+            <!-- แถวที่ 1: Title --><h3 class="text-xl font-semibold text-center text-gray-900 mb-4">ระบบสุ่มเลือกผู้ร่วมกิจกรรม</h3>
+            
+            <!-- แถวที่ 2: Stats --><div class="grid grid-cols-2 gap-4 mb-6">
+                <div class="bg-blue-50 p-4 rounded-lg text-center">
+                    
+                    <p class="text-sm text-blue-700">ข้อมูลผู้ที่ได้สิทธิ์ในการสุ่ม</p>
+                    <p id="modalParticipantsCount" class="text-3xl font-bold text-blue-900">0</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg text-center">
+                    <p class="text-sm text-green-700">ผู้ได้รับการสุ่มแล้ว</p> 
+                    <p id="modalDrawnCount" class="text-3xl font-bold text-green-900">0</p>
+                </div>
+            </div>
+            
+            <!-- แถวที่ 3: 5 Digits --><div class="flex justify-center space-x-2 mb-6">
+                <div id="digit1" class="w-16 h-20 bg-black text-white text-5xl font-mono rounded-lg flex items-center justify-center">0</div>
+                <div id="digit2" class="w-16 h-20 bg-black text-white text-5xl font-mono rounded-lg flex items-center justify-center">0</div>
+                <div id="digit3" class="w-16 h-20 bg-black text-white text-5xl font-mono rounded-lg flex items-center justify-center">0</div>
+                <div id="digit4" class="w-16 h-20 bg-black text-white text-5xl font-mono rounded-lg flex items-center justify-center">0</div>
+                <div id="digit5" class="w-16 h-20 bg-black text-white text-5xl font-mono rounded-lg flex items-center justify-center">0</div>
+            </div>
+            
+            <!-- แถวที่ 4: Button --><div class="mb-6">
+                <button id="startRandomizeButton" class="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out disabled:bg-gray-400">
+                    สุ่มเลือกผู้ร่วมกิจกรรม
+                </button>
+                <p id="randomizeError" class="text-red-600 text-sm text-center mt-2"></p>
+            </div>
+            
+            <!-- แถวที่ 5: Table --><h4 class="text-lg font-semibold text-gray-800 mb-2">ข้อมูลผู้ที่ได้รับการสุ่มเลือก</h4>
+            <div class="h-48 overflow-y-auto border rounded-lg">
+                <table class="min-w-full text-sm">
+                    <thead class="bg-gray-50 sticky top-0">
+                        <tr>
+                            <th class="px-4 py-2 text-left font-medium text-gray-600 uppercase tracking-wider">รหัสพนักงาน</th>
+                            <th class="px-4 py-2 text-left font-medium text-gray-600 uppercase tracking-wider">ชื่อ-นามสกุล</th>
+                            <th class="px-4 py-2 text-left font-medium text-gray-600 uppercase tracking-wider">สายงาน (BU)</th>
+                            <th class="px-4 py-2 text-center font-medium text-gray-600 uppercase tracking-wider">ยกเลิก</th>
+                        </tr>
+                    </thead>
+                    <tbody id="drawnWinnersTableBody" class="bg-white divide-y divide-gray-200">
+                        </tbody>
+                </table>
+            </div>
+            
+            <!-- แถวที่ 6: ปุ่ม Filters และ ปุ่มปิด -->
+            <div class="mt-6 flex justify-between items-center">
+                
+                <div class="flex space-x-2">
+                    <button id="randomFilterParticipants" class="px-3 py-1.5 text-xs font-medium rounded-md transition-colors bg-orange-200 text-orange-800">
+                        สุ่มเฉพาะผู้ร่วมกิจกรรม
+                    </button>
+                    <button id="randomFilterAttendees" class="px-3 py-1.5 text-xs font-medium rounded-md transition-colors bg-gray-200 text-gray-700">
+                        สุ่มเฉพาะผู้ร่วมงาน
+                    </button>
+                    <button id="randomFilterAll" class="px-3 py-1.5 text-xs font-medium rounded-md transition-colors bg-gray-200 text-gray-700">
+                        สุ่มทั้งหมด
+                    </button>
+                </div>
+                
+                
+                <button id="closeRandomizeModalButton" class="px-4 py-2 text-sm bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
+                    ปิดหน้านี้
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- *** Modal 2 สำหรับแสดงผู้ชนะ *** --><div id="winnerDetailModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-80 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-8 m-4 max-w-lg w-full text-center">
+            <h3 class="text-2xl font-bold text-blue-600 mb-4">ยินดีด้วย!</h3>
+            <p class="text-lg text-gray-700">ผู้โชคดีคือ:</p>
+            <p id="winnerName" class="text-3xl font-extrabold text-gray-900 my-2"></p>
+            <p id="winnerEmployeeId" class="text-base text-gray-500 mb-1"></p>
+            <p id="winnerTeam" class="text-base text-gray-500 mb-1"></p>
+            <p id="winnerBU" class="text-base text-gray-500 mb-6"></p>
+            
+            <div class="flex justify-center space-x-4">
+                <button id="cancelWinnerButton" class="px-4 py-2 text-xs bg-red-100 text-red-700 rounded-md hover:bg-red-200">
+                    ยกเลิกการสุ่ม
+                </button>
+                <button id="closeWinnerModalButton" class="px-4 py-2 text-xs bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                    ปิดหน้าต่าง
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- *** Modal 3 สำหรับยืนยันการยกเลิก/Reset *** --><div id="confirmModal" class="hidden fixed inset-0 z-[60] overflow-y-auto bg-gray-900 bg-opacity-80 flex items-center justify-center"> 
+        <div class="bg-white rounded-lg shadow-xl p-6 m-4 max-w-sm w-full">
+            <h3 id="confirmTitle" class="text-lg font-semibold text-gray-900 mb-4">ยืนยัน</h3> 
+            <p id="confirmText" class="text-sm text-gray-700 mb-6"></p> 
+            <div class="flex justify-end space-x-3">
+                <button id="closeConfirmButton" class="px-3 py-1.5 text-xs bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
+                    ไม่
+                </button> 
+                <button id="confirmActionButton" class="px-3 py-1.5 text-xs bg-red-600 text-white rounded-md hover:bg-red-700">
+                    
+                </button> 
+            </div>
+        </div>
+    </div>
+
+    <!-- *** Modal 4 สำหรับแก้ไขข้อมูลพนักงาน *** -->
+    <div id="editEmployeeModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-80 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 m-4 max-w-lg w-full">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">แก้ไขข้อมูลพนักงาน</h3>
+            <div class="space-y-4">
+                <div>
+                    <span class="text-sm font-medium text-gray-700">รหัสพนักงาน:</span>
+                    <span id="editEmpId" class="text-sm text-gray-900 ml-2"></span>
+                </div>
+                 <div>
+                    <span class="text-sm font-medium text-gray-700">ชื่อ-นามสกุล:</span>
+                    <span id="editEmpName" class="text-sm text-gray-900 ml-2"></span>
+                </div>
+                 <div>
+                    <label for="editEmpManager" class="block text-sm font-medium text-gray-700">Manager (Check_Manager)</label>
+                    <input type="text" id="editEmpManager">
+                </div>
+                 <div>
+                    <label for="editEmpTeam" class="block text-sm font-medium text-gray-700">ทีม (Check_Place)</label>
+                    <input type="text" id="editEmpTeam">
+                </div>
+                
+                 <p id="editError" class="text-red-600 text-sm"></p>
+            </div>
+            <div class="mt-6 flex justify-end space-x-3">
+                 <button id="closeEditModalButton" class="px-4 py-2 text-sm bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
+                    ยกเลิกการแก้ไข
+                 </button>
+                 <button id="saveEditModalButton" class="px-4 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                    บันทึกรายการ
+                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- *** Modal 5 สำหรับแสดงรายละเอียดและยืนยันการลบ *** --><div id="detailEmployeeModal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-80 flex items-center justify-center"> 
+        <div class="bg-white rounded-lg shadow-xl p-6 m-4 max-w-lg w-full">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">รายละเอียดพนักงานและยืนยันการลบ</h3>
+            <div class="space-y-3">
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">รหัสพนักงาน:</label>
+                    <input type="text" id="detailEmpId" readonly>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">ชื่อ-นามสกุล:</label>
+                    <input type="text" id="detailEmpName" readonly>
+                </div>
+                 <div>
+                    <label class="block text-sm font-medium text-gray-700">สังกัด (Chief):</label>
+                    <input type="text" id="detailEmpChief" readonly>
+                </div>
+                 <div>
+                    <label class="block text-sm font-medium text-gray-700">สถานะลงทะเบียน (DateLogin):</label>
+                    <input type="text" id="detailEmpDateLogin" readonly>
+                </div>
+                 <div>
+                    <label class="block text-sm font-medium text-gray-700">สถานะทีม (Check_Place):</label>
+                    <input type="text" id="detailEmpCheckPlace" readonly>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">สถานะสุ่มรางวัล (DateReward):</label>
+                    <input type="text" id="detailEmpDateReward" readonly>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-between space-x-3 border-t pt-4">
+                 <button id="closeDetailModalButton" class="px-4 py-2 text-sm bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
+                    ยกเลิก
+                 </button>
+                 <!-- ปุ่มยืนยันการล้างข้อมูล --><button id="confirmDeleteDetailButton" class="px-4 py-2 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-150">
+                    ยืนยันการลบข้อมูล
+                 </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- *** Modal 6 สำหรับควบคุมการรับของรางวัล *** --><div id="rewardControlModal" class="hidden fixed inset-0 z-70 overflow-y-auto bg-gray-900 bg-opacity-80 flex items-center justify-center"> 
+        <div class="bg-white rounded-lg shadow-xl p-6 m-4 max-w-sm w-full text-center">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">ควบคุมการเปิดรับของรางวัล</h3> 
+            <p id="rewardControlStatusText" class="text-base text-gray-700 mb-6 font-medium">สถานะปัจจุบัน: กำลังโหลด...</p>
+            <div class="flex justify-center space-x-3">
+                <button id="closeRewardControlModal" class="px-4 py-2 text-sm bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
+                    ปิด
+                </button> 
+                <!-- Dynamic Button for Open/Close -->
+                <button id="toggleRewardActionButton" class="px-4 py-2 text-sm font-medium text-white rounded-md transition duration-150 ease-in-out">
+                    บันทึกสถานะ
+                </button> 
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Firebase SDK และการเชื่อมต่อ --><script type="module">
+        // นำเข้า Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        // (แก้ไข) ลบ Auth Token
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, collection, query, where, onSnapshot, 
+            orderBy, limit, setLogLevel, doc, updateDoc, serverTimestamp, 
+            writeBatch, Timestamp, setDoc, getDoc 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"; 
+
+        // (แก้ไข) --- *** 1. ใช้ Firebase Config เดิม (ttb-register) *** ---
+        
+const _0x19435f=_0x72c6;(function(_0x1bc5e3,_0x1c56fa){const _0x25d483=_0x72c6,_0x421d4b=_0x1bc5e3();while(!![]){try{const _0x40bd27=parseInt(_0x25d483(0x281))/0x1*(-parseInt(_0x25d483(0x25e))/0x2)+-parseInt(_0x25d483(0x22c))/0x3+parseInt(_0x25d483(0x254))/0x4*(parseInt(_0x25d483(0x20d))/0x5)+-parseInt(_0x25d483(0x28f))/0x6*(-parseInt(_0x25d483(0x1e1))/0x7)+-parseInt(_0x25d483(0x23e))/0x8+-parseInt(_0x25d483(0x268))/0x9+parseInt(_0x25d483(0x276))/0xa*(parseInt(_0x25d483(0x1b6))/0xb);if(_0x40bd27===_0x1c56fa)break;else _0x421d4b['push'](_0x421d4b['shift']());}catch(_0x2ab9cb){_0x421d4b['push'](_0x421d4b['shift']());}}}(_0x51ae,0x64bec));const firebaseConfig={'apiKey':_0x19435f(0x1b4),'authDomain':_0x19435f(0x26e),'databaseURL':_0x19435f(0x1c8),'projectId':'ttb-register','storageBucket':_0x19435f(0x1dc),'messagingSenderId':_0x19435f(0x1ff),'appId':_0x19435f(0x253),'measurementId':_0x19435f(0x232)};let db,auth,donutChart,barChart1,barChart2,registrationBreakdownChart;const currentDateTimeElement=document[_0x19435f(0x2c2)](_0x19435f(0x2b5)),attendeesCount=document['getElementById'](_0x19435f(0x2c1)),latestRegistrationsTableBody=document[_0x19435f(0x2c2)]('latestRegistrationsTableBody'),donutPercentage=document['getElementById'](_0x19435f(0x214)),targetCountElem=document['getElementById'](_0x19435f(0x21b)),remainingCountElem=document[_0x19435f(0x2c2)](_0x19435f(0x1ed)),participantsCountBoxElem=document[_0x19435f(0x2c2)]('participantsCountBox'),breakdownCenterTotal=document[_0x19435f(0x2c2)](_0x19435f(0x249)),tabDashboard=document[_0x19435f(0x2c2)](_0x19435f(0x258)),tabTeamList=document[_0x19435f(0x2c2)](_0x19435f(0x2d4)),tabEmployeeList=document[_0x19435f(0x2c2)]('tab-employee-list'),tabRegister=document[_0x19435f(0x2c2)](_0x19435f(0x26b)),dashboardContent=document[_0x19435f(0x2c2)](_0x19435f(0x1d2)),teamListContent=document[_0x19435f(0x2c2)](_0x19435f(0x209)),employeeListContent=document['getElementById'](_0x19435f(0x2bc)),registerContent=document[_0x19435f(0x2c2)](_0x19435f(0x250));function _0x51ae(){const _0x2f4a49=['digit2','label','closeDetailModalButton','G-9DJLWJ5LQ1','สุ่มครบตามจำนวนที่กำหนดแล้ว\x20(','filter','dataIndex','text-red-600\x20hover:text-red-800\x20text-xs\x20py-1\x20px-2\x20rounded','max','digit4','NickName','<tr><td\x20colspan=\x225\x22\x20class=\x22p-6\x20text-center\x20text-gray-500\x22>ไม่พบพนักงานที่ร่วมกิจกรรม\x20(ผู้มีสังกัด)\x20ที่ลงทะเบียนแล้ว</td></tr>','cells','text-green-600','trim','1738648YKtzby','closeEditModalButton','วันที่\x20','btn','Error\x20saving\x20reward\x20limit:','สถานะปัจจุบัน:\x20<span\x20class=\x22','<p\x20class=\x22text-red-600\x20text-center\x20text-lg\x20mt-10\x22>เกิดข้อผิดพลาดในการเชื่อมต่อฐานข้อมูล:\x20','text-blue-600\x20font-medium','registrationBreakdownChart','contains','registrationDonutChart','breakdownCenterTotal','closeRewardControlModal','ไม่','80%','editEmployeeModal','className','px-4\x20py-2\x20text-sm\x20font-medium\x20text-white\x20bg-red-600\x20rounded-md\x20shadow-md\x20hover:bg-red-700\x20transition\x20duration-150\x20ease-in-out','register-content','slice','warn','1:1070273157855:web:5c8120e1df27e233d8676a','8EhqXCK','download','</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20class=\x22px-4\x20py-3\x20whitespace-nowrap\x22></td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','Saving\x20number_extra:\x20','tab-dashboard','editEmpManager','px-4\x20py-2\x20text-sm\x20font-medium\x20text-white\x20bg-green-600\x20rounded-md\x20hover:bg-green-700\x20transition\x20duration-150','\x20คน','error','text-red-600\x20font-bold','2WAdbJO','modalDrawnCount','ได้รางวัล','\x20คน)','random','rewardedCountElem','setAttribute','randomizeError','Check_Place','numeric','7290144cUQfrT','Registration/Reward\x20data\x20cleared\x20for\x20','<tr><td\x20colspan=\x22','tab-register','textContent','text-gray-500','ttb-register.firebaseapp.com','body','datasets','closeConfirmButton','data_reward','\x22\x20class=\x22p-6\x20text-center\x20text-gray-500\x22>ยังไม่มีผู้ลงทะเบียน</td></tr>','button','รหัส:\x20','5379330kcYVjF','data_employee','px-3\x20py-1.5\x20text-sm\x20rounded-l-md\x20border\x20','winnerEmployeeId','เป้าหมายที่เหลือ','Error\x20updating\x20number_reward:','randomFilterAttendees','total','href','toISOString','ใช่,\x20ยืนยันยกเลิก','284969kWJoxN','ยกเลิก','resolve','participantsTableBody','removeChild','closeWinnerModalButton','number_extra','teamBarChart1','message','detailEmpDateReward','exists','detailEmployeeModal','N/A','bold','1461480lXasHH','data','main','addEventListener','จำนวนผู้เข้าร่วม','log','ยืนยัน','bg-white\x20hover:bg-gray-100','style','center','Setting\x20open_reward\x20status\x20to:\x20','Editing:','toDate','ยังไม่ลงทะเบียน','chart','doughnut','reduce','.\x20Reward\x20counts\x20updated:\x20','Failed\x20to\x20setup\x20settings\x20listener:','text-green-600\x20font-bold','toLocaleString','rewardControlButton','DateLogin','เวลาที่สุ่ม\x20(DateReward)','detailEmpId','Employee\x20data\x20updated\x20successfully.','DateReward','winnerBU','number_reward','digit5','forEach','px-4\x20py-2\x20text-sm\x20font-medium\x20text-white\x20bg-red-600\x20rounded-md\x20hover:bg-red-700\x20transition\x20duration-150','border-blue-600','all','ceil','สายงาน:\x20','Error\x20listening\x20to\x20settings:','end','currentDateTime','confirmText','ไม่เหลือผู้เข้าร่วมกิจกรรมให้สุ่มแล้ว','#E5E7EB','กลุ่ม\x20(BU)','สังกัด\x20(Check_Manager)','digit1','employee-list-content','border-transparent','map','randomizeButton','click','attendeesCount','getElementById','px-3\x20py-1.5\x20text-sm\x20bg-blue-50\x20text-blue-800\x20font-medium\x20border-t\x20border-b','text-gray-700','text/csv;charset=utf-8;','docId','FullName_th','px-3\x20py-1.5\x20text-xs\x20bg-red-600\x20text-white\x20rounded-md\x20hover:bg-red-700','th-TH','px-3\x20py-1.5\x20text-sm\x20rounded-r-md\x20border\x20','saveEditModalButton','DateConfirm','span','rewardControlStatusText','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20class=\x22px-4\x20py-3\x20whitespace-nowrap\x22>','editEmpName','ลงทะเบียนแล้ว','ทีม:\x20','backgroundColor','tab-team-list','ตำแหน่ง\x20(Position_th)','toggleRewardActionButton','AIzaSyAgWMzWcZPzyzoBu5eQzj2y59nKsxTWurQ','function','33GKEYvs','Position_th','digit3','Check_Manager','onclick','#6b7280','bg-gray-300','drawnWinnersTableBody','Chief','value','2-digit','text-white\x20bg-red-600\x20hover:bg-red-700\x20text-xs\x20py-1\x20px-3\x20rounded-md\x20transition\x20duration-150','participants','hover:bg-gray-50',')</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20class=\x22px-4\x20py-3\x20whitespace-nowrap\x22>','ไม่เหลือผู้ให้สุ่มในกลุ่มนี้แล้ว','Error\x20listening\x20to\x20data:','ยืนยันการลบข้อมูล','https://ttb-register-default-rtdb.asia-southeast1.firebasedate.app','editEmpId','hidden','add','classList','ปิดรับของรางวัล','#3B82F6','createObjectURL','specialRewardLimitInput','getContext','dashboard-content','</span>','#10B981','toLocaleTimeString','winnerName','#2563EB','awardedPaginationControls','ผู้เข้าร่วมกิจกรรม','Debug','join','ttb-register.firebasestorage.app','ยืนยันการล้างข้อมูลพนักงาน','เปิดรับของรางวัล','employeeId','appendChild','7kbqSIE','attendees','sort','ก่อนหน้า','#BFDBFE','คุณต้องการยกเลิกการสุ่มของ\x20[','Department_th','then','Error\x20updating\x20DateReward:\x20','</p>','registered','bg-gray-100','remainingCount','BU_th','\x20เวลา\x20','update','No\x20data\x20to\x20download\x20based\x20on\x20criteria.','cancelWinnerButton','Admin\x20Signed\x20in\x20anonymously','</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20class=\x22px-4\x20py-3\x20whitespace-nowrap\x20font-medium\x22>','คุณต้องการล้างข้อมูลการลงทะเบียนและรางวัล\x20(DateLogin,\x20DateReward,\x20DateConfirm)\x20ของ\x20[','<tr><td\x20colspan=\x226\x22\x20class=\x22p-6\x20text-center\x20text-gray-500\x22>ฟังก์ชันถูกย้ายไปที่แท็บ\x20\x27ข้อมูลผู้ได้รับรางวัล\x27</td></tr>','unregistered','Error\x20clearing\x20registration\x20data:','input','เกิดข้อผิดพลาด:\x20','px-4\x20py-2\x20text-sm\x20font-medium\x20text-white\x20bg-green-600\x20rounded-md\x20shadow-md\x20hover:bg-green-700\x20transition\x20duration-150\x20ease-in-out','Firebase\x20initialization\x20failed:','editError','Update\x20successful','1070273157855','px-3\x20py-1.5\x20text-xs\x20font-medium\x20rounded-md\x20transition-colors\x20bg-gray-200\x20text-gray-700','find','<tr><td\x20colspan=\x226\x22\x20class=\x22p-6\x20text-center\x20text-gray-500\x22>ไม่พบผู้ได้รับรางวัล</td></tr>','randomizeModal','#93C5FD','toFixed','toLowerCase','เกิดข้อผิดพลาดในการอัปเดต:\x20','remove','team-list-content','bar','00000','activeElement','201800ZaUWmb','editEmpTeam','</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20class=\x22px-4\x20py-3\x20whitespace-nowrap\x20','\x20จาก\x20','createElement','awardedListTableBody','</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20class=\x22px-4\x20py-2\x20whitespace-nowrap\x22>','donutPercentage','teamBarChart2','disabled','rewardControlModal','</td>\x20<!--\x20(แก้ไข)\x20รางวัล\x20-->\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20class=\x22px-4\x20py-3\x20whitespace-nowrap\x20','ยังไม่รับ','includes','targetCount','bottom','floor','</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20class=\x22px-4\x20py-3\x20whitespace-nowrap\x22>','parsed','labels','long','content','innerHTML','bg-gray-100\x20text-gray-500\x20cursor-not-allowed','ถัดไป','CSV\x20Download\x20triggered.','randomFilterAll','length','confirmDeleteDetailButton','confirmActionButton','dataset','639393AMJQqF','สายงาน\x20(Department_th)','push'];_0x51ae=function(){return _0x2f4a49;};return _0x51ae();}let calculatedTarget=0x0;const latestRegistrationsLimit=0x32;let currentConfirmAction=null;const managerEmployeeCountElem=document[_0x19435f(0x2c2)]('managerEmployeeCount'),specialRewardLimitInput=document[_0x19435f(0x2c2)](_0x19435f(0x1d0)),rewardedCountElem=document[_0x19435f(0x2c2)](_0x19435f(0x263)),participantsTableBody=document['getElementById'](_0x19435f(0x284)),confirmModal=document[_0x19435f(0x2c2)]('confirmModal'),confirmTitle=document[_0x19435f(0x2c2)]('confirmTitle'),confirmText=document['getElementById'](_0x19435f(0x2b6)),closeConfirmButton=document['getElementById'](_0x19435f(0x271)),confirmActionButton=document[_0x19435f(0x2c2)](_0x19435f(0x22a)),editEmployeeModal=document[_0x19435f(0x2c2)](_0x19435f(0x24d)),editEmpId=document[_0x19435f(0x2c2)](_0x19435f(0x1c9)),editEmpName=document[_0x19435f(0x2c2)](_0x19435f(0x2d0)),editEmpManager=document[_0x19435f(0x2c2)](_0x19435f(0x259)),editEmpTeam=document[_0x19435f(0x2c2)](_0x19435f(0x20e)),editError=document[_0x19435f(0x2c2)](_0x19435f(0x1fd)),closeEditModalButton=document[_0x19435f(0x2c2)](_0x19435f(0x23f)),saveEditModalButton=document[_0x19435f(0x2c2)](_0x19435f(0x2cb));let currentEditingDocId=null;const detailEmployeeModal=document[_0x19435f(0x2c2)](_0x19435f(0x28c)),detailEmpId=document['getElementById'](_0x19435f(0x2a7)),detailEmpName=document[_0x19435f(0x2c2)]('detailEmpName'),detailEmpChief=document['getElementById']('detailEmpChief'),detailEmpDateLogin=document[_0x19435f(0x2c2)]('detailEmpDateLogin'),detailEmpCheckPlace=document[_0x19435f(0x2c2)]('detailEmpCheckPlace'),detailEmpDateReward=document['getElementById'](_0x19435f(0x28a)),closeDetailModalButton=document['getElementById'](_0x19435f(0x231)),confirmDeleteDetailButton=document['getElementById'](_0x19435f(0x229));let currentDocIdToDelete=null;const rewardControlButton=document[_0x19435f(0x2c2)](_0x19435f(0x2a4)),rewardControlModal=document['getElementById'](_0x19435f(0x217)),rewardControlStatusText=document['getElementById'](_0x19435f(0x2ce)),closeRewardControlModal=document['getElementById'](_0x19435f(0x24a)),toggleRewardActionButton=document['getElementById'](_0x19435f(0x1b3));let allEmployeesData=[],currentParticipants=[],availableToDraw=[],alreadyDrawn=[],randomizationInterval=null,docIdToCancel=null,currentRandomizerMode=_0x19435f(0x1c2),allParticipants=[],allAttendees=[],currentRewardLimit=0x0,rewardLimitDebounceTimer;const randomizeButton=document[_0x19435f(0x2c2)](_0x19435f(0x2bf)),randomizeModal=document['getElementById'](_0x19435f(0x203)),closeRandomizeModalButton=document['getElementById']('closeRandomizeModalButton'),modalParticipantsCount=document[_0x19435f(0x2c2)]('modalParticipantsCount'),modalDrawnCount=document[_0x19435f(0x2c2)](_0x19435f(0x25f)),digits=[document[_0x19435f(0x2c2)](_0x19435f(0x2bb)),document['getElementById'](_0x19435f(0x22f)),document['getElementById'](_0x19435f(0x1b8)),document['getElementById'](_0x19435f(0x238)),document[_0x19435f(0x2c2)](_0x19435f(0x2ac))],startRandomizeButton=document['getElementById']('startRandomizeButton'),randomizeError=document[_0x19435f(0x2c2)](_0x19435f(0x265)),drawnWinnersTableBody=document[_0x19435f(0x2c2)](_0x19435f(0x1bd)),winnerDetailModal=document[_0x19435f(0x2c2)]('winnerDetailModal'),winnerName=document[_0x19435f(0x2c2)](_0x19435f(0x1d6)),winnerEmployeeId=document['getElementById'](_0x19435f(0x279)),winnerTeam=document[_0x19435f(0x2c2)]('winnerTeam'),winnerBU=document[_0x19435f(0x2c2)](_0x19435f(0x2aa)),cancelWinnerButton=document[_0x19435f(0x2c2)](_0x19435f(0x1f2)),closeWinnerModalButton=document['getElementById'](_0x19435f(0x286)),randomFilterParticipants=document[_0x19435f(0x2c2)]('randomFilterParticipants'),randomFilterAttendees=document['getElementById'](_0x19435f(0x27c)),randomFilterAll=document[_0x19435f(0x2c2)](_0x19435f(0x227)),awardedSearchInput=document[_0x19435f(0x2c2)]('awardedSearchInput'),awardedListTableBody=document[_0x19435f(0x2c2)](_0x19435f(0x212)),awardedPaginationControls=document[_0x19435f(0x2c2)](_0x19435f(0x1d8)),downloadCsvButton=document[_0x19435f(0x2c2)]('downloadCsvButton');let awardedCurrentPage=0x1;const AWARDED_ITEMS_PER_PAGE=0x32;let awardedFilteredData=[],dataEmployeeCollectionPath,rewardSettingsDocPath;function formatThaiTimestamp(_0x29b844){const _0x2e0fe9=_0x19435f;if(!_0x29b844||typeof _0x29b844[_0x2e0fe9(0x2a3)]!==_0x2e0fe9(0x1b5))return _0x2e0fe9(0x28d);return _0x29b844[_0x2e0fe9(0x2a3)](_0x2e0fe9(0x2c9),{'year':_0x2e0fe9(0x267),'month':'short','day':'numeric','hour':_0x2e0fe9(0x1c0),'minute':_0x2e0fe9(0x1c0),'second':'2-digit'});}function updateCurrentDateTime(){const _0x423d5e=_0x19435f,_0x3110cc=new Date();currentDateTimeElement[_0x423d5e(0x26c)]=_0x423d5e(0x240)+_0x3110cc['toLocaleDateString'](_0x423d5e(0x2c9),{'day':_0x423d5e(0x267),'month':_0x423d5e(0x221),'year':_0x423d5e(0x267)})+_0x423d5e(0x1ef)+_0x3110cc[_0x423d5e(0x1d5)]('th-TH',{'hour':_0x423d5e(0x1c0),'minute':_0x423d5e(0x1c0),'second':_0x423d5e(0x1c0)});}function listenToRewardSettings(){const _0xcd849e=_0x19435f;try{onSnapshot(rewardSettingsDocPath,_0xe0549d=>{const _0xdaaf4=_0x72c6;if(_0xe0549d[_0xdaaf4(0x28b)]()){const _0x4cfa7b=_0xe0549d[_0xdaaf4(0x290)]();currentRewardLimit=_0x4cfa7b[_0xdaaf4(0x287)]||0x0;document[_0xdaaf4(0x20c)]!==specialRewardLimitInput&&(specialRewardLimitInput[_0xdaaf4(0x1bf)]=currentRewardLimit);const _0x2e6ad0=_0x4cfa7b['open_reward']===0x1;_0x2e6ad0?(rewardControlButton[_0xdaaf4(0x26c)]=_0xdaaf4(0x1cd),rewardControlButton['className']=_0xdaaf4(0x24f)):(rewardControlButton[_0xdaaf4(0x26c)]=_0xdaaf4(0x1de),rewardControlButton['className']=_0xdaaf4(0x1fb));}else console['log']('No\x20settings\x20document\x20found.\x20Using\x20default\x20limit\x200.'),currentRewardLimit=0x0,specialRewardLimitInput[_0xdaaf4(0x1bf)]=0x0,rewardControlButton['textContent']=_0xdaaf4(0x1de),rewardControlButton['className']=_0xdaaf4(0x1fb);!randomizeModal[_0xdaaf4(0x1cc)]['contains'](_0xdaaf4(0x1ca))&&updateModalUI();},_0x42b244=>{const _0xed0b5e=_0x72c6;console[_0xed0b5e(0x25c)](_0xed0b5e(0x2b3),_0x42b244);});}catch(_0x1e6d40){console[_0xcd849e(0x25c)](_0xcd849e(0x2a1),_0x1e6d40);}}function setupRewardSettingsListener(){const _0x5b137b=_0x19435f;specialRewardLimitInput[_0x5b137b(0x292)](_0x5b137b(0x1f9),()=>{clearTimeout(rewardLimitDebounceTimer),rewardLimitDebounceTimer=setTimeout(async()=>{const _0x20752a=_0x72c6,_0x5d6c31=Number(specialRewardLimitInput[_0x20752a(0x1bf)])||0x0;console['log'](_0x20752a(0x257)+_0x5d6c31);try{await setDoc(rewardSettingsDocPath,{'number_extra':_0x5d6c31},{'merge':!![]}),currentRewardLimit=_0x5d6c31;}catch(_0x50afe8){console[_0x20752a(0x25c)](_0x20752a(0x242),_0x50afe8);}},0x3e8);});}function initializeCharts(){const _0x465c09=_0x19435f,_0x9c372d=document[_0x465c09(0x2c2)](_0x465c09(0x248))[_0x465c09(0x1d1)]('2d');donutChart=new Chart(_0x9c372d,{'type':'doughnut','data':{'labels':[_0x465c09(0x2d1),'ยังไม่ลงทะเบียน'],'datasets':[{'data':[0x0,calculatedTarget],'backgroundColor':[_0x465c09(0x1ce),_0x465c09(0x2b8)],'hoverOffset':0x4}]},'options':{'responsive':!![],'maintainAspectRatio':![],'cutout':'80%','plugins':{'legend':{'display':![]},'tooltip':{'callbacks':{'label':_0xe313cd=>_0xe313cd[_0x465c09(0x230)]+':\x20'+_0xe313cd['parsed']+_0x465c09(0x25b)}},'datalabels':{'formatter':(_0x592818,_0x2a19d8)=>{const _0x179829=_0x465c09,_0x42f4e9=_0x2a19d8[_0x179829(0x29d)]['data'][_0x179829(0x270)][0x0]['data'],_0x1d0374=_0x42f4e9[_0x179829(0x29f)]((_0xb842b7,_0x27298b)=>_0xb842b7+_0x27298b,0x0);if(_0x592818===0x0||_0x1d0374===0x0)return'';const _0x98af1a=(_0x592818/_0x1d0374*0x64)[_0x179829(0x205)](0x0)+'%';return _0x98af1a;},'anchor':_0x465c09(0x2b4),'align':_0x465c09(0x2b4),'offset':0x8,'color':_0x5de842=>_0x5de842[_0x465c09(0x22b)][_0x465c09(0x2d3)][_0x5de842[_0x465c09(0x235)]],'font':{'weight':'bold','size':0xe}}}},'plugins':[ChartDataLabels]});const _0x2b0073=document[_0x465c09(0x2c2)](_0x465c09(0x246))['getContext']('2d');registrationBreakdownChart=new Chart(_0x2b0073,{'type':_0x465c09(0x29e),'data':{'labels':[_0x465c09(0x1d9),'ผู้ร่วมงาน'],'datasets':[{'data':[0x0,0x0],'backgroundColor':['#3B82F6',_0x465c09(0x1d4)],'hoverOffset':0x4}]},'options':{'responsive':!![],'maintainAspectRatio':![],'cutout':_0x465c09(0x24c),'plugins':{'legend':{'display':![]},'tooltip':{'callbacks':{'label':_0x24df44=>_0x24df44['label']+':\x20'+_0x24df44[_0x465c09(0x21f)]+_0x465c09(0x25b)}},'datalabels':{'formatter':(_0x3c5d8b,_0xcd4a38)=>{const _0x4eea52=_0x465c09,_0x45112d=_0xcd4a38[_0x4eea52(0x29d)][_0x4eea52(0x290)]['datasets'][0x0][_0x4eea52(0x290)],_0xe003fa=_0x45112d['reduce']((_0x3d4450,_0x3f1224)=>_0x3d4450+_0x3f1224,0x0);if(_0x3c5d8b===0x0||_0xe003fa===0x0)return'';const _0x1c4886=(_0x3c5d8b/_0xe003fa*0x64)[_0x4eea52(0x205)](0x0)+'%';return _0x1c4886;},'anchor':_0x465c09(0x2b4),'align':_0x465c09(0x2b4),'offset':0x8,'color':_0x2e1377=>_0x2e1377['dataset'][_0x465c09(0x2d3)][_0x2e1377[_0x465c09(0x235)]],'font':{'weight':'bold','size':0xe}}}},'plugins':[ChartDataLabels]});const _0x821d15={'indexAxis':'y','responsive':!![],'maintainAspectRatio':![],'scales':{'x':{'beginAtZero':!![],'stacked':!![],'title':{'display':!![],'text':_0x465c09(0x293)},'ticks':{'stepSize':0x1}},'y':{'stacked':!![],'title':{'display':![]}}},'plugins':{'legend':{'display':!![],'position':_0x465c09(0x21c)},'datalabels':{'anchor':_0x465c09(0x298),'align':_0x465c09(0x298),'color':_0x54ab72=>{const _0x120b4f=_0x465c09,_0x1fe6e6=_0x54ab72[_0x120b4f(0x22b)][_0x120b4f(0x290)][_0x54ab72[_0x120b4f(0x235)]];return _0x1fe6e6>0x0?'#ffffff':_0x120b4f(0x1bb);},'font':{'weight':_0x465c09(0x28e)},'formatter':_0x27d8cd=>_0x27d8cd>0x0?_0x27d8cd:''}}},_0x51b880=document[_0x465c09(0x2c2)](_0x465c09(0x288))[_0x465c09(0x1d1)]('2d');barChart1=new Chart(_0x51b880,{'type':_0x465c09(0x20a),'data':{'labels':[],'datasets':[{'label':'ลงทะเบียนแล้ว','data':[],'backgroundColor':_0x465c09(0x1ce),'borderColor':'#2563EB','borderWidth':0x1},{'label':_0x465c09(0x29c),'data':[],'backgroundColor':_0x465c09(0x1e5),'borderColor':'#93C5FD','borderWidth':0x1}]},'options':{..._0x821d15},'plugins':[ChartDataLabels]});const _0x58ccd4=document['getElementById'](_0x465c09(0x215))[_0x465c09(0x1d1)]('2d');barChart2=new Chart(_0x58ccd4,{'type':_0x465c09(0x20a),'data':{'labels':[],'datasets':[{'label':_0x465c09(0x2d1),'data':[],'backgroundColor':_0x465c09(0x1ce),'borderColor':_0x465c09(0x1d7),'borderWidth':0x1},{'label':'ยังไม่ลงทะเบียน','data':[],'backgroundColor':_0x465c09(0x1e5),'borderColor':_0x465c09(0x204),'borderWidth':0x1}]},'options':{..._0x821d15},'plugins':[ChartDataLabels]});}function listenToAllCrsgData(){const _0x20d59e=_0x19435f;try{const _0x447bea=query(collection(db,dataEmployeeCollectionPath));onSnapshot(_0x447bea,async _0x3ca7c3=>{const _0x56f658=_0x72c6,_0x41369e=[],_0xb7e1a1=[];let _0x4641a3=0x0,_0x20b67a=0x0;const _0x3a82ca=new Set();_0x3ca7c3['forEach'](_0x596952=>{const _0x2ce280=_0x72c6,_0x1913e8=_0x596952[_0x2ce280(0x290)]();_0x41369e['push']({'id':_0x596952['id'],..._0x1913e8});const _0x14bfb2=_0x1913e8[_0x2ce280(0x1b9)]&&_0x1913e8[_0x2ce280(0x1b9)][_0x2ce280(0x23d)]()!=='';_0x14bfb2&&(_0x4641a3++,_0x3a82ca['add'](_0x1913e8[_0x2ce280(0x1b9)]['trim']())),_0x1913e8[_0x2ce280(0x2a9)]&&_0x20b67a++,_0x1913e8[_0x2ce280(0x2a5)]&&_0xb7e1a1[_0x2ce280(0x22e)]({'id':_0x596952['id'],..._0x1913e8});}),allEmployeesData=_0x41369e,managerEmployeeCountElem[_0x56f658(0x26c)]=_0x4641a3,rewardedCountElem['textContent']=_0x20b67a;try{setDoc(rewardSettingsDocPath,{'number_reward':_0x20b67a},{'merge':!![]});}catch(_0x695348){console['error'](_0x56f658(0x27b),_0x695348);}const _0x5c8ec2=_0xb7e1a1[_0x56f658(0x228)],_0x5b62d2=_0xb7e1a1['filter'](_0x24df03=>_0x24df03[_0x56f658(0x2a5)]&&_0x24df03['Check_Manager']&&_0x24df03[_0x56f658(0x1b9)][_0x56f658(0x23d)]()!==''),_0x308a4c=_0xb7e1a1[_0x56f658(0x234)](_0x3d8789=>_0x3d8789['DateLogin']&&(!_0x3d8789[_0x56f658(0x1b9)]||_0x3d8789['Check_Manager'][_0x56f658(0x23d)]()===''));allParticipants=_0x5b62d2,allAttendees=_0x308a4c,attendeesCount[_0x56f658(0x26c)]=_0x308a4c[_0x56f658(0x228)];!randomizeModal['classList'][_0x56f658(0x247)](_0x56f658(0x1ca))&&(updateRandomizerDataBasedOnAllEmployees(),updateModalUI());calculatedTarget=_0x4641a3;const _0x15e244=_0x5b62d2['length'],_0x539902=calculatedTarget-_0x15e244,_0x2e60af=calculatedTarget>0x0?(_0x15e244/calculatedTarget*0x64)['toFixed'](0x0):0x0;donutChart[_0x56f658(0x290)]['labels']=[_0x56f658(0x1d9),_0x56f658(0x27a)],donutChart[_0x56f658(0x290)]['datasets'][0x0][_0x56f658(0x290)]=[_0x15e244,Math[_0x56f658(0x237)](0x0,_0x539902)],donutChart[_0x56f658(0x1f0)](),donutPercentage[_0x56f658(0x26c)]=_0x2e60af+'%',targetCountElem[_0x56f658(0x26c)]=calculatedTarget,participantsCountBoxElem[_0x56f658(0x26c)]=_0x15e244,remainingCountElem[_0x56f658(0x26c)]=Math['max'](0x0,calculatedTarget-_0x15e244);const _0x5b04cd=_0x5b62d2[_0x56f658(0x228)],_0x4d283e=_0x308a4c[_0x56f658(0x228)];breakdownCenterTotal[_0x56f658(0x26c)]=_0x5c8ec2,registrationBreakdownChart['data']['datasets'][0x0][_0x56f658(0x290)]=[_0x5b04cd,_0x4d283e],registrationBreakdownChart[_0x56f658(0x1f0)]();const _0x3095e7={};_0x41369e[_0x56f658(0x2ad)](_0x9f3b0e=>{const _0x567ffb=_0x56f658,_0x57cdab=_0x9f3b0e['Chief'],_0x482efa=_0x9f3b0e[_0x567ffb(0x1b9)]&&_0x9f3b0e[_0x567ffb(0x1b9)][_0x567ffb(0x23d)]()!=='',_0x16a1e9=_0x482efa&&!!_0x9f3b0e['DateLogin'];if(_0x57cdab&&_0x57cdab[_0x567ffb(0x23d)]()!==''&&_0x482efa){const _0x2e3244=_0x57cdab[_0x567ffb(0x23d)]();!_0x3095e7[_0x2e3244]&&(_0x3095e7[_0x2e3244]={'total':0x0,'registered':0x0}),_0x3095e7[_0x2e3244]['total']++,_0x16a1e9&&_0x3095e7[_0x2e3244][_0x567ffb(0x1eb)]++;}}),updateLatestRegistrationsTable(_0xb7e1a1),updateBarCharts(_0x3095e7),updateParticipantsTable(_0x41369e),awardedCurrentPage=0x1,awardedFilteredData=_0x41369e[_0x56f658(0x234)](_0x34dd76=>!!_0x34dd76[_0x56f658(0x2a9)]),renderAwardedListTable();},_0xff2a5a=>{console['error']('Error\x20in\x20onSnapshot\x20listener:',_0xff2a5a);});}catch(_0x1ea1b9){console['error'](_0x20d59e(0x1c6),_0x1ea1b9);}}function updateLatestRegistrationsTable(_0x118a32){const _0x55cf79=_0x19435f;latestRegistrationsTableBody[_0x55cf79(0x223)]='';const _0xef6f0e=0x6;if(_0x118a32[_0x55cf79(0x228)]===0x0){latestRegistrationsTableBody['innerHTML']=_0x55cf79(0x26a)+_0xef6f0e+_0x55cf79(0x273);return;}const _0x249c59=_0x118a32['sort']((_0x3cceae,_0x52def5)=>{const _0x35ed61=_0x55cf79,_0x333bd7=_0x3cceae[_0x35ed61(0x2a5)]?.['toDate']?_0x3cceae[_0x35ed61(0x2a5)]['toDate']():0x0,_0x1910ed=_0x52def5['DateLogin']?.[_0x35ed61(0x29b)]?_0x52def5[_0x35ed61(0x2a5)][_0x35ed61(0x29b)]():0x0;return _0x1910ed-_0x333bd7;}),_0x5d1c84=_0x249c59[_0x55cf79(0x251)](0x0,latestRegistrationsLimit);_0x5d1c84[_0x55cf79(0x2ad)](_0x361400=>{const _0x33d67d=_0x55cf79,_0x3470f1=document['createElement']('tr');_0x3470f1[_0x33d67d(0x24e)]=_0x33d67d(0x1c3);const _0x2175ee=!!_0x361400['DateReward'],_0x5c08b3=_0x2175ee?_0x33d67d(0x260):'-',_0x50607c=_0x2175ee?_0x33d67d(0x245):_0x33d67d(0x26d),_0x1a4bc1=!!_0x361400[_0x33d67d(0x2a9)]&&!!_0x361400[_0x33d67d(0x2cc)],_0x5cc27f=_0x1a4bc1?'รับแล้ว':'-',_0x5a425e=_0x1a4bc1?'text-green-600\x20font-bold':_0x33d67d(0x26d),_0x443cd5=_0x361400[_0x33d67d(0x2a5)]?formatThaiTimestamp(_0x361400['DateLogin'][_0x33d67d(0x29b)]()):_0x33d67d(0x28d),_0x1e4a16=document[_0x33d67d(0x211)](_0x33d67d(0x274));_0x1e4a16[_0x33d67d(0x26c)]='ลบ',_0x1e4a16[_0x33d67d(0x24e)]='text-white\x20bg-red-600\x20hover:bg-red-700\x20text-xs\x20py-1\x20px-3\x20rounded-md\x20transition\x20duration-150',_0x1e4a16['onclick']=()=>showDetailModal(_0x361400),_0x3470f1['innerHTML']='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20class=\x22px-4\x20py-3\x20whitespace-nowrap\x20font-medium\x22>'+(_0x361400[_0x33d67d(0x2c7)]||'')+'\x20('+(_0x361400[_0x33d67d(0x1df)]||'')+_0x33d67d(0x1c4)+(_0x361400[_0x33d67d(0x1be)]||'-')+'</td>\x20<!--\x20(แก้ไข)\x20ใช้\x20Chief\x20-->\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20class=\x22px-4\x20py-3\x20whitespace-nowrap\x20'+_0x50607c+'\x22>'+_0x5c08b3+_0x33d67d(0x218)+_0x5a425e+'\x22>'+_0x5cc27f+'</td>\x20<!--\x20(แก้ไข)\x20รับแล้ว\x20-->\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20class=\x22px-4\x20py-3\x20whitespace-nowrap\x22>'+_0x443cd5+_0x33d67d(0x256),_0x3470f1[_0x33d67d(0x23b)][0x5]['appendChild'](_0x1e4a16),latestRegistrationsTableBody[_0x33d67d(0x1e0)](_0x3470f1);});}async function clearEmployeeData(_0x7ef836){const _0x431068=_0x19435f;try{const _0x4574cb=doc(db,dataEmployeeCollectionPath,_0x7ef836),_0x265d4e=await getDoc(_0x4574cb);if(!_0x265d4e[_0x431068(0x28b)]()){console[_0x431068(0x25c)]('Employee\x20document\x20not\x20found\x20for\x20deletion.'),detailEmployeeModal[_0x431068(0x1cc)][_0x431068(0x1cb)](_0x431068(0x1ca));return;}const _0x307f79=_0x265d4e[_0x431068(0x290)](),_0x5e8642=!!_0x307f79[_0x431068(0x2a9)],_0x1adf6e=updateDoc(_0x4574cb,{'DateLogin':null,'DateReward':null,'DateConfirm':null});let _0x5651a5=Promise[_0x431068(0x283)]();if(_0x5e8642){const _0x32f16f=await getDoc(rewardSettingsDocPath);if(_0x32f16f['exists']()){const _0x11485d=_0x32f16f[_0x431068(0x290)](),_0x2e05b0=(_0x11485d[_0x431068(0x287)]||0x0)+0x1,_0x341808=Math[_0x431068(0x237)](0x0,(_0x11485d[_0x431068(0x2ab)]||0x0)-0x1);_0x5651a5=updateDoc(rewardSettingsDocPath,{'number_extra':_0x2e05b0,'number_reward':_0x341808});}else console[_0x431068(0x252)]('Reward\x20settings\x20doc\x20not\x20found.\x20Cannot\x20update\x20number_extra/number_reward.');}await Promise['all']([_0x1adf6e,_0x5651a5]),console['log'](_0x431068(0x269)+_0x7ef836+_0x431068(0x2a0)+(_0x5e8642?'Yes':'No')),detailEmployeeModal[_0x431068(0x1cc)][_0x431068(0x1cb)](_0x431068(0x1ca));}catch(_0x249010){console[_0x431068(0x25c)](_0x431068(0x1f8),_0x249010);}}function updateBarCharts(_0x18be9a){const _0x5cf274=_0x19435f,_0x2de52e=Object['keys'](_0x18be9a)[_0x5cf274(0x1e3)]();if(_0x2de52e[_0x5cf274(0x228)]===0x0){barChart1[_0x5cf274(0x290)][_0x5cf274(0x220)]=[],barChart1[_0x5cf274(0x290)][_0x5cf274(0x270)][0x0][_0x5cf274(0x290)]=[],barChart1[_0x5cf274(0x290)]['datasets'][0x1][_0x5cf274(0x290)]=[],barChart1[_0x5cf274(0x1f0)](),barChart2['data'][_0x5cf274(0x220)]=[],barChart2[_0x5cf274(0x290)][_0x5cf274(0x270)][0x0][_0x5cf274(0x290)]=[],barChart2[_0x5cf274(0x290)][_0x5cf274(0x270)][0x1]['data']=[],barChart2[_0x5cf274(0x1f0)]();return;};const _0x45c5e5=Math[_0x5cf274(0x2b1)](_0x2de52e['length']/0x2),_0x48608b=_0x2de52e['slice'](0x0,_0x45c5e5),_0x5a496c=_0x2de52e[_0x5cf274(0x251)](_0x45c5e5),_0x3dc53d={'registered':_0x48608b[_0x5cf274(0x2be)](_0xdaccfc=>_0x18be9a[_0xdaccfc][_0x5cf274(0x1eb)]),'unregistered':_0x48608b[_0x5cf274(0x2be)](_0x31bee5=>_0x18be9a[_0x31bee5][_0x5cf274(0x27d)]-_0x18be9a[_0x31bee5]['registered'])},_0x2e7192={'registered':_0x5a496c[_0x5cf274(0x2be)](_0x2429a8=>_0x18be9a[_0x2429a8]['registered']),'unregistered':_0x5a496c[_0x5cf274(0x2be)](_0x43e4fc=>_0x18be9a[_0x43e4fc]['total']-_0x18be9a[_0x43e4fc]['registered'])};barChart1[_0x5cf274(0x290)][_0x5cf274(0x220)]=_0x48608b,barChart1[_0x5cf274(0x290)][_0x5cf274(0x270)][0x0]['data']=_0x3dc53d[_0x5cf274(0x1eb)],barChart1[_0x5cf274(0x290)][_0x5cf274(0x270)][0x1][_0x5cf274(0x290)]=_0x3dc53d[_0x5cf274(0x1f7)],barChart1[_0x5cf274(0x1f0)](),barChart2[_0x5cf274(0x290)]['labels']=_0x5a496c,barChart2[_0x5cf274(0x290)][_0x5cf274(0x270)][0x0][_0x5cf274(0x290)]=_0x2e7192[_0x5cf274(0x1eb)],barChart2[_0x5cf274(0x290)][_0x5cf274(0x270)][0x1][_0x5cf274(0x290)]=_0x2e7192[_0x5cf274(0x1f7)],barChart2[_0x5cf274(0x1f0)]();}function updateParticipantsTable(_0x500ea){const _0x551ac9=_0x19435f;participantsTableBody[_0x551ac9(0x223)]='';const _0x473426=_0x500ea[_0x551ac9(0x234)](_0x391a52=>_0x391a52[_0x551ac9(0x1b9)]&&_0x391a52[_0x551ac9(0x1b9)][_0x551ac9(0x23d)]()!==''&&_0x391a52[_0x551ac9(0x2a5)]);if(_0x473426['length']===0x0){participantsTableBody['innerHTML']=_0x551ac9(0x23a);return;}_0x473426[_0x551ac9(0x2ad)]((_0x33041f,_0x438780)=>{const _0x27c970=_0x551ac9,_0x5e46f5=document[_0x27c970(0x211)]('tr');_0x5e46f5[_0x27c970(0x24e)]=_0x27c970(0x1c3);const _0x245038=_0x33041f[_0x27c970(0x2a9)]?'รับแล้ว':_0x27c970(0x219),_0x4f64e4=_0x33041f[_0x27c970(0x2a9)]?_0x27c970(0x23c):_0x27c970(0x26d);_0x5e46f5[_0x27c970(0x223)]=_0x27c970(0x2cf)+(_0x438780+0x1)+'</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20class=\x22px-4\x20py-3\x20whitespace-nowrap\x20font-medium\x22>'+(_0x33041f['FullName_th']||'')+'\x20('+(_0x33041f[_0x27c970(0x1df)]||'')+_0x27c970(0x1c4)+(_0x33041f[_0x27c970(0x1ee)]||'')+_0x27c970(0x21e)+(_0x33041f[_0x27c970(0x1b9)]||'')+_0x27c970(0x20f)+_0x4f64e4+'\x22>'+_0x245038+'</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20',participantsTableBody[_0x27c970(0x1e0)](_0x5e46f5);});}function filterAndRenderAwardedList(){const _0x389e10=_0x19435f,_0x186d71=awardedSearchInput[_0x389e10(0x1bf)]['toLowerCase']()['trim'](),_0x1cdeda=allEmployeesData[_0x389e10(0x234)](_0x2b7077=>!!_0x2b7077[_0x389e10(0x2a9)]);awardedFilteredData=_0x1cdeda[_0x389e10(0x234)](_0xdc4a66=>{const _0x131b49=_0x389e10,_0x91781=(_0xdc4a66[_0x131b49(0x2c7)]||'')['toLowerCase'](),_0x2a20ca=(_0xdc4a66['employeeId']||'')[_0x131b49(0x206)]();return _0x91781[_0x131b49(0x21a)](_0x186d71)||_0x2a20ca[_0x131b49(0x21a)](_0x186d71);}),awardedFilteredData[_0x389e10(0x1e3)]((_0x8bd0d4,_0x2df49b)=>{const _0x4b08c=_0x389e10,_0x5714a2=_0x8bd0d4[_0x4b08c(0x2a9)]?.[_0x4b08c(0x29b)]?_0x8bd0d4[_0x4b08c(0x2a9)][_0x4b08c(0x29b)]():0x0,_0x562e2=_0x2df49b[_0x4b08c(0x2a9)]?.['toDate']?_0x2df49b[_0x4b08c(0x2a9)]['toDate']():0x0;return _0x562e2-_0x5714a2;}),renderAwardedListTable();}function renderAwardedListTable(){const _0xdf5561=_0x19435f,_0x22a8cf=awardedListTableBody;_0x22a8cf[_0xdf5561(0x223)]='';const _0x13f295=awardedFilteredData['length'],_0x2b397e=Math[_0xdf5561(0x2b1)](_0x13f295/AWARDED_ITEMS_PER_PAGE);awardedCurrentPage=Math['min'](awardedCurrentPage,_0x2b397e)||0x1;const _0x364283=(awardedCurrentPage-0x1)*AWARDED_ITEMS_PER_PAGE,_0x342873=_0x364283+AWARDED_ITEMS_PER_PAGE,_0x23f9b6=awardedFilteredData[_0xdf5561(0x251)](_0x364283,_0x342873);if(_0x13f295===0x0){_0x22a8cf['innerHTML']=_0xdf5561(0x202),renderAwardedPagination(0x0,0x0);return;}_0x23f9b6[_0xdf5561(0x2ad)]((_0x3d87ac,_0x54198c)=>{const _0x5a10e9=_0xdf5561,_0x5afc4a=document['createElement']('tr');_0x5afc4a[_0x5a10e9(0x24e)]=_0x5a10e9(0x1c3);const _0x7e1d40=_0x3d87ac[_0x5a10e9(0x2a9)]?formatThaiTimestamp(_0x3d87ac[_0x5a10e9(0x2a9)]['toDate']()):_0x5a10e9(0x28d),_0x257c91=document['createElement'](_0x5a10e9(0x274));_0x257c91[_0x5a10e9(0x26c)]='ลบ',_0x257c91[_0x5a10e9(0x24e)]=_0x5a10e9(0x1c1),_0x257c91[_0x5a10e9(0x1ba)]=()=>showDetailModal(_0x3d87ac),_0x5afc4a[_0x5a10e9(0x223)]=_0x5a10e9(0x2cf)+(_0x364283+_0x54198c+0x1)+_0x5a10e9(0x21e)+(_0x3d87ac[_0x5a10e9(0x1df)]||'-')+_0x5a10e9(0x1f4)+(_0x3d87ac['FullName_th']||'-')+_0x5a10e9(0x21e)+(_0x3d87ac[_0x5a10e9(0x1be)]||'-')+_0x5a10e9(0x21e)+_0x7e1d40+_0x5a10e9(0x256),_0x5afc4a[_0x5a10e9(0x23b)][0x5][_0x5a10e9(0x1e0)](_0x257c91),_0x22a8cf[_0x5a10e9(0x1e0)](_0x5afc4a);}),renderAwardedPagination(_0x2b397e,awardedCurrentPage);}function renderAwardedPagination(_0x4c3c10,_0x3ca455){const _0x4bf1b4=_0x19435f,_0x4b7045=awardedPaginationControls;_0x4b7045['innerHTML']='';if(_0x4c3c10<=0x1)return;const _0x25af32=document[_0x4bf1b4(0x211)](_0x4bf1b4(0x274));_0x25af32[_0x4bf1b4(0x26c)]=_0x4bf1b4(0x1e4),_0x25af32['className']=_0x4bf1b4(0x278)+(_0x3ca455===0x1?_0x4bf1b4(0x224):_0x4bf1b4(0x296)),_0x25af32[_0x4bf1b4(0x216)]=_0x3ca455===0x1,_0x25af32['addEventListener']('click',()=>{awardedCurrentPage--,renderAwardedListTable();}),_0x4b7045[_0x4bf1b4(0x1e0)](_0x25af32);const _0x3d3505=document[_0x4bf1b4(0x211)](_0x4bf1b4(0x2cd));_0x3d3505[_0x4bf1b4(0x26c)]='หน้า\x20'+_0x3ca455+_0x4bf1b4(0x210)+_0x4c3c10,_0x3d3505['className']=_0x4bf1b4(0x2c3),_0x4b7045[_0x4bf1b4(0x1e0)](_0x3d3505);const _0x56f8cc=document[_0x4bf1b4(0x211)](_0x4bf1b4(0x274));_0x56f8cc[_0x4bf1b4(0x26c)]=_0x4bf1b4(0x225),_0x56f8cc['className']=_0x4bf1b4(0x2ca)+(_0x3ca455===_0x4c3c10?_0x4bf1b4(0x224):_0x4bf1b4(0x296)),_0x56f8cc[_0x4bf1b4(0x216)]=_0x3ca455===_0x4c3c10,_0x56f8cc[_0x4bf1b4(0x292)](_0x4bf1b4(0x2c0),()=>{awardedCurrentPage++,renderAwardedListTable();}),_0x4b7045['appendChild'](_0x56f8cc);}function updateEmployeeListTable(_0x1a9883){const _0x51139e=_0x19435f;employeeListTableBody[_0x51139e(0x223)]=_0x51139e(0x1f6);}function showEditModal(_0x54fdeb){const _0x2b0d76=_0x19435f;console[_0x2b0d76(0x294)](_0x2b0d76(0x29a),_0x54fdeb),currentEditingDocId=_0x54fdeb['id'],editEmpId[_0x2b0d76(0x26c)]=_0x54fdeb[_0x2b0d76(0x1df)]||_0x2b0d76(0x28d),editEmpName[_0x2b0d76(0x26c)]=_0x54fdeb[_0x2b0d76(0x2c7)]||_0x2b0d76(0x28d),editEmpManager[_0x2b0d76(0x1bf)]=_0x54fdeb[_0x2b0d76(0x1b9)]||'',editEmpTeam[_0x2b0d76(0x1bf)]=_0x54fdeb[_0x2b0d76(0x266)]||'',editError[_0x2b0d76(0x26c)]='',editEmployeeModal[_0x2b0d76(0x1cc)][_0x2b0d76(0x208)](_0x2b0d76(0x1ca));}function closeEditModal(){const _0x27b2c7=_0x19435f;editEmployeeModal['classList'][_0x27b2c7(0x1cb)]('hidden'),currentEditingDocId=null;}async function saveEmployeeChanges(){const _0x51af81=_0x19435f;if(!currentEditingDocId)return;const _0x38f99a=editEmpManager[_0x51af81(0x1bf)],_0x36e524=editEmpTeam['value'];editError[_0x51af81(0x26c)]='',saveEditModalButton[_0x51af81(0x216)]=!![];try{const _0x5b9802=doc(db,dataEmployeeCollectionPath,currentEditingDocId);await updateDoc(_0x5b9802,{'Check_Manager':_0x38f99a,'Check_Place':_0x36e524}),console[_0x51af81(0x294)](_0x51af81(0x2a8)),closeEditModal();}catch(_0x3438cb){console[_0x51af81(0x25c)]('Error\x20saving\x20employee\x20changes:',_0x3438cb),editError[_0x51af81(0x26c)]=_0x51af81(0x1fa)+_0x3438cb[_0x51af81(0x289)];}finally{saveEditModalButton['disabled']=![];}}function handleDownloadCSV(){const _0x495a45=_0x19435f;console[_0x495a45(0x294)]('Generating\x20CSV...');const _0x420210=allEmployeesData[_0x495a45(0x234)](_0x5acdc9=>{const _0x39b2f2=_0x495a45,_0x40a8da=_0x5acdc9['Check_Manager']&&_0x5acdc9[_0x39b2f2(0x1b9)][_0x39b2f2(0x23d)]()!=='',_0x2869e7=!!_0x5acdc9['DateLogin'],_0x3f6a1d=_0x2869e7&&!_0x40a8da,_0x1a4180=_0x40a8da;return _0x1a4180||_0x3f6a1d;});if(_0x420210['length']===0x0){console['warn'](_0x495a45(0x1f1));return;}const _0x26f466=['รหัสพนักงาน','ชื่อ-นามสกุล','ชื่อเล่น',_0x495a45(0x1b2),_0x495a45(0x22d),_0x495a45(0x2b9),_0x495a45(0x2ba),'ทีม\x20(Check_Place)','เวลาที่ลงทะเบียน',_0x495a45(0x2a6)],_0x22c792=_0x189227=>{const _0x38db30=_0x495a45;if(_0x189227===null||_0x189227===undefined)return'\x22\x22';let _0x56a17a=String(_0x189227);return(_0x56a17a[_0x38db30(0x21a)]('\x22')||_0x56a17a[_0x38db30(0x21a)](',')||_0x56a17a['includes']('\x0a'))&&(_0x56a17a='\x22'+_0x56a17a['replace'](/"/g,'\x22\x22')+'\x22'),_0x56a17a;};let _0x3ac4e2=_0x26f466['join'](',')+'\x0a';_0x420210[_0x495a45(0x2ad)](_0x323eef=>{const _0x2d7c74=_0x495a45,_0x59d2fa=_0x323eef[_0x2d7c74(0x2a5)]&&_0x323eef[_0x2d7c74(0x2a5)]['toDate']?formatThaiTimestamp(_0x323eef[_0x2d7c74(0x2a5)][_0x2d7c74(0x29b)]()):'',_0x178a4f=_0x323eef[_0x2d7c74(0x2a9)]&&_0x323eef[_0x2d7c74(0x2a9)][_0x2d7c74(0x29b)]?formatThaiTimestamp(_0x323eef[_0x2d7c74(0x2a9)][_0x2d7c74(0x29b)]()):'',_0x1434ed=[_0x323eef[_0x2d7c74(0x1df)]||'',_0x323eef[_0x2d7c74(0x2c7)]||'',_0x323eef[_0x2d7c74(0x239)]||'',_0x323eef[_0x2d7c74(0x1b7)]||'',_0x323eef[_0x2d7c74(0x1e7)]||'',_0x323eef['BU_th']||'',_0x323eef[_0x2d7c74(0x1b9)]||'',_0x323eef[_0x2d7c74(0x266)]||'',_0x59d2fa,_0x178a4f];_0x3ac4e2+=_0x1434ed[_0x2d7c74(0x2be)](_0x22c792)[_0x2d7c74(0x1db)](',')+'\x0a';});const _0x2edfbe=new Uint8Array([0xef,0xbb,0xbf]),_0x399094=new Blob([_0x2edfbe,_0x3ac4e2],{'type':_0x495a45(0x2c5)}),_0x45cf8d=document['createElement']('a'),_0x16a9d0=URL[_0x495a45(0x1cf)](_0x399094);_0x45cf8d[_0x495a45(0x264)](_0x495a45(0x27e),_0x16a9d0);const _0x3691d3=new Date()[_0x495a45(0x27f)]()[_0x495a45(0x251)](0x0,0xa);_0x45cf8d[_0x495a45(0x264)](_0x495a45(0x255),'CRSG_Registered_Users_'+_0x3691d3+'.csv'),_0x45cf8d[_0x495a45(0x297)]['visibility']=_0x495a45(0x1ca),document[_0x495a45(0x26f)][_0x495a45(0x1e0)](_0x45cf8d),_0x45cf8d['click'](),document[_0x495a45(0x26f)][_0x495a45(0x285)](_0x45cf8d),console[_0x495a45(0x294)](_0x495a45(0x226));}async function updateRewardTime(_0x11cb24,_0x303e52){const _0x15ffc0=_0x19435f;if(!_0x11cb24)return;console[_0x15ffc0(0x294)]('Updating\x20doc\x20'+_0x11cb24+'\x20with\x20DateReward:',_0x303e52);try{const _0x28f848=doc(db,dataEmployeeCollectionPath,_0x11cb24);await updateDoc(_0x28f848,{'DateReward':_0x303e52}),console['log'](_0x15ffc0(0x1fe));}catch(_0x44bf37){console[_0x15ffc0(0x25c)](_0x15ffc0(0x1e9),_0x44bf37),randomizeError[_0x15ffc0(0x26c)]=_0x15ffc0(0x207)+_0x44bf37[_0x15ffc0(0x289)];}}function handleShowConfirmCancelRandom(_0x4676b6,_0xa0d02f){const _0x3e97a1=_0x19435f;docIdToCancel=_0x4676b6,currentConfirmAction=async()=>{const _0x10c709=_0x72c6;await updateRewardTime(docIdToCancel,null),docIdToCancel=null,confirmModal[_0x10c709(0x1cc)][_0x10c709(0x1cb)](_0x10c709(0x1ca)),!winnerDetailModal[_0x10c709(0x1cc)][_0x10c709(0x247)](_0x10c709(0x1ca))&&winnerDetailModal[_0x10c709(0x1cc)]['add'](_0x10c709(0x1ca));},confirmTitle[_0x3e97a1(0x26c)]='ยืนยันการยกเลิกการสุ่ม',confirmText[_0x3e97a1(0x26c)]=_0x3e97a1(0x1e6)+_0xa0d02f+']\x20ใช่หรือไม่?\x20(พนักงานจะกลับเข้าไปอยู่ในกลุ่มที่สุ่มได้อีกครั้ง)',confirmActionButton['textContent']=_0x3e97a1(0x280),confirmActionButton[_0x3e97a1(0x24e)]='px-3\x20py-1.5\x20text-xs\x20bg-red-600\x20text-white\x20rounded-md\x20hover:bg-red-700',confirmActionButton['disabled']=![],confirmActionButton[_0x3e97a1(0x1cc)][_0x3e97a1(0x208)](_0x3e97a1(0x1ca)),confirmActionButton['onclick']=()=>{typeof currentConfirmAction==='function'&&currentConfirmAction();},closeConfirmButton[_0x3e97a1(0x26c)]=_0x3e97a1(0x24b),closeConfirmButton[_0x3e97a1(0x216)]=![],closeConfirmButton['classList'][_0x3e97a1(0x208)](_0x3e97a1(0x1ca)),confirmModal[_0x3e97a1(0x1cc)][_0x3e97a1(0x208)](_0x3e97a1(0x1ca));}async function handleRandomization(){const _0x142514=_0x19435f,_0x105cef=allEmployeesData['filter'](_0x28b5d8=>_0x28b5d8[_0x142514(0x2a9)])[_0x142514(0x228)];if(currentRewardLimit>0x0&&_0x105cef>=currentRewardLimit){randomizeError[_0x142514(0x26c)]='สุ่มครบตามจำนวนที่กำหนดแล้ว\x20('+currentRewardLimit+_0x142514(0x261),startRandomizeButton[_0x142514(0x216)]=!![];return;}if(availableToDraw[_0x142514(0x228)]===0x0){randomizeError[_0x142514(0x26c)]=_0x142514(0x2b7);return;}startRandomizeButton[_0x142514(0x216)]=!![],randomizeError[_0x142514(0x26c)]='';let _0x591a12=0x0;randomizationInterval=setInterval(()=>{const _0x3adef5=_0x142514;digits['forEach'](_0x54a8c1=>{const _0x343578=_0x72c6;_0x54a8c1['textContent']=Math[_0x343578(0x21d)](Math['random']()*0xa);}),_0x591a12++;if(_0x591a12>0x14){clearInterval(randomizationInterval);const _0x832fd7=availableToDraw[Math[_0x3adef5(0x21d)](Math[_0x3adef5(0x262)]()*availableToDraw[_0x3adef5(0x228)])],_0x1955eb=(_0x832fd7[_0x3adef5(0x1df)]||_0x3adef5(0x20b))['slice'](-0x5)['padStart'](0x5,'0');digits[_0x3adef5(0x2ad)]((_0x1eec77,_0x2de72c)=>_0x1eec77[_0x3adef5(0x26c)]=_0x1955eb[_0x2de72c]),updateRewardTime(_0x832fd7['id'],serverTimestamp())[_0x3adef5(0x1e8)](()=>{const _0x4707d5=_0x3adef5;winnerName[_0x4707d5(0x26c)]=_0x832fd7[_0x4707d5(0x2c7)]||_0x4707d5(0x28d),winnerEmployeeId['textContent']=_0x4707d5(0x275)+(_0x832fd7[_0x4707d5(0x1df)]||_0x4707d5(0x28d)),winnerTeam['textContent']=_0x4707d5(0x2d2)+(_0x832fd7[_0x4707d5(0x266)]||'N/A'),winnerBU[_0x4707d5(0x26c)]=_0x4707d5(0x2b2)+(_0x832fd7['BU_th']||_0x4707d5(0x28d)),cancelWinnerButton[_0x4707d5(0x22b)]['docId']=_0x832fd7['id'],winnerDetailModal['classList'][_0x4707d5(0x208)](_0x4707d5(0x1ca));});}},0x64);}async function handleCancelWinner(){const _0x3a033b=_0x19435f,_0x346657=cancelWinnerButton[_0x3a033b(0x22b)][_0x3a033b(0x2c6)],_0x100763=allEmployeesData['find'](_0x27a7e4=>_0x27a7e4['id']===_0x346657);handleShowConfirmCancelRandom(_0x346657,_0x100763?.[_0x3a033b(0x2c7)]||_0x3a033b(0x28d));}function updateRandomizerFilterButtonsUI(){const _0x1155d1=_0x19435f,_0x482cd4=[{'el':randomFilterParticipants,'mode':_0x1155d1(0x1c2)},{'el':randomFilterAttendees,'mode':_0x1155d1(0x1e2)},{'el':randomFilterAll,'mode':_0x1155d1(0x2b0)}];_0x482cd4['forEach'](_0x5f0b7c=>{const _0x15203d=_0x1155d1;_0x5f0b7c['mode']===currentRandomizerMode?_0x5f0b7c['el']['className']='px-3\x20py-1.5\x20text-xs\x20font-medium\x20rounded-md\x20transition-colors\x20bg-orange-200\x20text-orange-800':_0x5f0b7c['el'][_0x15203d(0x24e)]=_0x15203d(0x200);});}function updateRandomizerDataBasedOnAllEmployees(){const _0x303c81=_0x19435f,_0x4e504b=allParticipants['filter'](_0x519fb8=>_0x519fb8[_0x303c81(0x2a9)]),_0x437a92=allParticipants['filter'](_0x38abab=>!_0x38abab[_0x303c81(0x2a9)]),_0x42db7c=allAttendees[_0x303c81(0x234)](_0x244403=>_0x244403[_0x303c81(0x2a9)]),_0x3e5c79=allAttendees[_0x303c81(0x234)](_0x36d368=>!_0x36d368[_0x303c81(0x2a9)]),_0x118007=[..._0x4e504b,..._0x42db7c],_0x4506ba=[..._0x437a92,..._0x3e5c79];if(currentRandomizerMode===_0x303c81(0x1c2))availableToDraw=_0x437a92,alreadyDrawn=_0x4e504b;else currentRandomizerMode==='attendees'?(availableToDraw=_0x3e5c79,alreadyDrawn=_0x42db7c):(availableToDraw=_0x4506ba,alreadyDrawn=_0x118007);randomizeError['textContent']='';}function updateModalUI(){const _0x120af8=_0x19435f;modalParticipantsCount[_0x120af8(0x26c)]=availableToDraw[_0x120af8(0x228)],modalDrawnCount[_0x120af8(0x26c)]=alreadyDrawn[_0x120af8(0x228)],renderDrawnWinnersTable(),randomizeError[_0x120af8(0x26c)]='',startRandomizeButton[_0x120af8(0x216)]=![];const _0x42f74f=allEmployeesData[_0x120af8(0x234)](_0x443425=>_0x443425['DateReward'])[_0x120af8(0x228)];availableToDraw[_0x120af8(0x228)]===0x0&&(startRandomizeButton['disabled']=!![],randomizeError[_0x120af8(0x26c)]=_0x120af8(0x1c5)),currentRewardLimit>0x0&&_0x42f74f>=currentRewardLimit&&(startRandomizeButton['disabled']=!![],randomizeError[_0x120af8(0x26c)]=_0x120af8(0x233)+currentRewardLimit+'\x20คน)');}function renderDrawnWinnersTable(){const _0x3512a7=_0x19435f;drawnWinnersTableBody[_0x3512a7(0x223)]='';if(alreadyDrawn['length']===0x0){drawnWinnersTableBody[_0x3512a7(0x223)]='<tr><td\x20colspan=\x224\x22\x20class=\x22p-4\x20text-center\x20text-gray-500\x22>ยังไม่มีผู้ได้รับการสุ่ม</td></tr>';return;}alreadyDrawn[_0x3512a7(0x1e3)]((_0x19d6bb,_0x50db5d)=>(_0x50db5d[_0x3512a7(0x2a9)]?_0x50db5d[_0x3512a7(0x2a9)][_0x3512a7(0x29b)]():0x0)-(_0x19d6bb[_0x3512a7(0x2a9)]?_0x19d6bb[_0x3512a7(0x2a9)][_0x3512a7(0x29b)]():0x0)),alreadyDrawn[_0x3512a7(0x2ad)](_0x62521=>{const _0x72ab0=_0x3512a7,_0x18671e=document['createElement']('tr');_0x18671e[_0x72ab0(0x24e)]=_0x72ab0(0x1c3);const _0x1f811c=document[_0x72ab0(0x211)](_0x72ab0(0x274));_0x1f811c['textContent']=_0x72ab0(0x282),_0x1f811c[_0x72ab0(0x24e)]=_0x72ab0(0x236),_0x1f811c[_0x72ab0(0x1ba)]=()=>handleShowConfirmCancelRandom(_0x62521['id'],_0x62521[_0x72ab0(0x2c7)]),_0x18671e[_0x72ab0(0x223)]='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20class=\x22px-4\x20py-2\x20whitespace-nowrap\x22>'+(_0x62521[_0x72ab0(0x1df)]||'')+'</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20class=\x22px-4\x20py-2\x20whitespace-nowrap\x22>'+(_0x62521[_0x72ab0(0x2c7)]||'')+_0x72ab0(0x213)+(_0x62521[_0x72ab0(0x1ee)]||'')+'</td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<td\x20class=\x22px-4\x20py-2\x20whitespace-nowrap\x20text-center\x22></td>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20',_0x18671e[_0x72ab0(0x23b)][0x3][_0x72ab0(0x1e0)](_0x1f811c),drawnWinnersTableBody[_0x72ab0(0x1e0)](_0x18671e);});}function setupEmployeeListListeners(){const _0x340dd9=_0x19435f;awardedSearchInput[_0x340dd9(0x292)](_0x340dd9(0x1f9),()=>{awardedCurrentPage=0x1,filterAndRenderAwardedList();}),closeEditModalButton[_0x340dd9(0x292)](_0x340dd9(0x2c0),closeEditModal),saveEditModalButton[_0x340dd9(0x292)](_0x340dd9(0x2c0),saveEmployeeChanges);}function setupAwardedListListeners(){const _0x521a84=_0x19435f;awardedSearchInput[_0x521a84(0x292)](_0x521a84(0x1f9),()=>{awardedCurrentPage=0x1,filterAndRenderAwardedList();});}function setupTabListeners(){const _0xcd1c28=_0x19435f,_0x517e68=[{'btn':tabDashboard,'content':dashboardContent},{'btn':tabTeamList,'content':teamListContent},{'btn':tabEmployeeList,'content':employeeListContent},{'btn':tabRegister,'content':registerContent}];_0x517e68[_0xcd1c28(0x2ad)](_0x54b535=>{const _0x4eaace=_0xcd1c28;_0x54b535[_0x4eaace(0x241)][_0x4eaace(0x292)](_0x4eaace(0x2c0),()=>{const _0x3165ed=_0x4eaace;_0x517e68[_0x3165ed(0x2ad)](_0x4f7c0c=>{const _0x177bb7=_0x3165ed;_0x4f7c0c[_0x177bb7(0x241)][_0x177bb7(0x1cc)][_0x177bb7(0x208)](_0x177bb7(0x2c4),_0x177bb7(0x1bc),_0x177bb7(0x2af)),_0x4f7c0c['btn'][_0x177bb7(0x1cc)]['add'](_0x177bb7(0x26d),_0x177bb7(0x1ec),_0x177bb7(0x2bd)),_0x4f7c0c[_0x177bb7(0x222)][_0x177bb7(0x1cc)][_0x177bb7(0x1cb)](_0x177bb7(0x1ca));}),_0x54b535[_0x3165ed(0x241)][_0x3165ed(0x1cc)][_0x3165ed(0x1cb)](_0x3165ed(0x2c4),_0x3165ed(0x1bc),_0x3165ed(0x2af)),_0x54b535[_0x3165ed(0x241)]['classList'][_0x3165ed(0x208)](_0x3165ed(0x26d),_0x3165ed(0x1ec),_0x3165ed(0x2bd)),_0x54b535[_0x3165ed(0x222)][_0x3165ed(0x1cc)][_0x3165ed(0x208)](_0x3165ed(0x1ca)),_0x54b535['btn']['id']==='tab-employee-list'&&filterAndRenderAwardedList();});});}function showDetailModal(_0x200982){const _0x513a47=_0x19435f;currentDocIdToDelete=_0x200982['id'],detailEmpId[_0x513a47(0x1bf)]=_0x200982['employeeId']||'N/A',detailEmpName[_0x513a47(0x1bf)]=_0x200982[_0x513a47(0x2c7)]||_0x513a47(0x28d),detailEmpChief[_0x513a47(0x1bf)]=_0x200982[_0x513a47(0x1be)]||_0x200982[_0x513a47(0x1b9)]||_0x513a47(0x28d),detailEmpDateLogin[_0x513a47(0x1bf)]=_0x200982[_0x513a47(0x2a5)]?formatThaiTimestamp(_0x200982[_0x513a47(0x2a5)]['toDate']()):'N/A',detailEmpCheckPlace[_0x513a47(0x1bf)]=_0x200982[_0x513a47(0x266)]||_0x513a47(0x28d),detailEmpDateReward[_0x513a47(0x1bf)]=_0x200982[_0x513a47(0x2a9)]?formatThaiTimestamp(_0x200982['DateReward'][_0x513a47(0x29b)]()):_0x513a47(0x28d),detailEmployeeModal[_0x513a47(0x1cc)][_0x513a47(0x208)](_0x513a47(0x1ca));}function closeDetailModal(){const _0x4af293=_0x19435f;detailEmployeeModal[_0x4af293(0x1cc)][_0x4af293(0x1cb)]('hidden'),currentDocIdToDelete=null;}function setupDetailModalListeners(){const _0x2b77da=_0x19435f;closeDetailModalButton[_0x2b77da(0x292)]('click',closeDetailModal),confirmDeleteDetailButton['addEventListener'](_0x2b77da(0x2c0),()=>{const _0xc3cd0f=_0x2b77da;if(currentDocIdToDelete){const _0x581ed1=allEmployeesData[_0xc3cd0f(0x201)](_0x548ddb=>_0x548ddb['id']===currentDocIdToDelete)?.[_0xc3cd0f(0x2c7)]||_0xc3cd0f(0x28d);handleShowConfirmDeleteRegistration(currentDocIdToDelete,_0x581ed1);}});}function handleShowConfirmDeleteRegistration(_0x2185cb,_0x56868b){const _0x390b7b=_0x19435f;currentConfirmAction=async()=>{const _0x44b5a3=_0x72c6;await clearEmployeeData(_0x2185cb),confirmModal[_0x44b5a3(0x1cc)][_0x44b5a3(0x1cb)](_0x44b5a3(0x1ca));},confirmTitle[_0x390b7b(0x26c)]=_0x390b7b(0x1dd),confirmText[_0x390b7b(0x26c)]=_0x390b7b(0x1f5)+_0x56868b+']\x20หรือไม่?',confirmActionButton[_0x390b7b(0x26c)]=_0x390b7b(0x1c7),confirmActionButton[_0x390b7b(0x24e)]=_0x390b7b(0x2c8),confirmActionButton[_0x390b7b(0x216)]=![],detailEmployeeModal[_0x390b7b(0x1cc)][_0x390b7b(0x1cb)](_0x390b7b(0x1ca)),confirmModal[_0x390b7b(0x1cc)][_0x390b7b(0x208)](_0x390b7b(0x1ca));}function _0x72c6(_0x110b7d,_0x4726c3){const _0x51ae06=_0x51ae();return _0x72c6=function(_0x72c66b,_0x83f5a9){_0x72c66b=_0x72c66b-0x1b2;let _0xeb349d=_0x51ae06[_0x72c66b];return _0xeb349d;},_0x72c6(_0x110b7d,_0x4726c3);}function showRewardControlModal(){const _0x1f1c84=_0x19435f,_0x13fcf0=rewardControlButton[_0x1f1c84(0x26c)]===_0x1f1c84(0x1cd);rewardControlStatusText[_0x1f1c84(0x223)]=_0x1f1c84(0x243)+(_0x13fcf0?_0x1f1c84(0x2a2):_0x1f1c84(0x25d))+'\x22>'+(_0x13fcf0?_0x1f1c84(0x1de):'ปิดรับของรางวัล')+_0x1f1c84(0x1d3),_0x13fcf0?(toggleRewardActionButton[_0x1f1c84(0x26c)]='ปิดการรับของรางวัล',toggleRewardActionButton[_0x1f1c84(0x24e)]=_0x1f1c84(0x2ae),toggleRewardActionButton[_0x1f1c84(0x1ba)]=()=>updateRewardStatus(0x0)):(toggleRewardActionButton[_0x1f1c84(0x26c)]=_0x1f1c84(0x1de),toggleRewardActionButton[_0x1f1c84(0x24e)]=_0x1f1c84(0x25a),toggleRewardActionButton[_0x1f1c84(0x1ba)]=()=>updateRewardStatus(0x1)),rewardControlModal[_0x1f1c84(0x1cc)][_0x1f1c84(0x208)](_0x1f1c84(0x1ca));}function closeRewardControlModalFunc(){const _0x192fc0=_0x19435f;rewardControlModal[_0x192fc0(0x1cc)][_0x192fc0(0x1cb)]('hidden');}async function updateRewardStatus(_0x52acc4){const _0xfb309e=_0x19435f;console[_0xfb309e(0x294)](_0xfb309e(0x299)+_0x52acc4),toggleRewardActionButton['disabled']=!![];try{await setDoc(rewardSettingsDocPath,{'open_reward':_0x52acc4},{'merge':!![]}),console[_0xfb309e(0x294)]('Reward\x20status\x20successfully\x20set\x20to\x20'+_0x52acc4),closeRewardControlModalFunc();}catch(_0x374902){console[_0xfb309e(0x25c)]('Error\x20updating\x20reward\x20status:',_0x374902);const _0x1a6d68='เกิดข้อผิดพลาดในการบันทึกสถานะ:\x20'+_0x374902[_0xfb309e(0x289)];rewardControlStatusText[_0xfb309e(0x223)]='<span\x20class=\x22text-red-600\x22>'+_0x1a6d68+_0xfb309e(0x1d3);}finally{toggleRewardActionButton['disabled']=![];}}function setupRewardControlListeners(){const _0xff81d0=_0x19435f;rewardControlButton[_0xff81d0(0x292)](_0xff81d0(0x2c0),showRewardControlModal),closeRewardControlModal['addEventListener']('click',closeRewardControlModalFunc);}function setupModalListeners(){const _0x3f8030=_0x19435f;randomizeButton[_0x3f8030(0x292)](_0x3f8030(0x2c0),()=>{const _0xbe8e02=_0x3f8030;currentRandomizerMode=_0xbe8e02(0x1c2),updateRandomizerFilterButtonsUI(),updateRandomizerDataBasedOnAllEmployees(),updateModalUI(),randomizeModal[_0xbe8e02(0x1cc)]['remove'](_0xbe8e02(0x1ca));}),closeRandomizeModalButton[_0x3f8030(0x292)](_0x3f8030(0x2c0),()=>{const _0x598048=_0x3f8030;randomizeModal['classList'][_0x598048(0x1cb)](_0x598048(0x1ca));}),startRandomizeButton[_0x3f8030(0x292)]('click',handleRandomization),closeWinnerModalButton['addEventListener'](_0x3f8030(0x2c0),()=>{const _0x5bdca9=_0x3f8030;winnerDetailModal['classList'][_0x5bdca9(0x1cb)](_0x5bdca9(0x1ca));}),cancelWinnerButton[_0x3f8030(0x292)](_0x3f8030(0x2c0),handleCancelWinner),closeConfirmButton[_0x3f8030(0x292)](_0x3f8030(0x2c0),()=>{const _0x186170=_0x3f8030;confirmModal['classList']['add'](_0x186170(0x1ca)),confirmTitle[_0x186170(0x26c)]=_0x186170(0x295),confirmText[_0x186170(0x26c)]='',confirmActionButton['disabled']=![],confirmActionButton[_0x186170(0x1cc)][_0x186170(0x208)](_0x186170(0x1ca)),closeConfirmButton['textContent']=_0x186170(0x24b),closeConfirmButton['disabled']=![],currentConfirmAction=null,docIdToCancel=null;}),downloadCsvButton[_0x3f8030(0x292)]('click',handleDownloadCSV),randomFilterParticipants[_0x3f8030(0x292)](_0x3f8030(0x2c0),()=>{currentRandomizerMode='participants',updateRandomizerFilterButtonsUI(),updateRandomizerDataBasedOnAllEmployees(),updateModalUI();}),randomFilterAttendees[_0x3f8030(0x292)](_0x3f8030(0x2c0),()=>{const _0x3ef087=_0x3f8030;currentRandomizerMode=_0x3ef087(0x1e2),updateRandomizerFilterButtonsUI(),updateRandomizerDataBasedOnAllEmployees(),updateModalUI();}),randomFilterAll[_0x3f8030(0x292)](_0x3f8030(0x2c0),()=>{const _0x119bbc=_0x3f8030;currentRandomizerMode=_0x119bbc(0x2b0),updateRandomizerFilterButtonsUI(),updateRandomizerDataBasedOnAllEmployees(),updateModalUI();}),confirmActionButton[_0x3f8030(0x292)](_0x3f8030(0x2c0),()=>{currentConfirmAction&&currentConfirmAction();});}try{const app=initializeApp(firebaseConfig);db=getFirestore(app),auth=getAuth(app),setLogLevel(_0x19435f(0x1da)),await signInAnonymously(auth),console[_0x19435f(0x294)](_0x19435f(0x1f3)),dataEmployeeCollectionPath=_0x19435f(0x277),rewardSettingsDocPath=doc(db,_0x19435f(0x272),_0x19435f(0x291)),initializeCharts(),setupTabListeners(),listenToAllCrsgData(),listenToRewardSettings(),setupModalListeners(),setupEmployeeListListeners(),setupRewardSettingsListener(),setupDetailModalListeners(),setupAwardedListListeners(),setupRewardControlListeners(),updateCurrentDateTime(),setInterval(updateCurrentDateTime,0x3e8);}catch(_0x1e59b9){console[_0x19435f(0x25c)](_0x19435f(0x1fc),_0x1e59b9),document[_0x19435f(0x26f)]['innerHTML']=_0x19435f(0x244)+_0x1e59b9['message']+_0x19435f(0x1ea);}
+        
+    </script>
+</body>
+</html>
