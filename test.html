@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รวบหนี้กับ ttb - Consolidation Planner</title>
+    <!-- Google Fonts: Kanit -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Kanit', sans-serif; }
+        input[type="range"] { accent-color: #2563eb; }
+        
+        /* Stepper States */
+        .step-pending { @apply bg-slate-200 text-slate-400 border-none opacity-30; }
+        .step-active { @apply bg-blue-600 text-white ring-4 ring-blue-100 border-none opacity-100; }
+        .step-completed { @apply bg-orange-500 text-white ring-4 ring-orange-100 border-none opacity-100; }
+        
+        .hidden { display: none; }
+        .animate-fade { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-900 min-h-screen"> <!-- ปรับพื้นหลังเข้มขึ้น -->
+
+    <!-- LOGIN SECTION -->
+    <section id="login-section" class="min-h-screen flex flex-col justify-center items-center p-4">
+        <div class="w-full max-w-md bg-white rounded-[2rem] shadow-xl border border-slate-200 p-8 text-center">
+            <div class="inline-flex p-3 bg-blue-600 rounded-xl mb-5 shadow-lg shadow-blue-100 text-white">
+                <i data-lucide="trending-down" class="w-7 h-7"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-blue-900 mb-1">รวบหนี้กับ ttb</h1>
+            <p class="text-slate-500 text-sm font-medium mb-8">ระบบรวบหนี้เพื่อพนักงานที่ปรึกษาการเงิน</p>
+            
+            <form id="login-form" class="space-y-4 text-left">
+                <div>
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 block">รหัสพนักงาน (ID)</label>
+                    <div class="relative">
+                        <i data-lucide="hash" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+                        <input type="text" id="emp-code" required class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all text-base" placeholder="กรอกรหัสพนักงาน">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 block">ชื่อ-นามสกุล พนักงาน</label>
+                    <div class="relative">
+                        <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+                        <input type="text" id="emp-name" required class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all text-base" placeholder="กรอกชื่อ-นามสกุล">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-3.5 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-blue-700 shadow-lg shadow-blue-50 transition-all active:scale-[0.98] mt-4">
+                    <i data-lucide="log-in" class="w-5 h-5"></i> เข้าสู่ระบบ
+                </button>
+            </form>
+            <p class="mt-8 text-[10px] text-slate-400 font-medium">© 2024 ttb Financial Solutions Group.</p>
+        </div>
+    </section>
+
+    <!-- APP SECTION -->
+    <section id="app-section" class="hidden min-h-screen flex flex-col pb-20 md:pb-0">
+        <!-- Header -->
+        <header class="bg-white border-b border-slate-200 px-4 py-3 md:px-6 md:py-4 sticky top-0 z-30 shadow-sm">
+            <div class="max-w-6xl mx-auto flex justify-between items-center">
+                <div class="flex items-center gap-2 md:gap-3">
+                    <div class="bg-blue-600 p-1.5 rounded-lg text-white">
+                        <i data-lucide="trending-down" class="w-5 h-5 md:w-6 md:h-6"></i>
+                    </div>
+                    <h1 class="text-lg md:text-xl font-bold text-blue-900 tracking-tight">รวบหนี้กับ ttb</h1>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2 bg-blue-50 px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-blue-100 shadow-sm">
+                        <i data-lucide="user" class="w-4 h-4 text-blue-600 shrink-0"></i>
+                        <span id="display-emp-name" class="font-bold text-xs md:text-sm text-blue-700 truncate max-w-[150px] md:max-w-none">ชื่อพนักงาน</span>
+                    </div>
+                    <button onclick="logout()" class="p-2 text-slate-400 hover:text-red-500 transition-colors">
+                        <i data-lucide="log-out" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-6xl mx-auto p-4 md:p-8 w-full">
+            <!-- Stepper Timeline -->
+            <div class="flex justify-between items-center mb-10 relative px-2">
+                <!-- เส้น Timeline Background -->
+                <div class="absolute top-1/2 left-0 w-full h-1 bg-slate-200 -z-10 -translate-y-1/2 rounded-full"></div>
+                
+                <div class="flex flex-col items-center gap-2 bg-transparent px-2 md:px-6 cursor-pointer group" onclick="goToStep(1)">
+                    <div id="step-1-dot" class="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-bold text-base md:text-lg transition-all step-active">1</div>
+                    <span id="step-1-label" class="text-[10px] md:text-xs font-bold tracking-wide text-blue-600 uppercase">ข้อมูลลูกค้า</span>
+                </div>
+                
+                <div class="flex flex-col items-center gap-2 bg-transparent px-2 md:px-6 cursor-pointer group" onclick="goToStep(2)">
+                    <div id="step-2-dot" class="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-bold text-base md:text-lg transition-all step-pending">2</div>
+                    <span id="step-2-label" class="text-[10px] md:text-xs font-bold tracking-wide text-slate-400 uppercase opacity-30">จำลองแผน</span>
+                </div>
+                
+                <div class="flex flex-col items-center gap-2 bg-transparent px-2 md:px-6 cursor-pointer group" onclick="goToStep(3)">
+                    <div id="step-3-dot" class="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-bold text-base md:text-lg transition-all step-pending">3</div>
+                    <span id="step-3-label" class="text-[10px] md:text-xs font-bold tracking-wide text-slate-400 uppercase opacity-30">สรุปผล</span>
+                </div>
+            </div>
+
+            <!-- STEP 1: CUSTOMER DATA -->
+            <div id="step-1-content" class="animate-fade grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="bg-white p-6 rounded-[1.5rem] shadow-sm border border-slate-200">
+                        <h2 class="text-lg font-bold mb-5 flex items-center gap-2 text-slate-800">
+                            <i data-lucide="user" class="w-5 h-5 text-blue-600"></i> ข้อมูลส่วนตัวลูกค้า
+                        </h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 block">ชื่อ-นามสกุล ลูกค้า</label>
+                                <input type="text" id="cust-name" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-base" placeholder="ระบุชื่อลูกค้า...">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 block">อายุ</label>
+                                    <input type="number" id="cust-age" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none text-base">
+                                </div>
+                                <div>
+                                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1.5 block">เพศ</label>
+                                    <select id="cust-gender" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl outline-none text-base">
+                                        <option>ชาย</option>
+                                        <option>หญิง</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-[11px] font-bold text-blue-500 uppercase tracking-widest mb-1.5 block">รายได้ต่อเดือน (บาท)</label>
+                                <input type="number" id="cust-income" class="w-full px-4 py-2.5 bg-blue-50/30 border border-blue-100 rounded-xl outline-none text-lg font-bold text-blue-700">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-8 space-y-4">
+                    <div class="bg-white p-6 rounded-[1.5rem] shadow-sm border border-slate-200">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+                            <h2 class="text-lg font-bold flex items-center gap-2 text-slate-800">
+                                <i data-lucide="credit-card" class="w-5 h-5 text-blue-600"></i> รายการหนี้ในปัจจุบัน
+                            </h2>
+                            <button onclick="addDebt()" class="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl font-bold text-sm shadow hover:bg-blue-700 transition-all">
+                                <i data-lucide="plus" class="w-4 h-4"></i> เพิ่มรายการหนี้
+                            </button>
+                        </div>
+                        <div id="debt-container" class="space-y-3"></div>
+                        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-slate-900 text-white p-5 rounded-2xl shadow-md">
+                                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">ยอดหนี้รวมทั้งหมด</p>
+                                <p id="total-debt-display" class="text-2xl font-bold">0 <span class="text-sm font-normal opacity-70">บาท</span></p>
+                            </div>
+                            <div class="bg-red-50 border border-red-100 p-5 rounded-2xl">
+                                <p class="text-red-400 text-[10px] font-bold uppercase tracking-widest mb-1">ยอดชำระต่อเดือนรวม</p>
+                                <p id="total-monthly-display" class="text-2xl font-bold text-red-600">0 <span class="text-sm font-normal text-slate-500">บ./เดือน</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: CALCULATOR -->
+            <div id="step-2-content" class="hidden animate-fade grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white p-7 md:p-8 rounded-[1.5rem] shadow-lg border border-slate-200">
+                    <h2 class="text-xl md:text-2xl font-bold mb-8 flex items-center gap-2 text-slate-800">
+                        <i data-lucide="calculator" class="w-6 h-6 text-blue-600"></i> เงื่อนไขการรวบหนี้ใหม่
+                    </h2>
+                    <div class="space-y-10">
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <label class="text-base font-bold text-slate-600">อัตราดอกเบี้ยพิเศษต่อปี (%)</label>
+                                <span id="rate-val" class="text-2xl font-black text-blue-600">8%</span>
+                            </div>
+                            <input type="range" id="new-rate" min="1" max="15" step="0.25" value="8" class="w-full h-3 bg-slate-200 rounded-full appearance-none cursor-pointer">
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <label class="text-base font-bold text-slate-600">ระยะเวลาผ่อนชำระ (ปี)</label>
+                                <span id="years-val" class="text-2xl font-black text-blue-600">5 ปี</span>
+                            </div>
+                            <input type="range" id="new-years" min="1" max="15" step="1" value="5" class="w-full h-3 bg-slate-200 rounded-full appearance-none cursor-pointer">
+                        </div>
+                        <div class="p-6 bg-blue-50 rounded-2xl border border-blue-100">
+                            <p class="text-xs font-bold text-blue-800 uppercase tracking-widest mb-1">ยอดผ่อนชำระใหม่ต่อเดือน</p>
+                            <h3 class="text-3xl font-black text-blue-900 tracking-tight">
+                                <span id="new-monthly-calc">0</span>
+                                <span class="text-base font-medium ml-2">บ./เดือน</span>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <div class="bg-white p-7 rounded-[1.5rem] shadow-sm border border-slate-200">
+                        <h3 class="text-lg font-bold mb-5 flex items-center gap-2">
+                            <i data-lucide="pie-chart" class="w-5 h-5 text-blue-600"></i> วิเคราะห์ความคุ้มค่า
+                        </h3>
+                        <div class="space-y-5">
+                            <div class="bg-green-50 p-5 rounded-2xl border border-green-100 flex flex-col sm:flex-row justify-between items-center gap-2">
+                                <span class="text-base font-bold text-green-800">ประหยัดเงินได้มากขึ้น:</span>
+                                <span id="savings-val" class="text-3xl font-black text-green-600">0 ฿</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">ยอดเดิม</p>
+                                    <p id="calc-old-monthly" class="text-lg font-bold text-slate-600">0 ฿</p>
+                                </div>
+                                <div class="p-4 bg-blue-50/50 rounded-xl border border-blue-100">
+                                    <p class="text-[10px] text-blue-400 font-bold uppercase tracking-widest">ยอดใหม่</p>
+                                    <p id="calc-new-monthly" class="text-lg font-bold text-blue-600">0 ฿</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900 text-white p-7 rounded-[1.5rem] relative overflow-hidden shadow-lg">
+                        <div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none"><i data-lucide="dollar-sign" class="w-24 h-24"></i></div>
+                        <h3 class="text-sm font-bold mb-5 opacity-80 uppercase tracking-widest">สรุปภาพรวมแผนการเงิน</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">ยอดเงินต้นที่รวบ</span><span id="summary-pv" class="font-bold text-lg">0 ฿</span></div>
+                            <div class="flex justify-between items-center"><span class="text-slate-400 text-sm">ดอกเบี้ยใหม่ตลอดสัญญา</span><span id="summary-interest" class="font-bold text-lg text-blue-400">0 ฿</span></div>
+                            <div class="pt-4 border-t border-slate-700 flex justify-between items-center">
+                                <span class="text-xs uppercase font-bold text-slate-500 tracking-widest">ยอดรวมที่ต้องจ่ายทั้งสิ้น</span>
+                                <span id="summary-total" class="text-2xl font-black text-green-400">0 ฿</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 3: SUMMARY -->
+            <div id="step-3-content" class="hidden animate-fade max-w-2xl mx-auto space-y-6">
+                <div class="bg-white p-8 md:p-10 rounded-[2rem] shadow-xl border border-slate-200">
+                    <div class="text-center mb-8">
+                        <div class="inline-flex p-4 bg-blue-50 rounded-full mb-4 shadow-sm text-blue-600"><i data-lucide="check-circle" class="w-10 h-10"></i></div>
+                        <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-1">บันทึกผลการนำเสนอ</h2>
+                        <p id="final-cust-display" class="text-lg text-slate-500 font-medium">ลูกค้า: คุณ...</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100 text-center">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">อัตราดอกเบี้ย</p>
+                            <p id="final-rate" class="text-2xl font-black text-blue-600">8%</p>
+                        </div>
+                        <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100 text-center">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">ระยะเวลาผ่อน</p>
+                            <p id="final-years" class="text-2xl font-black text-slate-800">5 ปี</p>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 block">การตอบรับจากลูกค้า</label>
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <button onclick="setStatus('accepted')" id="btn-accept" class="flex-1 flex items-center justify-center gap-2 p-4 rounded-xl border-2 font-bold text-base transition-all bg-white border-slate-200 text-slate-400 hover:border-green-200">
+                                    <i data-lucide="check-circle" class="w-5 h-5"></i> ตกลงใช้บริการ
+                                </button>
+                                <button onclick="setStatus('rejected')" id="btn-reject" class="flex-1 flex items-center justify-center gap-2 p-4 rounded-xl border-2 font-bold text-base transition-all bg-white border-slate-200 text-slate-400 hover:border-red-200">
+                                    <i data-lucide="x-circle" class="w-5 h-5"></i> ปฏิเสธการเสนอ
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 block">บันทึกเพิ่มเติม</label>
+                            <textarea id="notes" rows="4" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl outline-none text-base focus:ring-2 focus:ring-blue-500 transition-all focus:bg-white" placeholder="ความเห็นของลูกค้า หรือเงื่อนไขเพิ่มเติม..."></textarea>
+                        </div>
+                        <button onclick="saveData()" class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:bg-black transition-all shadow-lg active:scale-[0.99]">
+                            <i data-lucide="save" class="w-5 h-5"></i> บันทึกข้อมูล
+                        </button>
+                    </div>
+                </div>
+                <div class="text-center opacity-60">
+                    <p id="final-emp-display" class="text-slate-500 text-xs font-bold uppercase tracking-widest">จัดทำโดย: - | 01/01/2024</p>
+                </div>
+            </div>
+
+            <!-- Footer Nav (Desktop) -->
+            <div class="hidden md:flex justify-between items-center mt-12 px-2">
+                <button id="prev-btn" onclick="prevStep()" class="flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-base transition-all bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 invisible">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i> ย้อนกลับ
+                </button>
+                <button id="next-btn" onclick="nextStep()" class="flex items-center gap-2 px-10 py-3 bg-blue-600 text-white rounded-xl font-bold text-base hover:bg-blue-700 shadow-lg transition-all transform hover:-translate-y-0.5">
+                    ขั้นตอนถัดไป <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </main>
+
+        <!-- Floating Mobile Nav -->
+        <div class="fixed bottom-0 left-0 w-full bg-white border-t border-slate-200 p-3 md:hidden flex justify-between gap-3 z-40">
+            <button id="mobile-prev-btn" onclick="prevStep()" class="flex-1 py-3 rounded-xl font-bold text-sm bg-slate-100 text-slate-600 invisible">ย้อนกลับ</button>
+            <button id="mobile-next-btn" onclick="nextStep()" class="flex-[1.5] py-3 bg-blue-600 text-white rounded-xl font-bold text-sm shadow-lg">ถัดไป</button>
+        </div>
+    </section>
+
+    <script>
+        let currentStep = 1;
+        let empInfo = { name: '', code: '' };
+        let debts = [{ id: 1, type: 'บัตรเครดิต', amount: 0, rate: 16, monthly: 0, bank: '', duration: 0 }];
+        let proposal = { status: 'pending' };
+
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            empInfo.name = document.getElementById('emp-name').value;
+            empInfo.code = document.getElementById('emp-code').value;
+            document.getElementById('display-emp-name').innerText = empInfo.name;
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('app-section').classList.remove('hidden');
+            lucide.createIcons();
+            renderDebts();
+        });
+
+        function logout() {
+            if(confirm("ต้องการออกจากระบบหรือไม่?")) location.reload();
+        }
+
+        function addDebt() {
+            debts.push({ id: Date.now(), type: 'บัตรเครดิต', amount: 0, rate: 16, monthly: 0, bank: '', duration: 0 });
+            renderDebts();
+        }
+
+        function removeDebt(id) {
+            debts = debts.filter(d => d.id !== id);
+            renderDebts();
+        }
+
+        function updateDebtValue(id, field, value) {
+            const debt = debts.find(d => d.id === id);
+            if (debt) {
+                debt[field] = field === 'type' || field === 'bank' ? value : Number(value);
+                calculateTotal();
+            }
+        }
+
+        function renderDebts() {
+            const container = document.getElementById('debt-container');
+            container.innerHTML = '';
+            const bankOptions = [
+                { val: "BBL", text: "BBL - ธนาคารกรุงเทพ" },
+                { val: "KBANK", text: "KBANK - ธนาคารกสิกรไทย" },
+                { val: "SCB", text: "SCB - ธนาคารไทยพาณิชย์" },
+                { val: "KTB", text: "KTB - ธนาคารกรุงไทย" },
+                { val: "BAY", text: "BAY - ธนาคารกรุงศรีอยุธยา" },
+                { val: "TTB", text: "TTB - ธนาคารทหารไทยธนชาต" },
+                { val: "UOB", text: "UOB - ธนาคารยูโอบี" },
+                { val: "GSB", text: "GSB - ธนาคารออมสิน" },
+                { val: "BAAC", text: "BAAC - ธ.ก.ส." },
+                { val: "GHB", text: "GHB - ธนาคารอาคารสงเคราะห์" },
+                { val: "CIMBT", text: "CIMBT - ธนาคารซีไอเอ็มบี ไทย" },
+                { val: "TISCO", text: "TISCO - ธนาคารทิสโก้" },
+                { val: "KKP", text: "KKP - ธนาคารเกียรตินาคินภัทร" },
+                { val: "ICBCT", text: "ICBCT - ธนาคารไอซีบีซี ไทย" }
+            ];
+            debts.forEach(debt => {
+                const div = document.createElement('div');
+                div.className = 'p-4 bg-slate-50 rounded-xl border border-slate-100 relative group transition-all hover:bg-white hover:shadow-sm';
+                let bankSelectHTML = `<select onchange="updateDebtValue(${debt.id}, 'bank', this.value)" class="w-full mt-1 p-2 bg-white border border-slate-200 rounded-lg text-xs font-medium outline-none">
+                    <option value="">เลือกธนาคาร</option>`;
+                bankOptions.forEach(opt => bankSelectHTML += `<option value="${opt.val}" ${debt.bank === opt.val ? 'selected' : ''}>${opt.text}</option>`);
+                bankSelectHTML += `</select>`;
+                div.innerHTML = `
+                    <button onclick="removeDebt(${debt.id})" class="absolute top-1.5 right-1.5 bg-white text-red-500 p-1.5 rounded-full shadow-sm border border-slate-200 sm:opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                    <div class="grid grid-cols-2 md:grid-cols-6 gap-3 pt-3 sm:pt-0">
+                        <div class="col-span-2 md:col-span-1">
+                            <label class="text-[11px] font-normal text-slate-400 uppercase tracking-tighter">ประเภท</label>
+                            <select onchange="updateDebtValue(${debt.id}, 'type', this.value)" class="w-full mt-1 p-2 bg-white border border-slate-200 rounded-lg text-sm font-medium outline-none">
+                                <option ${debt.type === 'บัตรเครดิต' ? 'selected' : ''}>บัตรเครดิต</option>
+                                <option ${debt.type === 'สินเชื่อบ้าน' ? 'selected' : ''}>สินเชื่อบ้าน</option>
+                                <option ${debt.type === 'สินเชื่อรถยนต์' ? 'selected' : ''}>สินเชื่อรถยนต์</option>
+                            </select>
+                        </div>
+                        <div class="col-span-1 md:col-span-1">
+                            <label class="text-[11px] font-normal text-slate-400 uppercase tracking-tighter">ธนาคาร</label>
+                            ${bankSelectHTML}
+                        </div>
+                        <div class="col-span-1 md:col-span-1">
+                            <label class="text-[11px] font-normal text-slate-400 uppercase tracking-tighter">คงเหลือ</label>
+                            <input type="number" value="${debt.amount}" onchange="updateDebtValue(${debt.id}, 'amount', this.value)" class="w-full mt-1 p-2 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-800">
+                        </div>
+                        <div class="col-span-1 md:col-span-1">
+                            <label class="text-[11px] font-normal text-slate-400 uppercase tracking-tighter">ดอกเบี้ย(%)</label>
+                            <input type="number" value="${debt.rate}" onchange="updateDebtValue(${debt.id}, 'rate', this.value)" class="w-full mt-1 p-2 bg-white border border-slate-200 rounded-lg text-xs">
+                        </div>
+                        <div class="col-span-1 md:col-span-1">
+                            <label class="text-[11px] font-normal text-red-400 uppercase tracking-tighter">ผ่อน/ด.</label>
+                            <input type="number" value="${debt.monthly}" onchange="updateDebtValue(${debt.id}, 'monthly', this.value)" class="w-full mt-1 p-2 bg-white border border-slate-200 rounded-lg text-xs font-bold text-red-600">
+                        </div>
+                        <div class="col-span-2 md:col-span-1">
+                            <label class="text-[11px] font-normal text-slate-400 uppercase tracking-tighter">ผ่อนแล้ว(ปี)</label>
+                            <input type="number" value="${debt.duration}" onchange="updateDebtValue(${debt.id}, 'duration', this.value)" class="w-full mt-1 p-2 bg-white border border-slate-200 rounded-lg text-xs">
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+            lucide.createIcons();
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const totalDebt = debts.reduce((sum, d) => sum + (Number(d.amount) || 0), 0);
+            const totalMonthly = debts.reduce((sum, d) => sum + (Number(d.monthly) || 0), 0);
+            document.getElementById('total-debt-display').innerHTML = `${totalDebt.toLocaleString()} <span class="text-sm font-normal opacity-70">บาท</span>`;
+            document.getElementById('total-monthly-display').innerHTML = `${totalMonthly.toLocaleString()} <span class="text-sm font-normal text-slate-500">บ./เดือน</span>`;
+            updateCalculator();
+        }
+
+        function getPMT(rate, nper, pv) {
+            if (rate === 0) return pv / nper;
+            const r = (rate / 100) / 12;
+            return (pv * r * Math.pow(1 + r, nper)) / (Math.pow(1 + r, nper) - 1);
+        }
+
+        function updateCalculator() {
+            const totalDebt = debts.reduce((sum, d) => sum + (Number(d.amount) || 0), 0);
+            const oldMonthly = debts.reduce((sum, d) => sum + (Number(d.monthly) || 0), 0);
+            const rate = Number(document.getElementById('new-rate').value);
+            const years = Number(document.getElementById('new-years').value);
+            const newMonthly = getPMT(rate, years * 12, totalDebt);
+            const totalInterest = (newMonthly * years * 12) - totalDebt;
+            const savings = oldMonthly - newMonthly;
+            document.getElementById('rate-val').innerText = rate + '%';
+            document.getElementById('years-val').innerText = years + ' ปี';
+            document.getElementById('new-monthly-calc').innerText = Math.round(newMonthly).toLocaleString();
+            document.getElementById('savings-val').innerText = Math.max(0, Math.round(savings)).toLocaleString() + ' ฿';
+            document.getElementById('calc-old-monthly').innerText = oldMonthly.toLocaleString() + ' ฿';
+            document.getElementById('calc-new-monthly').innerText = Math.round(newMonthly).toLocaleString() + ' ฿';
+            document.getElementById('summary-pv').innerText = totalDebt.toLocaleString() + ' ฿';
+            document.getElementById('summary-interest').innerText = '~' + Math.round(totalInterest).toLocaleString() + ' ฿';
+            document.getElementById('summary-total').innerText = Math.round(totalDebt + totalInterest).toLocaleString() + ' ฿';
+            document.getElementById('final-rate').innerText = rate + '%';
+            document.getElementById('final-years').innerText = years + ' ปี';
+        }
+
+        function goToStep(n) {
+            currentStep = n;
+            for(let i=1; i<=3; i++) {
+                document.getElementById(`step-${i}-content`).classList.add('hidden');
+                const dot = document.getElementById(`step-${i}-dot`);
+                const label = document.getElementById(`step-${i}-label`);
+                
+                // Timeline logic: Completed (Orange), Active (Blue), Pending (Gray)
+                if (i < n) {
+                    dot.className = 'w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-bold text-base md:text-lg transition-all step-completed';
+                    if(label) label.className = 'text-[10px] md:text-xs font-bold tracking-wide text-orange-500 uppercase opacity-100';
+                } else if (i === n) {
+                    dot.className = 'w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-bold text-base md:text-lg transition-all step-active';
+                    if(label) label.className = 'text-[10px] md:text-xs font-bold tracking-wide text-blue-600 uppercase opacity-100';
+                } else {
+                    dot.className = 'w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-bold text-base md:text-lg transition-all step-pending';
+                    if(label) label.className = 'text-[10px] md:text-xs font-bold tracking-wide text-slate-400 uppercase opacity-30';
+                }
+            }
+            document.getElementById(`step-${n}-content`).classList.remove('hidden');
+            document.getElementById('prev-btn').style.visibility = n === 1 ? 'hidden' : 'visible';
+            document.getElementById('mobile-prev-btn').style.visibility = n === 1 ? 'hidden' : 'visible';
+            document.getElementById('next-btn').style.display = n === 3 ? 'none' : 'flex';
+            document.getElementById('mobile-next-btn').style.display = n === 3 ? 'none' : 'flex';
+            if(n === 3) {
+                const custName = document.getElementById('cust-name').value || "...";
+                document.getElementById('final-cust-display').innerText = `ลูกค้า: คุณ${custName}`;
+                document.getElementById('final-emp-display').innerText = `จัดทำโดย: ${empInfo.name} | ${new Date().toLocaleDateString('th-TH')}`;
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextStep() { if(currentStep < 3) goToStep(currentStep + 1); }
+        function prevStep() { if(currentStep > 1) goToStep(currentStep - 1); }
+
+        function setStatus(status) {
+            proposal.status = status;
+            const btnAccept = document.getElementById('btn-accept');
+            const btnReject = document.getElementById('btn-reject');
+            if(status === 'accepted') {
+                btnAccept.className = 'flex-1 flex items-center justify-center gap-2 p-4 rounded-xl border-2 font-bold text-base transition-all bg-green-600 border-green-600 text-white shadow-md';
+                btnReject.className = 'flex-1 flex items-center justify-center gap-2 p-4 rounded-xl border-2 font-bold text-base transition-all bg-white border-slate-200 text-slate-400';
+            } else {
+                btnReject.className = 'flex-1 flex items-center justify-center gap-2 p-4 rounded-xl border-2 font-bold text-base transition-all bg-red-600 border-red-600 text-white shadow-md';
+                btnAccept.className = 'flex-1 flex items-center justify-center gap-2 p-4 rounded-xl border-2 font-bold text-base transition-all bg-white border-slate-200 text-slate-400';
+            }
+        }
+
+        function saveData() {
+            if(proposal.status === 'pending') { alert("กรุณาเลือกสถานะการตอบรับจากลูกค้า"); return; }
+            alert("บันทึกข้อมูลเรียบร้อยแล้ว แผนการรวบหนี้ถูกส่งเข้าระบบ CRM");
+            location.reload();
+        }
+
+        document.getElementById('new-rate').addEventListener('input', updateCalculator);
+        document.getElementById('new-years').addEventListener('input', updateCalculator);
+        lucide.createIcons();
+    </script>
+</body>
+</html>
