@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ระบบทดสอบความรู้พนักงาน</title>
+    <!-- Fonts: Kanit -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js for Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js DataLabels Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <style>
+        /* Base Background Slate-100 (#f1f5f9) */
+        body { font-family: 'Kanit', sans-serif; background-color: #f1f5f9; color: #334155; margin: 0; padding: 0; }
+        
+        :root {
+            --primary-color: #0056ff;
+            --portal-orange: #de7c24;
+            --neutral-mute: #aebad2;
+            --success-green: #10b981;
+            --error-red: #ef4444;
+        }
+
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Table Header: Darker Background and Normal Weight */
+        th { font-size: 0.8rem !important; font-weight: 400; color: #475569; text-transform: uppercase; background-color: #cbd5e1; padding: 0.75rem 1rem; } 
+        td { font-size: 0.9rem; color: #334155; padding: 0.75rem 1rem; border-bottom: 1px solid #e2e8f0; }
+
+        .bg-portal-orange { background-color: var(--portal-orange); }
+        .text-portal-orange { color: var(--portal-orange); }
+
+        .btn-interact:active { transform: scale(0.98); }
+
+        #notification {
+            position: fixed; top: 20px; left: 50%; transform: translate(-50%, -200%);
+            padding: 10px 16px; border-radius: 0.75rem; background: white; 
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); z-index: 9999;
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-left: 4px solid var(--portal-orange); width: 90%; max-width: 400px;
+            display: none; 
+        }
+        #notification.show { transform: translate(-50%, 0); display: flex; align-items: center; gap: 12px; }
+
+        .custom-input {
+            background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 0.75rem;
+            padding: 0.6rem 1rem; font-weight: 400; color: #334155;
+            width: 100%; transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .custom-input::placeholder {
+            font-size: 0.75rem;
+            font-weight: 300;
+            color: #94a3b8;
+        }
+        
+        .key-btn {
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem;
+            padding: 0.75rem; font-size: 1.25rem; font-weight: 400; color: #334155;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.1s; box-shadow: 0 2px 0 #e2e8f0; height: 52px;
+        }
+        .key-btn:active { transform: translateY(1px); box-shadow: none; background: #f8fafc; }
+        .key-btn-orange { background: var(--portal-orange); color: #fff; border: none; box-shadow: 0 2px 0 #d3833d; }
+
+        .option-btn {
+            width: 100%; text-align: left; padding: 0.85rem 1.15rem; border: 1px solid #e2e8f0;
+            border-radius: 1rem; margin-bottom: 0.75rem; transition: all 0.2s;
+            font-weight: 400; display: flex; align-items: center; gap: 0.85rem;
+            background: white;
+        }
+        .option-btn.selected { border-color: var(--portal-orange); background-color: rgba(235, 152, 78, 0.02); }
+        .option-btn.correct { border-color: var(--success-green) !important; background-color: rgba(16, 185, 129, 0.03); color: var(--success-green); border-width: 2px; font-weight: 400; }
+        .option-btn.incorrect { border-color: var(--error-red) !important; background-color: rgba(239, 68, 68, 0.03); color: var(--error-red); border-width: 2px; }
+
+        .bottom-nav-shadow { box-shadow: 0 -4px 15px rgba(0,0,0,0.03); }
+        .nav-item-active { color: var(--portal-orange) !important; font-weight: 400; }
+
+        .skill-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #475569; font-weight: 400; }
+        .skill-check { width: 18px; height: 18px; border-radius: 5px; display: flex; align-items: center; justify-content: center; color: white; transition: all 0.2s; }
+        .skill-check.active { background-color: var(--primary-color); border: none; }
+
+        .shimmer {
+            background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        .lightbox-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px);
+            display: none; justify-content: center; align-items: center;
+            z-index: 9999; padding: 20px;
+        }
+        .lightbox-content {
+            background: white; border-radius: 1.5rem; width: 100%; max-width: 450px;
+            max-height: 85vh; overflow-y: auto; position: relative;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            animation: modalSlideUp 0.3s ease-out;
+        }
+        @keyframes modalSlideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .custom-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+        }
+
+        /* Voice Animation Effect */
+        .voice-playing { animation: pulse-blue 1.5s infinite; }
+        @keyframes pulse-blue { 0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); } }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col select-none overflow-x-hidden text-[13px]">
+
+    <div id="notification">
+        <div id="noti-icon"></div>
+        <div id="noti-msg" class="font-normal text-slate-700"></div>
+    </div>
+
+    <!-- GENERIC ACTION LIGHTBOX -->
+    <div id="action-lightbox" class="lightbox-overlay">
+        <div class="lightbox-content p-6 space-y-5 text-center">
+            <div class="flex justify-center">
+                <div id="action-lb-icon" class="w-16 h-16 rounded-full flex items-center justify-center"></div>
+            </div>
+            <div class="space-y-1 text-center">
+                <h3 id="action-lb-title" class="text-lg font-normal text-slate-800 text-center">หัวข้อ</h3>
+                <p id="action-lb-desc" class="text-slate-500 font-normal leading-relaxed text-center">รายละเอียดข้อความแจ้งเตือน</p>
+            </div>
+            <button id="action-lb-btn" class="btn-interact w-full py-2 bg-slate-800 text-white rounded-xl font-normal text-sm shadow-md transition-all active:scale-95 text-center">
+                ตกลง
+            </button>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX FOR ANSWERS -->
+    <div id="answer-lightbox" class="lightbox-overlay">
+        <div class="lightbox-content p-6 space-y-5">
+            <div class="flex justify-center">
+                <div id="lb-result-icon" class="w-14 h-14 rounded-full flex items-center justify-center text-center"></div>
+            </div>
+            
+            <div class="text-center space-y-1 text-center">
+                <h3 id="lb-result-title" class="text-xl font-normal text-slate-800 italic text-center">...</h3>
+                <div id="lb-skill-badge" class="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-[11px] font-normal uppercase border border-blue-100 text-center">
+                    <i data-lucide="award" class="w-3 h-3 text-center"></i> <span id="lb-skill-name">ทักษะ: -</span>
+                </div>
+            </div>
+
+            <div class="space-y-3 text-left">
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 space-y-1 text-left">
+                    <label class="font-normal text-slate-400 uppercase text-[10px] tracking-wider block text-left">คำถาม</label>
+                    <p id="lb-question-text" class="font-normal text-slate-700 leading-tight text-left">...</p>
+                </div>
+                <div id="lb-correct-info-area" class="space-y-3 text-left">
+                    <div class="p-4 bg-red-50 rounded-xl border border-red-100 space-y-1 hidden" id="lb-user-pick-area">
+                        <label class="font-normal text-red-500 uppercase text-[10px] tracking-wider block text-left">คำตอบที่คุณเลือก</label>
+                        <p id="lb-user-answer" class="font-normal text-red-700 leading-tight">...</p>
+                    </div>
+                    <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-100 space-y-1 text-left">
+                        <label class="font-normal text-emerald-500 uppercase text-[10px] tracking-wider block text-left">เฉลยคำตอบที่ถูกต้อง</label>
+                        <p id="lb-correct-answer" class="font-normal text-emerald-700 text-left leading-tight">...</p>
+                    </div>
+                </div>
+            </div>
+
+            <button id="lb-next-btn" onclick="closeLightbox(); nextQuestion();" class="btn-interact w-full py-2.5 bg-blue-600 text-white rounded-xl font-normal text-sm shadow-md transition-all active:scale-95 flex items-center justify-center gap-2 text-center">
+                คลิกเพื่อตอบคำถามข้อต่อไป
+            </button>
+        </div>
+    </div>
+
+    <main class="flex-1 w-full flex flex-col relative h-full">
+        
+        <!-- SECTION: LANDING / LOGIN -->
+        <section id="section-register" class="content-section fade-in flex-1 flex flex-col bg-white">
+            <div class="bg-portal-orange p-3 flex items-center justify-between text-white shadow-sm">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 bg-white text-portal-orange rounded-lg flex items-center justify-center font-bold text-base">Q</div>
+                    <span class="font-normal text-sm uppercase tracking-wide">ระบบทดสอบความรู้พนักงาน</span>
+                </div>
+                <div id="sync-status-dot" class="w-2 h-2 bg-stone-300 rounded-full border border-white/30 animate-pulse text-center"></div>
+            </div>
+
+            <div class="flex-1 flex flex-col items-center justify-center px-6 pb-8 space-y-5 text-center">
+                <div class="space-y-1 -mt-[20px]">
+                    <h2 class="text-xl font-normal text-slate-800">ลงทะเบียนเข้าใช้งาน</h2>
+                    <p class="text-slate-400 font-normal">กรุณาระบุรหัสพนักงานเพื่อตรวจสอบสิทธิ์</p>
+                </div>
+                <div class="w-full max-w-sm bg-white p-6 rounded-[1.5rem] shadow-sm border border-slate-100 flex flex-col items-center space-y-4">
+                    <input type="text" id="portal-emp-id" placeholder="ระบุรหัสพนักงาน" oninput="if(this.value.length > 13) this.value = ''" class="custom-input text-center text-lg tracking-wider">
+                    <button id="btn-portal-login" onclick="handlePortalLogin()" class="btn-interact w-full py-2 bg-portal-orange text-white rounded-xl font-normal text-sm shadow-md transition-all text-center">
+                        ตรวจสอบรหัส
+                    </button>
+                </div>
+                <div class="text-center">
+                    <button onclick="navigate('new-member')" class="text-portal-orange font-normal text-sm hover:underline tracking-wide transition-all text-center">ลงทะเบียนสมาชิกใหม่</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: PIN VERIFICATION -->
+        <section id="section-pin-verify" class="content-section hidden fade-in flex-1 flex flex-col bg-[#f1f5f9] text-center">
+            <div class="bg-portal-orange p-3 flex items-center justify-between text-white shadow-sm">
+                <button onclick="navigate('register')" class="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-center"><i data-lucide="chevron-left" class="w-5 h-5 text-center text-center"></i></button>
+                <span class="font-normal text-sm tracking-wide uppercase">ยืนยันรหัส PIN</span>
+                <div class="w-8"></div>
+            </div>
+            <div class="flex-1 flex flex-col items-center py-6 px-6 space-y-5 text-center">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-normal text-slate-800 text-center">ใส่รหัส PIN 6 หลัก</h2>
+                    <p id="pin-welcome-text" class="text-slate-400 font-normal text-sm text-center">ยืนยันตัวตนเพื่อเข้าใช้งาน</p>
+                </div>
+                <div class="w-full max-w-[300px] flex flex-col items-center space-y-5 text-center">
+                    <input type="password" id="verify-pin-display" readonly placeholder="••••••" class="custom-input text-center text-2xl tracking-[0.6em] h-12 bg-white border-slate-200 pointer-events-none text-center">
+                    <div id="pin-keypad" class="grid grid-cols-3 gap-3 w-full pb-4 text-center">
+                        <button onclick="keypadPress('1')" class="key-btn text-center">1</button>
+                        <button onclick="keypadPress('2')" class="key-btn text-center">2</button>
+                        <button onclick="keypadPress('3')" class="key-btn text-center">3</button>
+                        <button onclick="keypadPress('4')" class="key-btn text-center">4</button>
+                        <button onclick="keypadPress('5')" class="key-btn text-center">5</button>
+                        <button onclick="keypadPress('6')" class="key-btn text-center">6</button>
+                        <button onclick="keypadPress('7')" class="key-btn text-center">7</button>
+                        <button onclick="keypadPress('8')" class="key-btn text-center">8</button>
+                        <button onclick="keypadPress('9')" class="key-btn text-center">9</button>
+                        <button onclick="keypadClear()" class="key-btn bg-slate-50 text-slate-400"><i data-lucide="delete" class="w-5 h-5 text-center"></i></button>
+                        <button onclick="keypadPress('0')" class="key-btn text-center">0</button>
+                        <button onclick="handlePinVerify()" class="key-btn key-btn-orange"><i data-lucide="check" class="w-6 h-6"></i></button>
+                    </div>
+
+                    <div id="reset-pin-area" class="hidden w-full text-center">
+                        <button onclick="handleRequestResetPin()" class="w-full py-2 text-red-500 font-normal text-sm hover:underline transition-all text-center">แจ้ง Reset Password</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: NEW MEMBER FORM -->
+        <section id="section-new-member" class="content-section hidden fade-in flex-1 flex flex-col bg-[#f1f5f9] text-center">
+            <div class="bg-portal-orange p-3 flex items-center justify-between text-white shadow-sm sticky top-0 z-10 text-center">
+                <div class="flex items-center gap-2 text-center">
+                    <button onclick="navigate('register')" class="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-center"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
+                    <span class="font-normal text-sm uppercase text-center">ข้อมูลสมาชิก</span>
+                </div>
+            </div>
+            <div class="flex-1 flex flex-col items-center py-6 px-5 space-y-5 overflow-y-auto no-scrollbar pb-10 text-center">
+                <div class="text-center space-y-1">
+                    <h2 class="text-xl font-normal text-slate-800 text-center">ลงทะเบียนใหม่</h2>
+                    <p class="text-slate-400 font-normal text-sm text-center">กรุณากรอกข้อมูลให้ครบเพื่อเข้าใช้งาน</p>
+                </div>
+                <div class="w-full max-w-md bg-white p-6 rounded-[1.5rem] shadow-sm border border-slate-100 space-y-5 text-left">
+                    <div class="space-y-4 text-left">
+                        <div class="space-y-1 text-left">
+                            <label class="font-normal text-slate-400 uppercase text-[10px] ml-1 tracking-wider">รหัสพนักงาน</label>
+                            <input type="text" id="new-emp-id" placeholder="ระบุ EMP ID" class="custom-input text-left">
+                        </div>
+                        <div class="space-y-1 text-left">
+                            <label class="font-normal text-slate-400 uppercase text-[10px] ml-1 tracking-wider">ชื่อ-นามสกุล</label>
+                            <input type="text" id="new-emp-name" placeholder="ระบุชื่อ นามสกุล" class="custom-input text-left">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 text-left">
+                            <div class="space-y-1">
+                                <label class="font-normal text-slate-400 uppercase text-[10px] ml-1 tracking-wider text-left">สังกัด</label>
+                                <select id="new-emp-dept" class="custom-input custom-select font-normal text-left"></select>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="font-normal text-slate-400 uppercase text-[10px] ml-1 tracking-wider text-left">ตำแหน่ง</label>
+                                <input type="text" id="new-emp-pos" placeholder="ระบุตำแหน่ง" class="custom-input text-left">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-dashed border-slate-100 space-y-3 text-center">
+                        <p class="font-normal text-slate-400 uppercase text-center text-[11px] tracking-widest text-center">กำหนด PIN 6 หลัก</p>
+                        <div class="grid grid-cols-2 gap-3 text-center">
+                            <input type="text" maxlength="6" inputmode="numeric" id="new-emp-pin" placeholder="PIN" class="custom-input text-center text-lg font-normal tracking-widest text-center text-center">
+                            <input type="text" maxlength="6" inputmode="numeric" id="new-emp-pin-confirm" placeholder="Confirm" class="custom-input text-center text-lg font-normal tracking-widest text-center text-center">
+                        </div>
+                    </div>
+                    <div class="flex gap-3 pt-1 text-center">
+                        <button id="btn-submit-reg" onclick="handleMemberSelfRegistration()" class="btn-interact flex-[2] py-2 bg-portal-orange text-white rounded-xl font-normal text-sm shadow-md transition-all text-center">บันทึกรายการ</button>
+                        <button onclick="navigate('register')" class="btn-interact flex-1 py-2 bg-slate-100 text-slate-500 rounded-xl font-normal text-sm transition-all text-center">ยกเลิก</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: MEMBER HOME -->
+        <section id="section-member-home" class="content-section hidden fade-in flex-1 flex flex-col bg-[#f1f5f9] pb-24 text-left">
+            <div class="bg-portal-orange p-4 text-white sticky top-0 z-10 flex items-center justify-between shadow-md rounded-b-2xl">
+                <div class="text-left">
+                    <h2 class="text-lg font-normal tracking-wide uppercase leading-tight text-white">ระบบทดสอบพนักงาน</h2>
+                    <p id="member-welcome-msg" class="text-white/80 font-normal text-xs italic text-left">สวัสดีครับคุณ -</p>
+                </div>
+                <div class="w-10 h-10 bg-white/10 text-white rounded-xl flex items-center justify-center border border-white/10 text-center">
+                    <i data-lucide="layout-grid" class="w-5 h-5 text-center"></i>
+                </div>
+            </div>
+            <div class="p-4 space-y-4">
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-100">
+                    <table class="w-full border-collapse text-left">
+                        <thead><tr><th class="text-left font-normal uppercase">รายการชุดทดสอบ</th><th class="text-right font-normal uppercase">สถานะ</th></tr></thead>
+                        <tbody id="member-quiz-table" class="divide-y divide-slate-50 text-left"></tbody>
+                    </table>
+                </div>
+                <div id="no-quiz-msg" class="hidden py-16 text-center text-slate-400 italic text-sm">ยังไม่มีชุดแบบทดสอบในขณะนี้</div>
+            </div>
+        </section>
+
+        <!-- SECTION: QUIZ INTRO -->
+        <section id="section-quiz-intro" class="content-section hidden fade-in flex-1 flex flex-col bg-[#f1f5f9] text-center">
+            <div class="bg-portal-orange p-3 flex items-center justify-between text-white shadow-sm">
+                <div class="flex items-center gap-3">
+                    <button onclick="navigate('member-home')" class="p-1.5 hover:bg-white/10 rounded-lg transition-colors text-center"><i data-lucide="chevron-left" class="w-5 h-5 text-center"></i></button>
+                    <span class="font-normal text-sm uppercase">รายละเอียดชุดทดสอบ</span>
+                </div>
+                <!-- Toggle Voice for Intro Details -->
+                <button id="btn-intro-voice-toggle" class="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-all text-center">
+                    <i data-lucide="volume-2" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="flex-1 p-6 space-y-5 overflow-y-auto no-scrollbar pb-32 text-center">
+                <div class="bg-orange-50 p-4 rounded-xl border border-orange-100 space-y-1 text-center">
+                    <h2 id="intro-quiz-title" class="text-base font-normal text-slate-800 leading-tight text-center">...</h2>
+                    <p id="intro-quiz-desc" class="text-slate-500 text-[13px] leading-relaxed font-normal text-center">...</p>
+                </div>
+                <div class="grid grid-cols-2 gap-3 text-center">
+                    <div class="bg-white p-3 rounded-xl border border-slate-100 text-center space-y-1 shadow-sm">
+                        <label class="block text-[9px] font-normal text-slate-400 uppercase tracking-widest text-center">จำนวนข้อ</label>
+                        <span id="intro-box-limit" class="text-lg font-bold text-slate-800 text-center">0</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-slate-100 text-center space-y-1 shadow-sm">
+                        <label class="block text-[9px] font-normal text-slate-400 uppercase tracking-widest">การจับเวลา</label>
+                        <span id="intro-box-timed" class="text-lg font-bold text-slate-800 text-center">-</span>
+                    </div>
+                    <!-- NEW BOX: เกณฑ์การสอบ (passTest) -->
+                    <div class="bg-white p-3 rounded-xl border border-slate-100 text-center space-y-1 shadow-sm">
+                        <label class="block text-[9px] font-normal text-slate-400 uppercase tracking-widest text-center">เกณฑ์การสอบ</label>
+                        <span id="intro-box-pass" class="text-lg font-bold text-slate-800 text-center">- %</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-slate-100 text-center space-y-1 shadow-sm">
+                        <label class="block text-[9px] font-normal text-slate-400 uppercase tracking-widest text-center">สุ่มคำถาม</label>
+                        <span id="intro-box-random" class="text-lg font-bold text-slate-800 text-center">-</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-slate-100 text-center space-y-1 shadow-sm">
+                        <label class="block text-[9px] font-normal text-slate-400 uppercase tracking-widest text-center">สลับตัวเลือก</label>
+                        <span id="intro-box-shuffle" class="text-lg font-bold text-slate-800 text-center">-</span>
+                    </div>
+                </div>
+                <div class="space-y-2 text-left">
+                    <h4 class="font-normal text-slate-400 uppercase tracking-widest ml-1 text-[10px] text-left">ทักษะที่จะได้รับ</h4>
+                    <div id="intro-quiz-skills" class="flex flex-wrap gap-2 text-left"></div>
+                </div>
+                <div id="intro-quiz-timer-info" class="hidden p-4 bg-orange-50 rounded-xl border border-orange-100 text-center">
+                    <p class="text-orange-600 font-normal text-[13px] text-center">มีการกำหนดเวลาในแต่ละข้อ กรุณาตอบให้ทันเวลา</p>
+                </div>
+                <div class="flex gap-3 pt-2 text-center">
+                    <button onclick="navigate('member-home')" class="btn-interact flex-1 py-2 bg-slate-200 text-slate-600 rounded-xl font-normal text-sm transition-all shadow-sm text-center">ยังไม่พร้อม</button>
+                    <button id="btn-intro-start" onclick="startActualQuiz()" class="btn-interact flex-1 py-2 bg-portal-orange text-white rounded-xl font-normal text-sm shadow-md transition-all active:scale-95 text-center">เริ่มทำแบบทดสอบ</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: QUIZ PLAY -->
+        <section id="section-quiz-play" class="content-section hidden fade-in flex-1 flex flex-col bg-[#f1f5f9]">
+            <div class="bg-white p-3.5 flex items-center justify-between border-b border-slate-100 sticky top-0 z-20 shadow-sm text-left">
+                <div class="flex items-center gap-3 text-left">
+                    <div class="w-9 h-9 bg-portal-orange text-white rounded-xl flex items-center justify-center shadow-sm"><i data-lucide="help-circle" class="w-5 h-5 text-center"></i></div>
+                    <div class="flex flex-col text-left">
+                        <span id="quiz-progress-text" class="text-[10px] font-normal text-slate-400 uppercase tracking-widest text-left">ข้อที่ 0 / 0</span>
+                        <span class="text-slate-800 font-bold text-xs uppercase italic text-left">แบบทดสอบความรู้</span>
+                    </div>
+                </div>
+                <div id="quiz-timer-display" class="bg-slate-800 text-white px-3.5 py-1.5 rounded-lg flex items-center gap-2 shadow-md">
+                    <i data-lucide="clock" class="w-3.5 h-3.5 text-orange-400 text-center"></i>
+                    <span id="timer-count" class="font-bold text-sm tracking-widest tabular-nums text-center">00:00</span>
+                </div>
+            </div>
+            <div class="flex-1 p-6 space-y-5 overflow-y-auto no-scrollbar text-left">
+                <div id="skill-badge-container" class="text-left"></div>
+                <!-- QUESTION AREA WITH INLINE VOICE TOGGLE -->
+                <div class="p-6 bg-white rounded-[1.5rem] shadow-sm border border-slate-100 text-left">
+                    <span id="current-question-text" class="text-base font-normal text-slate-800 leading-relaxed text-left"></span>
+                    <button id="btn-question-voice-toggle" class="btn-interact inline-flex w-7 h-7 bg-blue-50 text-blue-600 rounded-full items-center justify-center shadow-sm ml-2 align-text-bottom">
+                        <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+                <div class="space-y-2 text-left">
+                    <div class="flex items-center justify-between px-1">
+                        <span class="text-[10px] font-normal text-slate-400 uppercase tracking-wider">เลือกคำตอบ</span>
+                        <div class="flex items-center gap-3 text-[10px] font-normal text-slate-400 text-right">
+                            <span class="flex items-center gap-1 text-left"><i data-lucide="check" class="w-3 h-3 text-emerald-500 text-center"></i> <span id="q-stat-correct">0%</span></span>
+                            <span id="q-stat-total" class="opacity-70 text-[9px] text-right">เคยทำรายการ</span>
+                        </div>
+                    </div>
+                    <div id="options-container" class="text-left "></div>
+                </div>
+
+                <div id="quiz-feedback-container" class="space-y-4 pt-4 pb-12">
+                    <div id="quiz-feedback" class="text-left"></div>
+                    <button id="btn-submit-answer" onclick="checkAnswer()" class="btn-interact w-full py-2 bg-slate-800 text-white rounded-xl font-normal text-base shadow-md disabled:opacity-50 text-center">ยืนยันคำตอบ</button>
+                    <button id="btn-next-question" onclick="nextQuestion()" class="hidden btn-interact w-full py-2 bg-blue-600 text-white rounded-xl font-normal text-base shadow-md text-center text-center">ข้อถัดไป</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: QUIZ HISTORY -->
+        <section id="section-member-history" class="content-section hidden fade-in flex-1 flex flex-col bg-[#f1f5f9] pb-24 text-left">
+            <div class="bg-portal-orange p-4 text-white sticky top-0 z-10 shadow-md rounded-b-2xl">
+                <h2 class="text-lg font-normal uppercase tracking-wide text-white">ประวัติการทดสอบ</h2>
+                <p class="text-white/80 font-normal text-xs italic text-white">รายการที่คุณทำการทดสอบเรียบร้อยแล้ว</p>
+            </div>
+            <div class="p-4 text-left">
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-100">
+                    <table class="w-full border-collapse ">
+                        <thead>
+                            <tr>
+                                <th class="text-left font-normal">ชุดทดสอบ</th>
+                                <th class="text-center font-normal ">คะแนน</th>
+                                <th class="text-right font-normal text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body" class="divide-y divide-slate-50"></tbody>
+                    </table>
+                </div>
+                <div id="no-history-msg" class="hidden py-16 text-center text-slate-400 italic text-sm text-center text-center">ยังไม่มีประวัติในระบบ</div>
+            </div>
+        </section>
+
+        <!-- SECTION: QUIZ SUMMARY DETAIL -->
+        <section id="section-quiz-summary" class="content-section hidden fade-in flex-1 flex flex-col bg-[#f1f5f9] overflow-y-auto no-scrollbar pb-24 text-left">
+            <div class="bg-portal-orange p-4 text-white shadow-md text-center shrink-0 rounded-b-2xl">
+                <h2 class="text-lg font-normal uppercase tracking-widest text-center text-white">สรุปผลการวิเคราะห์</h2>
+            </div>
+            
+            <div class="flex-1 p-5 space-y-5">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 text-center space-y-1 ">
+                    <h3 id="summary-quiz-title" class="font-normal text-base text-slate-800 leading-tight">-</h3>
+                    <p id="summary-date-info" class="text-slate-400 font-normal text-xs uppercase tracking-widest text-center">-</p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3 text-center">
+                    <div class="bg-white p-3 rounded-xl border border-slate-50 shadow-sm text-center">
+                        <div class="text-[9px] font-normal text-slate-400 uppercase mb-1">เวลาที่ใช้</div>
+                        <div id="summary-count-current" class="text-sm font-bold text-blue-600">00:00</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-slate-50 shadow-sm text-center">
+                        <div class="text-[9px] font-normal text-slate-400 uppercase mb-1">ตอบถูก</div>
+                        <div id="summary-correct-current" class="text-sm font-bold text-emerald-600 text-center">0</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-slate-50 shadow-sm ">
+                        <div class="text-[9px] font-normal text-slate-400 uppercase mb-1 ">ตอบผิด</div>
+                        <div id="summary-incorrect-current" class="text-sm font-bold text-red-600">0</div>
+                    </div>
+                </div>
+
+                <!-- NEW: summary-overall-wrapper -->
+                <div id="summary-overall-wrapper" class="hidden space-y-2 text-left">
+                    <h4 class="font-normal text-slate-400 uppercase tracking-widest ml-1 text-[10px] text-left">ภาพรวมการตอบคำถาม</h4>
+                    <div class="grid grid-cols-3 gap-3 text-left">
+                        <div class="bg-white p-3 rounded-xl border border-slate-100 text-center shadow-sm">
+                            <div class="text-[9px] font-normal text-slate-700 uppercase">จำนวนรายการ</div>
+                            <div id="summary-count-overall" class="text-[12px] font-normal text-slate-700 mt-1 text-center">0 (00:00)</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-slate-100 text-center shadow-sm">
+                            <div class="text-[9px] font-normal text-slate-700 uppercase">ภาพรวมถูก</div>
+                            <div id="summary-correct-overall" class="text-[12px] font-normal text-slate-700 mt-1 text-center">0 (0%)</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-slate-100 text-center shadow-sm">
+                            <div class="text-[9px] font-normal text-slate-700 uppercase">ภาพรวมผิด</div>
+                            <div id="summary-incorrect-overall" class="text-[12px] font-normal text-slate-700 mt-1 text-center">0 (0%)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-[1.5rem] shadow-sm border border-slate-100 space-y-6">
+                    <div id="summary-spider-wrapper" class="hidden">
+                        <h4 class="text-[11px] font-normal text-slate-400 uppercase tracking-[0.2em] text-center">Skill Spider Analysis</h4>
+                        <div class="relative w-full aspect-square max-w-[280px] mx-auto">
+                            <canvas id="skillsRadarChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div id="summary-view-wrapper" class="hidden mt-8 pt-4 border-t border-slate-50 space-y-4">
+                        <h4 class="font-normal text-slate-400 uppercase tracking-widest text-[10px]">เปรียบเทียบทักษะรายด้าน (%)</h4>
+                        <div class="w-full" style="height: 220px;">
+                            <canvas id="skillsBarChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center gap-6 mt-4 text-center">
+                        <div class="flex items-center gap-2"><div class="w-2.5 h-2.5 bg-blue-500 rounded-full text-center"></div><span class="font-normal text-slate-500 text-[11px] text-center">คุณ</span></div>
+                        <div class="flex items-center gap-2 text-center"><div class="w-2.5 h-2.5 bg-slate-300 rounded-full text-center"></div><span class="font-normal text-slate-500 text-[11px] text-center">เฉลี่ยระบบ</span></div>
+                    </div>
+                </div>
+
+                <!-- Section Summary Detail controlled by showFinalKey - DOWNSIZED FONT -->
+                <div id="summary-final-key-area" class="hidden space-y-4 text-left">
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 space-y-5 text-left">
+                        <div class="flex items-center gap-2.5 border-b border-slate-50 pb-3">
+                            <div class="w-8 h-8 bg-slate-800 text-white rounded-lg flex items-center justify-center "><i data-lucide="list-checks" class="w-4 h-4 text-center text-center text-center"></i></div>
+                            <h4 class="font-normal text-slate-800 uppercase text-[12px] tracking-wide">เฉลยรายการคำถาม</h4>
+                        </div>
+                        <div id="summary-questions-list" class="space-y-4"></div>
+                    </div>
+                </div>
+
+                <div class="space-y-4 pt-2 text-center">
+                    <button onclick="navigate('member-home')" class="btn-interact w-full py-2.5 bg-blue-600 text-white rounded-xl font-normal text-base shadow-md">กลับสู่หน้าหลัก</button>
+                    <div class="h-[20px]"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: DASHBOARD -->
+        <section id="section-member-dashboard" class="content-section hidden fade-in flex-1 flex flex-col bg-[#f1f5f9] pb-24 text-left">
+            <div class="bg-portal-orange p-4 text-white sticky top-0 z-10 shadow-md rounded-b-2xl">
+                <h2 class="text-lg font-normal uppercase tracking-wide text-white text-left">Dashboard สรุปผลคะแนน</h2>
+                <p class="text-white/80 font-normal text-xs italic text-white">อันดับและคะแนนรวมของสมาชิกทั้งหมด</p>
+            </div>
+            <div class="p-4 space-y-4 flex-1 flex flex-col text-left">
+                <div class="relative text-left">
+                    <select id="dashboard-quiz-select" onchange="updateDashboardView()" class="custom-input custom-select font-normal text-sm bg-white text-left"></select>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2.5 text-center">
+                    <div class="bg-white p-3 rounded-xl border border-slate-50 shadow-sm ">
+                        <div class="text-[9px] font-normal text-slate-400 uppercase ">ผู้ทดสอบ</div>
+                        <div id="dash-stat-users" class="text-sm font-bold text-slate-800 mt-0.5 text-center text-center">0</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-slate-50 shadow-sm">
+                        <div class="text-[9px] font-normal text-slate-400 uppercase ">ภาพรวมถูก</div>
+                        <div id="dash-stat-correct" class="text-sm font-bold text-emerald-600 mt-0.5 text-center text-center">0%</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-slate-50 shadow-sm text-center">
+                        <div class="text-[9px] font-normal text-slate-400 uppercase ">เวลาเฉลี่ย</div>
+                        <div id="dash-stat-time" class="text-sm font-bold text-blue-600 mt-0.5 ">00:00</div>
+                    </div>
+                </div>
+
+                <div class="flex-1 bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-100 flex flex-col">
+                    <div class="flex-1 overflow-y-auto no-scrollbar">
+                        <!-- DOWNSIZED FONT FOR DASHBOARD TABLE -->
+                        <table class="w-full border-collapse ">
+                            <thead class="sticky top-0 bg-slate-50 z-10 shadow-sm">
+                                <tr>
+                                    <th class="w-12 text-center font-normal">ที่</th>
+                                    <th class="text-left font-normal ">ชื่อ-นามสกุล</th>
+                                    <th class="w-16 text-center font-normal">คะแนน</th>
+                                    <th class="w-16 text-center font-normal">เวลา</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashboard-leaderboard-body" class="divide-y divide-slate-50 text-[12px]"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: MEMBER PROFILE -->
+        <section id="section-member-profile" class="content-section hidden fade-in flex-1 flex flex-col bg-[#f1f5f9] pb-24">
+            <!-- Orange header with normal font as requested -->
+            <div class="bg-portal-orange p-6 border-b border-white/10 shadow-sm flex flex-col items-center space-y-4 rounded-b-[2rem] text-white">
+                <div class="w-16 h-16 bg-white/20 rounded-[1.5rem] flex items-center justify-center text-white border border-white/30 shadow-inner p-4 text-center">
+                    <i data-lucide="user" class="w-8 h-8 "></i>
+                </div>
+                <div class=" text-center">
+                    <h3 id="profile-display-name" class="font-normal text-lg">คุณ -</h3>
+                    <p id="profile-display-id" class="text-white/70 text-[10px] uppercase font-normal tracking-widest mt-1">ID: -</p>
+                </div>
+            </div>
+
+            <div class="p-5 space-y-5 overflow-y-auto no-scrollbar">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4  text-left text-left">
+                    <div class="space-y-4  text-left text-left">
+                        <div class="space-y-1 ">
+                            <label class="font-normal text-slate-400 uppercase text-[10px] ml-1 tracking-wider ">สังกัด/หน่วยงาน</label>
+                            <select id="profile-edit-dept" class="custom-input custom-select font-normal "></select>
+                        </div>
+                        <div class="space-y-1 text-left">
+                            <label class="font-normal text-slate-400 uppercase text-[10px] ml-1 tracking-wider text-left">ตำแหน่งงาน</label>
+                            <input type="text" id="profile-edit-pos" placeholder="ระบุตำแหน่ง" class="custom-input font-normal ">
+                        </div>
+                        <button onclick="handleUpdateProfileData()" class="btn-interact w-full py-2 bg-portal-orange text-white rounded-xl font-normal text-sm shadow-md ">บันทึกข้อมูล</button>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-4  text-left text-left">
+                    <h4 class="font-normal text-slate-800 text-[11px] uppercase tracking-wider border-b border-slate-50 pb-2  text-left text-left ">ความปลอดภัย (PIN)</h4>
+                    <div id="profile-pin-verify-area" class="space-y-3 ">
+                        <input type="password" id="profile-current-pin-check" maxlength="6" inputmode="numeric" placeholder="ระบุ PIN เดิม" class="custom-input text-center text-xl tracking-widest">
+                        <button onclick="handleVerifyCurrentPin()" class="btn-interact w-full py-2 bg-slate-800 text-white rounded-xl font-normal text-xs shadow-sm text-center">Reset PIN</button>
+                    </div>
+                    <div id="profile-new-pin-area" class="hidden space-y-4 fade-in pt-2">
+                        <div class="grid grid-cols-2 gap-3">
+                            <input type="text" id="profile-new-pin" maxlength="6" inputmode="numeric" placeholder="New PIN" class="custom-input text-center text-lg font-normal tracking-widest bg-blue-50/50">
+                            <input type="text" id="profile-new-pin-confirm" maxlength="6" inputmode="numeric" placeholder="Confirm" class="custom-input text-center text-lg font-normal tracking-widest bg-blue-50/50 text-center">
+                        </div>
+                        <button onclick="handleConfirmNewPin()" class="btn-interact w-full py-2.5 bg-emerald-500 text-white rounded-xl font-normal text-sm shadow-md text-center">ยืนยันรหัส PIN ใหม่</button>
+                    </div>
+                </div>
+
+                <button onclick="logoutMember()" class="btn-interact w-full py-2.5 bg-red-50 text-red-500 rounded-xl font-normal text-sm flex items-center justify-center gap-2">
+                    <i data-lucide="log-out" class="w-4 h-4 text-center"></i> ออกจากระบบ
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FLOATING BOTTOM NAV -->
+    <nav id="member-bottom-nav" class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-slate-100 h-16 flex items-center justify-around z-[100] hidden bottom-nav-shadow px-4 text-center">
+        <button onclick="navigate('member-home')" id="btn-nav-home" class="flex flex-col items-center gap-1 text-stone-300 transition-all active:scale-90 flex-1 text-center">
+            <i data-lucide="home" class="w-5 h-5 text-center"></i>
+            <span class="text-[9px] font-normal uppercase tracking-widest text-center text-center">Home</span>
+        </button>
+        <button onclick="navigate('member-dashboard')" id="btn-nav-dashboard" class="flex flex-col items-center gap-1 text-stone-300 transition-all active:scale-90 flex-1 text-center">
+            <i data-lucide="bar-chart-2" class="w-5 h-5 text-center"></i>
+            <span class="text-[9px] font-normal uppercase tracking-widest text-center text-center ">Rank</span>
+        </button>
+        <button onclick="navigate('member-history')" id="btn-nav-history" class="flex flex-col items-center gap-1 text-stone-300 transition-all active:scale-90 flex-1 text-center">
+            <i data-lucide="file-text" class="w-5 h-5 text-center"></i>
+            <span class="text-[9px] font-normal uppercase tracking-widest text-center">History</span>
+        </button>
+        <button onclick="navigate('member-profile')" id="btn-nav-profile" class="flex flex-col items-center gap-1 text-stone-300 transition-all active:scale-90 flex-1 text-center">
+            <i data-lucide="user" class="w-5 h-5 text-center"></i>
+            <span class="text-[9px] font-normal uppercase tracking-widest text-center text-center">Member</span>
+        </button>
+    </nav>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, addDoc, updateDoc, onSnapshot, serverTimestamp, increment, getDoc, query, where, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Initial setup
+        const firebaseConfig = {
+            apiKey: "AIzaSyAciknEYhZU7AwOdfYytC1t_AnW2Ee11us",
+            authDomain: "faifah-ttb.firebaseapp.com",
+            projectId: "faifah-ttb",
+            storageBucket: "faifah-ttb.appspot.com",
+            messagingSenderId: "842980876200",
+            appId: "1:842980876200:web:f33bfad2ccbf263075079d"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.appState = { 
+            members: [], questionSets: [], questions: [], results: [], spiderCategories: [], positions: [],
+            currentMember: null, activeQuiz: null, activeQuestions: [],
+            currentQuestionIdx: 0, selectedOptionIdx: null, score: 0,
+            timer: null, timeRemaining: 0, dataReady: false, pinInput: "",
+            sessionAnswers: [], questionStartTime: 0, currentOptions: [],
+            currentQuizResultId: null, currentResultIndexId: null,
+            dashboardQuizId: "", dashboardPage: 1, dashboardPageSize: 50, dashboardFullResults: [],
+            currentDeviceIP: null, memberUnsubscribe: null,
+            radarChart: null, barChart: null,
+            isSpeaking: false, currentUtterance: null, currentVoiceText: ""
+        };
+
+        const getColRef = (name) => collection(db, name);
+        const getDocRef = (name, id) => doc(db, name, id);
+
+        async function fetchUserIP() {
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                window.appState.currentDeviceIP = data.ip;
+                return data.ip;
+            } catch (err) { return null; }
+        }
+
+        /**
+         * PROFESSIONAL VOICE ASSISTANT
+         * Improved for Play/Stop Toggle and High Quality Male/Female Voices
+         */
+        const runTextToSpeech = (script, buttonId, rate = 1.05, pitch = 1.02) => {
+            if (!('speechSynthesis' in window)) return;
+
+            // If already speaking the SAME text, stop it (Toggle effect)
+            if (window.speechSynthesis.speaking && window.appState.currentVoiceText === script) {
+                window.speechSynthesis.cancel();
+                updateVoiceButtonIcon(buttonId, false);
+                window.appState.isSpeaking = false;
+                window.appState.currentVoiceText = "";
+                return;
+            }
+
+            // If speaking something else or starting new, cancel and speak
+            window.speechSynthesis.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(script);
+            utterance.lang = 'th-TH';
+            utterance.rate = rate;
+            utterance.pitch = pitch;
+            
+            // Voice Selection Logic (Male/Female)
+            const voices = window.speechSynthesis.getVoices();
+            // Female priority: Premium -> Google -> Microsoft Kanya -> Standard
+            let femaleVoice = voices.find(v => v.lang.includes('th') && (v.name.includes('Kanya') || v.name.includes('Natural') || v.name.includes('Enhanced')));
+            // Male priority: Pattara -> Google Male -> Standard Male
+            let maleVoice = voices.find(v => v.lang.includes('th') && (v.name.includes('Pattara') || v.name.includes('Male')));
+            
+            // We alternate or pick based on specific markers or availability
+            // For general assistant, high quality female is often most natural in current browsers
+            let selectedVoice = femaleVoice || voices.find(v => v.lang.includes('th') && v.name.includes('Google')) || voices.find(v => v.lang.includes('th'));
+            
+            if (selectedVoice) utterance.voice = selectedVoice;
+
+            utterance.onstart = () => {
+                updateVoiceButtonIcon(buttonId, true);
+                window.appState.isSpeaking = true;
+                window.appState.currentVoiceText = script;
+            };
+
+            utterance.onend = () => {
+                updateVoiceButtonIcon(buttonId, false);
+                window.appState.isSpeaking = false;
+                window.appState.currentVoiceText = "";
+            };
+
+            utterance.onerror = () => {
+                updateVoiceButtonIcon(buttonId, false);
+                window.appState.isSpeaking = false;
+            };
+
+            window.speechSynthesis.speak(utterance);
+        };
+
+        const updateVoiceButtonIcon = (id, active) => {
+            const btn = document.getElementById(id);
+            if (!btn) return;
+            if (active) {
+                btn.innerHTML = '<i data-lucide="square" class="w-3.5 h-3.5"></i>'; // Stop icon
+                btn.classList.add('voice-playing');
+            } else {
+                btn.innerHTML = '<i data-lucide="volume-2" class="w-3.5 h-3.5"></i>'; // Play icon
+                btn.classList.remove('voice-playing');
+            }
+            lucide.createIcons();
+        };
+
+        window.speakQuestion = (text) => {
+            const questionNum = window.appState.currentQuestionIdx + 1;
+            const cfg = window.appState.activeQuiz;
+            const timeLimit = parseInt(cfg.timeLimit) || 30;
+            const isTimed = cfg.isTimed === "true" || cfg.isTimed === true;
+
+            const randomIntros = ["ข้อถัดมานะคะ", "สำหรับข้อนี้ โจทย์มีอยู่ว่า", "มาดูคำถามข้อนี้กันค่ะ", "พิจารณาข้อนี้ดูนะคะ"];
+            const intro = questionNum === 1 ? "สวัสดีค่ะ เรามาเริ่มทำข้อแรกกันเลยนะคะ" : randomIntros[questionNum % randomIntros.length];
+            
+            let timeInfo = isTimed ? `คุณมีเวลาตอบคำถามข้อนี้ ${timeLimit} วินาทีนะคะ ` : "";
+            const assistantScript = `${intro}... ${text}... ${timeInfo} คุณคิดว่าข้อไหนคือคำตอบที่ถูกต้องคะ?`;
+
+            runTextToSpeech(assistantScript, 'btn-question-voice-toggle');
+        };
+
+        window.speakFeedback = (isCorrect) => {
+            let feedbackText = isCorrect 
+                ? "ยินดีด้วยค่ะ คุณตอบคำถามข้อนี้ได้ถูกต้องค่ะ" 
+                : "น่าเสียดายนะคะ คำตอบข้อนี้ยังไม่ถูกต้องค่ะ";
+            runTextToSpeech(feedbackText, null, 1.1, 1.05);
+        };
+
+        window.speakQuizIntroDetails = (quizData) => {
+            const title = quizData.title;
+            const summary = quizData.summary || "ไม่มีข้อมูลคำอธิบายเพิ่มเติม";
+            const limit = quizData.questionLimit || "ทั้งหมด";
+            const isTimed = quizData.isTimed === "true" || quizData.isTimed === true;
+            const timeLimit = quizData.timeLimit || 30;
+            const pass = quizData.passTest || 0;
+
+            const timeScript = isTimed ? `โดยจะมีการจับเวลาข้อละ ${timeLimit} วินาทีค่ะ` : "ชุดทดสอบนี้ไม่มีการจับเวลาค่ะ";
+            const introScript = `สวัสดีค่ะ ยินดีต้อนรับเข้าสู่การทำแบบทดสอบ... รายละเอียดของชุดทดสอบนี้คือ ${title}... ${summary}... โดยมีจำนวนคำถามทั้งหมด ${limit} ข้อ... เกณฑ์คะแนนการสอบผ่านคือ ${pass} เปอร์เซ็นต์นะคะ... ${timeScript}... หากคุณพร้อมสำหรับการทดสอบแล้ว ให้ทำการกดปุ่ม เริ่มทำแบบทดสอบ ได้ทันทีเลยค่ะ`;
+
+            runTextToSpeech(introScript, 'btn-intro-voice-toggle', 1.02, 1.0);
+        };
+
+        window.openActionLightbox = (title, desc, iconName, iconColorClass, btnText, btnOnClick) => {
+            const lb = document.getElementById('action-lightbox');
+            if (!lb) return;
+            document.getElementById('action-lb-title').innerText = title;
+            document.getElementById('action-lb-desc').innerText = desc;
+            const iconEl = document.getElementById('action-lb-icon');
+            iconEl.className = `w-16 h-16 rounded-full flex items-center justify-center ${iconColorClass}`;
+            iconEl.innerHTML = `<i data-lucide="${iconName}" class="w-8 h-8 text-center text-center"></i>`;
+            const btn = document.getElementById('action-lb-btn');
+            btn.innerText = btnText;
+            btn.onclick = () => { lb.style.display = 'none'; if(btnOnClick) btnOnClick(); };
+            lb.style.display = 'flex';
+            lucide.createIcons();
+        };
+
+        window.showNotify = (msg, type = 'orange') => {
+            const toast = document.getElementById('notification');
+            const msgEl = document.getElementById('noti-msg');
+            const iconEl = document.getElementById('noti-icon');
+            if(!toast || !msgEl || !iconEl) return;
+            msgEl.innerText = msg;
+            iconEl.innerHTML = type === 'success' ? '<i data-lucide="check-circle" class="text-emerald-500 w-5 h-5 text-center"></i>' : '<i data-lucide="alert-circle" class="text-amber-500 w-5 h-5 text-center"></i>';
+            toast.style.display = 'block'; toast.classList.add('fade-in'); toast.classList.add('show');
+            lucide.createIcons();
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.style.display = 'none', 300); }, 3000);
+        };
+
+        window.closeLightbox = () => { 
+            const lb = document.getElementById('answer-lightbox');
+            if (lb) lb.style.display = 'none'; 
+            window.speechSynthesis.cancel(); 
+        };
+        
+        window.formatDuration = (seconds) => {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        };
+
+        window.viewSummaryById = async (quizResultId) => {
+            if(!quizResultId) return;
+            try {
+                const resSnap = await getDoc(getDocRef('quizresults', quizResultId));
+                if (resSnap.exists()) {
+                    const r = resSnap.data();
+                    navigate('quiz-summary');
+                    
+                    document.getElementById('summary-quiz-title').innerText = r.quizTitle || "-";
+                    const finishedDate = r.completedAt ? new Date(r.completedAt.toDate()).toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' }) : '-';
+                    document.getElementById('summary-date-info').innerText = finishedDate;
+
+                    document.getElementById('summary-count-current').innerText = formatDuration(r.totalTimeSeconds || 0);
+                    document.getElementById('summary-correct-current').innerText = r.score;
+                    document.getElementById('summary-incorrect-current').innerText = (r.total || 0) - (r.score || 0);
+
+                    const gSnap = await getDocs(getColRef('quizresults'));
+                    const globalResults = gSnap.docs.map(d => d.data()).filter(res => res.quizId === r.quizId && res.status === 'completed');
+                    
+                    const gTotalRecords = globalResults.length;
+                    const gSumCorrect = globalResults.reduce((acc, curr) => acc + (curr.score || 0), 0);
+                    const gSumTotalQs = globalResults.reduce((acc, curr) => acc + (curr.total || 0), 0);
+                    const gAvgTime = gTotalRecords > 0 ? Math.round(globalResults.reduce((acc, curr) => acc + (curr.totalTimeSeconds || 0), 0) / gTotalRecords) : 0;
+                    const gRate = gSumTotalQs > 0 ? Math.round((gSumCorrect / gSumTotalQs) * 100) : 0;
+
+                    document.getElementById('summary-count-overall').innerText = `${gTotalRecords} (${formatDuration(gAvgTime)})`;
+                    document.getElementById('summary-correct-overall').innerText = `${gSumCorrect} (${gRate}%)`;
+                    document.getElementById('summary-incorrect-overall').innerText = `${gSumTotalQs - gSumCorrect} (${100 - gRate}%)`;
+
+                    const activeSet = window.appState.questionSets.find(s => s.id === r.quizId);
+                    
+                    const spiderWrapper = document.getElementById('summary-spider-wrapper');
+                    const viewWrapper = document.getElementById('summary-view-wrapper');
+                    const overallWrapper = document.getElementById('summary-overall-wrapper');
+                    
+                    if (activeSet) {
+                        const displaySpider = activeSet.DisplaySpider === "true" || activeSet.DisplaySpider === true;
+                        const displayView = activeSet.DisplayView === "true" || activeSet.DisplayView === true;
+                        const displayOverAll = activeSet.DisplayOverAll === "true" || activeSet.DisplayOverAll === true;
+                        
+                        if (spiderWrapper) spiderWrapper.classList.toggle('hidden', !displaySpider);
+                        if (viewWrapper) viewWrapper.classList.toggle('hidden', !displayView);
+                        if (overallWrapper) overallWrapper.classList.toggle('hidden', !displayOverAll);
+                    }
+
+                    const showFinalKey = activeSet ? (activeSet.showFinalKey === true || String(activeSet.showFinalKey) === "true") : true;
+                    const finalKeyArea = document.getElementById('summary-final-key-area');
+                    if(finalKeyArea) {
+                        if (showFinalKey) {
+                            finalKeyArea.classList.remove('hidden');
+                            const listEl = document.getElementById('summary-questions-list');
+                            if(listEl) {
+                                listEl.innerHTML = (r.details || []).map((ans, idx) => {
+                                    const qData = window.appState.questions.find(q => q.id === ans.questionId);
+                                    const correctText = qData ? qData.options[qData.correctIndex] : "-";
+                                    
+                                    return `
+                                        <div class="p-4 bg-white rounded-xl space-y-1.5 border border-slate-200 text-left text-[12px]">
+                                            <div class="flex justify-between items-center mb-1">
+                                                <div class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-[9px] font-normal uppercase">ทักษะ: ${ans.skillName || 'ทั่วไป'}</div>
+                                                <div class="flex-shrink-0">
+                                                    ${ans.isCorrect ? '<div class="text-emerald-500"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-center text-center"></i></div>' : '<div class="text-red-500"><i data-lucide="x-circle" class="w-3.5 h-3.5 text-center text-center"></i></div>'}
+                                                </div>
+                                            </div>
+                                            <p class="font-normal text-slate-800 leading-snug text-left">${idx + 1}. ${ans.text}</p>
+                                            <div class="space-y-0.5 mt-1.5 pt-1.5 border-t border-slate-50 text-left">
+                                                <div class="flex items-start gap-1 text-[11px] text-left">
+                                                    <span class="text-slate-400 font-normal whitespace-nowrap text-left">เฉลย:</span>
+                                                    <span class="text-emerald-600 font-normal text-left">${correctText}</span>
+                                                </div>
+                                            </div>
+                                        </div>`;
+                                }).join('');
+                                lucide.createIcons();
+                            }
+                        } else {
+                            finalKeyArea.classList.add('hidden');
+                        }
+                    }
+
+                    const categoryIds = activeSet ? (activeSet.categoryIds || []) : [];
+                    const userSkillAgg = {};
+                    (r.details || []).forEach(ans => {
+                        const sid = ans.skillId || 'unassigned';
+                        if (!userSkillAgg[sid]) userSkillAgg[sid] = { correct: 0, total: 0 };
+                        userSkillAgg[sid].total++;
+                        if (ans.isCorrect) userSkillAgg[sid].correct++;
+                    });
+                    const systemSkillAgg = {};
+                    globalResults.forEach(res => {
+                        (res.details || []).forEach(ans => {
+                            const sid = ans.skillId || 'unassigned';
+                            if (!systemSkillAgg[sid]) systemSkillAgg[sid] = { correct: 0, total: 0 };
+                            systemSkillAgg[sid].total++;
+                            if (ans.isCorrect) systemSkillAgg[sid].correct++;
+                        });
+                    });
+
+                    const chartDataArray = categoryIds.map(cid => {
+                        const cat = window.appState.spiderCategories.find(c => c.id === cid);
+                        const skillName = cat ? cat.name : "ทั่วไป";
+                        const uScore = (userSkillAgg[cid] && userSkillAgg[cid].total > 0) ? Math.round((userSkillAgg[cid].correct / userSkillAgg[cid].total) * 100) : 0;
+                        const sScore = (systemSkillAgg[cid] && systemSkillAgg[cid].total > 0) ? Math.round((systemSkillAgg[cid].correct / systemSkillAgg[cid].total) * 100) : 60;
+                        return { name: skillName, userScore: uScore, systemScore: sScore };
+                    });
+                    renderCharts(chartDataArray);
+                }
+            } catch (err) { console.error("ViewSummaryError:", err); }
+        };
+
+        function renderCharts(data) {
+            Chart.register(ChartDataLabels);
+            const radarCtx = document.getElementById('skillsRadarChart').getContext('2d');
+            if (window.appState.radarChart) window.appState.radarChart.destroy();
+            window.appState.radarChart = new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: data.map(d => d.name),
+                    datasets: [
+                        { label: 'คุณ', data: data.map(d => d.userScore), backgroundColor: 'rgba(0, 86, 255, 0.25)', borderColor: '#0056ff', pointBackgroundColor: '#0056ff', borderWidth: 2 },
+                        { label: 'เฉลี่ยระบบ', data: data.map(d => d.systemScore), backgroundColor: 'rgba(148, 163, 184, 0.1)', borderColor: '#94a3b8', borderDash: [4, 4], pointRadius: 0, borderWidth: 2 }
+                    ]
+                },
+                options: { 
+                    scales: { r: { min: 0, max: 100, ticks: { display: false }, pointLabels: { font: { family: 'Kanit', size: 10, weight: '400' } } } },
+                    plugins: { legend: { display: false }, datalabels: { color: (ctx) => ctx.datasetIndex === 0 ? '#0056ff' : '#94a3b8', font: { weight: '400', size: 10 }, formatter: (val) => val + '%', align: 'top', offset: 5 } } 
+                }
+            });
+
+            const barCtx = document.getElementById('skillsBarChart').getContext('2d');
+            if (window.appState.barChart) window.appState.barChart.destroy();
+            window.appState.barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.name),
+                    datasets: [
+                        { label: 'คุณ', data: data.map(d => d.userScore), backgroundColor: '#0056ff', borderRadius: 6, barPercentage: 0.65, categoryPercentage: 0.7 },
+                        { label: 'เฉลี่ยระบบ', data: data.map(d => d.systemScore), backgroundColor: '#e2e8f0', borderRadius: 6, barPercentage: 0.65, categoryPercentage: 0.7 }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                    scales: { x: { min: 0, max: 100, display: false }, y: { grid: { display: false }, ticks: { font: { family: 'Kanit', size: 11 }, color: '#64748b' } } },
+                    plugins: { legend: { display: false }, datalabels: { anchor: 'end', align: 'right', color: (ctx) => ctx.datasetIndex === 0 ? '#0056ff' : '#94a3b8', font: { weight: '400', size: 10 }, formatter: (v) => v + '%', offset: 4 } },
+                    layout: { padding: { right: 35 } }
+                }
+            });
+        }
+
+        window.navigate = (sectionId) => {
+            window.speechSynthesis.cancel(); 
+            document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
+            const target = document.getElementById(`section-${sectionId}`);
+            if (target) target.classList.remove('hidden');
+            
+            const showNav = ['member-home', 'member-dashboard', 'member-profile', 'member-history', 'quiz-summary'].includes(sectionId);
+            const navBar = document.getElementById('member-bottom-nav');
+            if (navBar) navBar.classList.toggle('hidden', !showNav);
+
+            document.querySelectorAll('#member-bottom-nav button').forEach(b => b.classList.remove('nav-item-active'));
+            const activeId = { 'member-home': 'btn-nav-home', 'member-dashboard': 'btn-nav-dashboard', 'member-history': 'btn-nav-history', 'member-profile': 'btn-nav-profile', 'quiz-summary': 'btn-nav-history' }[sectionId];
+            if(activeId) {
+                const activeBtn = document.getElementById(activeId);
+                if (activeBtn) activeBtn.classList.add('nav-item-active');
+            }
+            
+            if (sectionId === 'register') {
+                const empIdInp = document.getElementById('portal-emp-id');
+                if (empIdInp) {
+                    if (window.appState.currentDeviceIP && window.appState.members.length > 0) {
+                        const mByIP = window.appState.members.find(m => m.registeredIP === window.appState.currentDeviceIP);
+                        if (mByIP && mByIP.empId && String(mByIP.empId).length <= 13) {
+                            empIdInp.value = mByIP.empId;
+                        } else empIdInp.value = "";
+                    } else empIdInp.value = "";
+                }
+            }
+
+            if (sectionId === 'member-home' && window.appState.currentMember) {
+                const welcomeMsg = document.getElementById('member-welcome-msg');
+                if (welcomeMsg) welcomeMsg.innerText = `สวัสดีครับคุณ ${window.appState.currentMember.name || ""}`;
+                renderMemberQuizzes();
+            }
+            if (sectionId === 'member-history') renderHistory();
+            if (sectionId === 'member-dashboard') initDashboard();
+            if (sectionId === 'member-profile') prepareProfileEditor();
+            lucide.createIcons();
+        };
+
+        const bootstrap = async () => {
+            await fetchUserIP();
+            await signInAnonymously(auth);
+            onAuthStateChanged(auth, (user) => {
+                if (!user) return;
+                onSnapshot(getColRef('members'), (snap) => { 
+                    const members = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                    window.appState.members = members; 
+                    window.appState.dataReady = true; 
+                    const dot = document.getElementById('sync-status-dot');
+                    if (dot) dot.classList.replace('bg-stone-300', 'bg-emerald-400');
+                });
+                onSnapshot(getColRef('questionSets'), (snap) => { window.appState.questionSets = snap.docs.map(d => ({ id: d.id, ...d.data() })); renderMemberQuizzes(); });
+                onSnapshot(getColRef('questions'), (snap) => { window.appState.questions = snap.docs.map(d => ({ id: d.id, ...d.data() })); });
+                onSnapshot(getColRef('results'), (snap) => { 
+                    window.appState.results = snap.docs.map(d => ({ id: d.id, ...d.data() })); 
+                    renderMemberQuizzes(); 
+                    const historySect = document.getElementById('section-member-history');
+                    if (historySect && !historySect.classList.contains('hidden')) renderHistory();
+                });
+                onSnapshot(getColRef('spiderCategories'), (snap) => { window.appState.spiderCategories = snap.docs.map(d => ({ id: d.id, ...d.data() })); });
+                onSnapshot(getColRef('positions'), (snap) => { 
+                    window.appState.positions = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                    renderPositionDropdown();
+                });
+            });
+
+            if (window.speechSynthesis) {
+                window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+                window.speechSynthesis.getVoices();
+            }
+        };
+        bootstrap();
+
+        function renderPositionDropdown() {
+            const selectIds = ['new-emp-dept', 'profile-edit-dept'];
+            const pos = window.appState.positions;
+            selectIds.forEach(id => {
+                const select = document.getElementById(id);
+                if(!select) return;
+                if(pos.length === 0) select.innerHTML = '<option value="">-- ไม่พบสังกัด --</option>';
+                else select.innerHTML = '<option value="">-- เลือกสังกัด --</option>' + pos.map(p => `<option value="${p.name || p.id}">${p.name || p.id}</option>`).join('');
+            });
+        }
+
+        function prepareProfileEditor() {
+            const m = window.appState.currentMember;
+            if(!m) return;
+            const nameEl = document.getElementById('profile-display-name');
+            const idEl = document.getElementById('profile-display-id');
+            if (nameEl) nameEl.innerText = `คุณ ${m.name || '-'}`;
+            if (idEl) idEl.innerText = `ID: ${m.empId || '-'}`;
+            const deptSelect = document.getElementById('profile-edit-dept');
+            if(deptSelect) { renderPositionDropdown(); deptSelect.value = m.dept || ""; }
+            const posInput = document.getElementById('profile-edit-pos');
+            if(posInput) posInput.value = m.position || "";
+        }
+
+        window.handleUpdateProfileData = async () => {
+            const m = window.appState.currentMember;
+            const dept = document.getElementById('profile-edit-dept')?.value;
+            const pos = document.getElementById('profile-edit-pos')?.value?.trim();
+            if(!dept || !pos) { window.showNotify("กรุณากรอกข้อมูลให้ครบถ้วน", "orange"); return; }
+            try {
+                await updateDoc(getDocRef('members', m.id), { dept, position: pos, updatedAt: serverTimestamp() });
+                window.showNotify("อัปเดตข้อมูลสำเร็จ", "success");
+            } catch (err) { window.showNotify("เกิดข้อผิดพลาดในการบันทึก", "error"); }
+        }
+
+        window.handleVerifyCurrentPin = () => {
+            const m = window.appState.currentMember;
+            const input = document.getElementById('profile-current-pin-check')?.value;
+            if(String(input) === String(m.pin)) {
+                const newPinArea = document.getElementById('profile-new-pin-area');
+                if (newPinArea) newPinArea.classList.remove('hidden');
+                window.showNotify("ยืนยันสำเร็จ ตั้ง PIN ใหม่ได้เลย", "success");
+            } else window.showNotify("PIN เดิมไม่ถูกต้อง", "error");
+        }
+
+        window.handleConfirmNewPin = async () => {
+            const m = window.appState.currentMember;
+            const newPin = document.getElementById('profile-new-pin')?.value;
+            const confirmPin = document.getElementById('profile-new-pin-confirm')?.value;
+            if(!newPin || newPin.length !== 6 || newPin !== confirmPin) { window.showNotify("PIN ไม่ถูกต้อง", "error"); return; }
+            try {
+                await updateDoc(getDocRef('members', m.id), { pin: String(newPin), UserResetPIN: 0, updatedAt: serverTimestamp() });
+                window.showNotify("เปลี่ยน PIN สำเร็จแล้ว", "success");
+                const newPinArea = document.getElementById('profile-new-pin-area');
+                if (newPinArea) newPinArea.classList.add('hidden');
+            } catch (err) { window.showNotify("ขัดข้อง", "error"); }
+        }
+
+        window.handlePortalLogin = () => {
+            const id = document.getElementById('portal-emp-id')?.value?.trim();
+            if(!id || !window.appState.dataReady) return;
+            const m = window.appState.members.find(m => String(m.empId).toLowerCase() === id.toLowerCase());
+            if (m) {
+                window.appState.currentMember = m;
+                if (window.appState.memberUnsubscribe) window.appState.memberUnsubscribe();
+                window.appState.memberUnsubscribe = onSnapshot(getDocRef('members', m.id), (docSnap) => {
+                    const data = docSnap.data(); if (!data) return;
+                    const resetArea = document.getElementById('reset-pin-area');
+                    if (resetArea) resetArea.classList.toggle('hidden', !data.pin || data.registeredIP !== window.appState.currentDeviceIP);
+                    if (data.UserResetPIN === 2) { 
+                        openActionLightbox("การรีเซ็ตสำเร็จ", "ผู้ดูแลระบบได้รีเซ็ต PIN ให้ท่านแล้ว", "shield-check", "bg-emerald-50 text-emerald-600", "ตั้ง PIN ใหม่", () => { navigate('new-member'); document.getElementById('new-emp-id').value = data.empId; });
+                    }
+                });
+                if (m.pin) navigate('pin-verify');
+                else { navigate('new-member'); document.getElementById('new-emp-id').value = m.empId; document.getElementById('new-emp-name').value = m.name || ''; }
+            } else { navigate('new-member'); document.getElementById('new-emp-id').value = id; window.showNotify("กรุณาลงทะเบียน", "orange"); }
+        };
+
+        window.handleRequestResetPin = async () => {
+            const m = window.appState.currentMember;
+            try {
+                await updateDoc(getDocRef('members', m.id), { pin: "", UserResetPIN: 0 });
+                openActionLightbox("สำเร็จ", "ระบบล้างรหัส PIN เดิมแล้ว", "shield-check", "bg-emerald-50 text-emerald-600", "ตั้ง PIN ใหม่", () => { navigate('new-member'); document.getElementById('new-emp-id').value = m.empId; });
+            } catch (err) { window.showNotify("ขัดข้อง", "error"); }
+        };
+
+        window.keypadPress = (num) => { if (window.appState.pinInput.length < 6) { window.appState.pinInput += num; document.getElementById('verify-pin-display').value = window.appState.pinInput; } };
+        window.keypadClear = () => { window.appState.pinInput = window.appState.pinInput.slice(0, -1); document.getElementById('verify-pin-display').value = window.appState.pinInput; };
+        window.handlePinVerify = () => { if (window.appState.pinInput === String(window.appState.currentMember.pin)) navigate('member-home'); else { window.showNotify("PIN ผิด", "error"); window.appState.pinInput = ""; document.getElementById('verify-pin-display').value = ""; } };
+
+        window.handleMemberSelfRegistration = async () => {
+            const name = document.getElementById('new-emp-name')?.value?.trim();
+            const dept = document.getElementById('new-emp-dept')?.value;
+            const pos = document.getElementById('new-emp-pos')?.value?.trim();
+            const pin = document.getElementById('new-emp-pin')?.value;
+            const confirmPin = document.getElementById('new-emp-pin-confirm')?.value;
+            const empId = document.getElementById('new-emp-id')?.value;
+            if(!name || !dept || pin.length !== 6 || pin !== confirmPin) { window.showNotify("ข้อมูลไม่ถูกต้อง", "error"); return; }
+            try {
+                const ip = await fetchUserIP();
+                const mData = { empId, name, dept, position: pos, pin: String(pin), registeredIP: ip, updatedAt: serverTimestamp(), UserResetPIN: 0, totalQuizzes: 0, totalCorrect: 0, totalIncorrect: 0, totalQuestions: 0 };
+                if (window.appState.currentMember) await updateDoc(getDocRef('members', window.appState.currentMember.id), mData);
+                else await addDoc(getColRef('members'), { ...mData, createdAt: serverTimestamp() });
+                window.showNotify("ลงทะเบียนสำเร็จ", "success"); navigate('register');
+            } catch (err) { window.showNotify("เกิดข้อผิดพลาด", "error"); }
+        };
+
+        function renderMemberQuizzes() {
+            const tbody = document.getElementById('member-quiz-table'); if(!tbody) return;
+            const currentEmpId = window.appState.currentMember?.empId;
+            let visible = window.appState.questionSets.filter(s => {
+                if (s.status !== 'Online') return false;
+                const allowedIds = s.allowedEmpIds;
+                if (!allowedIds || (Array.isArray(allowedIds) && allowedIds.length === 0) || allowedIds === "") return true;
+                const idsList = Array.isArray(allowedIds) ? allowedIds : allowedIds.split(',').map(id => id.trim());
+                return idsList.includes(currentEmpId);
+            });
+            visible.sort((a, b) => (b.startDate ? new Date(b.startDate) : 0) - (a.startDate ? new Date(a.startDate) : 0));
+            tbody.innerHTML = visible.map(s => {
+                const result = window.appState.results.find(r => r.quizId === s.id && r.memberId === currentEmpId && r.status === 'completed');
+                return `<tr><td class="px-2 py-2 text-left text-[12px]">${s.title}</div></td><td class="px-2 py-2 text-right">${result ? `<button onclick="viewSummaryById('${result.quizResultId}')" class="bg-blue-600 text-white px-4 py-1.5 rounded-lg text-[12px] shadow-lg text-center">สรุปผล</button>` : `<button onclick="openQuizIntro('${s.id}')" class="bg-portal-orange text-white px-4 py-1.5 rounded-lg font-normal shadow-md text-center text-[12px]">Start</button>`}</td></tr>`;
+            }).join('');
+            const noQuizMsg = document.getElementById('no-quiz-msg');
+            if (noQuizMsg) noQuizMsg.classList.toggle('hidden', visible.length > 0);
+        }
+
+        function renderHistory() {
+            const tbody = document.getElementById('history-table-body'); if(!tbody) return;
+            const myRes = window.appState.results.filter(r => r.memberId === window.appState.currentMember?.empId && r.status === 'completed');
+            myRes.sort((a, b) => (b.completedAt ? b.completedAt.toDate() : 0) - (a.completedAt ? a.completedAt.toDate() : 0));
+            const noHistoryMsg = document.getElementById('no-history-msg');
+            if (noHistoryMsg) noHistoryMsg.classList.toggle('hidden', myRes.length > 0);
+            tbody.innerHTML = myRes.map(r => `
+                <tr class="hover:bg-slate-50 transition-all text-left">
+                    <td class="px-2 py-2 text-left leading-tight text-[12px]">${r.quizTitle}</div><div class="text-[10px] text-slate-400 mt-1 text-left">${r.completedAt ? new Date(r.completedAt.toDate()).toLocaleDateString('th-TH') : '-'}</div></td>
+                    <td class="px-2 py-2 text-center text-[12px]">${r.score} / ${r.total}</div><div class="text-[10px] text-slate-400 mt-1 font-medium text-center text-center">${formatDuration(r.totalTimeSeconds || 0)}</div></td>
+                    <td class="px-2 py-2 text-right text-right text-[12px]"><button onclick="viewSummaryById('${r.quizResultId}')" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg font-normal text-[12px] shadow-sm text-center">ผลลัพธ์</button></td>
+                </tr>`).join('');
+        }
+
+        window.openQuizIntro = async (id) => {
+            const q = window.appState.questionSets.find(s => s.id === id);
+            window.appState.activeQuiz = q;
+            document.getElementById('intro-quiz-title').innerText = q.title;
+            document.getElementById('intro-quiz-desc').innerText = q.summary || 'ไม่ระบุ';
+            document.getElementById('intro-box-limit').innerText = q.questionLimit || '0';
+            document.getElementById('intro-box-timed').innerText = (q.isTimed === "true" || q.isTimed === true) ? 'จับเวลา' : 'ไม่จำกัด';
+            document.getElementById('intro-box-random').innerText = (q.randomizeQuestions === "true" || q.randomizeQuestions === true) ? 'สุ่มคำถาม' : 'ไม่สุ่ม';
+            document.getElementById('intro-box-shuffle').innerText = (q.shuffleAnswers === "true" || q.shuffleAnswers === true) ? 'สลับตัวเลือก' : 'ปกติ';
+            document.getElementById('intro-box-pass').innerText = (q.passTest || '-') + ' %';
+            document.getElementById('intro-quiz-skills').innerHTML = (q.categoryIds || []).map(id => {
+                const cat = window.appState.spiderCategories.find(c => c.id === id);
+                return `<div class="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-[11px] font-normal uppercase border border-blue-100 shadow-sm">${cat ? cat.name : id}</div>`;
+            }).join('');
+            
+            // Set up Voice Toggle for Intro
+            const introText = `รายละเอียดชุดทดสอบ ${q.title}... ${q.summary || ""}... จำนวนข้อสอบ ${q.questionLimit || 0} ข้อ... เกณฑ์คะแนน ${q.passTest || 0} เปอร์เซ็นต์... หากพร้อมแล้วกดปุ่มเริ่มทำแบบทดสอบได้เลยค่ะ`;
+            const voiceBtn = document.getElementById('btn-intro-voice-toggle');
+            if (voiceBtn) voiceBtn.onclick = () => runTextToSpeech(introScript, 'btn-intro-voice-toggle');
+
+            navigate('quiz-intro');
+            // Auto-play intro with toggle control
+            const introScript = `สวัสดีค่ะ ยินดีต้อนรับเข้าสู่การทำแบบทดสอบ... รายละเอียดของชุดทดสอบนี้คือ ${q.title}... ${q.summary || ""}... โดยมีจำนวนคำถามทั้งหมด ${q.questionLimit || 0} ข้อ... เกณฑ์คะแนนการสอบผ่านคือ ${q.passTest || 0} เปอร์เซ็นต์นะคะ... และหากคุณพร้อมสำหรับการทดสอบแล้ว ให้ทำการกดปุ่ม เริ่มทำแบบทดสอบ ได้ทันทีเลยค่ะ`;
+            runTextToSpeech(introScript, 'btn-intro-voice-toggle', 1.02, 1.0);
+        };
+
+        window.startActualQuiz = async () => {
+            const config = window.appState.activeQuiz;
+            const pool = window.appState.questions.filter(q => q.setId === config.id);
+            if(pool.length === 0) return;
+            let selected = pool.slice(0, parseInt(config.questionLimit) || pool.length);
+            window.appState.activeQuestions = selected;
+            window.appState.currentQuestionIdx = 0; window.appState.score = 0; window.appState.sessionAnswers = []; 
+            try {
+                const rRef = await addDoc(getColRef('quizresults'), { memberId: window.appState.currentMember.empId, memberName: window.appState.currentMember.name, quizId: config.id, quizTitle: config.title, score: 0, total: selected.length, details: [], createdAt: serverTimestamp(), status: 'in-progress', totalTimeSeconds: 0 });
+                window.appState.currentQuizResultId = rRef.id;
+                const iRef = await addDoc(getColRef('results'), { quizResultId: rRef.id, memberId: window.appState.currentMember.empId, quizId: config.id, quizTitle: config.title, status: 'in-progress', totalTimeSeconds: 0 });
+                window.appState.currentResultIndexId = iRef.id;
+            } catch (e) { console.error(e); }
+            navigate('quiz-play'); renderCurrentQuestion();
+        };
+
+        function renderCurrentQuestion() {
+            window.speechSynthesis.cancel(); 
+            const q = window.appState.activeQuestions[window.appState.currentQuestionIdx];
+            const cfg = window.appState.activeQuiz;
+            document.getElementById('quiz-progress-text').innerText = `ข้อที่ ${window.appState.currentQuestionIdx + 1} / ${window.appState.activeQuestions.length}`;
+            document.getElementById('current-question-text').innerText = q.text;
+            const cat = window.appState.spiderCategories.find(c => c.id === q.spiderCatId);
+            document.getElementById('skill-badge-container').innerHTML = `<div class="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-[10px] font-medium uppercase border border-blue-200 text-left shadow-sm"><i data-lucide="award" class="w-3 h-3 text-center"></i><span>${cat ? cat.name : "ทั่วไป"}</span></div>`;
+            const rate = q.totalAttemptCount > 0 ? Math.round((q.correctCount / q.totalAttemptCount) * 100) : 0;
+            document.getElementById('q-stat-correct').innerText = rate + '%';
+            document.getElementById('q-stat-total').innerText = (q.totalAttemptCount || 0) + ' answers';
+            let opts = (q.options || []).map((text, idx) => ({ text, originalIndex: idx }));
+            window.appState.currentOptions = opts; 
+            document.getElementById('options-container').innerHTML = opts.map((o, i) => `<button onclick="selectOption(${i})" class="option-btn text-left" id="opt-${i}"><div class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center font-normal text-xs text-slate-500 text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center ">${String.fromCharCode(65 + i)}</div><div class="text-sm font-normal text-left">${o.text}</div></button>`).join('');
+            document.getElementById('quiz-feedback').innerHTML = "";
+            window.appState.selectedOptionIdx = null; window.appState.questionStartTime = Date.now();
+            const subBtn = document.getElementById('btn-submit-answer');
+            subBtn.classList.remove('hidden'); subBtn.disabled = true;
+            if(cfg.isTimed === "true" || cfg.isTimed === true) {
+                window.appState.timeRemaining = parseInt(cfg.timeLimit) || 30;
+                document.getElementById('quiz-timer-display').classList.remove('hidden');
+                if(window.appState.timer) clearInterval(window.appState.timer);
+                window.appState.timer = setInterval(() => { 
+                    window.appState.timeRemaining--; 
+                    document.getElementById('timer-count').innerText = `00:${String(window.appState.timeRemaining).padStart(2, '0')}`; 
+                    if(window.appState.timeRemaining <= 0) { clearInterval(window.appState.timer); checkAnswer(true); } 
+                }, 1000);
+            } else document.getElementById('quiz-timer-display').classList.add('hidden');
+            document.getElementById('btn-next-question').classList.add('hidden');
+            
+            // Set Voice Toggle for Question
+            const voiceBtn = document.getElementById('btn-question-voice-toggle');
+            if (voiceBtn) voiceBtn.onclick = () => window.speakQuestion(q.text);
+            
+            speakQuestion(q.text);
+            lucide.createIcons();
+        }
+
+        window.selectOption = (idx) => { 
+            const subBtn = document.getElementById('btn-submit-answer');
+            if(!subBtn || subBtn.classList.contains('hidden')) return;
+            window.appState.selectedOptionIdx = idx; 
+            document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected')); 
+            document.getElementById(`opt-${idx}`).classList.add('selected'); 
+            subBtn.disabled = false;
+        };
+
+        window.checkAnswer = (timeout = false) => {
+            window.speechSynthesis.cancel(); 
+            if(window.appState.selectedOptionIdx === null && !timeout) return;
+            if(window.appState.timer) clearInterval(window.appState.timer);
+            const q = window.appState.activeQuestions[window.appState.currentQuestionIdx];
+            const cfg = window.appState.activeQuiz;
+            const isCorr = !timeout && window.appState.selectedOptionIdx !== null && String(window.appState.currentOptions[window.appState.selectedOptionIdx].originalIndex) === String(q.correctIndex);
+            
+            speakFeedback(isCorr);
+
+            window.appState.sessionAnswers.push({ questionId: q.id, text: q.text, isCorrect: isCorr, skillId: q.spiderCatId || 'unassigned', timeTaken: Math.floor((Date.now() - window.appState.questionStartTime) / 1000), selectedOptionIdx: window.appState.selectedOptionIdx !== null ? window.appState.currentOptions[window.appState.selectedOptionIdx].originalIndex : null, userAnswerText: timeout ? "หมดเวลา" : (window.appState.selectedOptionIdx !== null ? window.appState.currentOptions[window.appState.selectedOptionIdx].text : "-") });
+            const nextBtnText = window.appState.currentQuestionIdx === window.appState.activeQuestions.length - 1 ? "ดูผลการทดสอบ" : "ข้อถัดไป";
+            const subBtn = document.getElementById('btn-submit-answer');
+            subBtn.classList.add('hidden'); subBtn.disabled = true;
+            if (isCorr) {
+                document.getElementById('quiz-feedback').innerHTML = `<div class="p-4 bg-emerald-50 text-emerald-700 rounded-xl flex items-center gap-3 font-normal text-sm fade-in text-left text-center"></i> ถูกต้องยอดเยี่ยม!</div>`;
+                const nextBtn = document.getElementById('btn-next-question'); nextBtn.innerText = nextBtnText; nextBtn.classList.remove('hidden');
+            } else {
+                document.getElementById('lb-result-title').innerText = timeout ? "หมดเวลา!" : "คำตอบไม่ถูกต้อง";
+                document.getElementById('lb-question-text').innerText = q.text;
+                document.getElementById('lb-user-answer').innerText = timeout ? "หมดเวลา" : (window.appState.selectedOptionIdx !== null ? window.appState.currentOptions[window.appState.selectedOptionIdx].text : "-");
+                document.getElementById('lb-correct-answer').innerText = q.options[q.correctIndex];
+                document.getElementById('lb-user-pick-area').classList.remove('hidden');
+                document.getElementById('lb-correct-info-area').classList.toggle('hidden', cfg.showInstantResult !== "true" && cfg.showInstantResult !== true);
+                document.getElementById('lb-next-btn').innerText = nextBtnText;
+                document.getElementById('answer-lightbox').style.display = 'flex';
+                const nextBtn = document.getElementById('btn-next-question'); nextBtn.innerText = nextBtnText; nextBtn.classList.remove('hidden');
+            }
+            lucide.createIcons();
+        };
+
+        window.nextQuestion = () => { 
+            window.speechSynthesis.cancel();
+            if(window.appState.currentQuestionIdx < window.appState.activeQuestions.length - 1) { 
+                window.appState.currentQuestionIdx++; renderCurrentQuestion(); 
+            } else finishQuiz(); 
+        };
+
+        async function finishQuiz() {
+            window.speechSynthesis.cancel();
+            if(window.appState.timer) clearInterval(window.appState.timer);
+            const score = window.appState.score; const total = window.appState.activeQuestions.length;
+            const time = window.appState.sessionAnswers.reduce((a, c) => a + (c.timeTaken || 0), 0);
+            try {
+                for (const ans of window.appState.sessionAnswers) {
+                    const qUpdate = { totalAttemptCount: increment(1), correctCount: ans.isCorrect ? increment(1) : increment(0) };
+                    if (ans.selectedOptionIdx !== null) qUpdate[`optionCounts.${ans.selectedOptionIdx}`] = increment(1);
+                    await updateDoc(getDocRef('questions', ans.questionId), qUpdate);
+                }
+                await updateDoc(getDocRef('quizresults', window.appState.currentQuizResultId), { score, total, details: window.appState.sessionAnswers, completedAt: serverTimestamp(), status: 'completed', totalTimeSeconds: time });
+                await updateDoc(getDocRef('results', window.appState.currentResultIndexId), { status: 'completed', score, total, totalTimeSeconds: time, completedAt: serverTimestamp() });
+                await updateDoc(getDocRef('members', window.appState.currentMember.id), { totalQuizzes: increment(1), totalCorrect: increment(score) });
+                window.viewSummaryById(window.appState.currentQuizResultId);
+            } catch (e) { console.error(e); }
+        }
+
+        async function initDashboard() {
+            const select = document.getElementById('dashboard-quiz-select'); if(!select) return;
+            select.innerHTML = window.appState.questionSets.map(s => `<option value="${s.id}">${s.title}</option>`).join('');
+            window.appState.dashboardQuizId = select.value; 
+            await fetchDashboardData();
+        }
+
+        window.updateDashboardView = async () => { 
+            window.appState.dashboardQuizId = document.getElementById('dashboard-quiz-select').value; 
+            await fetchDashboardData(); 
+        };
+
+        async function fetchDashboardData() {
+            const quizId = window.appState.dashboardQuizId; if(!quizId) return;
+            document.getElementById('dashboard-leaderboard-body').innerHTML = '<tr><td colspan="4" class="py-10"></td></tr>';
+            try {
+                const snap = await getDocs(getColRef('quizresults'));
+                const results = snap.docs.map(d => d.data()).filter(res => res.quizId === quizId && res.status === 'completed');
+                results.sort((a, b) => b.score - a.score || (a.totalTimeSeconds - b.totalTimeSeconds));
+                window.appState.dashboardFullResults = results; 
+                document.getElementById('dash-stat-users').innerText = results.length;
+                const totalCorrect = results.reduce((a,c) => a+c.score, 0);
+                const totalQs = results.reduce((a,c) => a+c.total, 0);
+                document.getElementById('dash-stat-correct').innerText = totalQs > 0 ? Math.round((totalCorrect/totalQs)*100)+'%' : '0%';
+                const totalTime = results.reduce((a,c) => a+(c.totalTimeSeconds||0), 0);
+                document.getElementById('dash-stat-time').innerText = results.length > 0 ? formatDuration(Math.round(totalTime/results.length)) : '00:00';
+                renderDashboardTable();
+            } catch (err) { console.error(err); }
+        }
+
+        function renderDashboardTable() {
+            const body = document.getElementById('dashboard-leaderboard-body');
+            const results = window.appState.dashboardFullResults; if (!body) return;
+            body.innerHTML = results.map((r, i) => `
+                <tr class="${r.memberId === window.appState.currentMember?.empId ? 'bg-orange-50/50' : ''} text-left">
+                    <td class="text-center font-normal text-slate-400 py-3 text-[12px] text-center">${i + 1}</td>
+                    <td class="text-left font-normal text-slate-700 py-3 text-[12px]">${r.memberName}</td>
+                    <td class="text-center font-bold text-slate-800 py-3 text-[12px] text-center">${r.score} / ${r.total}</td>
+                    <td class="text-center text-slate-400 py-3 font-normal text-[12px] text-center">${formatDuration(r.totalTimeSeconds)}</td>
+                </tr>`).join('');
+        }
+
+        window.logoutMember = () => { if(window.appState.memberUnsubscribe) window.appState.memberUnsubscribe(); window.appState.currentMember = null; navigate('register'); };
+        window.onload = () => { navigate('register'); lucide.createIcons(); };
+    </script>
+</body>
+</html>
