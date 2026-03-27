@@ -429,7 +429,7 @@
                             <tr>
                                 <th class="text-left font-normal">ชุดทดสอบ</th>
                                 <th class="text-center font-normal ">คะแนน</th>
-                                <th class="text-right font-normal text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right text-right"></th>
+                                <th class="text-right font-normal"></th>
                             </tr>
                         </thead>
                         <tbody id="history-table-body" class="divide-y divide-slate-50"></tbody>
@@ -658,6 +658,13 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // Define helper functions at script scope
+        const formatDuration = (seconds) => {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        };
+
         window.appState = { 
             members: [], questionSets: [], questions: [], results: [], spiderCategories: [], positions: [],
             currentMember: null, activeQuiz: null, activeQuestions: [],
@@ -685,12 +692,9 @@
 
         /**
          * PROFESSIONAL VOICE ASSISTANT
-         * Improved for Play/Stop Toggle and High Quality Male/Female Voices
          */
         const runTextToSpeech = (script, buttonId, rate = 1.05, pitch = 1.02) => {
             if (!('speechSynthesis' in window)) return;
-
-            // If already speaking the SAME text, stop it (Toggle effect)
             if (window.speechSynthesis.speaking && window.appState.currentVoiceText === script) {
                 window.speechSynthesis.cancel();
                 updateVoiceButtonIcon(buttonId, false);
@@ -698,45 +702,25 @@
                 window.appState.currentVoiceText = "";
                 return;
             }
-
-            // If speaking something else or starting new, cancel and speak
             window.speechSynthesis.cancel();
-            
             const utterance = new SpeechSynthesisUtterance(script);
             utterance.lang = 'th-TH';
             utterance.rate = rate;
             utterance.pitch = pitch;
-            
-            // Voice Selection Logic (Male/Female)
             const voices = window.speechSynthesis.getVoices();
-            // Female priority: Premium -> Google -> Microsoft Kanya -> Standard
             let femaleVoice = voices.find(v => v.lang.includes('th') && (v.name.includes('Kanya') || v.name.includes('Natural') || v.name.includes('Enhanced')));
-            // Male priority: Pattara -> Google Male -> Standard Male
-            let maleVoice = voices.find(v => v.lang.includes('th') && (v.name.includes('Pattara') || v.name.includes('Male')));
-            
-            // We alternate or pick based on specific markers or availability
-            // For general assistant, high quality female is often most natural in current browsers
-            let selectedVoice = femaleVoice || voices.find(v => v.lang.includes('th') && v.name.includes('Google')) || voices.find(v => v.lang.includes('th'));
-            
+            let selectedVoice = femaleVoice || voices.find(v => v.lang.includes('th'));
             if (selectedVoice) utterance.voice = selectedVoice;
-
             utterance.onstart = () => {
                 updateVoiceButtonIcon(buttonId, true);
                 window.appState.isSpeaking = true;
                 window.appState.currentVoiceText = script;
             };
-
             utterance.onend = () => {
                 updateVoiceButtonIcon(buttonId, false);
                 window.appState.isSpeaking = false;
                 window.appState.currentVoiceText = "";
             };
-
-            utterance.onerror = () => {
-                updateVoiceButtonIcon(buttonId, false);
-                window.appState.isSpeaking = false;
-            };
-
             window.speechSynthesis.speak(utterance);
         };
 
@@ -744,10 +728,10 @@
             const btn = document.getElementById(id);
             if (!btn) return;
             if (active) {
-                btn.innerHTML = '<i data-lucide="square" class="w-3.5 h-3.5"></i>'; // Stop icon
+                btn.innerHTML = '<i data-lucide="square" class="w-3.5 h-3.5"></i>'; 
                 btn.classList.add('voice-playing');
             } else {
-                btn.innerHTML = '<i data-lucide="volume-2" class="w-3.5 h-3.5"></i>'; // Play icon
+                btn.innerHTML = '<i data-lucide="volume-2" class="w-3.5 h-3.5"></i>'; 
                 btn.classList.remove('voice-playing');
             }
             lucide.createIcons();
@@ -758,20 +742,14 @@
             const cfg = window.appState.activeQuiz;
             const timeLimit = parseInt(cfg.timeLimit) || 30;
             const isTimed = cfg.isTimed === "true" || cfg.isTimed === true;
-
-            const randomIntros = ["ข้อถัดมานะคะ", "สำหรับข้อนี้ โจทย์มีอยู่ว่า", "มาดูคำถามข้อนี้กันค่ะ", "พิจารณาข้อนี้ดูนะคะ"];
-            const intro = questionNum === 1 ? "สวัสดีค่ะ เรามาเริ่มทำข้อแรกกันเลยนะคะ" : randomIntros[questionNum % randomIntros.length];
-            
+            const intro = questionNum === 1 ? "สวัสดีค่ะ เรามาเริ่มทำข้อแรกกันเลยนะคะ" : "ข้อถัดมานะคะ";
             let timeInfo = isTimed ? `คุณมีเวลาตอบคำถามข้อนี้ ${timeLimit} วินาทีนะคะ ` : "";
             const assistantScript = `${intro}... ${text}... ${timeInfo} คุณคิดว่าข้อไหนคือคำตอบที่ถูกต้องคะ?`;
-
             runTextToSpeech(assistantScript, 'btn-question-voice-toggle');
         };
 
         window.speakFeedback = (isCorrect) => {
-            let feedbackText = isCorrect 
-                ? "ยินดีด้วยค่ะ คุณตอบคำถามข้อนี้ได้ถูกต้องค่ะ" 
-                : "น่าเสียดายนะคะ คำตอบข้อนี้ยังไม่ถูกต้องค่ะ";
+            let feedbackText = isCorrect ? "ยินดีด้วยค่ะ คุณตอบคำถามข้อนี้ได้ถูกต้องค่ะ" : "น่าเสียดายนะคะ คำตอบข้อนี้ยังไม่ถูกต้องค่ะ";
             runTextToSpeech(feedbackText, null, 1.1, 1.05);
         };
 
@@ -787,21 +765,6 @@
             const introScript = `สวัสดีค่ะ ยินดีต้อนรับเข้าสู่การทำแบบทดสอบ... รายละเอียดของชุดทดสอบนี้คือ ${title}... ${summary}... โดยมีจำนวนคำถามทั้งหมด ${limit} ข้อ... เกณฑ์คะแนนการสอบผ่านคือ ${pass} เปอร์เซ็นต์นะคะ... ${timeScript}... หากคุณพร้อมสำหรับการทดสอบแล้ว ให้ทำการกดปุ่ม เริ่มทำแบบทดสอบ ได้ทันทีเลยค่ะ`;
 
             runTextToSpeech(introScript, 'btn-intro-voice-toggle', 1.02, 1.0);
-        };
-
-        window.openActionLightbox = (title, desc, iconName, iconColorClass, btnText, btnOnClick) => {
-            const lb = document.getElementById('action-lightbox');
-            if (!lb) return;
-            document.getElementById('action-lb-title').innerText = title;
-            document.getElementById('action-lb-desc').innerText = desc;
-            const iconEl = document.getElementById('action-lb-icon');
-            iconEl.className = `w-16 h-16 rounded-full flex items-center justify-center ${iconColorClass}`;
-            iconEl.innerHTML = `<i data-lucide="${iconName}" class="w-8 h-8 text-center text-center"></i>`;
-            const btn = document.getElementById('action-lb-btn');
-            btn.innerText = btnText;
-            btn.onclick = () => { lb.style.display = 'none'; if(btnOnClick) btnOnClick(); };
-            lb.style.display = 'flex';
-            lucide.createIcons();
         };
 
         window.showNotify = (msg, type = 'orange') => {
@@ -822,12 +785,7 @@
             window.speechSynthesis.cancel(); 
         };
         
-        window.formatDuration = (seconds) => {
-            const m = Math.floor(seconds / 60);
-            const s = seconds % 60;
-            return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-        };
-
+        // --- ANALYSIS SUMMARY REFACTORED WITH VOICE ---
         window.viewSummaryById = async (quizResultId) => {
             if(!quizResultId) return;
             try {
@@ -840,10 +798,14 @@
                     const finishedDate = r.completedAt ? new Date(r.completedAt.toDate()).toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' }) : '-';
                     document.getElementById('summary-date-info').innerText = finishedDate;
 
+                    const userScore = r.score || 0;
+                    const userTotal = r.total || 0;
+                    const userRate = Math.round((userScore / userTotal) * 100);
                     document.getElementById('summary-count-current').innerText = formatDuration(r.totalTimeSeconds || 0);
-                    document.getElementById('summary-correct-current').innerText = r.score;
-                    document.getElementById('summary-incorrect-current').innerText = (r.total || 0) - (r.score || 0);
+                    document.getElementById('summary-correct-current').innerText = userScore;
+                    document.getElementById('summary-incorrect-current').innerText = userTotal - userScore;
 
+                    // Benchmarking Logic
                     const gSnap = await getDocs(getColRef('quizresults'));
                     const globalResults = gSnap.docs.map(d => d.data()).filter(res => res.quizId === r.quizId && res.status === 'completed');
                     
@@ -853,12 +815,12 @@
                     const gAvgTime = gTotalRecords > 0 ? Math.round(globalResults.reduce((acc, curr) => acc + (curr.totalTimeSeconds || 0), 0) / gTotalRecords) : 0;
                     const gRate = gSumTotalQs > 0 ? Math.round((gSumCorrect / gSumTotalQs) * 100) : 0;
 
-                    document.getElementById('summary-count-overall').innerText = `${gTotalRecords} (${formatDuration(gAvgTime)})`;
-                    document.getElementById('summary-correct-overall').innerText = `${gSumCorrect} (${gRate}%)`;
-                    document.getElementById('summary-incorrect-overall').innerText = `${gSumTotalQs - gSumCorrect} (${100 - gRate}%)`;
+                    document.getElementById('summary-overall-wrapper').classList.remove('hidden');
+                    document.getElementById('summary-count-overall').innerText = `${gTotalRecords} รายการ (${formatDuration(gAvgTime)})`;
+                    document.getElementById('summary-correct-overall').innerText = `${gRate}%`;
+                    document.getElementById('summary-incorrect-overall').innerText = `${100 - gRate}%`;
 
                     const activeSet = window.appState.questionSets.find(s => s.id === r.quizId);
-                    
                     const spiderWrapper = document.getElementById('summary-spider-wrapper');
                     const viewWrapper = document.getElementById('summary-view-wrapper');
                     const overallWrapper = document.getElementById('summary-overall-wrapper');
@@ -867,14 +829,16 @@
                         const displaySpider = activeSet.DisplaySpider === "true" || activeSet.DisplaySpider === true;
                         const displayView = activeSet.DisplayView === "true" || activeSet.DisplayView === true;
                         const displayOverAll = activeSet.DisplayOverAll === "true" || activeSet.DisplayOverAll === true;
-                        
                         if (spiderWrapper) spiderWrapper.classList.toggle('hidden', !displaySpider);
                         if (viewWrapper) viewWrapper.classList.toggle('hidden', !displayView);
                         if (overallWrapper) overallWrapper.classList.toggle('hidden', !displayOverAll);
                     }
 
+                    // Question Review Logic
                     const showFinalKey = activeSet ? (activeSet.showFinalKey === true || String(activeSet.showFinalKey) === "true") : true;
                     const finalKeyArea = document.getElementById('summary-final-key-area');
+                    let incorrectIndices = [];
+
                     if(finalKeyArea) {
                         if (showFinalKey) {
                             finalKeyArea.classList.remove('hidden');
@@ -883,21 +847,29 @@
                                 listEl.innerHTML = (r.details || []).map((ans, idx) => {
                                     const qData = window.appState.questions.find(q => q.id === ans.questionId);
                                     const correctText = qData ? qData.options[qData.correctIndex] : "-";
+                                    const itemBg = ans.isCorrect ? 'bg-white' : 'bg-red-50/50 border-red-100';
+                                    if (!ans.isCorrect) incorrectIndices.push(idx + 1);
                                     
                                     return `
-                                        <div class="p-4 bg-white rounded-xl space-y-1.5 border border-slate-200 text-left text-[12px]">
+                                        <div class="p-4 rounded-xl space-y-1.5 border border-slate-200 text-left text-[12px] ${itemBg}">
                                             <div class="flex justify-between items-center mb-1">
-                                                <div class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-[9px] font-normal uppercase">ทักษะ: ${ans.skillName || 'ทั่วไป'}</div>
+                                                <div class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-[9px] font-bold uppercase">ทักษะ: ${ans.skillName || 'ทั่วไป'}</div>
                                                 <div class="flex-shrink-0">
-                                                    ${ans.isCorrect ? '<div class="text-emerald-500"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-center text-center"></i></div>' : '<div class="text-red-500"><i data-lucide="x-circle" class="w-3.5 h-3.5 text-center text-center"></i></div>'}
+                                                    ${ans.isCorrect ? '<div class="text-emerald-500"><i data-lucide="check-circle" class="w-3.5 h-3.5"></i></div>' : '<div class="text-red-500 animate-pulse"><i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i></div>'}
                                                 </div>
                                             </div>
-                                            <p class="font-normal text-slate-800 leading-snug text-left">${idx + 1}. ${ans.text}</p>
-                                            <div class="space-y-0.5 mt-1.5 pt-1.5 border-t border-slate-50 text-left">
+                                            <p class="font-medium text-slate-800 leading-snug text-left">${idx + 1}. ${ans.text}</p>
+                                            <div class="space-y-1 mt-1.5 pt-1.5 border-t border-slate-100 text-left">
                                                 <div class="flex items-start gap-1 text-[11px] text-left">
-                                                    <span class="text-slate-400 font-normal whitespace-nowrap text-left">เฉลย:</span>
-                                                    <span class="text-emerald-600 font-normal text-left">${correctText}</span>
+                                                    <span class="text-slate-400 font-normal whitespace-nowrap text-left">คุณเลือกตอบ:</span>
+                                                    <span class="${ans.isCorrect ? 'text-emerald-600' : 'text-red-600'} font-bold text-left">${ans.userAnswerText}</span>
                                                 </div>
+                                                ${!ans.isCorrect ? `
+                                                <div class="flex items-start gap-1 text-[11px] text-left">
+                                                    <span class="text-slate-400 font-normal whitespace-nowrap text-left">เฉลยที่ถูกต้อง:</span>
+                                                    <span class="text-emerald-600 font-bold text-left">${correctText}</span>
+                                                </div>
+                                                ` : ''}
                                             </div>
                                         </div>`;
                                 }).join('');
@@ -908,6 +880,7 @@
                         }
                     }
 
+                    // Skills Chart Data Prep
                     const categoryIds = activeSet ? (activeSet.categoryIds || []) : [];
                     const userSkillAgg = {};
                     (r.details || []).forEach(ans => {
@@ -926,14 +899,35 @@
                         });
                     });
 
+                    let bestSkill = "ทั่วไป";
+                    let worstSkill = "ทั่วไป";
+                    let maxScore = -1;
+                    let minScore = 101;
+
                     const chartDataArray = categoryIds.map(cid => {
                         const cat = window.appState.spiderCategories.find(c => c.id === cid);
                         const skillName = cat ? cat.name : "ทั่วไป";
                         const uScore = (userSkillAgg[cid] && userSkillAgg[cid].total > 0) ? Math.round((userSkillAgg[cid].correct / userSkillAgg[cid].total) * 100) : 0;
                         const sScore = (systemSkillAgg[cid] && systemSkillAgg[cid].total > 0) ? Math.round((systemSkillAgg[cid].correct / systemSkillAgg[cid].total) * 100) : 60;
+                        
+                        if (uScore > maxScore) { maxScore = uScore; bestSkill = skillName; }
+                        if (uScore < minScore) { minScore = uScore; worstSkill = skillName; }
+
                         return { name: skillName, userScore: uScore, systemScore: sScore };
                     });
                     renderCharts(chartDataArray);
+
+                    // --- GENERATE AI SUMMARY SCRIPT ---
+                    const comparisonText = userRate >= gRate ? `ซึ่งสูงกว่าค่าเฉลี่ยของระบบที่ทำได้ ${gRate} เปอร์เซ็นต์ค่ะ` : `ซึ่งยังต่ำกว่าค่าเฉลี่ยของระบบที่ทำได้ ${gRate} เปอร์เซ็นต์นะคะ`;
+                    const skillSummaryText = `จากการวิเคราะห์ทักษะ คุณทำได้ดีที่สุดในด้าน ${bestSkill}... แต่ควรพัฒนาเพิ่มเติมในด้าน ${worstSkill} ค่ะ`;
+                    const reviewText = incorrectIndices.length > 0 
+                        ? `มีข้อที่คุณตอบไม่ถูกต้องคือข้อที่ ${incorrectIndices.join(', ')}... แนะนำให้คุณเลื่อนลงไปด้านล่างเพื่อทบทวนรายการคำถามเหล่านี้นะคะ จะได้ช่วยเสริมความแม่นยำในครั้งต่อไปค่ะ`
+                        : "ยอดเยี่ยมมากค่ะ คุณตอบคำถามถูกต้องครบทุกข้อเลยค่ะ";
+
+                    const summaryScript = `สรุปผลการวิเคราะห์ชุดทดสอบ ${r.quizTitle}... คุณทำคะแนนได้ ${userScore} จากทั้งหมด ${userTotal} ข้อ... คิดเป็น ${userRate} เปอร์เซ็นต์... ${comparisonText}... ${skillSummaryText}... ${reviewText}`;
+                    
+                    // Delay speech slightly to ensure page renders
+                    setTimeout(() => runTextToSpeech(summaryScript, null), 800);
                 }
             } catch (err) { console.error("ViewSummaryError:", err); }
         };
@@ -982,30 +976,12 @@
             document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
             const target = document.getElementById(`section-${sectionId}`);
             if (target) target.classList.remove('hidden');
-            
             const showNav = ['member-home', 'member-dashboard', 'member-profile', 'member-history', 'quiz-summary'].includes(sectionId);
             const navBar = document.getElementById('member-bottom-nav');
             if (navBar) navBar.classList.toggle('hidden', !showNav);
-
             document.querySelectorAll('#member-bottom-nav button').forEach(b => b.classList.remove('nav-item-active'));
             const activeId = { 'member-home': 'btn-nav-home', 'member-dashboard': 'btn-nav-dashboard', 'member-history': 'btn-nav-history', 'member-profile': 'btn-nav-profile', 'quiz-summary': 'btn-nav-history' }[sectionId];
-            if(activeId) {
-                const activeBtn = document.getElementById(activeId);
-                if (activeBtn) activeBtn.classList.add('nav-item-active');
-            }
-            
-            if (sectionId === 'register') {
-                const empIdInp = document.getElementById('portal-emp-id');
-                if (empIdInp) {
-                    if (window.appState.currentDeviceIP && window.appState.members.length > 0) {
-                        const mByIP = window.appState.members.find(m => m.registeredIP === window.appState.currentDeviceIP);
-                        if (mByIP && mByIP.empId && String(mByIP.empId).length <= 13) {
-                            empIdInp.value = mByIP.empId;
-                        } else empIdInp.value = "";
-                    } else empIdInp.value = "";
-                }
-            }
-
+            if(activeId && document.getElementById(activeId)) document.getElementById(activeId).classList.add('nav-item-active');
             if (sectionId === 'member-home' && window.appState.currentMember) {
                 const welcomeMsg = document.getElementById('member-welcome-msg');
                 if (welcomeMsg) welcomeMsg.innerText = `สวัสดีครับคุณ ${window.appState.currentMember.name || ""}`;
@@ -1043,7 +1019,6 @@
                     renderPositionDropdown();
                 });
             });
-
             if (window.speechSynthesis) {
                 window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
                 window.speechSynthesis.getVoices();
@@ -1205,16 +1180,10 @@
                 const cat = window.appState.spiderCategories.find(c => c.id === id);
                 return `<div class="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-[11px] font-normal uppercase border border-blue-100 shadow-sm">${cat ? cat.name : id}</div>`;
             }).join('');
-            
-            // Set up Voice Toggle for Intro
-            const introText = `รายละเอียดชุดทดสอบ ${q.title}... ${q.summary || ""}... จำนวนข้อสอบ ${q.questionLimit || 0} ข้อ... เกณฑ์คะแนน ${q.passTest || 0} เปอร์เซ็นต์... หากพร้อมแล้วกดปุ่มเริ่มทำแบบทดสอบได้เลยค่ะ`;
             const voiceBtn = document.getElementById('btn-intro-voice-toggle');
-            if (voiceBtn) voiceBtn.onclick = () => runTextToSpeech(introScript, 'btn-intro-voice-toggle');
-
+            if (voiceBtn) voiceBtn.onclick = () => window.speakQuizIntroDetails(q);
             navigate('quiz-intro');
-            // Auto-play intro with toggle control
-            const introScript = `สวัสดีค่ะ ยินดีต้อนรับเข้าสู่การทำแบบทดสอบ... รายละเอียดของชุดทดสอบนี้คือ ${q.title}... ${q.summary || ""}... โดยมีจำนวนคำถามทั้งหมด ${q.questionLimit || 0} ข้อ... เกณฑ์คะแนนการสอบผ่านคือ ${q.passTest || 0} เปอร์เซ็นต์นะคะ... และหากคุณพร้อมสำหรับการทดสอบแล้ว ให้ทำการกดปุ่ม เริ่มทำแบบทดสอบ ได้ทันทีเลยค่ะ`;
-            runTextToSpeech(introScript, 'btn-intro-voice-toggle', 1.02, 1.0);
+            window.speakQuizIntroDetails(q);
         };
 
         window.startActualQuiz = async () => {
@@ -1246,7 +1215,7 @@
             document.getElementById('q-stat-total').innerText = (q.totalAttemptCount || 0) + ' answers';
             let opts = (q.options || []).map((text, idx) => ({ text, originalIndex: idx }));
             window.appState.currentOptions = opts; 
-            document.getElementById('options-container').innerHTML = opts.map((o, i) => `<button onclick="selectOption(${i})" class="option-btn text-left" id="opt-${i}"><div class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center font-normal text-xs text-slate-500 text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center ">${String.fromCharCode(65 + i)}</div><div class="text-sm font-normal text-left">${o.text}</div></button>`).join('');
+            document.getElementById('options-container').innerHTML = opts.map((o, i) => `<button onclick="selectOption(${i})" class="option-btn text-left" id="opt-${i}"><div class="w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center font-normal text-xs text-slate-500 text-center">${String.fromCharCode(65 + i)}</div><div class="text-sm font-normal text-left">${o.text}</div></button>`).join('');
             document.getElementById('quiz-feedback').innerHTML = "";
             window.appState.selectedOptionIdx = null; window.appState.questionStartTime = Date.now();
             const subBtn = document.getElementById('btn-submit-answer');
@@ -1262,11 +1231,8 @@
                 }, 1000);
             } else document.getElementById('quiz-timer-display').classList.add('hidden');
             document.getElementById('btn-next-question').classList.add('hidden');
-            
-            // Set Voice Toggle for Question
             const voiceBtn = document.getElementById('btn-question-voice-toggle');
             if (voiceBtn) voiceBtn.onclick = () => window.speakQuestion(q.text);
-            
             speakQuestion(q.text);
             lucide.createIcons();
         }
@@ -1287,15 +1253,22 @@
             const q = window.appState.activeQuestions[window.appState.currentQuestionIdx];
             const cfg = window.appState.activeQuiz;
             const isCorr = !timeout && window.appState.selectedOptionIdx !== null && String(window.appState.currentOptions[window.appState.selectedOptionIdx].originalIndex) === String(q.correctIndex);
-            
+            if(isCorr) window.appState.score++;
             speakFeedback(isCorr);
-
-            window.appState.sessionAnswers.push({ questionId: q.id, text: q.text, isCorrect: isCorr, skillId: q.spiderCatId || 'unassigned', timeTaken: Math.floor((Date.now() - window.appState.questionStartTime) / 1000), selectedOptionIdx: window.appState.selectedOptionIdx !== null ? window.appState.currentOptions[window.appState.selectedOptionIdx].originalIndex : null, userAnswerText: timeout ? "หมดเวลา" : (window.appState.selectedOptionIdx !== null ? window.appState.currentOptions[window.appState.selectedOptionIdx].text : "-") });
-            const nextBtnText = window.appState.currentQuestionIdx === window.appState.activeQuestions.length - 1 ? "ดูผลการทดสอบ" : "ข้อถัดไป";
+            window.appState.sessionAnswers.push({ 
+                questionId: q.id, text: q.text, isCorrect: isCorr, 
+                skillId: q.spiderCatId || 'unassigned', 
+                skillName: window.appState.spiderCategories.find(c => c.id === q.spiderCatId)?.name || 'ทั่วไป',
+                timeTaken: Math.floor((Date.now() - window.appState.questionStartTime) / 1000), 
+                selectedOptionIdx: window.appState.selectedOptionIdx !== null ? window.appState.currentOptions[window.appState.selectedOptionIdx].originalIndex : null, 
+                userAnswerText: timeout ? "หมดเวลา" : (window.appState.selectedOptionIdx !== null ? window.appState.currentOptions[window.appState.selectedOptionIdx].text : "-") 
+            });
+            const last = window.appState.currentQuestionIdx === window.appState.activeQuestions.length - 1;
+            const nextBtnText = last ? "ดูผลการทดสอบ" : "ข้อถัดไป";
             const subBtn = document.getElementById('btn-submit-answer');
             subBtn.classList.add('hidden'); subBtn.disabled = true;
             if (isCorr) {
-                document.getElementById('quiz-feedback').innerHTML = `<div class="p-4 bg-emerald-50 text-emerald-700 rounded-xl flex items-center gap-3 font-normal text-sm fade-in text-left text-center"></i> ถูกต้องยอดเยี่ยม!</div>`;
+                document.getElementById('quiz-feedback').innerHTML = `<div class="p-4 bg-emerald-50 text-emerald-700 rounded-xl flex items-center gap-3 font-normal text-sm fade-in text-center">ถูกต้องยอดเยี่ยม!</div>`;
                 const nextBtn = document.getElementById('btn-next-question'); nextBtn.innerText = nextBtnText; nextBtn.classList.remove('hidden');
             } else {
                 document.getElementById('lb-result-title').innerText = timeout ? "หมดเวลา!" : "คำตอบไม่ถูกต้อง";
@@ -1350,7 +1323,7 @@
 
         async function fetchDashboardData() {
             const quizId = window.appState.dashboardQuizId; if(!quizId) return;
-            document.getElementById('dashboard-leaderboard-body').innerHTML = '<tr><td colspan="4" class="py-10"></td></tr>';
+            document.getElementById('dashboard-leaderboard-body').innerHTML = '<tr><td colspan="4" class="py-10 text-center">กำลังโหลด...</td></tr>';
             try {
                 const snap = await getDocs(getColRef('quizresults'));
                 const results = snap.docs.map(d => d.data()).filter(res => res.quizId === quizId && res.status === 'completed');
