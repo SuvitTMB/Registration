@@ -261,7 +261,7 @@
                     <h2 class="text-xl font-normal text-slate-800 text-center">ลงทะเบียนใหม่</h2>
                     <p class="text-slate-400 font-normal text-sm text-center">กรุณากรอกข้อมูลให้ครบเพื่อเข้าใช้งาน</p>
                 </div>
-                <div class="w-full max-w-md bg-white p-6 rounded-[1.5rem] shadow-sm border border-slate-100 space-y-5 text-left">
+                <div class="w-full max-md bg-white p-6 rounded-[1.5rem] shadow-sm border border-slate-100 space-y-5 text-left">
                     <div class="space-y-4 text-left">
                         <div class="space-y-1 text-left">
                             <label class="font-normal text-slate-400 uppercase text-[10px] ml-1 tracking-wider">รหัสพนักงาน</label>
@@ -488,14 +488,18 @@
                     <button id="btn-question-voice-toggle" class="btn-interact p-2 bg-blue-50 text-blue-600 rounded-lg border border-blue-100 shadow-sm">
                         <i data-lucide="volume-2" class="w-4 h-4"></i>
                     </button>
-                    <div id="quiz-timer-display" class="bg-slate-800 text-white px-3.5 py-1.5 rounded-lg flex items-center gap-2 shadow-md">
-                        <i data-lucide="clock" class="w-3.5 h-3.5 text-orange-400 text-center"></i>
-                        <span id="timer-count" class="font-bold text-sm tracking-widest tabular-nums text-center">00:00</span>
-                    </div>
                 </div>
             </div>
             <div class="flex-1 p-6 space-y-5 overflow-y-auto no-scrollbar text-left">
-                <div id="skill-badge-container" class="text-left"></div>
+                <!-- UPDATED: Skill Badge and Timer Row -->
+                <div class="flex items-center justify-between">
+                    <div id="skill-badge-container" class="text-left"></div>
+                    <div id="quiz-timer-display" class="hidden bg-slate-800 text-white px-3.5 py-1.5 rounded-lg flex items-center gap-2 shadow-md">
+                        <i data-lucide="clock" class="w-3.5 h-3.5 text-orange-400"></i>
+                        <span id="timer-count" class="font-bold text-sm tracking-widest tabular-nums">00:00</span>
+                    </div>
+                </div>
+
                 <!-- QUESTION AREA -->
                 <div class="p-6 bg-white rounded-[1.5rem] shadow-sm border border-slate-100 text-left">
                     <span id="current-question-text" class="text-base font-normal text-slate-800 leading-relaxed text-left"></span>
@@ -864,14 +868,14 @@
             runTextToSpeech(`${prefix}... โจทย์ถามว่า ${text}... เลือกข้อที่ถูกต้องที่สุดค่ะ`, 'btn-question-voice-toggle');
         };
 
+        // UPDATED: speakFeedback with specific instruction logic
         window.speakFeedback = (isCorrect) => {
             const q = window.appState.activeQuestions[window.appState.currentQuestionIdx];
-            const selectedIdx = window.appState.selectedOptionIdx;
-            if(isCorrect) {
-                runTextToSpeech(`ถูกต้องแล้วค่ะ`, null);
-            } else {
-                runTextToSpeech(`ยังไม่ถูกนะคะ เฉลยคือ ${q.options[q.correctIndex]}`, null);
-            }
+            const last = window.appState.currentQuestionIdx === window.appState.activeQuestions.length - 1;
+            const instruction = last ? "คลิกปุ่ม ดูผลการทดสอบของคุณ" : "กดปุ่มเลือกคำถามข้อต่อไป";
+            
+            let feedback = isCorrect ? "ถูกต้องแล้วค่ะ" : `ยังไม่ถูกนะคะ เฉลยคือ ${q.options[q.correctIndex]}`;
+            runTextToSpeech(`${feedback}... ${instruction}`, null);
         };
 
         window.speakQuizIntroDetails = (quizData) => {
@@ -937,9 +941,11 @@
                     }
 
                     const listEl = document.getElementById('summary-questions-list');
+                    let incorrectIndices = [];
                     listEl.innerHTML = (r.details || []).map((ans, idx) => {
                         const qData = window.appState.questions.find(q => q.id === ans.questionId);
                         const correctText = qData ? qData.options[qData.correctIndex] : "-";
+                        if (!ans.isCorrect) incorrectIndices.push(idx + 1);
                         return `
                             <div class="p-4 rounded-xl border border-slate-200 ${ans.isCorrect ? 'bg-white' : 'bg-red-50/50'}">
                                 <div class="flex justify-between mb-1">
@@ -964,15 +970,23 @@
                     });
                     
                     const catIds = activeSet ? (activeSet.categoryIds || []) : [];
+                    let bestSkill = "ทั่วไป", maxScore = -1;
                     const chartDataArray = catIds.map(cid => {
                         const cat = window.appState.spiderCategories.find(c => c.id === cid);
                         const skillName = cat ? cat.name : "ทั่วไป";
                         const uScore = (userSkillAgg[cid] && userSkillAgg[cid].total > 0) ? Math.round((userSkillAgg[cid].correct / userSkillAgg[cid].total) * 100) : 0;
+                        if (uScore > maxScore) { maxScore = uScore; bestSkill = skillName; }
                         return { name: skillName, userScore: uScore, systemScore: 60 };
                     });
                     renderCharts(chartDataArray);
 
-                    const summaryScript = `สรุปผลวิเคราะห์เรื่อง ${r.quizTitle}... คุณทำได้ ${userScore} คะแนน จาก ${userTotal} ข้อ... คิดเป็น ${userRate} เปอร์เซ็นต์ค่ะ... ตรวจสอบรายละเอียดได้จากกราฟด้านล่างนะคะ`;
+                    // --- Detailed Summary Script (Return to previous style) ---
+                    const compT = userRate >= gRate ? `ซึ่งสูงกว่าค่าเฉลี่ยระบบที่ทำได้ ${gRate} เปอร์เซ็นต์ค่ะ` : `ซึ่งยังต่ำกว่าค่าเฉลี่ยระบบที่ทำได้ ${gRate} เปอร์เซ็นต์นะคะ`;
+                    const skillT = chartDataArray.length > 0 ? `โดยคุณทำได้ดีที่สุดในด้าน ${bestSkill} ค่ะ` : "";
+                    const reviewT = incorrectIndices.length > 0 ? `มีข้อที่ตอบไม่ถูกต้องคือข้อที่ ${incorrectIndices.join(', ')} แนะนำให้ทบทวนรายการด้านล่างนะคะ` : "ยอดเยี่ยมมากค่ะ คุณตอบถูกครบทุกข้อเลยค่ะ";
+                    
+                    const summaryScript = `สรุปผลวิเคราะห์ชุดทดสอบ ${r.quizTitle}... คุณทำได้ ${userScore} จาก ${userTotal} ข้อ คิดเป็น ${userRate} เปอร์เซ็นต์... ${compT}... ${skillT}... ${reviewT}`;
+                    
                     document.getElementById('btn-summary-voice-toggle').onclick = () => runTextToSpeech(summaryScript, 'btn-summary-voice-toggle');
                     runTextToSpeech(summaryScript, 'btn-summary-voice-toggle');
                 }
@@ -1057,7 +1071,6 @@
                 onSnapshot(getColRef('spiderCategories'), (snap) => { window.appState.spiderCategories = snap.docs.map(d => ({ id: d.id, ...d.data() })); });
                 onSnapshot(getColRef('positions'), (snap) => { window.appState.positions = snap.docs.map(d => ({ id: d.id, ...d.data() })); renderPositionDropdown(); });
             });
-            // Init voices for browsers that need a pre-fetch
             if (window.speechSynthesis) {
                 window.speechSynthesis.getVoices();
                 window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
@@ -1163,16 +1176,15 @@
 
             const q = window.appState.tutorQuestions[window.appState.currentTutorIdx];
             const isCorrect = idx === q.correctIndex;
+            const correctText = q.options[q.correctIndex];
             const selectedBtn = document.getElementById(`tutor-opt-${idx}`);
             const correctBtn = document.getElementById(`tutor-opt-${q.correctIndex}`);
 
+            // Visual markers
             if (isCorrect) {
                 selectedBtn.className = "option-btn bg-emerald-500 text-white p-3 rounded-xl mb-2 flex items-center gap-3 border-none fade-in";
                 const iconDiv = selectedBtn.querySelector('div');
                 if(iconDiv) iconDiv.className = "w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-xs text-white";
-                runTextToSpeech(`ถูกต้องแล้วค่ะ`, 'btn-tutor-voice-toggle', () => {
-                    document.getElementById('btn-tutor-next').classList.remove('hidden');
-                });
             } else {
                 selectedBtn.className = "option-btn bg-red-500 text-white p-3 rounded-xl mb-2 flex items-center gap-3 border-none fade-in";
                 const selIconDiv = selectedBtn.querySelector('div');
@@ -1181,11 +1193,19 @@
                 correctBtn.className = "option-btn bg-emerald-500 text-white p-3 rounded-xl mb-2 flex items-center gap-3 border-none fade-in";
                 const corIconDiv = correctBtn.querySelector('div');
                 if(corIconDiv) corIconDiv.className = "w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-xs text-white";
-
-                runTextToSpeech(`ยังไม่ถูกนะคะ เฉลยคือ ${q.options[q.correctIndex]}`, 'btn-tutor-voice-toggle', () => {
-                    document.getElementById('btn-tutor-next').classList.remove('hidden');
-                });
             }
+
+            // --- Voice Response according to specific requirement ---
+            let voiceMsg = "";
+            if (isCorrect) {
+                voiceMsg = `คุณตอบคำถามได้ถูกต้องค่ะ คำตอบคือ ${correctText}... กดปุ่มเพื่อติวข้อต่อไปนะคะ`;
+            } else {
+                voiceMsg = `คุณตอบไม่ถูกต้องค่ะ คำตอบที่ถูกต้องคือ ${correctText}... กดปุ่มเพื่อติวข้อต่อไปนะคะ`;
+            }
+
+            runTextToSpeech(voiceMsg, 'btn-tutor-voice-toggle', () => {
+                document.getElementById('btn-tutor-next').classList.remove('hidden');
+            });
         };
 
         window.nextTutorQuestion = () => {
