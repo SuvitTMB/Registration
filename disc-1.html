@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DISC Personality System</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom animations for modal */
+        .modal-enter {
+            animation: fadeIn 0.2s ease-out, zoomIn 0.2s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0.95); }
+            to { transform: scale(1); }
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-transparent min-h-screen flex items-center justify-center m-0 p-0 font-sans text-gray-800">
+
+    <!-- Top Fixed Color Bar - Increased height by 5px (8px + 5px = 13px) -->
+    <div class="fixed top-0 left-0 right-0 h-[13px] flex z-50">
+        <div class="flex-1 bg-green-600"></div>
+        <div class="flex-1 bg-red-500"></div>
+        <div class="flex-1 bg-cyan-500"></div>
+        <div class="flex-1 bg-yellow-500"></div>
+    </div>
+
+    <!-- Main Container - No shadow, No rounded corners -->
+    <div class="w-full max-w-[500px] relative overflow-hidden flex flex-col items-center bg-transparent">
+        
+        <!-- Image Area -->
+        <div class="relative w-full aspect-[1/1.414] select-none">
+            <!-- Background Image -->
+            <img 
+                src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc.jpg?alt=media&token=328a617d-07b1-419b-bc5d-00a85dc455e2" 
+                alt="DISC Background"
+                class="absolute inset-0 w-full h-full object-contain"
+            >
+
+            <!-- Interactive Overlay -->
+            <div class="absolute inset-0 flex items-center justify-center">
+                <!-- Quadrant Grid -->
+                <div class="relative w-[75%] aspect-square mt-[28%] grid grid-cols-2 grid-rows-2 z-10">
+                    <button 
+                        onclick="openModal('D')" 
+                        class="rounded-tl-full hover:bg-black/5 active:bg-black/10 transition-all cursor-pointer focus:outline-none"
+                        title="D - Dominance"
+                    ></button>
+                    <button 
+                        onclick="openModal('i')" 
+                        class="rounded-tr-full hover:bg-black/5 active:bg-black/10 transition-all cursor-pointer focus:outline-none"
+                        title="i - Influence"
+                    ></button>
+                    <button 
+                        onclick="openModal('C')" 
+                        class="rounded-bl-full hover:bg-black/5 active:bg-black/10 transition-all cursor-pointer focus:outline-none"
+                        title="C - Conscientiousness"
+                    ></button>
+                    <button 
+                        onclick="openModal('S')" 
+                        class="rounded-br-full hover:bg-black/5 active:bg-black/10 transition-all cursor-pointer focus:outline-none"
+                        title="S - Steadiness"
+                    ></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Fixed Color Bar - Increased height by 5px (8px + 5px = 13px) -->
+    <div class="fixed bottom-0 left-0 right-0 h-[13px] flex z-50">
+        <div class="flex-1 bg-green-600"></div>
+        <div class="flex-1 bg-red-500"></div>
+        <div class="flex-1 bg-cyan-500"></div>
+        <div class="flex-1 bg-yellow-500"></div>
+    </div>
+
+    <!-- Modal Backdrop -->
+    <div id="modalBackdrop" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm hidden" onclick="event.target === this && closeModal()">
+        
+        <!-- Modal Content -->
+        <div id="modalContent" class="bg-white w-full max-w-[400px] rounded-[2rem] shadow-2xl overflow-hidden modal-enter">
+            <!-- Header Area -->
+            <div id="modalHeader" class="p-6 text-white flex justify-between items-center transition-colors duration-300">
+                <div class="flex items-center gap-3">
+                    <div class="bg-white/20 p-2 rounded-xl" id="iconContainer">
+                        <!-- Icon will be inserted here -->
+                    </div>
+                    <h2 id="modalTitle" class="text-xl font-bold"></h2>
+                </div>
+                <button onclick="closeModal()" class="hover:bg-white/20 p-1 rounded-full transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <!-- Body Area -->
+            <div class="p-6 space-y-4">
+                <p id="modalDescription" class="text-gray-700 leading-relaxed font-medium"></p>
+                
+                <div class="space-y-2">
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">คุณลักษณะ</p>
+                    <div id="traitsContainer" class="grid grid-cols-1 gap-2">
+                        <!-- Traits will be inserted here -->
+                    </div>
+                </div>
+
+                <button 
+                    id="closeBtn"
+                    onclick="closeModal()"
+                    class="w-full py-4 rounded-2xl font-bold text-white shadow-lg mt-4 transition-all active:scale-95"
+                >
+                    ปิดหน้าต่าง
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const discData = {
+            D: {
+                title: "Dominance (D) - เป้าประสงค์",
+                colorClass: "bg-green-600",
+                lightColorClass: "bg-green-50",
+                textColorClass: "text-green-600",
+                description: "เน้นผลลัพธ์ ความรวดเร็ว และความท้าทาย เป็นคนที่มีความมั่นใจในตัวเองสูง กล้าตัดสินใจ และชอบควบคุมสถานการณ์ มักจะพูดตรงไปตรงมาและเน้นเป้าหมายเป็นหลัก",
+                traits: ["เน้นผลลัพธ์ (Results)", "กล้าท้าทาย (Challenge)", "ตัดสินใจเร็ว (Direct)", "มีความมั่นใจ (Self-confident)"],
+                icon: "target"
+            },
+            i: {
+                title: "Influence (i) - หนึ่งดารา",
+                colorClass: "bg-red-500",
+                lightColorClass: "bg-red-50",
+                textColorClass: "text-red-500",
+                description: "เน้นการสร้างปฏิสัมพันธ์ ความกระตือรือร้น และการทำงานร่วมกัน เป็นคนสนุกสนาน มีมนุษยสัมพันธ์ดี ชอบสร้างแรงบันดาลใจ และสามารถโน้มน้าวใจผู้อื่นได้เก่ง",
+                traits: ["มีความกระตือรือร้น (Enthusiasm)", "ชอบทำงานร่วมกัน (Collaboration)", "มองโลกในแง่ดี (Optimistic)", "ชอบเข้าสังคม (Social)"],
+                icon: "star"
+            },
+            S: {
+                title: "Steadiness (S) - ถนอมจิต",
+                colorClass: "bg-cyan-500",
+                lightColorClass: "bg-cyan-50",
+                textColorClass: "text-cyan-500",
+                description: "เน้นความมั่นคง การสนับสนุน และความเป็นทีม เป็นคนใจเย็น รับฟังเก่ง ชอบช่วยเหลือผู้อื่น และไม่ชอบความขัดแย้ง ให้ความสำคัญกับความสัมพันธ์ที่ยั่งยืน",
+                traits: ["การสนับสนุน (Support)", "ความมั่นคง (Stability)", "ความเห็นอกเห็นใจ (Empathy)", "เป็นผู้ฟังที่ดี (Good listener)"],
+                icon: "heart"
+            },
+            C: {
+                title: "Conscientiousness (C) - คิดคำนวณ",
+                colorClass: "bg-yellow-500",
+                lightColorClass: "bg-yellow-50",
+                textColorClass: "text-yellow-600",
+                description: "เน้นความถูกต้อง แม่นยำ และตรรกะเหตุผล เป็นคนละเอียดรอบคอบ ทำงานอย่างมีระบบ ยึดมั่นในมาตรฐานที่สูง และให้ความสำคัญกับข้อมูลที่ชัดเจน",
+                traits: ["ความถูกต้องแม่นยำ (Accuracy)", "คิดวิเคราะห์ (Analytical)", "มีระเบียบ (Systematic)", "ใช้เหตุผล (Logical)"],
+                icon: "calculator"
+            }
+        };
+
+        function openModal(type) {
+            const data = discData[type];
+            const backdrop = document.getElementById('modalBackdrop');
+            const header = document.getElementById('modalHeader');
+            const title = document.getElementById('modalTitle');
+            const description = document.getElementById('modalDescription');
+            const traitsContainer = document.getElementById('traitsContainer');
+            const iconContainer = document.getElementById('iconContainer');
+            const closeBtn = document.getElementById('closeBtn');
+
+            title.textContent = data.title;
+            description.textContent = data.description;
+            header.className = `p-6 text-white flex justify-between items-center ${data.colorClass}`;
+            closeBtn.className = `w-full py-4 rounded-2xl font-bold text-white shadow-lg mt-4 transition-all active:scale-95 ${data.colorClass}`;
+            iconContainer.innerHTML = `<i data-lucide="${data.icon}" class="w-6 h-6"></i>`;
+            traitsContainer.innerHTML = '';
+            data.traits.forEach(trait => {
+                const div = document.createElement('div');
+                div.className = `${data.lightColorClass} px-4 py-2 rounded-xl flex items-center gap-3 border border-transparent`;
+                div.innerHTML = `
+                    <div class="w-2 h-2 rounded-full ${data.colorClass}"></div>
+                    <span class="${data.textColorClass} font-bold text-sm">${trait}</span>
+                `;
+                traitsContainer.appendChild(div);
+            });
+            backdrop.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            document.getElementById('modalBackdrop').classList.add('hidden');
+        }
+
+        window.onload = () => {
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
