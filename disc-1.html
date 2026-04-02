@@ -8,34 +8,70 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
-        body {
-            font-family: 'Kanit', sans-serif;
+        body { font-family: 'Kanit', sans-serif; }
+        .modal-enter { animation: fadeIn 0.2s ease-out, zoomIn 0.2s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes zoomIn { from { transform: scale(0.95); } to { transform: scale(1); } }
+        
+        .hidden { display: none !important; }
+        
+        button { cursor: pointer; transition: all 0.2s; }
+        button:disabled { cursor: not-allowed; opacity: 0.5; }
+
+        /* ปรับปรุงสถานะ Input: พื้นหลังฟ้าเข้ม (#0038a8) เมื่อมีการพิมพ์ */
+        .input-active:not(:placeholder-shown),
+        .input-active:focus {
+            background-color: #0038a8 !important; 
+            color: white !important;
+            font-weight: bold;
+            border-color: white !important;
+            outline: none;
         }
-        /* Custom animations for modal */
-        .modal-enter {
-            animation: fadeIn 0.2s ease-out, zoomIn 0.2s ease-out;
+
+        #messageBox {
+            position: fixed;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes zoomIn {
-            from { transform: scale(0.95); }
-            to { transform: scale(1); }
-        }
-        .hidden {
-            display: none;
+        
+        #globalLoader {
+            position: fixed;
+            inset: 0;
+            background: white;
+            z-index: 9000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex items-center justify-center m-0 p-0 text-gray-800">
 
-    <!-- Top Fixed Color Bar -->
+    <!-- Loading Overlay -->
+    <div id="globalLoader">
+        <div id="loaderIcon" class="w-10 h-10 border-4 border-slate-100 border-t-blue-600 rounded-full animate-spin mb-6"></div>
+    </div>
+
+    <div id="messageBox" class="hidden"></div>
+
+    <!-- แถบสีด้านบน -->
     <div class="fixed top-0 left-0 right-0 h-[13px] flex z-50">
         <div class="flex-1 bg-green-600"></div>
         <div class="flex-1 bg-red-500"></div>
@@ -43,57 +79,52 @@
         <div class="flex-1 bg-yellow-500"></div>
     </div>
 
-    <!-- Main Container -->
-    <div class="w-full max-w-[500px] flex flex-col items-center bg-white min-h-screen pb-24 pt-[13px]">
-        
-        <!-- Image Area -->
-        <div class="relative w-full select-none">
-            <!-- Main Image Display -->
-            <img 
-                src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc.jpg?alt=media&token=328a617d-07b1-419b-bc5d-00a85dc455e2" 
-                alt="DISC Chart"
-                class="w-full h-auto block"
-            >
-
-            <!-- Interactive Overlay -->
-            <div class="absolute inset-0 flex items-center justify-center">
-                <div class="relative w-[75%] aspect-square mt-[28%] grid grid-cols-2 grid-rows-2 z-10">
-                    <button 
-                        onclick="openModal('D')" 
-                        class="rounded-tl-full hover:bg-black/5 active:bg-black/10 transition-all cursor-pointer focus:outline-none"
-                    ></button>
-                    <button 
-                        onclick="openModal('i')" 
-                        class="rounded-tr-full hover:bg-black/5 active:bg-black/10 transition-all cursor-pointer focus:outline-none"
-                    ></button>
-                    <button 
-                        onclick="openModal('C')" 
-                        class="rounded-bl-full hover:bg-black/5 active:bg-black/10 transition-all cursor-pointer focus:outline-none"
-                    ></button>
-                    <button 
-                        onclick="openModal('S')" 
-                        class="rounded-br-full hover:bg-black/5 active:bg-black/10 transition-all cursor-pointer focus:outline-none"
-                    ></button>
-                </div>
-            </div>
+    <!-- หน้า Landing -->
+    <div id="landingPage" class="w-full max-w-[500px] flex flex-col items-center bg-white min-h-screen pt-[13px] hidden">
+        <div class="relative w-[80%] mt-[60px] select-none mx-auto">
+            <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc.jpg?alt=media&token=328a617d-07b1-419b-bc5d-00a85dc455e2" 
+                 alt="DISC Chart" class="w-full h-auto block rounded-lg shadow-sm">
         </div>
 
-        <!-- Registration Section -->
-        <div class="w-full px-8 py-12 flex flex-col items-center space-y-5">
-            <button 
-                onclick="handleRegistration()"
-                class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 shadow-md transition-all active:scale-[0.97]"
-            >
+        <div class="w-full px-8 py-6 flex flex-col items-center space-y-5">
+            <button id="openModalBtn" class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white text-[14px] font-normal py-4 px-6 rounded-xl flex items-center justify-center gap-2 shadow-md active:scale-[0.97]">
                 <i data-lucide="user-plus" class="w-5 h-5"></i>
-                <span>ลงทะเบียน</span>
+                <span>ลงทะเบียน / เข้าสู่ระบบ</span>
             </button>
-            <p class="text-[11px] text-gray-400 text-center leading-relaxed max-w-[80%]">
-                กรุณาลงทะเบียนเพื่อบันทึกข้อมูลและดูประวัติการทดสอบ<br>ข้อมูลของคุณจะถูกจัดเก็บไว้อย่างปลอดภัย
+            <p class="text-[12px] text-gray-400 text-center leading-relaxed">
+                กรุณาลงทะเบียนเพื่อบันทึกข้อมูล
             </p>
+        </div>
+
+        <div class="mt-auto mb-8 text-center text-gray-300 text-[10px] uppercase tracking-[0.3em] font-bold">
+            DISC PERSONALITY NAVIGATOR
         </div>
     </div>
 
-    <!-- Bottom Fixed Color Bar -->
+    <!-- หน้าหลัก DISC เมื่อสำเร็จ -->
+    <div id="mainDiscPage" class="w-full max-w-[500px] flex flex-col items-center bg-white min-h-screen pt-[13px] hidden">
+        <div class="w-full px-8 pt-10 flex justify-between items-center border-b pb-4">
+            <div>
+                <h1 id="welcomeUser" class="text-xl font-bold text-slate-800 tracking-tight">สวัสดีครับ</h1>
+                <p id="userSub" class="text-xs text-slate-400"></p>
+            </div>
+            <button id="logoutBtn" class="p-2 text-slate-300 hover:text-red-500 transition-colors">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+            </button>
+        </div>
+        
+        <div class="relative w-[85%] mt-10 mx-auto">
+            <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc.jpg?alt=media&token=328a617d-07b1-419b-bc5d-00a85dc455e2" 
+                 alt="DISC Main" class="w-full h-auto block rounded-2xl shadow-xl">
+        </div>
+
+        <div class="mt-auto mb-10 text-center space-y-2">
+            <div class="text-[10px] text-slate-300 uppercase tracking-widest">เข้าใช้งานครั้งที่: <span id="loginCountDisplay" class="font-bold text-blue-500">0</span></div>
+            <div class="text-[10px] text-slate-300 uppercase tracking-[0.3em] font-bold">READY FOR ASSESSMENT</div>
+        </div>
+    </div>
+
+    <!-- แถบสีล่าง -->
     <div class="fixed bottom-0 left-0 right-0 h-[13px] flex z-50">
         <div class="flex-1 bg-green-600"></div>
         <div class="flex-1 bg-red-500"></div>
@@ -101,127 +132,337 @@
         <div class="flex-1 bg-yellow-500"></div>
     </div>
 
-    <!-- Modal Backdrop -->
-    <div id="modalBackdrop" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm hidden" onclick="event.target === this && closeModal()">
-        
-        <!-- Modal Content -->
-        <div id="modalContent" class="bg-white w-full max-w-[400px] rounded-[2.5rem] shadow-2xl overflow-hidden modal-enter">
-            <!-- Header Area -->
-            <div id="modalHeader" class="p-8 text-white flex justify-between items-center">
-                <div class="flex items-center gap-4">
-                    <div class="bg-white/20 p-3 rounded-2xl backdrop-blur-md" id="iconContainer"></div>
-                    <h2 id="modalTitle" class="text-2xl font-bold tracking-tight"></h2>
+    <!-- Lightbox Modal -->
+    <div id="regModalBackdrop" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
+        <div class="bg-white w-[60%] min-w-[320px] max-w-[450px] rounded-[12px] shadow-2xl overflow-hidden modal-enter relative" onclick="event.stopPropagation()">
+            <div class="bg-[#0056ff] px-8 py-5">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-[16px] font-bold text-white uppercase tracking-tight">ลงทะเบียน / เข้าสู่ระบบ</h2>
+                    <button id="closeModalIconBtn" class="text-white/80 hover:text-white transition-colors">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
                 </div>
-                <button onclick="closeModal()" class="hover:bg-white/20 p-2 rounded-full transition-colors">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
             </div>
             
-            <!-- Body Area -->
-            <div class="p-8 space-y-6">
-                <p id="modalDescription" class="text-gray-700 leading-relaxed text-lg font-medium"></p>
-                
-                <div class="space-y-4">
-                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">ลักษณะเด่นหลัก</p>
-                    <div id="traitsContainer" class="grid grid-cols-1 gap-3"></div>
+            <div class="p-8">
+                <!-- Step 1: Employee ID -->
+                <div id="stepEmployeeId" class="space-y-6">
+                    <div class="space-y-2 text-center">
+                        <label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">ระบุรหัสพนักงาน 5 หลัก</label>
+                        <input type="text" id="EmpID" maxlength="5" inputmode="numeric" placeholder="xxxxx" class="input-active w-full px-4 py-3.5 bg-blue-50 border-2 border-white rounded-xl text-[18px] font-bold text-center shadow-sm">
+                    </div>
+                    <div class="flex gap-3">
+                        <button id="cancelBtn" class="flex-1 bg-slate-200 text-slate-600 text-[14px] py-3.5 rounded-xl flex items-center justify-center gap-2">
+                            <span>ยกเลิก</span>
+                        </button>
+                        <button id="submitIdBtn" disabled class="flex-1 bg-blue-600 text-white text-[14px] py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all">
+                            <span id="submitIdText">ถัดไป</span>
+                            <div id="submitIdLoader" class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        </button>
+                    </div>
                 </div>
 
-                <button 
-                    id="closeBtn"
-                    onclick="closeModal()"
-                    class="w-full py-4 rounded-2xl font-bold text-white shadow-lg mt-4 transition-all active:scale-95"
-                >
-                    ปิด
-                </button>
+                <!-- Step 2: New Registration Setup -->
+                <div id="stepSetupProfile" class="hidden space-y-6">
+                    <div class="bg-blue-50 p-4 rounded-xl space-y-1 text-sm border border-blue-100 shadow-inner">
+                        <div class="flex justify-between border-b border-blue-200 pb-1 mb-1"><span class="text-slate-400 text-xs">ชื่อ-นามสกุล:</span><span id="dispName" class="font-bold text-blue-700 text-right"></span></div>
+                        <div class="flex justify-between border-b border-blue-200 pb-1 mb-1"><span class="text-slate-400 text-xs">ตำแหน่ง:</span><span id="dispPos" class="font-medium text-slate-700 text-right"></span></div>
+                        <div class="flex justify-between"><span class="text-slate-400 text-xs">กลุ่มงาน:</span><span id="dispGroup" class="text-slate-600 text-right"></span></div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">กำหนด PIN (4 หลัก)</label>
+                            <input type="password" id="setPin" maxlength="4" inputmode="numeric" placeholder="••••" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-center text-xl tracking-[1em] focus:ring-2 focus:ring-blue-100 outline-none">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">ยืนยัน PIN</label>
+                            <input type="password" id="confirmPin" maxlength="4" inputmode="numeric" placeholder="••••" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-center text-xl tracking-[1em] focus:ring-2 focus:ring-blue-100 outline-none">
+                        </div>
+                    </div>
+                    <button id="confirmRegBtn" class="w-full bg-green-600 text-white text-[14px] py-4 rounded-xl font-bold shadow-lg hover:bg-green-700 transition-colors">สร้างบัญชีและเข้าใช้งาน</button>
+                </div>
+
+                <!-- Step 3: Login (Verify PIN) -->
+                <div id="stepEnterPin" class="hidden space-y-6">
+                    <div class="text-center space-y-3">
+                        <p class="text-[14px] text-slate-600 font-medium leading-tight">ยินดีต้อนรับกลับมา, <br><span id="loginUserName" class="text-lg font-bold text-blue-700"></span></p>
+                        <input type="password" id="inputPin" maxlength="4" inputmode="numeric" placeholder="••••" class="w-full px-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-center text-2xl tracking-[1em] focus:border-blue-500 outline-none transition-all">
+                    </div>
+                    <button id="verifyPinBtn" class="w-full bg-[#0056ff] text-white text-[14px] py-4 rounded-xl font-bold shadow-xl shadow-blue-500/10 hover:bg-blue-700 transition-colors">ยืนยันตัวตน</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        const discData = {
-            D: {
-                title: "DOMINANCE (D)",
-                colorClass: "bg-green-600",
-                lightColorClass: "bg-green-50",
-                textColorClass: "text-green-600",
-                description: "เน้นผลลัพธ์ ความรวดเร็ว และความท้าทาย เป็นคนที่มีความมั่นใจในตัวเองสูง กล้าตัดสินใจ และชอบควบคุมสถานการณ์",
-                traits: ["เน้นเป้าหมาย (Results)", "กล้าท้าทาย (Daring)", "ตัดสินใจเร็ว (Direct)", "มั่นใจในตนเอง (Self-confident)"],
-                icon: "target"
-            },
-            i: {
-                title: "INFLUENCE (i)",
-                colorClass: "bg-red-500",
-                lightColorClass: "bg-red-50",
-                textColorClass: "text-red-500",
-                description: "เน้นการสร้างปฏิสัมพันธ์ ความกระตือรือร้น และการทำงานร่วมกัน เป็นคนสนุกสนาน มีมนุษยสัมพันธ์ดี ชอบสร้างแรงบันดาลใจ",
-                traits: ["มีเสน่ห์ (Charming)", "กระตือรือร้น (Enthusiastic)", "มองโลกแง่ดี (Optimistic)", "ชอบเข้าสังคม (Social)"],
-                icon: "star"
-            },
-            S: {
-                title: "STEADINESS (S)",
-                colorClass: "bg-cyan-500",
-                lightColorClass: "bg-cyan-50",
-                textColorClass: "text-cyan-500",
-                description: "เน้นความมั่นคง การสนับสนุน และความเป็นทีม เป็นคนใจเย็น รับฟังเก่ง ชอบช่วยเหลือผู้อื่น และไม่ชอบความขัดแย้ง",
-                traits: ["มีความอดทน (Patient)", "ถ่อมตัว (Humble)", "เป็นผู้สนับสนุน (Supportive)", "จริงใจ (Sincere)"],
-                icon: "heart"
-            },
-            C: {
-                title: "CONSCIENTIOUS (C)",
-                colorClass: "bg-yellow-500",
-                lightColorClass: "bg-yellow-50",
-                textColorClass: "text-yellow-600",
-                description: "เน้นความถูกต้อง แม่นยำ และตรรกะเหตุผล เป็นคนละเอียดรอบคอบ ทำงานอย่างมีระบบ ยึดมั่นในมาตรฐานที่สูง",
-                traits: ["วิเคราะห์เก่ง (Analytical)", "มีระเบียบ (Systematic)", "ใช้เหตุผล (Logical)", "แม่นยำ (Accurate)"],
-                icon: "calculator"
+    <!-- JavaScript Module -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, updateDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // 🔥 FIREBASE CONFIGURATION
+        const firebaseConfig = {
+            apiKey: "AIzaSyAciknEYhZU7AwOdfYytC1t_AnW2Ee11us",
+            authDomain: "faifah-ttb.firebaseapp.com",
+            projectId: "faifah-ttb",
+            storageBucket: "faifah-ttb.appspot.com",
+            messagingSenderId: "842980876200",
+            appId: "1:842980876200:web:f33bfad2ccbf263075079d"
+        };
+
+        // --- PATH SETTINGS (ปรับตรงตามรูปภาพ Security Rules ที่คุณแนบมา) ---
+        // ใช้ "DISC_Member" เป็นคอลเลกชันระดับ Root (Root Path)
+        const COLLECTION_NAME = "DISC_Member";
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let isAuthReady = false;
+        let currentMember = null;
+
+        // --- UI Helpers ---
+        const showMessage = (text, type = 'success') => {
+            const msgBox = document.getElementById('messageBox');
+            if (!msgBox) return;
+            msgBox.textContent = text;
+            msgBox.className = `fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl shadow-lg font-medium transition-all duration-300 ${
+                type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }`;
+            msgBox.classList.remove('hidden', 'opacity-0');
+            setTimeout(() => {
+                msgBox.classList.add('opacity-0');
+                setTimeout(() => msgBox.classList.add('hidden'), 300);
+            }, 5000);
+        };
+
+        const showMainPage = (user) => {
+            document.getElementById('landingPage').classList.add('hidden');
+            document.getElementById('mainDiscPage').classList.remove('hidden');
+            const welcome = document.getElementById('welcomeUser');
+            const sub = document.getElementById('userSub');
+            const count = document.getElementById('loginCountDisplay');
+            if (welcome) welcome.textContent = `สวัสดีครับ, ${user.Fullname || 'พนักงาน'}`;
+            if (sub) sub.textContent = `${user.Position || '-'} | ${user.Group || '-'}`;
+            if (count) count.textContent = user.loginCount || 1;
+            closeRegModal();
+            lucide.createIcons();
+        };
+
+        const openRegModal = () => {
+            if (!isAuthReady) {
+                showMessage("กำลังเตรียมการเชื่อมต่อฐานข้อมูล... โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ต", "error");
+                return;
+            }
+            document.getElementById('regModalBackdrop').classList.remove('hidden');
+            document.getElementById('stepEmployeeId').classList.remove('hidden');
+            document.getElementById('stepSetupProfile').classList.add('hidden');
+            document.getElementById('stepEnterPin').classList.add('hidden');
+            const empInput = document.getElementById('EmpID');
+            if (empInput) { empInput.value = ''; empInput.focus(); }
+        };
+
+        const closeRegModal = () => {
+            document.getElementById('regModalBackdrop').classList.add('hidden');
+        };
+
+        // --- Core Logic ---
+        const handleIdSubmission = async () => {
+            const empIdInputVal = document.getElementById('EmpID').value.trim();
+            if (empIdInputVal.length !== 5) return;
+
+            const btn = document.getElementById('submitIdBtn');
+            const text = document.getElementById('submitIdText');
+            const loader = document.getElementById('submitIdLoader');
+
+            btn.disabled = true;
+            if (text) text.textContent = "Checking...";
+            if (loader) loader.classList.remove('hidden');
+
+            try {
+                // บังคับตรวจสอบ Authentication ก่อนทำการเข้าถึง Firestore
+                if (!auth.currentUser) {
+                    await signInAnonymously(auth);
+                }
+
+                // ค้นหาพนักงานโดยเชื่อมต่อที่ระดับ Root Collection ชื่อ "DISC_Member" 
+                // ตามกฎ match /DISC_Member/{document=**}
+                const membersRef = collection(db, COLLECTION_NAME);
+                const mSnap = await getDocs(membersRef);
+                currentMember = null;
+                
+                mSnap.forEach(d => {
+                    const data = d.data();
+                    // ตรวจสอบผ่านฟิลด์ EmpID (แปลงเป็น Text String เพื่อความแม่นยำ)
+                    const dbEmpId = data.EmpID ? String(data.EmpID).trim() : '';
+                    if (dbEmpId === empIdInputVal) {
+                        currentMember = { docId: d.id, ...data };
+                    }
+                });
+
+                if (!currentMember) {
+                    showMessage("ไม่พบรหัสพนักงานในฐานข้อมูล", "error");
+                    btn.disabled = false;
+                    if (text) text.textContent = "ถัดไป";
+                    if (loader) loader.classList.add('hidden');
+                    return;
+                }
+
+                // สลับหน้าใน Modal
+                document.getElementById('stepEmployeeId').classList.add('hidden');
+                if (currentMember.pin) {
+                    document.getElementById('stepEnterPin').classList.remove('hidden');
+                    const loginName = document.getElementById('loginUserName');
+                    if (loginName) loginName.textContent = currentMember.Fullname;
+                    const inputPin = document.getElementById('inputPin');
+                    if (inputPin) inputPin.focus();
+                } else {
+                    document.getElementById('stepSetupProfile').classList.remove('hidden');
+                    const dispName = document.getElementById('dispName');
+                    const dispPos = document.getElementById('dispPos');
+                    const dispGroup = document.getElementById('dispGroup');
+                    if (dispName) dispName.textContent = currentMember.Fullname;
+                    if (dispPos) dispPos.textContent = currentMember.Position;
+                    if (dispGroup) dispGroup.textContent = `${currentMember.Group} (${currentMember.SubGroup || '-'})`;
+                    const setPin = document.getElementById('setPin');
+                    if (setPin) setPin.focus();
+                }
+            } catch (err) {
+                console.error("Firestore Error:", err);
+                if (err.code === 'permission-denied') {
+                    showMessage("สิทธิ์ถูกปฏิเสธ: โปรดตรวจสอบ Security Rules และการตั้งค่า Authentication", "error");
+                } else {
+                    showMessage("เชื่อมต่อฐานข้อมูลล้มเหลว: " + err.message, "error");
+                }
+            } finally {
+                btn.disabled = false;
+                if (text) text.textContent = "ถัดไป";
+                if (loader) loader.classList.add('hidden');
+                lucide.createIcons();
             }
         };
 
-        function openModal(type) {
-            const data = discData[type];
-            const backdrop = document.getElementById('modalBackdrop');
-            const header = document.getElementById('modalHeader');
-            const title = document.getElementById('modalTitle');
-            const description = document.getElementById('modalDescription');
-            const traitsContainer = document.getElementById('traitsContainer');
-            const iconContainer = document.getElementById('iconContainer');
-            const closeBtn = document.getElementById('closeBtn');
+        const handleRegistration = async () => {
+            const pin = document.getElementById('setPin').value;
+            const cPin = document.getElementById('confirmPin').value;
+            if (pin.length !== 4) { showMessage("PIN ต้องมี 4 หลัก", "error"); return; }
+            if (pin !== cPin) { showMessage("PIN ยืนยันไม่ตรงกัน", "error"); return; }
 
-            title.textContent = data.title;
-            description.textContent = data.description;
-            header.className = `p-8 text-white flex justify-between items-center ${data.colorClass}`;
-            closeBtn.className = `w-full py-4 rounded-2xl font-bold text-white shadow-lg mt-4 transition-all active:scale-95 ${data.colorClass}`;
-            iconContainer.innerHTML = `<i data-lucide="${data.icon}" class="w-8 h-8 text-white"></i>`;
-            
-            traitsContainer.innerHTML = '';
-            data.traits.forEach(trait => {
-                const div = document.createElement('div');
-                div.className = `${data.lightColorClass} px-5 py-3 rounded-2xl flex items-center gap-4 border border-transparent shadow-sm`;
-                div.innerHTML = `
-                    <div class="w-2.5 h-2.5 rounded-full ${data.colorClass}"></div>
-                    <span class="${data.textColorClass} font-bold text-base">${trait}</span>
-                `;
-                traitsContainer.appendChild(div);
-            });
-            
-            backdrop.classList.remove('hidden');
-            lucide.createIcons();
-        }
+            const btn = document.getElementById('confirmRegBtn');
+            btn.disabled = true;
+            btn.textContent = "กำลังบันทึก...";
 
-        function closeModal() {
-            document.getElementById('modalBackdrop').classList.add('hidden');
-        }
-
-        function handleRegistration() {
-            const empId = window.prompt("กรุณากรอกรหัสพนักงานของคุณเพื่อลงทะเบียน:");
-            if (empId) {
-                console.log("Registered with ID:", empId);
+            try {
+                // บันทึกข้อมูลลงใน Root Path "DISC_Member"
+                const docRef = doc(db, COLLECTION_NAME, currentMember.docId);
+                const updateData = {
+                    pin: pin,
+                    loginCount: 1,
+                    registrationDate: serverTimestamp(),
+                    lastLogin: serverTimestamp()
+                };
+                await updateDoc(docRef, updateData);
+                showMessage("ลงทะเบียนสำเร็จ");
+                showMainPage({ ...currentMember, ...updateData, loginCount: 1 });
+            } catch (e) {
+                console.error("Save Error:", e);
+                showMessage("บันทึกข้อมูลไม่สำเร็จ: ตรวจสอบ Security Rules สำหรับการอัปเดต", "error");
+                btn.disabled = false;
+                btn.textContent = "สร้างบัญชีและเข้าใช้งาน";
             }
-        }
+        };
 
-        window.onload = () => {
+        const handlePinVerification = async () => {
+            const pinInput = document.getElementById('inputPin').value;
+            if (String(pinInput) === String(currentMember.pin)) {
+                const btn = document.getElementById('verifyPinBtn');
+                btn.disabled = true;
+                btn.textContent = "กำลังเข้าระบบ...";
+                try {
+                    const docRef = doc(db, COLLECTION_NAME, currentMember.docId);
+                    const newCount = (currentMember.loginCount || 0) + 1;
+                    await updateDoc(docRef, { loginCount: newCount, lastLogin: serverTimestamp() });
+                    showMessage("เข้าสู่ระบบสำเร็จ");
+                    showMainPage({ ...currentMember, loginCount: newCount });
+                } catch (e) {
+                    console.error("Update Error:", e);
+                    showMainPage(currentMember);
+                }
+            } else {
+                showMessage("รหัส PIN ไม่ถูกต้อง", "error");
+                document.getElementById('inputPin').value = '';
+            }
+        };
+
+        // --- Lifecycle Management ---
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                isAuthReady = true;
+                document.getElementById('globalLoader').classList.add('hidden');
+                document.getElementById('landingPage').classList.remove('hidden');
+                console.log("Firebase Auth Established. Current Collection:", COLLECTION_NAME);
+            }
+        });
+
+        const startApp = async () => {
+            // ป้องกันการรันผ่าน file:// ซึ่งเป็นสาเหตุหนึ่งที่ทำให้ Auth/Firestore ล้มเหลว
+            if (window.location.protocol === 'file:') {
+                document.getElementById('loaderIcon').classList.add('hidden');
+                showMessage("โปรดรันไฟล์ผ่าน Server (Live Server) เพื่อให้ Firebase ทำงานได้", "error");
+                return;
+            }
+
+            try {
+                // บังคับการระบุตัวตนตั้งแต่เริ่มต้น
+                await signInAnonymously(auth);
+            } catch (e) { 
+                console.error("Initial Auth Fail:", e);
+                // แสดงหน้าเว็บไว้ก่อนเพื่อความยืดหยุ่น แต่อาจจะติด Permission เมื่อกดปุ่ม
+                isAuthReady = true;
+                document.getElementById('globalLoader').classList.add('hidden');
+                document.getElementById('landingPage').classList.remove('hidden');
+            }
+
+            // Bind Events
+            const get = (id) => document.getElementById(id);
+            if (get('openModalBtn')) get('openModalBtn').onclick = openRegModal;
+            if (get('cancelBtn')) get('cancelBtn').onclick = closeRegModal;
+            if (get('closeModalIconBtn')) get('closeModalIconBtn').onclick = closeRegModal;
+            if (get('submitIdBtn')) get('submitIdBtn').onclick = handleIdSubmission;
+            if (get('confirmRegBtn')) get('confirmRegBtn').onclick = handleRegistration;
+            if (get('verifyPinBtn')) get('verifyPinBtn').onclick = handlePinVerification;
+            if (get('logoutBtn')) get('logoutBtn').onclick = () => location.reload();
+
+            const empInput = get('EmpID');
+            if (empInput) {
+                empInput.oninput = (e) => {
+                    let val = e.target.value.replace(/\D/g, '').substring(0, 5);
+                    e.target.value = val;
+                    const subBtn = get('submitIdBtn');
+                    if (subBtn) subBtn.disabled = val.length !== 5;
+                };
+            }
+
+            document.onkeypress = (e) => {
+                if (e.key === 'Enter') {
+                    const backdrop = get('regModalBackdrop');
+                    if (backdrop && !backdrop.classList.contains('hidden')) {
+                        const stepId = document.getElementById('stepEmployeeId');
+                        const subBtn = document.getElementById('submitIdBtn');
+                        if (stepId && !stepId.classList.contains('hidden') && subBtn && !subBtn.disabled) {
+                            handleIdSubmission();
+                        } else {
+                            const stepPin = document.getElementById('stepEnterPin');
+                            if (stepPin && !stepPin.classList.contains('hidden')) handlePinVerification();
+                        }
+                    }
+                }
+            };
             lucide.createIcons();
         };
+
+        startApp();
     </script>
 </body>
 </html>
