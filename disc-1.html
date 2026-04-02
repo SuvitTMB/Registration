@@ -26,7 +26,6 @@
         button { cursor: pointer; transition: all 0.2s; }
         button:disabled { cursor: not-allowed; opacity: 0.5; }
 
-        /* ปรับปรุงสถานะ Input: พื้นหลังฟ้าเข้ม (#0038a8) เมื่อมีการพิมพ์ */
         .input-active:not(:placeholder-shown),
         .input-active:focus {
             background-color: #0038a8 !important; 
@@ -60,6 +59,30 @@
             align-items: center;
             justify-content: center;
         }
+
+        .keypad-btn {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1e293b;
+            transition: all 0.1s;
+        }
+        .keypad-btn:active {
+            background: #e2e8f0;
+            transform: scale(0.95);
+        }
+
+        /* ปุ่มยกเลิก สีเทา 35% */
+        .btn-cancel-gray {
+            background-color: #A6A6A6;
+            color: white;
+        }
+        .btn-cancel-gray:hover {
+            background-color: #8c8c8c;
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex items-center justify-center m-0 p-0 text-gray-800">
@@ -71,8 +94,16 @@
 
     <div id="messageBox" class="hidden"></div>
 
-    <!-- แถบสีด้านบน -->
-    <div class="fixed top-0 left-0 right-0 h-[13px] flex z-50">
+    <!-- แถบสีบน (Fixed) -->
+    <div class="fixed top-0 left-0 right-0 h-[13px] flex z-[60]">
+        <div class="flex-1 bg-green-600"></div>
+        <div class="flex-1 bg-red-500"></div>
+        <div class="flex-1 bg-cyan-500"></div>
+        <div class="flex-1 bg-yellow-500"></div>
+    </div>
+
+    <!-- แถบสีล่าง (Fixed) -->
+    <div class="fixed bottom-0 left-0 right-0 h-[13px] flex z-[60]">
         <div class="flex-1 bg-green-600"></div>
         <div class="flex-1 bg-red-500"></div>
         <div class="flex-1 bg-cyan-500"></div>
@@ -80,7 +111,7 @@
     </div>
 
     <!-- หน้า Landing -->
-    <div id="landingPage" class="w-full max-w-[500px] flex flex-col items-center bg-white min-h-screen pt-[13px] hidden">
+    <div id="landingPage" class="w-full max-w-[500px] flex flex-col items-center bg-white min-h-screen pt-[13px] pb-[13px] hidden">
         <div class="relative w-[80%] mt-[60px] select-none mx-auto">
             <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc.jpg?alt=media&token=328a617d-07b1-419b-bc5d-00a85dc455e2" 
                  alt="DISC Chart" class="w-full h-auto block rounded-lg shadow-sm">
@@ -102,7 +133,7 @@
     </div>
 
     <!-- หน้าหลัก DISC เมื่อสำเร็จ -->
-    <div id="mainDiscPage" class="w-full max-w-[500px] flex flex-col items-center bg-white min-h-screen pt-[13px] hidden">
+    <div id="mainDiscPage" class="w-full max-w-[500px] flex flex-col items-center bg-white min-h-screen pt-[13px] pb-[13px] hidden">
         <div class="w-full px-8 pt-10 flex justify-between items-center border-b pb-4">
             <div>
                 <h1 id="welcomeUser" class="text-xl font-bold text-slate-800 tracking-tight">สวัสดีครับ</h1>
@@ -124,17 +155,9 @@
         </div>
     </div>
 
-    <!-- แถบสีล่าง -->
-    <div class="fixed bottom-0 left-0 right-0 h-[13px] flex z-50">
-        <div class="flex-1 bg-green-600"></div>
-        <div class="flex-1 bg-red-500"></div>
-        <div class="flex-1 bg-cyan-500"></div>
-        <div class="flex-1 bg-yellow-500"></div>
-    </div>
-
     <!-- Lightbox Modal -->
     <div id="regModalBackdrop" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
-        <div class="bg-white w-[60%] min-w-[320px] max-w-[450px] rounded-[12px] shadow-2xl overflow-hidden modal-enter relative" onclick="event.stopPropagation()">
+        <div class="bg-white w-full max-w-[450px] rounded-[12px] shadow-2xl overflow-hidden modal-enter relative" onclick="event.stopPropagation()">
             <div class="bg-[#0056ff] px-8 py-5">
                 <div class="flex justify-between items-center">
                     <h2 class="text-[16px] font-bold text-white uppercase tracking-tight">ลงทะเบียน / เข้าสู่ระบบ</h2>
@@ -152,10 +175,8 @@
                         <input type="text" id="EmpID" maxlength="5" inputmode="numeric" placeholder="xxxxx" class="input-active w-full px-4 py-3.5 bg-blue-50 border-2 border-white rounded-xl text-[18px] font-bold text-center shadow-sm">
                     </div>
                     <div class="flex gap-3">
-                        <button id="cancelBtn" class="flex-1 bg-slate-200 text-slate-600 text-[14px] py-3.5 rounded-xl flex items-center justify-center gap-2">
-                            <span>ยกเลิก</span>
-                        </button>
-                        <button id="submitIdBtn" disabled class="flex-1 bg-blue-600 text-white text-[14px] py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all">
+                        <button id="cancelBtn" class="flex-1 btn-cancel-gray text-white text-[14px] py-2.5 rounded-xl font-bold">ยกเลิก</button>
+                        <button id="submitIdBtn" disabled class="flex-1 bg-blue-600 text-white text-[14px] py-2.5 rounded-xl flex items-center justify-center gap-2 transition-all font-bold">
                             <span id="submitIdText">ถัดไป</span>
                             <div id="submitIdLoader" class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                         </button>
@@ -165,30 +186,61 @@
                 <!-- Step 2: New Registration Setup -->
                 <div id="stepSetupProfile" class="hidden space-y-6">
                     <div class="bg-blue-50 p-4 rounded-xl space-y-1 text-sm border border-blue-100 shadow-inner">
-                        <div class="flex justify-between border-b border-blue-200 pb-1 mb-1"><span class="text-slate-400 text-xs">ชื่อ-นามสกุล:</span><span id="dispName" class="font-bold text-blue-700 text-right"></span></div>
-                        <div class="flex justify-between border-b border-blue-200 pb-1 mb-1"><span class="text-slate-400 text-xs">ตำแหน่ง:</span><span id="dispPos" class="font-medium text-slate-700 text-right"></span></div>
-                        <div class="flex justify-between"><span class="text-slate-400 text-xs">กลุ่มงาน:</span><span id="dispGroup" class="text-slate-600 text-right"></span></div>
+                        <div class="flex justify-between border-b border-blue-200 pb-1 mb-1"><span class="text-slate-400 text-xs font-medium">ชื่อ-นามสกุล:</span><span id="dispName" class="font-bold text-blue-700 text-right"></span></div>
+                        <div class="flex justify-between border-b border-blue-200 pb-1 mb-1"><span class="text-slate-400 text-xs font-medium">กลุ่มงาน:</span><span id="dispGroup" class="font-medium text-slate-700 text-right"></span></div>
+                        <div class="flex justify-between"><span class="text-slate-400 text-xs font-medium">หน่วยงาน:</span><span id="dispSubGroup" class="text-slate-600 text-right"></span></div>
                     </div>
-                    <div class="space-y-4">
+                    
+                    <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-1">
-                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">กำหนด PIN (4 หลัก)</label>
-                            <input type="password" id="setPin" maxlength="4" inputmode="numeric" placeholder="••••" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-center text-xl tracking-[1em] focus:ring-2 focus:ring-blue-100 outline-none">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">กำหนด PIN (6 หลัก)</label>
+                            <input type="password" id="setPin" maxlength="6" inputmode="numeric" placeholder="••••••" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-center text-xl tracking-[0.2em] outline-none focus:ring-2 focus:ring-blue-500/20">
                         </div>
                         <div class="space-y-1">
                             <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider ml-1">ยืนยัน PIN</label>
-                            <input type="password" id="confirmPin" maxlength="4" inputmode="numeric" placeholder="••••" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-center text-xl tracking-[1em] focus:ring-2 focus:ring-blue-100 outline-none">
+                            <input type="password" id="confirmPin" maxlength="6" inputmode="numeric" placeholder="••••••" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-center text-xl tracking-[0.2em] outline-none focus:ring-2 focus:ring-blue-500/20">
                         </div>
                     </div>
-                    <button id="confirmRegBtn" class="w-full bg-green-600 text-white text-[14px] py-4 rounded-xl font-bold shadow-lg hover:bg-green-700 transition-colors">สร้างบัญชีและเข้าใช้งาน</button>
+
+                    <div class="flex gap-3">
+                        <button id="cancelSetupBtn" class="flex-1 btn-cancel-gray text-white py-2.5 rounded-xl font-bold text-[14px]">ยกเลิก</button>
+                        <button id="confirmRegBtn" disabled class="flex-[2] bg-green-600 text-white text-[14px] py-2.5 rounded-xl font-bold shadow-lg hover:bg-green-700 transition-all disabled:opacity-50">สร้างบัญชีและเข้าใช้งาน</button>
+                    </div>
                 </div>
 
-                <!-- Step 3: Login (Verify PIN) -->
-                <div id="stepEnterPin" class="hidden space-y-6">
+                <!-- Step 3: Login Verification (Numeric Keypad) -->
+                <div id="stepEnterPinKeypad" class="hidden space-y-6">
                     <div class="text-center space-y-3">
-                        <p class="text-[14px] text-slate-600 font-medium leading-tight">ยินดีต้อนรับกลับมา, <br><span id="loginUserName" class="text-lg font-bold text-blue-700"></span></p>
-                        <input type="password" id="inputPin" maxlength="4" inputmode="numeric" placeholder="••••" class="w-full px-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-center text-2xl tracking-[1em] focus:border-blue-500 outline-none transition-all">
+                        <p class="text-[14px] text-slate-600 font-medium leading-tight text-center">ยืนยันรหัส PIN, <br><span id="loginUserName" class="text-lg font-bold text-blue-700"></span></p>
+                        <div id="pinDisplay" class="flex justify-center gap-2 mb-2">
+                            <div class="w-4 h-4 rounded-full border-2 border-slate-200" id="dot-0"></div>
+                            <div class="w-4 h-4 rounded-full border-2 border-slate-200" id="dot-1"></div>
+                            <div class="w-4 h-4 rounded-full border-2 border-slate-200" id="dot-2"></div>
+                            <div class="w-4 h-4 rounded-full border-2 border-slate-200" id="dot-3"></div>
+                            <div class="w-4 h-4 rounded-full border-2 border-slate-200" id="dot-4"></div>
+                            <div class="w-4 h-4 rounded-full border-2 border-slate-200" id="dot-5"></div>
+                        </div>
                     </div>
-                    <button id="verifyPinBtn" class="w-full bg-[#0056ff] text-white text-[14px] py-4 rounded-xl font-bold shadow-xl shadow-blue-500/10 hover:bg-blue-700 transition-colors">ยืนยันตัวตน</button>
+                    
+                    <div class="grid grid-cols-3 gap-3 max-w-[320px] mx-auto">
+                        <button class="keypad-btn" onclick="pressKey('1')">1</button>
+                        <button class="keypad-btn" onclick="pressKey('2')">2</button>
+                        <button class="keypad-btn" onclick="pressKey('3')">3</button>
+                        <button class="keypad-btn" onclick="pressKey('4')">4</button>
+                        <button class="keypad-btn" onclick="pressKey('5')">5</button>
+                        <button class="keypad-btn" onclick="pressKey('6')">6</button>
+                        <button class="keypad-btn" onclick="pressKey('7')">7</button>
+                        <button class="keypad-btn" onclick="pressKey('8')">8</button>
+                        <button class="keypad-btn" onclick="pressKey('9')">9</button>
+                        <button class="keypad-btn text-slate-400" onclick="pressKey('del')"><i data-lucide="delete" class="w-6 h-6 mx-auto"></i></button>
+                        <button class="keypad-btn" onclick="pressKey('0')">0</button>
+                        <button class="keypad-btn text-red-500" onclick="pressKey('clear')">C</button>
+                    </div>
+
+                    <div class="flex gap-3 pt-2">
+                        <button id="closeKeypadBtn" class="flex-1 bg-slate-100 text-slate-600 py-3 rounded-xl font-bold hover:bg-slate-200 transition-colors">ปิดหน้าต่าง</button>
+                        <button id="savePinLoginBtn" class="flex-[2] bg-blue-600 text-white py-3 rounded-xl font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition-colors">บันทึกข้อมูล</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -200,7 +252,6 @@
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, updateDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // 🔥 FIREBASE CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyAciknEYhZU7AwOdfYytC1t_AnW2Ee11us",
             authDomain: "faifah-ttb.firebaseapp.com",
@@ -210,17 +261,24 @@
             appId: "1:842980876200:web:f33bfad2ccbf263075079d"
         };
 
-        // --- PATH SETTINGS (ปรับตรงตามรูปภาพ Security Rules ที่คุณแนบมา) ---
-        // ใช้ "DISC_Member" เป็นคอลเลกชันระดับ Root (Root Path)
         const COLLECTION_NAME = "DISC_Member";
-
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
         let isAuthReady = false;
         let currentMember = null;
+        let userIP = "";
+        let inputPinValue = "";
+
+        // --- IP Detection ---
+        async function fetchIP() {
+            try {
+                const res = await fetch('https://api.ipify.org?format=json');
+                const data = await res.json();
+                userIP = data.ip;
+            } catch (e) { userIP = "unknown"; }
+        }
 
         // --- UI Helpers ---
         const showMessage = (text, type = 'success') => {
@@ -234,37 +292,50 @@
             setTimeout(() => {
                 msgBox.classList.add('opacity-0');
                 setTimeout(() => msgBox.classList.add('hidden'), 300);
-            }, 5000);
+            }, 3000);
         };
 
         const showMainPage = (user) => {
             document.getElementById('landingPage').classList.add('hidden');
             document.getElementById('mainDiscPage').classList.remove('hidden');
             const welcome = document.getElementById('welcomeUser');
+            if (welcome) welcome.textContent = `สวัสดีครับ, ${user.FullName || 'พนักงาน'}`;
             const sub = document.getElementById('userSub');
+            if (sub) sub.textContent = `${user.Group || '-'} | ${user.SubGroup || '-'}`;
             const count = document.getElementById('loginCountDisplay');
-            if (welcome) welcome.textContent = `สวัสดีครับ, ${user.Fullname || 'พนักงาน'}`;
-            if (sub) sub.textContent = `${user.Position || '-'} | ${user.Group || '-'}`;
-            if (count) count.textContent = user.loginCount || 1;
+            if (count) count.textContent = user.Times || 1;
             closeRegModal();
             lucide.createIcons();
         };
 
-        const openRegModal = () => {
-            if (!isAuthReady) {
-                showMessage("กำลังเตรียมการเชื่อมต่อฐานข้อมูล... โปรดตรวจสอบการเชื่อมต่ออินเทอร์เน็ต", "error");
-                return;
-            }
-            document.getElementById('regModalBackdrop').classList.remove('hidden');
-            document.getElementById('stepEmployeeId').classList.remove('hidden');
-            document.getElementById('stepSetupProfile').classList.add('hidden');
-            document.getElementById('stepEnterPin').classList.add('hidden');
-            const empInput = document.getElementById('EmpID');
-            if (empInput) { empInput.value = ''; empInput.focus(); }
-        };
-
         const closeRegModal = () => {
             document.getElementById('regModalBackdrop').classList.add('hidden');
+            inputPinValue = "";
+            updatePinDots();
+        };
+
+        const updatePinDots = () => {
+            for(let i=0; i<6; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (dot) {
+                    if (i < inputPinValue.length) {
+                        dot.className = "w-4 h-4 rounded-full bg-blue-600 border-2 border-blue-600 shadow-sm";
+                    } else {
+                        dot.className = "w-4 h-4 rounded-full border-2 border-slate-200";
+                    }
+                }
+            }
+        };
+
+        window.pressKey = (key) => {
+            if (key === 'del') {
+                inputPinValue = inputPinValue.slice(0, -1);
+            } else if (key === 'clear') {
+                inputPinValue = "";
+            } else {
+                if (inputPinValue.length < 6) inputPinValue += key;
+            }
+            updatePinDots();
         };
 
         // --- Core Logic ---
@@ -281,20 +352,14 @@
             if (loader) loader.classList.remove('hidden');
 
             try {
-                // บังคับตรวจสอบ Authentication ก่อนทำการเข้าถึง Firestore
-                if (!auth.currentUser) {
-                    await signInAnonymously(auth);
-                }
+                if (!auth.currentUser) await signInAnonymously(auth);
 
-                // ค้นหาพนักงานโดยเชื่อมต่อที่ระดับ Root Collection ชื่อ "DISC_Member" 
-                // ตามกฎ match /DISC_Member/{document=**}
                 const membersRef = collection(db, COLLECTION_NAME);
                 const mSnap = await getDocs(membersRef);
                 currentMember = null;
                 
                 mSnap.forEach(d => {
                     const data = d.data();
-                    // ตรวจสอบผ่านฟิลด์ EmpID (แปลงเป็น Text String เพื่อความแม่นยำ)
                     const dbEmpId = data.EmpID ? String(data.EmpID).trim() : '';
                     if (dbEmpId === empIdInputVal) {
                         currentMember = { docId: d.id, ...data };
@@ -309,32 +374,31 @@
                     return;
                 }
 
-                // สลับหน้าใน Modal
                 document.getElementById('stepEmployeeId').classList.add('hidden');
+
                 if (currentMember.pin) {
-                    document.getElementById('stepEnterPin').classList.remove('hidden');
-                    const loginName = document.getElementById('loginUserName');
-                    if (loginName) loginName.textContent = currentMember.Fullname;
-                    const inputPin = document.getElementById('inputPin');
-                    if (inputPin) inputPin.focus();
+                    if (currentMember.IPAddress === userIP) {
+                        const docRef = doc(db, COLLECTION_NAME, currentMember.docId);
+                        const newTimes = (currentMember.Times || 0) + 1;
+                        await updateDoc(docRef, { Times: newTimes, lastLogin: serverTimestamp() });
+                        showMessage("เข้าสู่ระบบอัตโนมัติเรียบร้อย");
+                        showMainPage({ ...currentMember, Times: newTimes });
+                    } else {
+                        document.getElementById('stepEnterPinKeypad').classList.remove('hidden');
+                        document.getElementById('loginUserName').textContent = currentMember.FullName;
+                        lucide.createIcons();
+                    }
                 } else {
                     document.getElementById('stepSetupProfile').classList.remove('hidden');
-                    const dispName = document.getElementById('dispName');
-                    const dispPos = document.getElementById('dispPos');
-                    const dispGroup = document.getElementById('dispGroup');
-                    if (dispName) dispName.textContent = currentMember.Fullname;
-                    if (dispPos) dispPos.textContent = currentMember.Position;
-                    if (dispGroup) dispGroup.textContent = `${currentMember.Group} (${currentMember.SubGroup || '-'})`;
-                    const setPin = document.getElementById('setPin');
-                    if (setPin) setPin.focus();
+                    document.getElementById('dispName').textContent = currentMember.FullName;
+                    document.getElementById('dispGroup').textContent = currentMember.Group;
+                    document.getElementById('dispSubGroup').textContent = currentMember.SubGroup || '-';
+                    document.getElementById('setPin').value = "";
+                    document.getElementById('confirmPin').value = "";
+                    validateRegistration();
                 }
             } catch (err) {
-                console.error("Firestore Error:", err);
-                if (err.code === 'permission-denied') {
-                    showMessage("สิทธิ์ถูกปฏิเสธ: โปรดตรวจสอบ Security Rules และการตั้งค่า Authentication", "error");
-                } else {
-                    showMessage("เชื่อมต่อฐานข้อมูลล้มเหลว: " + err.message, "error");
-                }
+                showMessage("ฐานข้อมูลขัดข้อง", "error");
             } finally {
                 btn.disabled = false;
                 if (text) text.textContent = "ถัดไป";
@@ -343,122 +407,121 @@
             }
         };
 
+        const validateRegistration = () => {
+            const p1 = document.getElementById('setPin').value;
+            const p2 = document.getElementById('confirmPin').value;
+            const regBtn = document.getElementById('confirmRegBtn');
+            if (p1.length === 6 && p2.length === 6 && p1 === p2) {
+                regBtn.disabled = false;
+            } else {
+                regBtn.disabled = true;
+            }
+        };
+
         const handleRegistration = async () => {
             const pin = document.getElementById('setPin').value;
-            const cPin = document.getElementById('confirmPin').value;
-            if (pin.length !== 4) { showMessage("PIN ต้องมี 4 หลัก", "error"); return; }
-            if (pin !== cPin) { showMessage("PIN ยืนยันไม่ตรงกัน", "error"); return; }
-
             const btn = document.getElementById('confirmRegBtn');
             btn.disabled = true;
-            btn.textContent = "กำลังบันทึก...";
 
             try {
-                // บันทึกข้อมูลลงใน Root Path "DISC_Member"
                 const docRef = doc(db, COLLECTION_NAME, currentMember.docId);
                 const updateData = {
                     pin: pin,
-                    loginCount: 1,
+                    Times: 1,
+                    ActivatedAt: serverTimestamp(),
                     registrationDate: serverTimestamp(),
-                    lastLogin: serverTimestamp()
+                    lastLogin: serverTimestamp(),
+                    IPAddress: userIP
                 };
                 await updateDoc(docRef, updateData);
-                showMessage("ลงทะเบียนสำเร็จ");
-                showMainPage({ ...currentMember, ...updateData, loginCount: 1 });
+                showMessage("ลงทะเบียนและบันทึก PIN สำเร็จ");
+                showMainPage({ ...currentMember, ...updateData, Times: 1 });
             } catch (e) {
-                console.error("Save Error:", e);
-                showMessage("บันทึกข้อมูลไม่สำเร็จ: ตรวจสอบ Security Rules สำหรับการอัปเดต", "error");
+                showMessage("บันทึกข้อมูลล้มเหลว", "error");
                 btn.disabled = false;
-                btn.textContent = "สร้างบัญชีและเข้าใช้งาน";
             }
         };
 
         const handlePinVerification = async () => {
-            const pinInput = document.getElementById('inputPin').value;
-            if (String(pinInput) === String(currentMember.pin)) {
-                const btn = document.getElementById('verifyPinBtn');
+            if (inputPinValue.length !== 6) {
+                showMessage("กรุณาระบุ PIN ให้ครบ 6 หลัก", "error");
+                return;
+            }
+
+            if (String(inputPinValue) === String(currentMember.pin)) {
+                const btn = document.getElementById('savePinLoginBtn');
                 btn.disabled = true;
-                btn.textContent = "กำลังเข้าระบบ...";
                 try {
                     const docRef = doc(db, COLLECTION_NAME, currentMember.docId);
-                    const newCount = (currentMember.loginCount || 0) + 1;
-                    await updateDoc(docRef, { loginCount: newCount, lastLogin: serverTimestamp() });
-                    showMessage("เข้าสู่ระบบสำเร็จ");
-                    showMainPage({ ...currentMember, loginCount: newCount });
+                    const newTimes = (currentMember.Times || 0) + 1;
+                    await updateDoc(docRef, { Times: newTimes, lastLogin: serverTimestamp() });
+                    showMessage("ยืนยันตัวตนสำเร็จ");
+                    showMainPage({ ...currentMember, Times: newTimes });
                 } catch (e) {
-                    console.error("Update Error:", e);
                     showMainPage(currentMember);
                 }
             } else {
-                showMessage("รหัส PIN ไม่ถูกต้อง", "error");
-                document.getElementById('inputPin').value = '';
+                showMessage("รหัส PIN ไม่ถูกต้อง กรุณาลองใหม่", "error");
+                inputPinValue = "";
+                updatePinDots();
             }
         };
 
-        // --- Lifecycle Management ---
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 isAuthReady = true;
                 document.getElementById('globalLoader').classList.add('hidden');
                 document.getElementById('landingPage').classList.remove('hidden');
-                console.log("Firebase Auth Established. Current Collection:", COLLECTION_NAME);
             }
         });
 
         const startApp = async () => {
-            // ป้องกันการรันผ่าน file:// ซึ่งเป็นสาเหตุหนึ่งที่ทำให้ Auth/Firestore ล้มเหลว
             if (window.location.protocol === 'file:') {
-                document.getElementById('loaderIcon').classList.add('hidden');
-                showMessage("โปรดรันไฟล์ผ่าน Server (Live Server) เพื่อให้ Firebase ทำงานได้", "error");
+                alert("กรุณารันผ่าน Server");
                 return;
             }
 
+            await fetchIP();
+
             try {
-                // บังคับการระบุตัวตนตั้งแต่เริ่มต้น
                 await signInAnonymously(auth);
             } catch (e) { 
-                console.error("Initial Auth Fail:", e);
-                // แสดงหน้าเว็บไว้ก่อนเพื่อความยืดหยุ่น แต่อาจจะติด Permission เมื่อกดปุ่ม
                 isAuthReady = true;
                 document.getElementById('globalLoader').classList.add('hidden');
                 document.getElementById('landingPage').classList.remove('hidden');
             }
 
-            // Bind Events
-            const get = (id) => document.getElementById(id);
-            if (get('openModalBtn')) get('openModalBtn').onclick = openRegModal;
-            if (get('cancelBtn')) get('cancelBtn').onclick = closeRegModal;
-            if (get('closeModalIconBtn')) get('closeModalIconBtn').onclick = closeRegModal;
-            if (get('submitIdBtn')) get('submitIdBtn').onclick = handleIdSubmission;
-            if (get('confirmRegBtn')) get('confirmRegBtn').onclick = handleRegistration;
-            if (get('verifyPinBtn')) get('verifyPinBtn').onclick = handlePinVerification;
-            if (get('logoutBtn')) get('logoutBtn').onclick = () => location.reload();
+            // Event Binding
+            document.getElementById('openModalBtn').onclick = () => {
+                document.getElementById('regModalBackdrop').classList.remove('hidden');
+                document.getElementById('stepEmployeeId').classList.remove('hidden');
+                document.getElementById('stepSetupProfile').classList.add('hidden');
+                document.getElementById('stepEnterPinKeypad').classList.add('hidden');
+            };
+            
+            document.getElementById('cancelBtn').onclick = closeRegModal;
+            document.getElementById('cancelSetupBtn').onclick = closeRegModal;
+            document.getElementById('closeModalIconBtn').onclick = closeRegModal;
+            document.getElementById('closeKeypadBtn').onclick = closeRegModal;
+            
+            document.getElementById('submitIdBtn').onclick = handleIdSubmission;
+            document.getElementById('confirmRegBtn').onclick = handleRegistration;
+            document.getElementById('savePinLoginBtn').onclick = handlePinVerification;
+            
+            document.getElementById('logoutBtn').onclick = () => location.reload();
 
-            const empInput = get('EmpID');
+            document.getElementById('setPin').oninput = validateRegistration;
+            document.getElementById('confirmPin').oninput = validateRegistration;
+
+            const empInput = document.getElementById('EmpID');
             if (empInput) {
                 empInput.oninput = (e) => {
                     let val = e.target.value.replace(/\D/g, '').substring(0, 5);
                     e.target.value = val;
-                    const subBtn = get('submitIdBtn');
-                    if (subBtn) subBtn.disabled = val.length !== 5;
+                    document.getElementById('submitIdBtn').disabled = val.length !== 5;
                 };
             }
 
-            document.onkeypress = (e) => {
-                if (e.key === 'Enter') {
-                    const backdrop = get('regModalBackdrop');
-                    if (backdrop && !backdrop.classList.contains('hidden')) {
-                        const stepId = document.getElementById('stepEmployeeId');
-                        const subBtn = document.getElementById('submitIdBtn');
-                        if (stepId && !stepId.classList.contains('hidden') && subBtn && !subBtn.disabled) {
-                            handleIdSubmission();
-                        } else {
-                            const stepPin = document.getElementById('stepEnterPin');
-                            if (stepPin && !stepPin.classList.contains('hidden')) handlePinVerification();
-                        }
-                    }
-                }
-            };
             lucide.createIcons();
         };
 
