@@ -140,51 +140,43 @@
             color: #f97316;
         }
 
-        /* DISC Assessment Specific Styles */
         .choice-card {
             transition: all 0.3s ease;
-            border: 2px solid #f1f5f9;
+            border-width: 2px;
+            border-style: solid;
         }
-        .choice-card.most-selected {
-            background-color: #f0fdf4;
-            border-color: #86efac;
-        }
-        .choice-card.least-selected {
-            background-color: #fef2f2;
-            border-color: #fca5a5;
-        }
-        
-        .btn-most { background-color: #22c55e; color: white; }
-        .btn-most.faded { background-color: #86efac; opacity: 0.7; }
-        
-        .btn-least { background-color: #ef4444; color: white; }
-        .btn-least.faded { background-color: #fca5a5; opacity: 0.7; }
 
         .progress-bar-fill {
             transition: width 0.4s ease-out;
+        }
+
+        .tab-content {
+            width: 100%;
+        }
+
+        .color-bar-container {
+            height: 13px;
+            width: 100%;
+            display: flex;
         }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center m-0 p-0 text-gray-800">
 
-    <!-- Loading Overlay -->
     <div id="globalLoader">
         <div id="loaderIcon" class="w-10 h-10 border-4 border-slate-100 border-t-blue-600 rounded-full animate-spin mb-6"></div>
     </div>
 
     <div id="messageBox" class="hidden"></div>
 
-    <!-- แถบสีบน (Fixed) -->
     <div id="topColorBar" class="fixed top-0 left-0 right-0 h-[13px] flex z-[60]">
         <div class="flex-1 bg-green-600"></div><div class="flex-1 bg-red-500"></div><div class="flex-1 bg-cyan-500"></div><div class="flex-1 bg-yellow-500"></div>
     </div>
 
-    <!-- แถบสีล่าง (Fixed) -->
     <div id="bottomColorBar" class="fixed bottom-0 left-0 right-0 h-[13px] flex z-[60]">
         <div class="flex-1 bg-green-600"></div><div class="flex-1 bg-red-500"></div><div class="flex-1 bg-cyan-500"></div><div class="flex-1 bg-yellow-500"></div>
     </div>
 
-    <!-- หน้า Landing -->
     <div id="landingPage" class="w-full max-w-[500px] flex flex-col items-center bg-white min-h-screen pt-[13px] pb-[13px] hidden">
         <div class="relative w-[80%] mt-[60px] select-none mx-auto">
             <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc.jpg?alt=media&token=328a617d-07b1-419b-bc5d-00a85dc455e2" 
@@ -199,18 +191,23 @@
         <div class="mt-auto mb-8 text-center text-gray-300 text-[10px] uppercase tracking-[0.3em] font-bold">DISC PERSONALITY NAVIGATOR</div>
     </div>
 
-    <!-- หน้าหลัก DISC (Home Page) -->
     <div id="mainDiscPage" class="w-full max-w-[500px] flex flex-col bg-white min-h-screen relative hidden">
         <div class="w-full px-6 py-4 flex justify-between items-center bg-orange-500 text-white shadow-md z-10">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center border border-white/30"><i data-lucide="user" class="w-5 h-5 text-white"></i></div>
-                <div><h1 id="welcomeUser" class="text-base font-normal tracking-tight leading-tight">สวัสดีครับ</h1><p id="userSub" class="text-[10px] opacity-80 font-normal"></p></div>
+                <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center border border-white/30">
+                    <i data-lucide="user" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                    <h1 id="welcomeUser" class="text-base font-normal tracking-tight leading-tight">สวัสดีครับ</h1>
+                    <p id="userSub" class="text-[10px] opacity-80 font-normal"></p>
+                </div>
             </div>
-            <button id="logoutBtn" class="hover:bg-white/10 p-2 rounded-full transition-colors h-11 w-11 flex items-center justify-center text-[13px]"><i data-lucide="log-out" class="w-5 h-5"></i></button>
+            <button id="logoutBtn" class="hover:bg-white/10 p-2 rounded-full transition-colors h-11 w-11 flex items-center justify-center text-[13px]">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+            </button>
         </div>
         
         <div id="homeContentArea" class="flex-1 overflow-y-auto pb-24 pt-4 px-6 space-y-4 text-center">
-            <!-- Tab: Home -->
             <div id="tab-home" class="tab-content space-y-6">
                 <div class="w-full flex justify-center py-2">
                     <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[60%] h-auto block">
@@ -219,17 +216,26 @@
                     <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-overall.jpg?alt=media&token=91607be6-5038-4509-afe7-6de5f6bb91e5" class="max-w-full h-auto block">
                 </div>
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <h3 class="text-lg font-normal text-slate-800 mb-3">DISC คืออะไร</h3>
-                    <p class="text-sm text-slate-500 leading-relaxed text-left">เครื่องมือวิเคราะห์รูปแบบพฤติกรรมของมนุษย์ ใช้เพื่อทำความเข้าใจว่า คนคิด ตัดสินใจ สื่อสาร และทำงานร่วมกับผู้อื่นอย่างไร DISC ไม่ได้วัดความเก่งหรือฉลาด แต่ช่วยอธิบายว่า “เราเป็นคนแบบไหน และควรทำงานกับคนแบบอื่นอย่างไร”</p>
+                    <h3 class="text-lg font-normal text-slate-800 mb-3 text-center font-semibold">DISC คืออะไร</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed text-left">
+                        เครื่องมือวิเคราะห์รูปแบบพฤติกรรมของมนุษย์ ใช้เพื่อทำความเข้าใจว่า คนคิด ตัดสินใจ สื่อสาร และทำงานร่วมกับผู้อื่นอย่างไร DISC ไม่ได้วัดความเก่งหรือฉลาด แต่ช่วยอธิบายว่า “เราเป็นคนแบบไหน และควรทำงานกับคนแบบอื่นอย่างไร”
+                    </p>
                 </div>
+
                 <div class="grid grid-cols-2 gap-4">
-                    <button onclick="switchTab('about')" class="btn-standard bg-[#0056ff] hover:bg-blue-700 text-white shadow-lg h-[64px]"><i data-lucide="book-open-check" class="w-5 h-5"></i><span class="leading-tight text-left">รู้จัก DISC<br>ให้มากขึ้น</span></button>
-                    <button id="dynamicActionBtn" class="btn-standard bg-[#f97316] hover:bg-orange-600 text-white shadow-lg h-[64px]"><i id="dynamicActionIcon" data-lucide="clipboard-list" class="w-5 h-5"></i><span id="dynamicActionText" class="leading-tight text-left">เริ่มทำ<br>แบบทดสอบ</span></button>
+                    <button onclick="switchTab('about')" class="btn-standard bg-[#0056ff] hover:bg-blue-700 text-white shadow-lg h-[64px]">
+                        <i data-lucide="book-open-check" class="w-5 h-5"></i>
+                        <span class="leading-tight text-left">รู้จัก DISC<br>ให้มากขึ้น</span>
+                    </button>
+                    
+                    <button id="dynamicActionBtn" class="btn-standard bg-[#f97316] hover:bg-orange-600 text-white shadow-lg h-[64px]">
+                        <i id="dynamicActionIcon" data-lucide="clipboard-list" class="w-5 h-5"></i>
+                        <span id="dynamicActionText" class="leading-tight text-left">เริ่มทำ<br>แบบทดสอบ</span>
+                    </button>
                 </div>
                 <div class="h-5 w-full"></div>
             </div>
 
-            <!-- Tab: รู้จัก DISC -->
             <div id="tab-about" class="tab-content hidden space-y-4 text-left">
                 <h3 class="text-lg font-normal text-slate-800">บุคลิกภาพทั้ง 4 แบบ</h3>
                 <div class="space-y-3">
@@ -240,31 +246,42 @@
                 </div>
             </div>
 
-            <!-- Tab: DISC ของคุณ -->
             <div id="tab-user" class="tab-content hidden space-y-6 text-center">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                     <div class="w-20 h-20 bg-slate-100 rounded-full mx-auto mb-4 flex items-center justify-center border-4 border-white shadow-sm"><i data-lucide="user" class="w-10 h-10 text-slate-300"></i></div>
                     <h3 class="text-lg font-normal text-slate-800" id="profileName">-</h3>
                     <p class="text-xs text-slate-400" id="profileDetail">-</p>
                 </div>
+                
                 <div id="noDiscResult" class="bg-orange-50 border border-orange-100 p-6 rounded-2xl">
                     <p class="text-sm text-orange-700">คุณยังไม่ได้ทำแบบทดสอบ</p>
-                    <button onclick="startAssessmentFlow()" class="mt-4 btn-standard bg-[#f97316] text-white shadow-md px-8">เริ่มทำแบบประเมิน</button>
+                    <button onclick="startAssessmentFlow()" class="mt-4 btn-standard bg-[#f97316] text-white shadow-md px-8 h-[54px]">
+                        <i data-lucide="play" class="w-4 h-4"></i>
+                        <span>เริ่มทำแบบประเมิน</span>
+                    </button>
                 </div>
+                
                 <div id="hasDiscResult" class="hidden bg-green-50 border border-green-100 p-6 rounded-2xl">
-                    <p class="text-sm text-green-700">คุณทำแบบทดสอบเรียบร้อยแล้ว ผลคือ:</p>
-                    <div id="discResultValue" class="text-5xl font-bold text-green-600 mt-2">-</div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 bg-white rounded-xl shadow-sm border border-green-200">
+                            <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">โดดเด่นที่สุด (UP)</span>
+                            <div id="discUpValue" class="text-5xl font-bold text-green-600 mt-2">-</div>
+                        </div>
+                        <div class="p-4 bg-white rounded-xl shadow-sm border border-red-100">
+                            <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">ชอบน้อยที่สุด (DOWN)</span>
+                            <div id="discDownValue" class="text-5xl font-bold text-red-400 mt-2">-</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Tab: DISC ของทีม -->
             <div id="tab-team" class="tab-content hidden space-y-6 text-left">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <h3 class="text-base font-normal text-slate-800 mb-4">ภาพรวมทีมของคุณ</h3>
-                    <div class="space-y-4">
+                    <h3 class="text-base font-normal text-slate-800 mb-4 text-center">ภาพรวมทีมของคุณ</h3>
+                    <div class="space-y-4 px-4">
                         <div class="flex items-center justify-between text-xs"><span class="text-slate-500">สมาชิกทั้งหมด</span><span class="font-normal text-slate-800">12 คน</span></div>
                         <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden flex">
-                            <div class="bg-green-500 h-full w-[25%]"></div><div class="bg-red-500 h-full w-[35%]"></div><div class="bg-cyan-500 h-full w-[20%]"></div><div class="bg-yellow-500 h-full w-[20%]"></div>
+                            <div class="bg-green-500 h-full" style="width: 25%"></div><div class="bg-red-500 h-full" style="width: 35%"></div><div class="bg-cyan-500 h-full" style="width: 20%"></div><div class="bg-yellow-500 h-full" style="width: 20%"></div>
                         </div>
                         <p class="text-[10px] text-slate-400 italic text-center">ข้อมูลจำลองเพื่อการแสดงผล</p>
                     </div>
@@ -272,7 +289,6 @@
             </div>
         </div>
 
-        <!-- Fixed Bottom Menu (Slate 50) -->
         <div class="fixed bottom-0 w-full max-w-[500px] bg-slate-50 border-t border-slate-200 h-20 flex items-center justify-around px-2 z-50 shadow-[0_-4px_15px_rgba(0,0,0,0.05)]">
             <button class="bottom-nav-item active" onclick="switchTab('home')"><i data-lucide="house" class="w-6 h-6"></i><span>Home</span></button>
             <button class="bottom-nav-item" onclick="switchTab('about')"><i data-lucide="info" class="w-6 h-6"></i><span>รู้จัก DISC</span></button>
@@ -281,61 +297,66 @@
         </div>
     </div>
 
-    <!-- หน้าแบบทดสอบ (Assessment Page) -->
     <div id="assessmentPage" class="w-full max-w-[500px] flex flex-col bg-white min-h-screen relative hidden">
-        <!-- Progress Bar -->
-        <div class="w-full h-2 bg-slate-100 sticky top-0 z-20">
-            <div id="assessmentProgress" class="h-full bg-orange-500 progress-bar-fill w-0"></div>
+        <div class="sticky top-0 z-[70] w-full">
+            <div class="color-bar-container">
+                <div class="flex-1 bg-green-600"></div><div class="flex-1 bg-red-500"></div><div class="flex-1 bg-cyan-500"></div><div class="flex-1 bg-yellow-500"></div>
+            </div>
+            <div class="w-full h-2 bg-slate-100">
+                <div id="assessmentProgress" class="h-full bg-orange-500 progress-bar-fill w-0"></div>
+            </div>
         </div>
-        
-        <!-- Assessment Content -->
+
         <div id="assessmentContainer" class="flex-1 overflow-y-auto px-6 py-8 space-y-8 pb-32">
-            <!-- Intro View -->
-            <div id="assessmentIntro" class="space-y-6 text-center animate-in fade-in duration-500">
+            <div id="assessmentIntro" class="space-y-6 text-center">
                 <div class="w-20 h-20 bg-orange-100 rounded-full mx-auto flex items-center justify-center"><i data-lucide="clipboard-check" class="w-10 h-10 text-orange-500"></i></div>
-                <h2 class="text-xl font-normal text-slate-800">คำชี้แจงแบบประเมิน DISC</h2>
-                <div class="text-sm text-slate-500 text-left space-y-4 bg-slate-50 p-6 rounded-2xl">
-                    <p>1. แบบประเมินประกอบด้วยคำถาม 20 ชุด</p>
-                    <p>2. ในแต่ละชุด ให้คุณเลือกพฤติกรรมที่เป็นตัวคุณ <b>"มากที่สุด" (Most)</b> 1 อย่าง และ <b>"น้อยที่สุด" (Least)</b> 1 อย่าง</p>
-                    <p>3. โปรดตอบตามความเป็นจริงที่เกิดขึ้นบ่อยที่สุด เพื่อความแม่นยำของผลลัพธ์</p>
+                <h2 class="text-xl font-normal text-slate-800 px-4">คำชี้แจงแบบประเมิน DISC</h2>
+                <div class="text-sm text-slate-500 text-left space-y-4 bg-slate-50 p-6 rounded-2xl leading-relaxed">
+                    <p>คาร์ล จุง (Carl Jung) ทฤษฎีทางบุคลิกภาพของจุงได้รับการยกย่องว่าครอบคลุมปรากฏการณ์ของมนุษยชาติอย่างทั่วถึง เป็นผลงานที่เด่นที่สุดในปัจจุบัน เรามาดูกันดีกว่าว่าการสื่อสารของคุณเป็นแบบไหนใน 4 แบบ เป็น D, I, S หรือ C</p>
+                    <p><b>กติกา:</b> ในแต่ละชุด ให้คุณเลือกพฤติกรรมที่เป็นตัวคุณ <b>"มากที่สุด" (Most)</b> 1 อย่าง และ <b>"น้อยที่สุด" (Least)</b> 1 อย่าง และอย่าลังเล!</p>
+                    <p class="text-red-500 font-medium border-t pt-4">การตอบคำถามจะใช้เวลาในการทำ และหากคุณเริ่มทำแล้วคุณจะไม่สามารถทำแบบสอบถามได้อีก คุณพร้อมหรือไม่</p>
                 </div>
-                <button onclick="beginActualTest()" class="btn-standard bg-orange-500 text-white w-full h-[64px] shadow-lg">เข้าสู่การทดสอบ DISC</button>
-                <button onclick="exitAssessment()" class="text-slate-400 text-xs">กลับหน้าหลัก</button>
+                <div class="flex gap-4 pt-4">
+                    <button onclick="exitAssessment()" class="btn-standard flex-1 bg-slate-500 hover:bg-slate-600 text-white shadow-md h-[54px]">
+                        <i data-lucide="house" class="w-4 h-4"></i><span>กลับหน้าหลัก</span>
+                    </button>
+                    <button onclick="beginActualTest()" class="btn-standard flex-[2] bg-orange-500 hover:bg-orange-600 text-white shadow-lg h-[54px]">
+                        <i data-lucide="play" class="w-4 h-4"></i><span>เข้าสู่การทดสอบ DISC</span>
+                    </button>
+                </div>
             </div>
 
-            <!-- Question View -->
-            <div id="assessmentQuestion" class="hidden space-y-8 animate-in slide-in-from-right duration-300">
+            <div id="assessmentQuestion" class="hidden space-y-8">
                 <div class="text-center">
-                    <span class="text-orange-500 font-bold text-xs uppercase tracking-widest">Question <span id="qNumber">1</span> of 20</span>
-                    <h3 id="qPrompt" class="text-lg font-normal text-slate-800 mt-2">เมื่อต้องทำงานร่วมกับผู้อื่น ฉันมักจะ...</h3>
+                    <span class="text-orange-500 font-bold text-xs uppercase tracking-widest">Question <span id="qNumber">1</span> of 19</span>
+                    <h3 id="qPrompt" class="text-lg font-normal text-slate-800 mt-2 leading-snug">คำถาม...</h3>
                 </div>
-
-                <div id="qChoices" class="space-y-4">
-                    <!-- Choices will be injected here -->
-                </div>
-
+                <div id="qChoices" class="space-y-4"></div>
                 <div class="flex justify-between items-center pt-4">
-                    <button onclick="prevQuestion()" id="prevBtn" class="text-slate-400 disabled:opacity-0 flex items-center gap-1"><i data-lucide="chevron-left" class="w-4 h-4"></i> ก่อนหน้า</button>
-                    <button onclick="nextQuestion()" id="nextBtn" disabled class="btn-standard bg-orange-500 text-white px-8 shadow-md">ถัดไป <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i></button>
+                    <button onclick="prevQuestion()" id="prevBtn" class="text-slate-400 disabled:opacity-0 flex items-center gap-1 font-medium"><i data-lucide="chevron-left" class="w-4 h-4"></i> ก่อนหน้า</button>
+                    <button id="nextBtn" disabled onclick="nextQuestion()" class="btn-standard bg-orange-500 text-white px-8 shadow-md h-[54px] font-medium text-[14px]">ถัดไป <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i></button>
                 </div>
+            </div>
+        </div>
+
+        <div class="sticky bottom-0 z-[70] w-full">
+            <div class="color-bar-container">
+                <div class="flex-1 bg-green-600"></div><div class="flex-1 bg-red-500"></div><div class="flex-1 bg-cyan-500"></div><div class="flex-1 bg-yellow-500"></div>
             </div>
         </div>
     </div>
 
-    <!-- Lightbox Modal (Existing) -->
-    <div id="regModalBackdrop" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
+    <div id="regModalBackdrop" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
         <div class="bg-white w-full max-w-[450px] rounded-[12px] shadow-2xl overflow-hidden modal-enter relative" onclick="event.stopPropagation()">
-            <div class="bg-[#0056ff] px-8 py-5"><div class="flex justify-between items-center text-white"><h2 class="text-[16px] font-normal uppercase tracking-tight">ลงทะเบียน / เข้าสู่ระบบ</h2><button id="closeModalIconBtn" class="opacity-80 hover:opacity-100"><i data-lucide="x" class="w-5 h-5"></i></button></div></div>
+            <div class="bg-[#0056ff] px-8 py-5"><div class="flex justify-between items-center text-white font-normal uppercase tracking-tight"><span>ลงทะเบียน / เข้าสู่ระบบ</span><button id="closeModalIconBtn"><i data-lucide="x" class="w-5 h-5"></i></button></div></div>
             <div class="p-8">
-                <!-- Step 1 -->
                 <div id="stepEmployeeId" class="space-y-6">
                     <div class="space-y-2 text-center"><label class="text-[12px] font-normal text-slate-500 uppercase tracking-wider">ระบุรหัสพนักงาน 5 หลัก</label><input type="text" id="EmpID" maxlength="5" inputmode="numeric" placeholder="xxxxx" class="input-active w-full px-4 py-3.5 border-2 rounded-xl text-[18px] font-normal text-center shadow-sm"></div>
                     <div class="flex justify-center gap-3">
                         <button id="cancelBtn" class="btn-standard btn-lightbox btn-cancel-gray"><i data-lucide="ban" class="w-4 h-4"></i><span>ยกเลิก</span></button>
-                        <button id="submitIdBtn" disabled class="btn-standard btn-lightbox bg-blue-600 text-white transition-all"><span id="submitIdText">ถัดไป</span><i data-lucide="arrow-right" class="w-4 h-4"></i><div id="submitIdLoader" class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div></button>
+                        <button id="submitIdBtn" disabled class="btn-standard btn-lightbox bg-blue-600 text-white transition-all font-normal"><span id="submitIdText">ถัดไป</span><i data-lucide="arrow-right" class="w-4 h-4"></i><div id="submitIdLoader" class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div></button>
                     </div>
                 </div>
-                <!-- Step 2 -->
                 <div id="stepSetupProfile" class="hidden space-y-6">
                     <div class="bg-white p-4 rounded-xl space-y-2 border border-slate-200 text-[15px]">
                         <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-400 font-normal">ชื่อ-นามสกุล:</span><span id="dispName" class="font-normal text-blue-700 text-right"></span></div>
@@ -351,363 +372,267 @@
                         <button id="confirmRegBtn" disabled class="btn-standard btn-lightbox bg-green-600 text-white shadow-lg disabled:opacity-50"><i data-lucide="user-check" class="w-4 h-4"></i><span>สร้างบัญชีและเข้าใช้งาน</span></button>
                     </div>
                 </div>
-                <!-- Step 3 -->
                 <div id="stepEnterPinKeypad" class="hidden space-y-6">
                     <div class="text-center space-y-4">
-                        <p class="text-[14px] text-slate-600">ยืนยันรหัส PIN, <br><span id="loginUserName" class="text-lg font-normal text-blue-700"></span></p>
-                        <div class="flex justify-center gap-2">
-                            <div class="pin-input-box" id="pin-0"></div><div class="pin-input-box" id="pin-1"></div><div class="pin-input-box" id="pin-2"></div>
-                            <div class="pin-input-box" id="pin-3"></div><div class="pin-input-box" id="pin-4"></div><div class="pin-input-box" id="pin-5"></div>
-                        </div>
+                        <p class="text-[14px] text-slate-600 font-normal">ยืนยันรหัส PIN, <br><span id="loginUserName" class="text-lg font-normal text-blue-700"></span></p>
+                        <div class="flex justify-center gap-2"><div class="pin-input-box" id="pin-0"></div><div class="pin-input-box" id="pin-1"></div><div class="pin-input-box" id="pin-2"></div><div class="pin-input-box" id="pin-3"></div><div class="pin-input-box" id="pin-4"></div><div class="pin-input-box" id="pin-5"></div></div>
                     </div>
                     <div class="grid grid-cols-3 gap-3 max-w-[320px] mx-auto">
                         <button class="keypad-btn" onclick="pressKey('1')">1</button><button class="keypad-btn" onclick="pressKey('2')">2</button><button class="keypad-btn" onclick="pressKey('3')">3</button>
                         <button class="keypad-btn" onclick="pressKey('4')">4</button><button class="keypad-btn" onclick="pressKey('5')">5</button><button class="keypad-btn" onclick="pressKey('6')">6</button>
                         <button class="keypad-btn" onclick="pressKey('7')">7</button><button class="keypad-btn" onclick="pressKey('8')">8</button><button class="keypad-btn" onclick="pressKey('9')">9</button>
-                        <button class="keypad-btn text-slate-400" onclick="pressKey('del')"><i data-lucide="delete" class="w-5 h-5"></i></button>
-                        <button class="keypad-btn" onclick="pressKey('0')">0</button>
-                        <button class="keypad-btn text-red-500" onclick="pressKey('clear')">C</button>
+                        <button class="keypad-btn text-slate-400" onclick="pressKey('del')"><i data-lucide="delete" class="w-5 h-5"></i></button><button class="keypad-btn" onclick="pressKey('0')">0</button><button class="keypad-btn text-red-500" onclick="pressKey('clear')">C</button>
                     </div>
                     <div class="flex justify-center gap-3 pt-2">
-                        <button id="closeKeypadBtn" class="btn-standard btn-lightbox bg-slate-100 text-slate-600"><span>ปิดหน้าต่าง</span></button>
-                        <button id="savePinLoginBtn" class="btn-standard btn-lightbox bg-blue-600 text-white shadow-lg shadow-blue-200"><i data-lucide="save" class="w-4 h-4"></i><span>บันทึกข้อมูล</span></button>
+                        <button id="closeKeypadBtn" class="btn-standard btn-lightbox bg-slate-100 text-slate-600 font-normal"><span>ปิดหน้าต่าง</span></button>
+                        <button id="savePinLoginBtn" class="btn-standard btn-lightbox bg-blue-600 text-white shadow-lg shadow-blue-200 font-normal"><i data-lucide="save" class="w-4 h-4"></i><span>บันทึกข้อมูล</span></button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Module -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, updateDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAciknEYhZU7AwOdfYytC1t_AnW2Ee11us",
-            authDomain: "faifah-ttb.firebaseapp.com",
-            projectId: "faifah-ttb",
-            storageBucket: "faifah-ttb.appspot.com",
-            messagingSenderId: "842980876200",
-            appId: "1:842980876200:web:f33bfad2ccbf263075079d"
-        };
-
+        const firebaseConfig = { apiKey: "AIzaSyAciknEYhZU7AwOdfYytC1t_AnW2Ee11us", authDomain: "faifah-ttb.firebaseapp.com", projectId: "faifah-ttb", storageBucket: "faifah-ttb.appspot.com", messagingSenderId: "842980876200", appId: "1:842980876200:web:f33bfad2ccbf263075079d" };
         const COLLECTION_NAME = "DISC_Member";
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        let isAuthReady = false;
-        let currentMember = null;
-        let userIP = "";
-        let inputPinValue = "";
-
-        // Assessment State
-        let currentQIndex = 0;
-        let assessmentAnswers = []; // Array of {most: type, least: type}
+        let isAuthReady = false, currentMember = null, userIP = "", inputPinValue = "";
+        let currentQIndex = 0, assessmentAnswers = [];
 
         const discQuestions = [
-            { prompt: "เมื่อต้องทำงานร่วมกับผู้อื่น ฉันมักจะ...", choices: [ {text: "ตัดสินใจเร็วและมุ่งเป้า", type: "D"}, {text: "สร้างบรรยากาศและชวนคุย", type: "I"}, {text: "สนับสนุนและรับฟังทีม", type: "S"}, {text: "วิเคราะห์ข้อมูลและรายละเอียด", type: "C"} ] },
-            { prompt: "เวลาเจอสถานการณ์กดดัน ฉันมักจะ...", choices: [ {text: "ควบคุมสถานการณ์ให้เร็วที่สุด", type: "D"}, {text: "มองหาทางออกที่สนุกและตื่นเต้น", type: "I"}, {text: "อดทนและประนีประนอม", type: "S"}, {text: "ตรวจสอบข้อมูลให้รอบคอบ", type: "C"} ] },
-            { prompt: "ในการสื่อสารกับเพื่อนร่วมงาน ฉันมักจะ...", choices: [ {text: "พูดตรงไปตรงมาและเข้าประเด็น", type: "D"}, {text: "ชักจูงด้วยอารมณ์และความรู้สึก", type: "I"}, {text: "ใจเย็นและแสดงความเห็นอกเห็นใจ", type: "S"}, {text: "เน้นข้อเท็จจริงและหลักฐาน", type: "C"} ] },
-            { prompt: "เมื่อต้องตัดสินใจเรื่องสำคัญ ฉันมักจะ...", choices: [ {text: "ตัดสินใจทันทีโดยเน้นผลลัพธ์", type: "D"}, {text: "ปรึกษาหลายคนเพื่อสร้างความมั่นใจ", type: "I"}, {text: "รอให้ทุกคนเห็นพ้องต้องกันก่อน", type: "S"}, {text: "วิเคราะห์ข้อดีข้อเสียอย่างละเอียด", type: "C"} ] },
-            { prompt: "ความต้องการลึกๆ ของฉันคือ...", choices: [ {text: "การประสบความสำเร็จตามเป้าหมาย", type: "D"}, {text: "การเป็นที่ยอมรับและชื่นชม", type: "I"}, {text: "ความมั่นคงและความสัมพันธ์ที่ดี", type: "S"}, {text: "ความถูกต้องและมาตรฐานที่สูง", type: "C"} ] },
-            // ... (จำลองให้ครบ 20 ข้อด้วยหัวข้ออื่นๆ)
-            { prompt: "เวลาทำงานเป็นทีม บทบาทของฉันคือ...", choices: [ {text: "ผู้นำที่กล้าได้กล้าเสีย", type: "D"}, {text: "คนสร้างสีสันและแรงบันดาลใจ", type: "I"}, {text: "ผู้สนับสนุนที่ไว้วางใจได้", type: "S"}, {text: "ผู้ตรวจสอบความถูกต้องแม่นยำ", type: "C"} ] },
-            { prompt: "ฉันมักจะกังวลเรื่อง...", choices: [ {text: "การเสียการควบคุมหรือความล้มเหลว", type: "D"}, {text: "การถูกปฏิเสธหรือไม่เป็นที่สนใจ", type: "I"}, {text: "การเปลี่ยนแปลงที่กะทันหัน", type: "S"}, {text: "การทำงานที่ผิดพลาดไม่สมบูรณ์", type: "C"} ] },
-            { prompt: "คนอื่นมักจะมองว่าฉันเป็นคน...", choices: [ {text: "มั่นใจในตัวเองและพูดน้อยต่อยหนัก", type: "D"}, {text: "ร่าเริงและเข้ากับคนง่าย", type: "I"}, {text: "ใจดีและเป็นผู้รับฟังที่ดี", type: "S"}, {text: "มีระเบียบและคิดเป็นระบบ", type: "C"} ] },
-            { prompt: "ในการทำงาน ฉันให้ความสำคัญกับ...", choices: [ {text: "ความเร็วและประสิทธิภาพ", type: "D"}, {text: "ความสัมพันธ์และบรรยากาศ", type: "I"}, {text: "ความต่อเนื่องและความเสถียร", type: "S"}, {text: "คุณภาพและรายละเอียดเชิงลึก", type: "C"} ] },
-            { prompt: "เมื่อเกิดความขัดแย้ง ฉันมักจะ...", choices: [ {text: "เผชิญหน้าเพื่อหาข้อสรุปทันที", type: "D"}, {text: "พยายามพูดให้บรรยากาศดีขึ้น", type: "I"}, {text: "ยอมถอยเพื่อรักษาความสัมพันธ์", type: "S"}, {text: "ใช้เหตุผลและข้อมูลเข้าชี้แจง", type: "C"} ] },
-            { prompt: "ฉันชอบสภาพแวดล้อมที่...", choices: [ {text: "ท้าทายและมีอิสระในการทำงาน", type: "D"}, {text: "สนุกสนานและมีคนเยอะๆ", type: "I"}, {text: "สงบและมีความเป็นขั้นตอน", type: "S"}, {text: "ชัดเจนและมีความเป็นมืออาชีพ", type: "C"} ] },
-            { prompt: "เวลาสอนงานผู้อื่น ฉันมักจะ...", choices: [ {text: "บอกจุดสำคัญและเน้นผลลัพธ์", type: "D"}, {text: "ใช้การเล่าเรื่องเพื่อสร้างพลัง", type: "I"}, {text: "สอนอย่างค่อยเป็นค่อยไปและอดทน", type: "S"}, {text: "มีคู่มือและรายละเอียดครบถ้วน", type: "C"} ] },
-            { prompt: "เป้าหมายในชีวิตการทำงานของฉันคือ...", choices: [ {text: "อำนาจและความก้าวหน้า", type: "D"}, {text: "ความสุขและมิตรภาพ", type: "I"}, {text: "ความสงบและมั่นคง", type: "S"}, {text: "ความเป็นเลิศในสิ่งที่ทำ", type: "C"} ] },
-            { prompt: "เวลาพักผ่อน ฉันมักจะ...", choices: [ {text: "ทำกิจกรรมที่ท้าทายหรือแข่งขัน", type: "D"}, {text: "ออกไปพบปะเพื่อนฝูง", type: "I"}, {text: "อยู่บ้านกับครอบครัวเงียบๆ", type: "S"}, {text: "ทำงานอดิเรกที่ต้องใช้สมาธิสูง", type: "C"} ] },
-            { prompt: "เมื่อได้รับคำชม ฉันจะรู้สึกดีถ้าชมเรื่อง...", choices: [ {text: "ความสำเร็จของงาน", type: "D"}, {text: "บุคลิกภาพหรือความสามารถ", type: "I"}, {text: "ความมีน้ำใจหรือการช่วยเหลือ", type: "S"}, {text: "ความละเอียดแม่นยำของผลงาน", type: "C"} ] },
-            { prompt: "ฉันมักจะตัดสินคนอื่นจาก...", choices: [ {text: "ผลงานและความสำเร็จ", type: "D"}, {text: "ความสามารถในการพูดคุย", type: "I"}, {text: "ความจริงใจและการวางตัว", type: "S"}, {text: "ความรอบรู้และความเป็นระบบ", type: "C"} ] },
-            { prompt: "ในที่ประชุม ฉันมักจะเป็นคน...", choices: [ {text: "เสนอทางเลือกและเร่งหาข้อสรุป", type: "D"}, {text: "พูดจูงใจและสร้างแรงกระตุ้น", type: "I"}, {text: "คอยสนับสนุนและประสานงาน", type: "S"}, {text: "คอยซักถามรายละเอียดและข้อโต้แย้ง", type: "C"} ] },
-            { prompt: "นิสัยเสียของฉันที่คนอื่นบ่นคือ...", choices: [ {text: "ใจร้อนและเผด็จการเกินไป", type: "D"}, {text: "พูดมากและไม่ค่อยฟัง", type: "I"}, {text: "ตัดสินใจช้าและขี้เกรงใจ", type: "S"}, {text: "จู้จี้และเจ้าระเบียบเกินไป", type: "C"} ] },
-            { prompt: "สิ่งที่ทำให้ฉันมีพลังในการทำงานคือ...", choices: [ {text: "ชัยชนะและการแข่งขัน", type: "D"}, {text: "คำชมและการเป็นที่ยอมรับ", type: "I"}, {text: "มิตรภาพและความสามัคคี", type: "S"}, {text: "การได้ทำสิ่งที่ถูกต้องสมบูรณ์", type: "C"} ] },
-            { prompt: "โดยรวมแล้ว ฉันคิดว่าฉันเป็นคน...", choices: [ {text: "กล้าตัดสินใจและมุ่งเป้า", type: "D"}, {text: "กระตือรือร้นและช่างเจรจา", type: "I"}, {text: "ใจเย็นและมีน้ำใจ", type: "S"}, {text: "ละเอียดรอบคอบและมีเหตุผล", type: "C"} ] }
+            { id: 1, prompt: "ในการประชุม ถ้าเลือกได้ คุณชอบที่จะตรงไป ...", choices: [{text: "นั่งที่หัวโต๊ะ", type: "D"}, {text: "นั่งตรงไหนที่ก็ได้ที่ทุกคนจะเห็นคุณได้ชัดเจน", type: "I"}, {text: "นั่งข้างๆ ตรงที่มีคนรู้จักนั่งอยู่แล้ว", type: "S"}, {text: "นั่งข้างๆ คนที่รู้จัก โดยเว้นเก้าอี้ว่างระหว่างเขากับคุณไว้ 1 ตัว", type: "C"}] },
+            { id: 2, prompt: "ในการสนทนา สายตาของคุณมักอยู่ที่ ...", choices: [{text: "คู่สนทนาตลอดการสนทนา", type: "D"}, {text: "คู่สนทนาเป็นส่วนใหญ่", type: "I"}, {text: "พื้นห้องสลับกับที่คู่สนทนา", type: "S"}, {text: "ความเคลื่อนไหวรอบๆ ห้องมากกว่าคู่สนทนา", type: "C"}] },
+            { id: 3, prompt: "ในระหว่างการสนทนากับคนรู้จัก คุณ ...", choices: [{text: "ไม่ชอบถ้าอีกฝ่ายเข้ามาประชิดคุณมากเกินไป", type: "D"}, {text: "ชอบคุยเคียงบ่าเคียงไหล่", type: "I"}, {text: "เฉยๆ เห็นเป็นเรื่องธรรมดา ถ้าอีกฝ่ายเข้ามาใกล้ๆ", type: "S"}, {text: "รู้สึกอึดอัดทันทีที่อีกฝ่ายเข้ามา", type: "C"}] },
+            { id: 4, prompt: "ลักษณะการเดินของคุณ …", choices: [{text: "เดินเร็ว", type: "D"}, {text: "กระตือรือร้น มีชีวิต ชีวา", type: "I"}, {text: "ช้าๆ และตามสบาย", type: "S"}, {text: "มีจังหวะสม่ำเสมอ", type: "C"}] },
+            { id: 5, prompt: "ในขณะที่ฟังคนอื่นพูด คุณ ...", choices: [{text: "ต้องการหาประเด็นสำคัญให้เร็วที่สุด", type: "D"}, {text: "หูผึ่งกับเรื่องราวดีๆ มากกว่าอย่างอื่น", type: "I"}, {text: "มักคิดไปด้วยว่าผู้ที่พูดเขามีความรู้สึกอย่างไรในขณะนั้น", type: "S"}, {text: "ฟังหาข้อมูลสนับสนุนประเด็นที่เขาพูด", type: "C"}] },
+            { id: 6, prompt: "ในการพูดต่อหน้าสาธารณชนคุณเน้นที่จะ ...", choices: [{text: "พูดเสียงดัง ฟังชัดอย่างมั่นใจ", type: "D"}, {text: "พูดอย่างมีท่วงทำนอง ไม่ลืมที่จะใช้เสียงสูงและต่ำสลับกันไป", type: "I"}, {text: "พูดเสียงเบา พูดไปเรื่อยๆ", type: "S"}, {text: "พูดให้ชัดถ้อยชัดคำ ให้ชัดเจนแต่ไม่ดัง", type: "C"}] },
+            { id: 8, prompt: "เมื่อมีผู้มาเยี่ยมเยียนที่ห้องทำงานของคุณ คุณ ...", choices: [{text: "บอกให้เขานั่งลงได้", type: "D"}, {text: "เลื่อนเก้าอี้ออกมาและเชิญให้เขานั่ง", type: "I"}, {text: "ถามเขาว่าอยากจะนั่งลงก่อนไหม", type: "S"}, {text: "ให้เขาตัดสินใจว่าจะนั่งหรือจะยืน หรือว่าจะนั่งตรงไหน", type: "C"}] },
+            { id: 9, prompt: "เมื่อคุณกำลังร่วมวงในการร่วมกันแก้ไขปัญหา คุณ ...", choices: [{text: "เป็นผู้นำการสนทนา", type: "D"}, {text: "ใส่ใจกับภาพรวมมากกว่าลงไปในรายละเอียด", type: "I"}, {text: "เป็นผู้รับฟังที่ดี", type: "S"}, {text: "ใส่ใจกับรายละเอียดและความเป็นจริง", type: "C"}] },
+            { id: 10, prompt: "เมื่อนัดผู้ร่วมงานมาปรึกษาหารือกัน คุณมักเริ่มการสนทนาโดย ...", choices: [{text: "จะคุยกันในประเด็นอะไร ก็ว่าไปเลย", type: "D"}, {text: "เล่าเรื่องโน้น เรื่องนี้ซะหน่อยก่อน", type: "I"}, {text: "ถามสารทุกข์สุกดิบของอีกฝ่ายซะก่อน", type: "S"}, {text: "กล่าวถึงจุดประสงค์ของเรื่องที่จะคุยก่อน", type: "C"}] },
+            { id: 11, prompt: "ในการตัดสินใจ คุณตัดสินใจจาก ...", choices: [{text: "สิ่งที่คุณเชื่อและการสรุปของคุณ", type: "D"}, {text: "การที่ทุกคนเห็นด้วยกับการตัดสินใจนั้นๆ", type: "I"}, {text: "การที่จะมีผู้ได้รับผลกระทบมากเท่าไหร่ แค่ไหน", type: "S"}, {text: "เหตุผล และจากข้อมูลที่พิสูจ็นได้", type: "C"}] },
+            { id: 12, prompt: "เวลาฟังการนำเสนอ คุณ ...", choices: [{text: "ชอบให้รวบรัด", type: "D"}, {text: "ชอบให้เฮฮา", type: "I"}, {text: "มักถามในใจว่า คนพูดเขารู้สึกยังไงอยู่นะ", type: "S"}, {text: "ประเมินถึงความเป็นไปได้/ เป็นไปไม่ได้ในเนื้อหาที่นำเสนอ", type: "C"}] },
+            { id: 13, prompt: "เมื่อคุณพยายามที่จะไขว่คว้าอะไรมาสักอย่าง คุณ ...", choices: [{text: "รู้ว่าคุณทำได้ และถึงมีคู่แข่ง คุณก็ไม่หวั่น", type: "D"}, {text: "หว่านล้อมจูงใจเก่ง", type: "I"}, {text: "พยายามทำความเข้าใจก่อนว่าอีกฝ่ายต้องการอะไร", type: "S"}, {text: "ใช้ข้อมูลที่เพียบพร้อมของคุณให้เป็นประโยชน์", type: "C"}] },
+            { id: 14, prompt: "ผู้อื่นมักจะ ...", choices: [{text: "รู้จักความเป็นคุณในขอบเขตที่คุณต้องการเท่านั้น", type: "D"}, {text: "มองว่าคุณเป็นคนเปิดเผย", type: "I"}, {text: "มองว่าคุณเป็นที่ปรึกษาที่ดีทั้งเรื่องงานและส่วนตัว", type: "S"}, {text: "มองว่าคุณเป็นคนลึกลับ เก็บตัว", type: "C"}] },
+            { id: 15, prompt: "ในการประชุมกลุ่ม คุณเห็นว่าเป็นสิ่งสำคัญที่ ...", choices: [{text: "คุณรับหน้าที่ดำเนินรายการเอง", type: "D"}, {text: "คุณทำให้ทุกคนมีส่วนร่วม", type: "I"}, {text: "คุณรับฟังผู้อื่น และผู้อื่นรับฟังคุณ", type: "S"}, {text: "คุณประเมินข้อดี ข้อเสียของแต่ละความคิดอย่างรอบคอบ", type: "C"}] },
+            { id: 16, prompt: "คุณคิดว่าการเปิดเผยความรู้สึกส่วนตัวให้ผู้อื่นรับทราบนั้น ...", choices: [{text: "ทำให้การทำงานช้าลง", type: "D"}, {text: "น่าสนใจดี", type: "I"}, {text: "ช่วยให้ปรับตัวเข้าหากันง่ายขึ้น", type: "S"}, {text: "เป็นเรื่องที่อึดอัดจะตายไป", type: "C"}] },
+            { id: 17, prompt: "ตอนที่คุณเล่าเรื่องอะไรสักอย่าง คุณ ...", choices: [{text: "ตรงไปที่ประเด็นสำคัญเลย", type: "D"}, {text: "ทำให้ผู้ฟังเคลิ้ม ไม่ลุกไปไหนได้ตั้งแต่ต้นจนจบ", type: "I"}, {text: "พูดระบุถึงสถานการณ์ของตัวประกอบในเรื่องได้ดี", type: "S"}, {text: "พูดอย่างเป็นระบบ มีข้อมูลสนับสนุน", type: "C"}] },
+            { id: 18, prompt: "เมื่อคุณนำเสนอสิ่งที่สำคัญมาก คุณ ...", choices: [{text: "ดูจริงจัง น่าเกรงขาม", type: "D"}, {text: "เป็นนักแสดงที่สร้างความบันเทิงได้ดี", type: "I"}, {text: "อ่อนโยน คำนึงถึงผู้ฟัง", type: "S"}, {text: "เรียบเรียงข้อมูลอย่างดี มีขั้นตอนชัดเจน", type: "C"}] },
+            { id: 19, prompt: "เมื่อมีใครสักคนมาร้องไห้อยู่ตรงหน้าคุณ คุณ ...", choices: [{text: "บอกให้เขาหยุดร้องไห้จะดีกว่า", type: "D"}, {text: "พยายามพูดให้เขาอารมณ์ดีขึ้น", type: "I"}, {text: "ให้คำปรึกษา แสดงความเข้าใจ", type: "S"}, {text: "ลำบากใจ และอยากปลีกตัวออกไป", type: "C"}] },
+            { id: 20, prompt: "การคุยโทรศัพท์ของคุณ …", choices: [{text: "มุ่งไปที่ประเด็นสำคัญ", type: "D"}, {text: "สร้างความสดใส มีชีวิตชีวา", type: "I"}, {text: "มักยืดเยื้อ อ้อมค้อม", type: "S"}, {text: "สั้นที่สุดเท่าที่จะเป็นไปได้", type: "C"}] }
         ];
 
-        async function fetchIP() { try { const res = await fetch('https://api.ipify.org?format=json'); const data = await res.json(); userIP = data.ip; } catch (e) { userIP = "unknown"; } }
+        async function fetchIP() { try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); userIP = d.ip; } catch { userIP = "unknown"; } }
+        const showMessage = (t, ty = 'success') => { const m = document.getElementById('messageBox'); if (!m) return; m.textContent = t; m.className = `fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl shadow-lg font-normal transition-all duration-300 ${ty === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`; m.classList.remove('hidden', 'opacity-0'); setTimeout(() => { m.classList.add('opacity-0'); setTimeout(() => m.classList.add('hidden'), 300); }, 3000); };
 
-        const showMessage = (text, type = 'success') => {
-            const msgBox = document.getElementById('messageBox');
-            if (!msgBox) return;
-            msgBox.textContent = text;
-            msgBox.className = `fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl shadow-lg font-normal transition-all duration-300 ${type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`;
-            msgBox.classList.remove('hidden', 'opacity-0');
-            setTimeout(() => { msgBox.classList.add('opacity-0'); setTimeout(() => msgBox.classList.add('hidden'), 300); }, 3000);
+        window.switchTab = (n) => { 
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden')); 
+            const tar = document.getElementById(`tab-${n}`); 
+            if (tar) tar.classList.remove('hidden'); 
+            document.querySelectorAll('.bottom-nav-item').forEach(b => { 
+                b.classList.remove('active'); 
+                const st = b.querySelector('span').innerText.toLowerCase(); 
+                if ((n === 'home' && st === 'home') || (n === 'about' && st.includes('รู้จัก')) || (n === 'user' && st.includes('ของคุณ')) || (n === 'team' && st.includes('ของทีม'))) b.classList.add('active'); 
+            }); 
         };
 
-        window.switchTab = (tabName) => {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
-            const targetTab = document.getElementById(`tab-${tabName}`);
-            if (targetTab) targetTab.classList.remove('hidden');
-            document.querySelectorAll('.bottom-nav-item').forEach(btn => {
-                btn.classList.remove('active');
-                const spanText = btn.querySelector('span').innerText.toLowerCase();
-                if ((tabName === 'home' && spanText === 'home') || (tabName === 'about' && spanText.includes('รู้จัก')) || (tabName === 'user' && spanText.includes('ของคุณ')) || (tabName === 'team' && spanText.includes('ของทีม'))) btn.classList.add('active');
-            });
-        };
-
-        const showMainPage = (user) => {
-            document.getElementById('landingPage').classList.add('hidden');
-            document.getElementById('assessmentPage').classList.add('hidden');
-            document.getElementById('mainDiscPage').classList.remove('hidden');
+        const showMainPage = (u) => {
+            const landing = document.getElementById('landingPage');
+            const main = document.getElementById('mainDiscPage');
+            const assess = document.getElementById('assessmentPage');
+            if (landing) landing.classList.add('hidden');
+            if (assess) assess.classList.add('hidden');
+            if (main) main.classList.remove('hidden');
+            
             document.getElementById('topColorBar').classList.add('hidden');
             document.getElementById('bottomColorBar').classList.add('hidden');
-            document.getElementById('welcomeUser').textContent = `สวัสดีครับ, ${user.FullName || 'พนักงาน'}`;
-            document.getElementById('userSub').textContent = `${user.Group || '-'} | ${user.SubGroup || '-'}`;
-            document.getElementById('profileName').textContent = user.FullName || '-';
-            document.getElementById('profileDetail').textContent = `${user.Group || '-'} | ${user.SubGroup || '-'}`;
-
-            const actionBtn = document.getElementById('dynamicActionBtn');
-            const actionText = document.getElementById('dynamicActionText');
-            const actionIcon = document.getElementById('dynamicActionIcon');
-            const noResDiv = document.getElementById('noDiscResult');
-            const hasResDiv = document.getElementById('hasDiscResult');
-            const resVal = document.getElementById('discResultValue');
-
-            if (user.DISC) {
-                actionText.innerHTML = "DISC<br>ของคุณ";
-                actionBtn.className = "btn-standard bg-[#f97316] hover:bg-orange-600 text-white shadow-lg h-[64px]";
-                actionIcon.setAttribute('data-lucide', 'user-check');
-                actionBtn.onclick = () => switchTab('user');
-                if(noResDiv) noResDiv.classList.add('hidden');
-                if(hasResDiv) hasResDiv.classList.remove('hidden');
-                if(resVal) resVal.textContent = user.DISC;
+            
+            document.getElementById('welcomeUser').textContent = `สวัสดีครับ, ${u.FullName || 'พนักงาน'}`;
+            document.getElementById('userSub').textContent = `${u.Group || '-'} | ${u.SubGroup || '-'}`;
+            document.getElementById('profileName').textContent = u.FullName || '-';
+            document.getElementById('profileDetail').textContent = `${u.Group || '-'} | ${u.SubGroup || '-'}`;
+            
+            const btn = document.getElementById('dynamicActionBtn'), txt = document.getElementById('dynamicActionText'), icon = document.getElementById('dynamicActionIcon'), noRes = document.getElementById('noDiscResult'), hasRes = document.getElementById('hasDiscResult');
+            const upVal = document.getElementById('discUpValue'), downVal = document.getElementById('discDownValue');
+            
+            if (u.DISCup) {
+                txt.innerHTML = "DISC<br>ของคุณ"; btn.className = "btn-standard bg-[#f97316] hover:bg-orange-600 text-white shadow-lg h-[64px]"; icon.setAttribute('data-lucide', 'user-check'); btn.onclick = () => switchTab('user'); 
+                if(noRes) noRes.classList.add('hidden'); 
+                if(hasRes) hasRes.classList.remove('hidden'); 
+                if(upVal) upVal.textContent = u.DISCup;
+                if(downVal) downVal.textContent = u.DISCdown || '-';
             } else {
-                actionText.innerHTML = "เริ่มทำ<br>แบบทดสอบ";
-                actionBtn.className = "btn-standard bg-[#f97316] hover:bg-orange-600 text-white shadow-lg h-[64px]";
-                actionIcon.setAttribute('data-lucide', 'clipboard-list');
-                actionBtn.onclick = startAssessmentFlow;
-                if(noResDiv) noResDiv.classList.remove('hidden');
-                if(hasResDiv) hasResDiv.classList.add('hidden');
+                txt.innerHTML = "เริ่มทำ<br>แบบทดสอบ"; btn.className = "btn-standard bg-[#f97316] hover:bg-orange-600 text-white shadow-lg h-[64px]"; icon.setAttribute('data-lucide', 'clipboard-list'); btn.onclick = startAssessmentFlow; 
+                if(noRes) noRes.classList.remove('hidden'); 
+                if(hasRes) hasRes.classList.add('hidden');
             }
-            closeRegModal();
-            switchTab('home'); 
-            lucide.createIcons();
+            closeRegModal(); lucide.createIcons();
         };
 
-        // --- Assessment Logic ---
-        window.startAssessmentFlow = () => {
-            document.getElementById('mainDiscPage').classList.add('hidden');
-            document.getElementById('assessmentPage').classList.remove('hidden');
-            document.getElementById('assessmentIntro').classList.remove('hidden');
-            document.getElementById('assessmentQuestion').classList.add('hidden');
-            lucide.createIcons();
+        window.startAssessmentFlow = () => { 
+            if (currentMember.DISCup) {
+                showMessage("คุณทำแบบทดสอบไปแล้ว ไม่สามารถทำซ้ำได้", "error");
+                return;
+            }
+            document.getElementById('mainDiscPage').classList.add('hidden'); 
+            document.getElementById('assessmentPage').classList.remove('hidden'); 
+            document.getElementById('assessmentIntro').classList.remove('hidden'); 
+            document.getElementById('assessmentQuestion').classList.add('hidden'); 
+            lucide.createIcons(); 
         };
-
+        
         window.exitAssessment = () => showMainPage(currentMember);
-
-        window.beginActualTest = () => {
-            currentQIndex = 0;
-            assessmentAnswers = new Array(discQuestions.length).fill(null).map(() => ({most: null, least: null}));
-            document.getElementById('assessmentIntro').classList.add('hidden');
-            document.getElementById('assessmentQuestion').classList.remove('hidden');
-            renderQuestion();
+        
+        window.beginActualTest = () => { 
+            currentQIndex = 0; 
+            assessmentAnswers = new Array(discQuestions.length).fill(null).map(() => ({most: null, least: null})); 
+            document.getElementById('assessmentIntro').classList.add('hidden'); 
+            document.getElementById('assessmentQuestion').classList.remove('hidden'); 
+            renderQuestion(); 
         };
 
         const renderQuestion = () => {
-            const q = discQuestions[currentQIndex];
-            const answer = assessmentAnswers[currentQIndex];
-            
+            const q = discQuestions[currentQIndex], ans = assessmentAnswers[currentQIndex];
             document.getElementById('qNumber').textContent = currentQIndex + 1;
             document.getElementById('qPrompt').textContent = q.prompt;
             document.getElementById('assessmentProgress').style.width = `${((currentQIndex) / discQuestions.length) * 100}%`;
+            
+            const con = document.getElementById('qChoices'); 
+            con.innerHTML = '';
 
-            const container = document.getElementById('qChoices');
-            container.innerHTML = '';
+            const isAnyMostSelected = !!ans.most;
+            const isAnyLeastSelected = !!ans.least;
 
-            q.choices.forEach((choice, idx) => {
+            q.choices.forEach((c, i) => {
+                const isThisMost = ans.most === c.type;
+                const isThisLeast = ans.least === c.type;
+
+                // Card Color logic
+                let cardStyle = "bg-white text-slate-700 border-slate-100";
+                if (isThisMost) cardStyle = "bg-green-600 text-white border-green-600";
+                else if (isThisLeast) cardStyle = "bg-red-500 text-white border-red-500";
+
+                // Most Button Color and State
+                let mostBtnStyle = "bg-green-500 text-white hover:bg-green-600";
+                if (isThisMost) mostBtnStyle = "bg-green-900 text-white border-green-800 scale-[1.05]";
+                else if (isAnyMostSelected) mostBtnStyle = "bg-green-200 text-green-800 opacity-40";
+                else if (isThisLeast) mostBtnStyle = "bg-white/30 text-white/70";
+
+                // Least Button Color and State
+                let leastBtnStyle = "bg-red-500 text-white hover:bg-red-600";
+                if (isThisLeast) leastBtnStyle = "bg-red-900 text-white border-red-800 scale-[1.05]";
+                else if (isAnyLeastSelected) leastBtnStyle = "bg-red-200 text-red-800 opacity-40";
+                else if (isThisMost) leastBtnStyle = "bg-white/30 text-white/70";
+
                 const card = document.createElement('div');
-                card.className = `choice-card p-4 rounded-xl flex justify-between items-center ${answer.most === choice.type ? 'most-selected' : (answer.least === choice.type ? 'least-selected' : '')}`;
+                card.className = `choice-card p-4 rounded-xl flex justify-between items-center transition-all duration-300 ${cardStyle}`;
                 
-                const isMost = answer.most === choice.type;
-                const isLeast = answer.least === choice.type;
-
                 card.innerHTML = `
-                    <span class="text-sm font-normal text-slate-700">${choice.text}</span>
-                    <div class="flex gap-2">
-                        <button onclick="pickChoice(${idx}, 'most')" class="btn-standard h-9 px-4 rounded-lg text-xs btn-most ${isMost ? 'faded' : ''}">Most</button>
-                        <button onclick="pickChoice(${idx}, 'least')" class="btn-standard h-9 px-4 rounded-lg text-xs btn-least ${isLeast ? 'faded' : ''}">Least</button>
+                    <span class="text-sm font-normal flex-1 pr-2">${c.text}</span>
+                    <div class="flex gap-2 shrink-0">
+                        <button onclick="pickChoice(${i}, 'most')" class="btn-standard h-9 px-3 rounded-lg text-[11px] border flex items-center gap-1 transition-all ${mostBtnStyle}">
+                            <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> มากสุด
+                        </button>
+                        <button onclick="pickChoice(${i}, 'least')" class="btn-standard h-9 px-3 rounded-lg text-[11px] border flex items-center gap-1 transition-all ${leastBtnStyle}">
+                            <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> น้อยสุด
+                        </button>
                     </div>
                 `;
-                container.appendChild(card);
+                con.appendChild(card);
             });
 
             document.getElementById('prevBtn').disabled = currentQIndex === 0;
-            document.getElementById('nextBtn').disabled = !(answer.most && answer.least);
-            document.getElementById('nextBtn').innerHTML = currentQIndex === discQuestions.length - 1 ? 'ดูผลการทดสอบ' : 'ถัดไป <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>';
+            const next = document.getElementById('nextBtn'); 
+            next.disabled = !(ans.most && ans.least);
+            next.innerHTML = currentQIndex === discQuestions.length - 1 ? 'ดูผลการทดสอบ' : 'ถัดไป <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>';
             lucide.createIcons();
         };
 
-        window.pickChoice = (choiceIdx, mode) => {
-            const q = discQuestions[currentQIndex];
-            const type = q.choices[choiceIdx].type;
-            const answer = assessmentAnswers[currentQIndex];
-
-            if (mode === 'most') {
-                if (answer.least === type) answer.least = null;
-                answer.most = type;
-            } else {
-                if (answer.most === type) answer.most = null;
-                answer.least = type;
-            }
-            renderQuestion();
+        window.pickChoice = (idx, mode) => { 
+            const q = discQuestions[currentQIndex], type = q.choices[idx].type, ans = assessmentAnswers[currentQIndex]; 
+            if (mode === 'most') { 
+                if (ans.least === type) ans.least = null; 
+                ans.most = type; 
+            } else { 
+                if (ans.most === type) ans.most = null; 
+                ans.least = type; 
+            } 
+            renderQuestion(); 
         };
 
         window.prevQuestion = () => { if (currentQIndex > 0) { currentQIndex--; renderQuestion(); } };
-
-        window.nextQuestion = async () => {
-            if (currentQIndex < discQuestions.length - 1) {
-                currentQIndex++;
-                renderQuestion();
-            } else {
-                await calculateAndSaveResult();
-            }
-        };
+        window.nextQuestion = async () => { if (currentQIndex < discQuestions.length - 1) { currentQIndex++; renderQuestion(); } else await calculateAndSaveResult(); };
 
         const calculateAndSaveResult = async () => {
             document.getElementById('globalLoader').classList.remove('hidden');
-            
-            // Calculate Scores
-            const counts = { D: 0, I: 0, S: 0, C: 0 };
-            assessmentAnswers.forEach(ans => {
-                if (ans.most) counts[ans.most] += 2; // Weight most
-                if (ans.least) counts[ans.least] -= 1; // Weight least
+            const countsMost = { D: 0, I: 0, S: 0, C: 0 };
+            const countsLeast = { D: 0, I: 0, S: 0, C: 0 };
+            assessmentAnswers.forEach(ans => { 
+                if (ans.most) countsMost[ans.most]++; 
+                if (ans.least) countsLeast[ans.least]++; 
             });
-
-            // Determine primary type
-            const finalType = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
             
+            const finalUp = Object.keys(countsMost).reduce((a, b) => countsMost[a] >= countsMost[b] ? a : b);
+            const finalDown = Object.keys(countsLeast).reduce((a, b) => countsLeast[a] >= countsLeast[b] ? a : b);
+
             try {
                 const docRef = doc(db, COLLECTION_NAME, currentMember.docId);
-                await updateDoc(docRef, { DISC: finalType, updatedAt: serverTimestamp() });
-                currentMember.DISC = finalType;
-                showMessage("บันทึกผลการทดสอบเรียบร้อยแล้ว");
-                showMainPage(currentMember);
-                switchTab('user');
-            } catch (e) {
-                showMessage("เกิดข้อผิดพลาดในการบันทึกผล", "error");
-            } finally {
-                document.getElementById('globalLoader').classList.add('hidden');
-            }
+                await updateDoc(docRef, { DISCup: finalUp, DISCdown: finalDown, updatedAt: serverTimestamp() });
+                currentMember.DISCup = finalUp; currentMember.DISCdown = finalDown;
+                showMessage("บันทึกผลสำเร็จ"); showMainPage(currentMember); switchTab('user');
+            } catch { showMessage("บันทึกผลผิดพลาด", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
         };
 
-        // --- Core Authentication and Setup ---
-        const closeRegModal = () => {
-            const backdrop = document.getElementById('regModalBackdrop');
-            if (backdrop) backdrop.classList.add('hidden');
-            inputPinValue = "";
-            updatePinDisplay();
-        };
-
-        const updatePinDisplay = () => {
-            for(let i=0; i<6; i++) {
-                const box = document.getElementById(`pin-${i}`);
-                if (box) {
-                    if (i < inputPinValue.length) { box.textContent = "•"; box.classList.add('active'); }
-                    else { box.textContent = ""; box.classList.remove('active'); }
-                }
-            }
-        };
-
-        window.pressKey = (key) => {
-            if (key === 'del') inputPinValue = inputPinValue.slice(0, -1);
-            else if (key === 'clear') inputPinValue = "";
-            else if (inputPinValue.length < 6) inputPinValue += key;
-            updatePinDisplay();
-        };
+        const closeRegModal = () => { const b = document.getElementById('regModalBackdrop'); if (b) b.classList.add('hidden'); inputPinValue = ""; updatePinDisplay(); };
+        const updatePinDisplay = () => { for(let i=0; i<6; i++) { const box = document.getElementById(`pin-${i}`); if (box) { if (i < inputPinValue.length) { box.textContent = "•"; box.classList.add('active'); } else { box.textContent = ""; box.classList.remove('active'); } } } };
+        window.pressKey = (k) => { if (k === 'del') inputPinValue = inputPinValue.slice(0, -1); else if (k === 'clear') inputPinValue = ""; else if (inputPinValue.length < 6) inputPinValue += k; updatePinDisplay(); };
 
         const handleIdSubmission = async () => {
-            const empIdInputVal = document.getElementById('EmpID').value.trim();
-            if (empIdInputVal.length !== 5) return;
-            const btn = document.getElementById('submitIdBtn');
-            const loader = document.getElementById('submitIdLoader');
-            if (btn) btn.disabled = true;
-            if (loader) loader.classList.remove('hidden');
+            const val = document.getElementById('EmpID').value.trim(); if (val.length !== 5) return;
+            const btn = document.getElementById('submitIdBtn'), load = document.getElementById('submitIdLoader'); btn.disabled = true; load.classList.remove('hidden');
             try {
                 if (!auth.currentUser) await signInAnonymously(auth);
-                const mSnap = await getDocs(collection(db, COLLECTION_NAME));
-                currentMember = null;
-                mSnap.forEach(d => { if (String(d.data().EmpID).trim() === empIdInputVal) currentMember = { docId: d.id, ...d.data() }; });
-                if (!currentMember) { showMessage("ไม่พบรหัสพนักงานในฐานข้อมูล", "error"); if (btn) btn.disabled = false; return; }
+                const snap = await getDocs(collection(db, COLLECTION_NAME)); currentMember = null;
+                snap.forEach(d => { if (String(d.data().EmpID).trim() === val) currentMember = { docId: d.id, ...d.data() }; });
+                if (!currentMember) { showMessage("ไม่พบรหัสพนักงาน", "error"); btn.disabled = false; return; }
                 document.getElementById('stepEmployeeId').classList.add('hidden');
                 if (currentMember.pin) {
                     if (currentMember.IPAddress === userIP) {
-                        const docRef = doc(db, COLLECTION_NAME, currentMember.docId);
-                        const newTimes = (currentMember.Times || 0) + 1;
-                        await updateDoc(docRef, { Times: newTimes, lastLogin: serverTimestamp() });
-                        showMainPage({ ...currentMember, Times: newTimes });
-                    } else {
-                        document.getElementById('stepEnterPinKeypad').classList.remove('hidden');
-                        document.getElementById('loginUserName').textContent = currentMember.FullName;
-                        lucide.createIcons();
-                    }
+                        const dr = doc(db, COLLECTION_NAME, currentMember.docId); const t = (currentMember.Times || 0) + 1;
+                        await updateDoc(dr, { Times: t, lastLogin: serverTimestamp() }); showMainPage({ ...currentMember, Times: t });
+                    } else { document.getElementById('stepEnterPinKeypad').classList.remove('hidden'); document.getElementById('loginUserName').textContent = currentMember.FullName; lucide.createIcons(); }
                 } else {
                     document.getElementById('stepSetupProfile').classList.remove('hidden');
-                    document.getElementById('dispName').textContent = currentMember.FullName;
-                    document.getElementById('dispGroup').textContent = currentMember.Group;
-                    document.getElementById('dispSubGroup').textContent = currentMember.SubGroup || '-';
+                    document.getElementById('dispName').textContent = currentMember.FullName; document.getElementById('dispGroup').textContent = currentMember.Group; document.getElementById('dispSubGroup').textContent = currentMember.SubGroup || '-';
                 }
-            } catch (err) { showMessage("ฐานข้อมูลขัดข้อง", "error"); } finally { if (btn) btn.disabled = false; if (loader) loader.classList.add('hidden'); }
+            } catch { showMessage("ขัดข้อง", "error"); } finally { btn.disabled = false; load.classList.add('hidden'); }
         };
 
-        const validateRegistration = () => {
-            const p1 = document.getElementById('setPin').value;
-            const p2 = document.getElementById('confirmPin').value;
-            const regBtn = document.getElementById('confirmRegBtn');
-            if (regBtn) regBtn.disabled = !(p1.length === 6 && p1 === p2);
-        };
-
-        const handleRegistration = async () => {
-            const pin = document.getElementById('setPin').value;
-            const btn = document.getElementById('confirmRegBtn');
-            if (btn) btn.disabled = true;
-            try {
-                const docRef = doc(db, COLLECTION_NAME, currentMember.docId);
-                const updateData = { pin: String(pin), Times: 1, ActivatedAt: serverTimestamp(), lastLogin: serverTimestamp(), IPAddress: userIP };
-                await updateDoc(docRef, updateData);
-                showMainPage({ ...currentMember, ...updateData });
-            } catch (e) { showMessage("บันทึกข้อมูลล้มเหลว", "error"); if (btn) btn.disabled = false; }
-        };
-
-        const handlePinVerification = async () => {
-            if (inputPinValue.length !== 6) return;
-            if (String(inputPinValue) === String(currentMember.pin)) {
-                const btn = document.getElementById('savePinLoginBtn');
-                if (btn) btn.disabled = true;
-                try {
-                    const docRef = doc(db, COLLECTION_NAME, currentMember.docId);
-                    const newTimes = (currentMember.Times || 0) + 1;
-                    await updateDoc(docRef, { Times: newTimes, lastLogin: serverTimestamp() });
-                    showMainPage({ ...currentMember, Times: newTimes });
-                } catch (e) { showMainPage(currentMember); }
-            } else { showMessage("รหัส PIN ไม่ถูกต้อง", "error"); inputPinValue = ""; updatePinDisplay(); }
-        };
-
-        onAuthStateChanged(auth, (user) => { if (user) { isAuthReady = true; document.getElementById('globalLoader').classList.add('hidden'); document.getElementById('landingPage').classList.remove('hidden'); } });
-
+        onAuthStateChanged(auth, (u) => { if (u) { isAuthReady = true; document.getElementById('globalLoader').classList.add('hidden'); document.getElementById('landingPage').classList.remove('hidden'); } });
         const startApp = async () => {
-            if (window.location.protocol === 'file:') { alert("กรุณารันผ่าน Server"); return; }
-            await fetchIP();
-            try { await signInAnonymously(auth); } catch (e) { isAuthReady = true; document.getElementById('globalLoader').classList.add('hidden'); document.getElementById('landingPage').classList.remove('hidden'); }
-            const bind = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = fn; };
-            bind('openModalBtn', () => { document.getElementById('regModalBackdrop').classList.remove('hidden'); document.getElementById('stepEmployeeId').classList.remove('hidden'); document.getElementById('stepSetupProfile').classList.add('hidden'); document.getElementById('stepEnterPinKeypad').classList.add('hidden'); document.getElementById('EmpID').value = ""; });
-            bind('cancelBtn', closeRegModal);
-            bind('cancelSetupBtn', closeRegModal);
-            bind('closeModalIconBtn', closeRegModal);
-            bind('closeKeypadBtn', closeRegModal);
-            bind('submitIdBtn', handleIdSubmission);
-            bind('confirmRegBtn', handleRegistration);
-            bind('savePinLoginBtn', handlePinVerification);
-            bind('logoutBtn', () => location.reload());
-            const sp = document.getElementById('setPin'); if(sp) sp.oninput = validateRegistration;
-            const cp = document.getElementById('confirmPin'); if(cp) cp.oninput = validateRegistration;
-            const emp = document.getElementById('EmpID'); if (emp) emp.oninput = (e) => { e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5); document.getElementById('submitIdBtn').disabled = e.target.value.length !== 5; };
+            if (window.location.protocol === 'file:') { alert("Run via Server"); return; }
+            await fetchIP(); try { await signInAnonymously(auth); } catch { isAuthReady = true; document.getElementById('globalLoader').classList.add('hidden'); document.getElementById('landingPage').classList.remove('hidden'); }
+            const b = (i, f) => { const e = document.getElementById(i); if (e) e.onclick = f; };
+            b('openModalBtn', () => { document.getElementById('regModalBackdrop').classList.remove('hidden'); document.getElementById('stepEmployeeId').classList.remove('hidden'); document.getElementById('stepSetupProfile').classList.add('hidden'); document.getElementById('stepEnterPinKeypad').classList.add('hidden'); document.getElementById('EmpID').value = ""; });
+            b('cancelBtn', closeRegModal); b('cancelSetupBtn', closeRegModal); b('closeModalIconBtn', closeRegModal); b('closeKeypadBtn', closeRegModal); b('submitIdBtn', handleIdSubmission); b('confirmRegBtn', async () => {
+                const p = document.getElementById('setPin').value; const bt = document.getElementById('confirmRegBtn'); bt.disabled = true;
+                try { const dr = doc(db, COLLECTION_NAME, currentMember.docId); const ud = { pin: String(p), Times: 1, ActivatedAt: serverTimestamp(), lastLogin: serverTimestamp(), IPAddress: userIP }; await updateDoc(dr, ud); showMainPage({ ...currentMember, ...ud }); } catch { showMessage("ล้มเหลว", "error"); bt.disabled = false; }
+            });
+            b('savePinLoginBtn', async () => {
+                if (inputPinValue.length !== 6) return; if (String(inputPinValue) === String(currentMember.pin)) {
+                    const bt = document.getElementById('savePinLoginBtn'); bt.disabled = true;
+                    try { const dr = doc(db, COLLECTION_NAME, currentMember.docId); const t = (currentMember.Times || 0) + 1; await updateDoc(dr, { Times: t, lastLogin: serverTimestamp() }); showMainPage({ ...currentMember, Times: t }); } catch { showMainPage(currentMember); }
+                } else { showMessage("PIN ผิด", "error"); inputPinValue = ""; updatePinDisplay(); }
+            });
+            b('logoutBtn', () => location.reload());
+            document.getElementById('setPin').oninput = document.getElementById('confirmPin').oninput = () => { const p1 = document.getElementById('setPin').value, p2 = document.getElementById('confirmPin').value; document.getElementById('confirmRegBtn').disabled = !(p1.length === 6 && p1 === p2); };
+            document.getElementById('EmpID').oninput = (e) => { e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5); document.getElementById('submitIdBtn').disabled = e.target.value.length !== 5; };
             lucide.createIcons();
         };
         startApp();
