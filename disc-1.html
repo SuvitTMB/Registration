@@ -309,12 +309,16 @@
 
         <div id="assessmentContainer" class="flex-1 overflow-y-auto px-6 py-8 space-y-8 pb-32">
             <div id="assessmentIntro" class="space-y-6 text-center">
-                <div class="w-20 h-20 bg-orange-100 rounded-full mx-auto flex items-center justify-center"><i data-lucide="clipboard-check" class="w-10 h-10 text-orange-500"></i></div>
-                <h2 class="text-xl font-normal text-slate-800 px-4">คำชี้แจงแบบประเมิน DISC</h2>
+                <!-- ส่วนหัวข้อเป็นรูปภาพ -->
+                <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" alt="DISC Assessment Header" class="w-[60%] mx-auto mb-2">
+                
+                <!-- รูปภาพ Carl Jung แบบวงกลม -->
+                <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FCarl%20Jung.jpg?alt=media&token=4f683dc5-0f68-432d-b15c-679db17ee7f7" alt="Carl Jung" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover shadow-md border-2 border-slate-100">
+
                 <div class="text-sm text-slate-500 text-left space-y-4 bg-slate-50 p-6 rounded-2xl leading-relaxed">
-                    <p>คาร์ล จุง (Carl Jung) ทฤษฎีทางบุคลิกภาพของจุงได้รับการยกย่องว่าครอบคลุมปรากฏการณ์ของมนุษยชาติอย่างทั่วถึง เป็นผลงานที่เด่นที่สุดในปัจจุบัน เรามาดูกันดีกว่าว่าการสื่อสารของคุณเป็นแบบไหนใน 4 แบบ เป็น D, I, S หรือ C</p>
-                    <p><b>กติกา:</b> ในแต่ละชุด ให้คุณเลือกพฤติกรรมที่เป็นตัวคุณ <b>"มากที่สุด" (Most)</b> 1 อย่าง และ <b>"น้อยที่สุด" (Least)</b> 1 อย่าง และอย่าลังเล!</p>
-                    <p class="text-red-500 font-medium border-t pt-4">การตอบคำถามจะใช้เวลาในการทำ และหากคุณเริ่มทำแล้วคุณจะไม่สามารถทำแบบสอบถามได้อีก คุณพร้อมหรือไม่</p>
+                    <p><b>คาร์ล จุง (Carl Jung)</b> ทฤษฎีทางบุคลิกภาพของจุงได้รับการยกย่องว่าครอบคลุมปรากฏการณ์ของมนุษยชาติอย่างทั่วถึง เป็นผลงานที่เด่นที่สุดในปัจจุบัน เรามาดูกันดีกว่าว่าการสื่อสารของคุณเป็นแบบไหนใน 4 แบบ เป็น D, I, S หรือ C</p>
+                    <p><b>กติกา:</b> ในแต่ละชุด ให้คุณเลือกพฤติกรรมที่เป็นตัวคุณ <b class="text-green-600">↑ มากสุด</b> 1 อย่าง และ <b class="text-red-500">↓ น้อยสุด</b> 1 อย่าง และอย่าลังเล!</p>
+                    <p class="text-red-500 font-medium border-t pt-4 text-center">การตอบคำถามจะใช้เวลาในการทำ และหากคุณเริ่มทำแล้วคุณจะไม่สามารถทำแบบสอบถามได้อีก คุณพร้อมหรือไม่</p>
                 </div>
                 <div class="flex gap-4 pt-4">
                     <button onclick="exitAssessment()" class="btn-standard flex-1 bg-slate-500 hover:bg-slate-600 text-white shadow-md h-[54px]">
@@ -328,12 +332,14 @@
 
             <div id="assessmentQuestion" class="hidden space-y-8">
                 <div class="text-center">
-                    <span class="text-orange-500 font-bold text-xs uppercase tracking-widest">Question <span id="qNumber">1</span> of 19</span>
+                    <!-- รูปภาพเหนือเลขข้อคำถาม -->
+                    <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" alt="DISC Logo" class="w-[40%] mx-auto mb-4">
+                    <span class="text-orange-500 font-normal text-xs uppercase tracking-widest">Question <span id="qNumber">1</span> of 20</span>
                     <h3 id="qPrompt" class="text-lg font-normal text-slate-800 mt-2 leading-snug">คำถาม...</h3>
                 </div>
                 <div id="qChoices" class="space-y-4"></div>
                 <div class="flex justify-between items-center pt-4">
-                    <button onclick="prevQuestion()" id="prevBtn" class="text-slate-400 disabled:opacity-0 flex items-center gap-1 font-medium"><i data-lucide="chevron-left" class="w-4 h-4"></i> ก่อนหน้า</button>
+                    <button onclick="prevQuestion()" id="prevBtn" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-xl text-slate-400 disabled:opacity-0 flex items-center gap-1 font-medium transition-colors"><i data-lucide="chevron-left" class="w-4 h-4"></i> ก่อนหน้า</button>
                     <button id="nextBtn" disabled onclick="nextQuestion()" class="btn-standard bg-orange-500 text-white px-8 shadow-md h-[54px] font-medium text-[14px]">ถัดไป <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i></button>
                 </div>
             </div>
@@ -413,6 +419,7 @@
             { id: 4, prompt: "ลักษณะการเดินของคุณ …", choices: [{text: "เดินเร็ว", type: "D"}, {text: "กระตือรือร้น มีชีวิต ชีวา", type: "I"}, {text: "ช้าๆ และตามสบาย", type: "S"}, {text: "มีจังหวะสม่ำเสมอ", type: "C"}] },
             { id: 5, prompt: "ในขณะที่ฟังคนอื่นพูด คุณ ...", choices: [{text: "ต้องการหาประเด็นสำคัญให้เร็วที่สุด", type: "D"}, {text: "หูผึ่งกับเรื่องราวดีๆ มากกว่าอย่างอื่น", type: "I"}, {text: "มักคิดไปด้วยว่าผู้ที่พูดเขามีความรู้สึกอย่างไรในขณะนั้น", type: "S"}, {text: "ฟังหาข้อมูลสนับสนุนประเด็นที่เขาพูด", type: "C"}] },
             { id: 6, prompt: "ในการพูดต่อหน้าสาธารณชนคุณเน้นที่จะ ...", choices: [{text: "พูดเสียงดัง ฟังชัดอย่างมั่นใจ", type: "D"}, {text: "พูดอย่างมีท่วงทำนอง ไม่ลืมที่จะใช้เสียงสูงและต่ำสลับกันไป", type: "I"}, {text: "พูดเสียงเบา พูดไปเรื่อยๆ", type: "S"}, {text: "พูดให้ชัดถ้อยชัดคำ ให้ชัดเจนแต่ไม่ดัง", type: "C"}] },
+            { id: 7, prompt: "ในสถานการณ์ที่ต้องเปลี่ยนแผนงานกะทันหัน คุณ ...", choices: [{text: "พร้อมลุยและปรับเปลี่ยนทันที", type: "D"}, {text: "มองว่าเป็นการผจญภัยที่น่าตื่นเต้น", type: "I"}, {text: "ขอเวลาทำใจและค่อยๆ ปรับตาม", type: "S"}, {text: "ตรวจสอบผลกระทบและแผนสำรองอย่างละเอียด", type: "C"}] },
             { id: 8, prompt: "เมื่อมีผู้มาเยี่ยมเยียนที่ห้องทำงานของคุณ คุณ ...", choices: [{text: "บอกให้เขานั่งลงได้", type: "D"}, {text: "เลื่อนเก้าอี้ออกมาและเชิญให้เขานั่ง", type: "I"}, {text: "ถามเขาว่าอยากจะนั่งลงก่อนไหม", type: "S"}, {text: "ให้เขาตัดสินใจว่าจะนั่งหรือจะยืน หรือว่าจะนั่งตรงไหน", type: "C"}] },
             { id: 9, prompt: "เมื่อคุณกำลังร่วมวงในการร่วมกันแก้ไขปัญหา คุณ ...", choices: [{text: "เป็นผู้นำการสนทนา", type: "D"}, {text: "ใส่ใจกับภาพรวมมากกว่าลงไปในรายละเอียด", type: "I"}, {text: "เป็นผู้รับฟังที่ดี", type: "S"}, {text: "ใส่ใจกับรายละเอียดและความเป็นจริง", type: "C"}] },
             { id: 10, prompt: "เมื่อนัดผู้ร่วมงานมาปรึกษาหารือกัน คุณมักเริ่มการสนทนาโดย ...", choices: [{text: "จะคุยกันในประเด็นอะไร ก็ว่าไปเลย", type: "D"}, {text: "เล่าเรื่องโน้น เรื่องนี้ซะหน่อยก่อน", type: "I"}, {text: "ถามสารทุกข์สุกดิบของอีกฝ่ายซะก่อน", type: "S"}, {text: "กล่าวถึงจุดประสงค์ของเรื่องที่จะคุยก่อน", type: "C"}] },
