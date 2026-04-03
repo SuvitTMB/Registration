@@ -169,14 +169,17 @@
 
     <div id="messageBox" class="hidden"></div>
 
+    <!-- แถบสีบน -->
     <div id="topColorBar" class="fixed top-0 left-0 right-0 h-[13px] flex z-[60]">
         <div class="flex-1 bg-green-600"></div><div class="flex-1 bg-red-500"></div><div class="flex-1 bg-cyan-500"></div><div class="flex-1 bg-yellow-500"></div>
     </div>
 
+    <!-- แถบสีล่าง -->
     <div id="bottomColorBar" class="fixed bottom-0 left-0 right-0 h-[13px] flex z-[60]">
         <div class="flex-1 bg-green-600"></div><div class="flex-1 bg-red-500"></div><div class="flex-1 bg-cyan-500"></div><div class="flex-1 bg-yellow-500"></div>
     </div>
 
+    <!-- หน้า Landing -->
     <div id="landingPage" class="w-full max-w-[500px] flex flex-col items-center bg-white min-h-screen pt-[13px] pb-[13px] hidden">
         <div class="relative w-[80%] mt-[60px] select-none mx-auto">
             <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc.jpg?alt=media&token=328a617d-07b1-419b-bc5d-00a85dc455e2" 
@@ -191,6 +194,7 @@
         <div class="mt-auto mb-8 text-center text-gray-300 text-[10px] uppercase tracking-[0.3em] font-bold">DISC PERSONALITY NAVIGATOR</div>
     </div>
 
+    <!-- หน้าหลัก DISC -->
     <div id="mainDiscPage" class="w-full max-w-[500px] flex flex-col bg-white min-h-screen relative hidden">
         <div class="w-full px-6 py-4 flex justify-between items-center bg-orange-500 text-white shadow-md z-10">
             <div class="flex items-center gap-3">
@@ -264,14 +268,19 @@
                 <div id="hasDiscResult" class="hidden bg-green-50 border border-green-100 p-6 rounded-2xl">
                     <div class="grid grid-cols-2 gap-4">
                         <div class="p-4 bg-white rounded-xl shadow-sm border border-green-200">
-                            <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">โดดเด่นที่สุด (UP)</span>
+                            <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">ทักษะหลัก (Primary)</span>
                             <div id="discUpValue" class="text-5xl font-bold text-green-600 mt-2">-</div>
                         </div>
-                        <div class="p-4 bg-white rounded-xl shadow-sm border border-red-100">
-                            <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">ชอบน้อยที่สุด (DOWN)</span>
-                            <div id="discDownValue" class="text-5xl font-bold text-red-400 mt-2">-</div>
+                        <div class="p-4 bg-white rounded-xl shadow-sm border border-blue-100">
+                            <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">ทักษะรอง (Secondary)</span>
+                            <div id="disc2Value" class="text-5xl font-bold text-blue-500 mt-2">-</div>
                         </div>
                     </div>
+                    <!-- ปุ่ม Reset DISC -->
+                    <button onclick="confirmReset()" class="mt-8 btn-standard bg-white border border-red-200 text-red-500 hover:bg-red-50 shadow-sm px-8 h-[54px]">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        <span>ล้างข้อมูลและเริ่มทดสอบใหม่ (Reset)</span>
+                    </button>
                 </div>
             </div>
 
@@ -297,6 +306,7 @@
         </div>
     </div>
 
+    <!-- หน้าแบบทดสอบ -->
     <div id="assessmentPage" class="w-full max-w-[500px] flex flex-col bg-white min-h-screen relative hidden">
         <div class="sticky top-0 z-[70] w-full">
             <div class="color-bar-container">
@@ -309,10 +319,8 @@
 
         <div id="assessmentContainer" class="flex-1 overflow-y-auto px-6 py-8 space-y-8 pb-32">
             <div id="assessmentIntro" class="space-y-6 text-center">
-                <!-- ส่วนหัวข้อเป็นรูปภาพ -->
                 <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" alt="DISC Assessment Header" class="w-[60%] mx-auto mb-2">
                 
-                <!-- รูปภาพ Carl Jung แบบวงกลม -->
                 <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FCarl%20Jung.jpg?alt=media&token=4f683dc5-0f68-432d-b15c-679db17ee7f7" alt="Carl Jung" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover shadow-md border-2 border-slate-100">
 
                 <div class="text-sm text-slate-500 text-left space-y-4 bg-slate-50 p-6 rounded-2xl leading-relaxed">
@@ -332,15 +340,18 @@
 
             <div id="assessmentQuestion" class="hidden space-y-8">
                 <div class="text-center">
-                    <!-- รูปภาพเหนือเลขข้อคำถาม -->
-                    <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" alt="DISC Logo" class="w-[40%] mx-auto mb-4">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" alt="DISC Logo" class="w-[80%] mx-auto mb-4">
                     <span class="text-orange-500 font-normal text-xs uppercase tracking-widest">Question <span id="qNumber">1</span> of 20</span>
-                    <h3 id="qPrompt" class="text-lg font-normal text-slate-800 mt-2 leading-snug">คำถาม...</h3>
+                    <h3 id="qPrompt" class="text-lg font-normal text-slate-700 mt-2 leading-snug">คำถาม...</h3>
                 </div>
                 <div id="qChoices" class="space-y-4"></div>
-                <div class="flex justify-between items-center pt-4">
-                    <button onclick="prevQuestion()" id="prevBtn" class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-xl text-slate-400 disabled:opacity-0 flex items-center gap-1 font-medium transition-colors"><i data-lucide="chevron-left" class="w-4 h-4"></i> ก่อนหน้า</button>
-                    <button id="nextBtn" disabled onclick="nextQuestion()" class="btn-standard bg-orange-500 text-white px-8 shadow-md h-[54px] font-medium text-[14px]">ถัดไป <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i></button>
+                <div class="flex justify-between items-center pt-4 gap-4">
+                    <button onclick="prevQuestion()" id="prevBtn" class="btn-standard px-6 bg-gray-100 hover:bg-gray-200 text-slate-400 disabled:opacity-0 flex items-center justify-center gap-1 font-normal transition-colors">
+                        <i data-lucide="chevron-left" class="w-4 h-4"></i> ก่อนหน้า
+                    </button>
+                    <button id="nextBtn" disabled onclick="nextQuestion()" class="btn-standard px-10 bg-orange-500 hover:bg-orange-600 text-white shadow-md font-normal text-[14px]">
+                        <span>ถัดไป</span> <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -352,10 +363,12 @@
         </div>
     </div>
 
+    <!-- Modals (Lightbox) -->
     <div id="regModalBackdrop" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
         <div class="bg-white w-full max-w-[450px] rounded-[12px] shadow-2xl overflow-hidden modal-enter relative" onclick="event.stopPropagation()">
             <div class="bg-[#0056ff] px-8 py-5"><div class="flex justify-between items-center text-white font-normal uppercase tracking-tight"><span>ลงทะเบียน / เข้าสู่ระบบ</span><button id="closeModalIconBtn"><i data-lucide="x" class="w-5 h-5"></i></button></div></div>
             <div class="p-8">
+                <!-- Employee ID Step -->
                 <div id="stepEmployeeId" class="space-y-6">
                     <div class="space-y-2 text-center"><label class="text-[12px] font-normal text-slate-500 uppercase tracking-wider">ระบุรหัสพนักงาน 5 หลัก</label><input type="text" id="EmpID" maxlength="5" inputmode="numeric" placeholder="xxxxx" class="input-active w-full px-4 py-3.5 border-2 rounded-xl text-[18px] font-normal text-center shadow-sm"></div>
                     <div class="flex justify-center gap-3">
@@ -363,6 +376,7 @@
                         <button id="submitIdBtn" disabled class="btn-standard btn-lightbox bg-blue-600 text-white transition-all font-normal"><span id="submitIdText">ถัดไป</span><i data-lucide="arrow-right" class="w-4 h-4"></i><div id="submitIdLoader" class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div></button>
                     </div>
                 </div>
+                <!-- Profile Setup Step -->
                 <div id="stepSetupProfile" class="hidden space-y-6">
                     <div class="bg-white p-4 rounded-xl space-y-2 border border-slate-200 text-[15px]">
                         <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-400 font-normal">ชื่อ-นามสกุล:</span><span id="dispName" class="font-normal text-blue-700 text-right"></span></div>
@@ -378,6 +392,7 @@
                         <button id="confirmRegBtn" disabled class="btn-standard btn-lightbox bg-green-600 text-white shadow-lg disabled:opacity-50"><i data-lucide="user-check" class="w-4 h-4"></i><span>สร้างบัญชีและเข้าใช้งาน</span></button>
                     </div>
                 </div>
+                <!-- Pin Keypad Step -->
                 <div id="stepEnterPinKeypad" class="hidden space-y-6">
                     <div class="text-center space-y-4">
                         <p class="text-[14px] text-slate-600 font-normal">ยืนยันรหัส PIN, <br><span id="loginUserName" class="text-lg font-normal text-blue-700"></span></p>
@@ -395,6 +410,18 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Success/Info Lightbox -->
+    <div id="infoModal" class="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm hidden">
+        <div class="bg-white w-full max-w-[350px] rounded-2xl shadow-2xl overflow-hidden modal-enter p-8 text-center space-y-4">
+            <div id="infoModalIcon" class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto text-green-500">
+                <i data-lucide="check-circle" class="w-10 h-10"></i>
+            </div>
+            <h3 id="infoModalTitle" class="text-xl font-semibold text-slate-800">ดำเนินการสำเร็จ</h3>
+            <p id="infoModalDesc" class="text-sm text-slate-500">ข้อมูลของคุณได้รับการจัดการเรียบร้อยแล้ว</p>
+            <button onclick="closeInfoModal()" class="w-full btn-standard bg-blue-600 text-white mt-4 font-normal h-12 shadow-lg">ตกลง</button>
         </div>
     </div>
 
@@ -466,14 +493,15 @@
             document.getElementById('profileDetail').textContent = `${u.Group || '-'} | ${u.SubGroup || '-'}`;
             
             const btn = document.getElementById('dynamicActionBtn'), txt = document.getElementById('dynamicActionText'), icon = document.getElementById('dynamicActionIcon'), noRes = document.getElementById('noDiscResult'), hasRes = document.getElementById('hasDiscResult');
-            const upVal = document.getElementById('discUpValue'), downVal = document.getElementById('discDownValue');
+            const upVal = document.getElementById('discUpValue'), disc2Val = document.getElementById('disc2Value');
             
-            if (u.DISCup) {
+            // เช็คฟิลด์ DISC แทน DISCup
+            if (u.DISC) {
                 txt.innerHTML = "DISC<br>ของคุณ"; btn.className = "btn-standard bg-[#f97316] hover:bg-orange-600 text-white shadow-lg h-[64px]"; icon.setAttribute('data-lucide', 'user-check'); btn.onclick = () => switchTab('user'); 
                 if(noRes) noRes.classList.add('hidden'); 
                 if(hasRes) hasRes.classList.remove('hidden'); 
-                if(upVal) upVal.textContent = u.DISCup;
-                if(downVal) downVal.textContent = u.DISCdown || '-';
+                if(upVal) upVal.textContent = u.DISC;
+                if(disc2Val) disc2Val.textContent = u.DISC2 || '-';
             } else {
                 txt.innerHTML = "เริ่มทำ<br>แบบทดสอบ"; btn.className = "btn-standard bg-[#f97316] hover:bg-orange-600 text-white shadow-lg h-[64px]"; icon.setAttribute('data-lucide', 'clipboard-list'); btn.onclick = startAssessmentFlow; 
                 if(noRes) noRes.classList.remove('hidden'); 
@@ -483,7 +511,7 @@
         };
 
         window.startAssessmentFlow = () => { 
-            if (currentMember.DISCup) {
+            if (currentMember.DISC) {
                 showMessage("คุณทำแบบทดสอบไปแล้ว ไม่สามารถทำซ้ำได้", "error");
                 return;
             }
@@ -520,18 +548,15 @@
                 const isThisMost = ans.most === c.type;
                 const isThisLeast = ans.least === c.type;
 
-                // Card Color logic
                 let cardStyle = "bg-white text-slate-700 border-slate-100";
                 if (isThisMost) cardStyle = "bg-green-600 text-white border-green-600";
                 else if (isThisLeast) cardStyle = "bg-red-500 text-white border-red-500";
 
-                // Most Button Color and State
                 let mostBtnStyle = "bg-green-500 text-white hover:bg-green-600";
                 if (isThisMost) mostBtnStyle = "bg-green-900 text-white border-green-800 scale-[1.05]";
                 else if (isAnyMostSelected) mostBtnStyle = "bg-green-200 text-green-800 opacity-40";
                 else if (isThisLeast) mostBtnStyle = "bg-white/30 text-white/70";
 
-                // Least Button Color and State
                 let leastBtnStyle = "bg-red-500 text-white hover:bg-red-600";
                 if (isThisLeast) leastBtnStyle = "bg-red-900 text-white border-red-800 scale-[1.05]";
                 else if (isAnyLeastSelected) leastBtnStyle = "bg-red-200 text-red-800 opacity-40";
@@ -578,22 +603,71 @@
 
         const calculateAndSaveResult = async () => {
             document.getElementById('globalLoader').classList.remove('hidden');
-            const countsMost = { D: 0, I: 0, S: 0, C: 0 };
-            const countsLeast = { D: 0, I: 0, S: 0, C: 0 };
-            assessmentAnswers.forEach(ans => { 
-                if (ans.most) countsMost[ans.most]++; 
-                if (ans.least) countsLeast[ans.least]++; 
+            const scores = { D: 0, I: 0, S: 0, C: 0 };
+            assessmentAnswers.forEach(ans => {
+                if (ans.most) scores[ans.most] += 1;
+                if (ans.least) scores[ans.least] -= 1;
             });
             
-            const finalUp = Object.keys(countsMost).reduce((a, b) => countsMost[a] >= countsMost[b] ? a : b);
-            const finalDown = Object.keys(countsLeast).reduce((a, b) => countsLeast[a] >= countsLeast[b] ? a : b);
-
+            const sortedResults = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            const finalPrimary = sortedResults[0][0]; 
+            const finalSecondary = sortedResults[1][0]; 
+            
             try {
                 const docRef = doc(db, COLLECTION_NAME, currentMember.docId);
-                await updateDoc(docRef, { DISCup: finalUp, DISCdown: finalDown, updatedAt: serverTimestamp() });
-                currentMember.DISCup = finalUp; currentMember.DISCdown = finalDown;
+                await updateDoc(docRef, { DISC: finalPrimary, DISC2: finalSecondary, updatedAt: serverTimestamp() });
+                currentMember.DISC = finalPrimary; 
+                currentMember.DISC2 = finalSecondary;
                 showMessage("บันทึกผลสำเร็จ"); showMainPage(currentMember); switchTab('user');
             } catch { showMessage("บันทึกผลผิดพลาด", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
+        };
+
+        // --- ระบบ Reset ข้อมูล ---
+        window.confirmReset = () => {
+            // เราไม่ใช้ confirm browser แต่ใช้ logic ของการถามก่อน (ถ้าต้องการ Lightbox สอบถามเพิ่มสามารถทำได้)
+            // สำหรับตอนนี้ทำตามขั้นตอนคือคลิกแล้ว Reset เลยพร้อม Lightbox แจ้งผล
+            resetAssessment();
+        };
+
+        window.resetAssessment = async () => {
+            document.getElementById('globalLoader').classList.remove('hidden');
+            try {
+                const docRef = doc(db, COLLECTION_NAME, currentMember.docId);
+                // ปรับฟิลด์ DISC และ DISC2 ให้เป็นค่าว่าง (null)
+                const updateData = { DISC: null, DISC2: null, updatedAt: serverTimestamp() };
+                await updateDoc(docRef, updateData);
+                
+                // อัปเดตข้อมูลในเครื่อง
+                currentMember.DISC = null;
+                currentMember.DISC2 = null;
+                
+                // แสดง Lightbox แจ้งผล
+                showInfoModal("Reset ข้อมูลเรียบร้อยแล้ว", "คุณสามารถเริ่มต้นทำแบบทดสอบ DISC ใหม่ได้ทันทีครับ", "check-circle", "green");
+                
+                // กลับไปหน้า Home เพื่อให้เห็นปุ่มเริ่มทำใหม่
+                showMainPage(currentMember);
+                switchTab('home');
+
+            } catch (e) {
+                showMessage("เกิดข้อผิดพลาดในการ Reset", "error");
+            } finally {
+                document.getElementById('globalLoader').classList.add('hidden');
+            }
+        };
+
+        // --- ระบบ Info Modal (Lightbox) ---
+        const showInfoModal = (title, desc, iconName, color) => {
+            document.getElementById('infoModalTitle').textContent = title;
+            document.getElementById('infoModalDesc').textContent = desc;
+            const iconDiv = document.getElementById('infoModalIcon');
+            iconDiv.innerHTML = `<i data-lucide="${iconName}" class="w-10 h-10"></i>`;
+            iconDiv.className = `w-16 h-16 rounded-full flex items-center justify-center mx-auto ${color === 'green' ? 'bg-green-100 text-green-500' : 'bg-blue-100 text-blue-500'}`;
+            document.getElementById('infoModal').classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        window.closeInfoModal = () => {
+            document.getElementById('infoModal').classList.add('hidden');
         };
 
         const closeRegModal = () => { const b = document.getElementById('regModalBackdrop'); if (b) b.classList.add('hidden'); inputPinValue = ""; updatePinDisplay(); };
