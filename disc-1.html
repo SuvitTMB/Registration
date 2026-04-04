@@ -174,7 +174,6 @@
             font-weight: 700;
         }
 
-        /* DiSC Core Colors */
         .color-d { background-color: #16a34a; }
         .color-i { background-color: #ef4444; }
         .color-s { background-color: #3b82f6; }
@@ -335,14 +334,14 @@
             <div class="w-full h-2 bg-slate-100">
                 <div id="assessmentProgress" class="h-full bg-orange-500 progress-bar-fill w-0"></div>
             </div>
-            <!-- ส่วนหัวหน้าแบบทดสอบพร้อมไอคอนเสียงและรูปโลโก้ -->
             <div class="flex justify-end px-4 py-1">
                 <button onclick="toggleMute()" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full transition-all">
                     <i id="muteIconAssess" data-lucide="volume-2" class="w-6 h-6"></i>
                 </button>
             </div>
             <div class="w-full flex justify-center pb-3">
-                <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[50%] h-auto">
+                <!-- ปรับรูป DiSC กว้าง 65% -->
+                <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[65%] h-auto">
             </div>
         </div>
 
@@ -351,7 +350,8 @@
                 <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FCarl%20Jung.jpg?alt=media&token=4f683dc5-0f68-432d-b15c-679db17ee7f7" alt="Carl Jung" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover">
                 <div class="text-sm text-slate-500 text-left space-y-4 bg-slate-50 p-6 rounded-2xl leading-relaxed">
                     <h2 class="text-xl font-bold text-center text-slate-800">DiSC 4 จริตพิชิตใจ</h2>
-                    <p>ทฤษฎีทางบุคลิกภาพของคาร์ล จุง ได้รับการยกย่องว่าครอบคลุมปรากฏการณ์ของมนุษยชาติอย่างทั่วถึง เรามาดูกันดีกว่าว่าการสื่อสารของคุณเป็นแบบไหน</p>
+                    <!-- ปรับปรุงข้อความเกี่ยวกับ คาร์ล จุง -->
+                    <p>คาร์ล จุง (Carl Jung) ทฤษฎีทางบุคคลิกภาพของจุงได้รับการยกย่องว่าครอบคลุมปรากฏการณ์ของมนุษยชาติอย่างทั่วถึง เป็นผลงานที่เด่นที่สุดในปัจจุบัน เรามาดูกันดีกว่าว่าการสื่อสารของคุณเป็นแบบไหนใน 4 แบบ เป็น D, I, S หรือ C</p>
                     <p><b>กติกา:</b> ในแต่ละชุด ให้คุณเลือกพฤติกรรมที่เป็นตัวคุณ <span class="text-d font-bold">↑ มากสุด</span> และ <span class="text-i font-bold">↓ น้อยสุด</span> และอย่าลังเล</p>
                     <p class="text-red-500 font-medium border-t pt-4 text-center">หากคุณยังไม่พร้อมสำหรับการทดสอบ<br>สามารถกลับสู่หน้าหลักได้ที่ปุ่มด้านล่างครับ</p>
                 </div>
@@ -365,7 +365,8 @@
                 </div>
             </div>
 
-            <div id="assessmentQuestion" class="hidden space-y-8">
+            <!-- หน้าส่วนคำถาม ปรับระยะ Question ห่างจากรูปด้านบน 15px -->
+            <div id="assessmentQuestion" class="hidden space-y-8 mt-[15px]">
                 <div class="text-center">
                     <span class="text-orange-500 font-normal text-xs uppercase tracking-widest">Question <span id="qNumber">1</span> of 20</span>
                     <h3 id="qPrompt" class="text-lg font-normal text-slate-700 mt-2 leading-snug">คำถาม...</h3>
@@ -458,7 +459,6 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
         let currentMember = null, userIP = "", inputPinValue = "";
         let currentQIndex = 0, assessmentAnswers = [];
@@ -489,6 +489,7 @@
             { id: 20, prompt: "การคุยโทรศัพท์ของคุณ …", choices: [{text: "มุ่งไปที่ประเด็นสำคัญ", type: "D"}, {text: "สร้างความสดใส มีชีวิตชีวา", type: "I"}, {text: "มักยืดเยื้อ อ้อมค้อม", type: "S"}, {text: "สั้นที่สุดเท่าที่จะเป็นไปได้", type: "C"}] }
         ];
 
+        // ระบบเสียง
         function unlockVoice() {
             if (isAudioUnlocked) return;
             const utterance = new SpeechSynthesisUtterance("");
@@ -502,7 +503,7 @@
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'th-TH';
-            utterance.rate = 1.15; 
+            utterance.rate = 1.2; 
             utterance.pitch = 1.1; 
             const voices = window.speechSynthesis.getVoices();
             const femaleVoice = voices.find(v => v.lang === 'th-TH' && (v.name.includes('Female') || v.name.includes('Google') || v.name.includes('Kanya')));
@@ -522,7 +523,7 @@
             if (isMuted) {
                 window.speechSynthesis.cancel();
             } else {
-                if (!document.getElementById('mainDiscPage').classList.contains('hidden')) triggerHomeGreeting();
+                if (currentMember && !document.getElementById('mainDiscPage').classList.contains('hidden')) triggerHomeGreeting();
                 else if (!document.getElementById('assessmentPage').classList.contains('hidden')) {
                     if (!document.getElementById('assessmentIntro').classList.contains('hidden')) triggerAssessmentIntroGreeting();
                     else renderQuestion(true);
@@ -532,22 +533,33 @@
         };
 
         const triggerHomeGreeting = () => {
-            if (isMuted) return;
-            let script = `สวัสดีค่ะ คุณ ${currentMember.FullName} ยินดีต้อนรับเข้าสู่ระบบ ดีไอเอสซี นาวีเกเตอร์ ค่ะ ดีไอเอสซี คือเครื่องมือวิเคราะห์พฤติกรรมมนุษย์ที่ช่วยให้เราเข้าใจสไตล์การทำงานและการสื่อสารของคนแต่ละแบบค่ะ`;
-            script += ` หากคุณต้องการทำความรู้จักกับ ดีไอเอสซี ให้มากขึ้น สามารถคลิกที่ปุ่มสีน้ำเงินได้เลยนะคะ`;
-            if (currentMember.DISC) script += ` และตอนนี้ระบบได้วิเคราะห์ผลลัพธ์ของคุณเรียบร้อยแล้ว คุณสามารถคลิกที่ปุ่มสีส้มเพื่อดูผลการวิเคราะห์ ดีไอเอสซี ของคุณได้ทันทีค่ะ`;
-            else script += ` แต่ดูเหมือนว่าคุณยังไม่ได้ทำแบบประเมินเลยนะคะ รบกวนคลิกที่ปุ่มสีส้ม เพื่อเริ่มทำแบบทดสอบ ดีไอเอสซี ของคุณ และค้นพบตัวตนที่แท้จริงของคุณกันค่ะ`;
+            if (isMuted || !currentMember) return;
+            let script = `สวัสดี คุณ ${currentMember.FullName} ยินดีต้อนรับเข้าสู่ระบบ ดีไอเอสซี นาวีเกเตอร์ ดีไอเอสซี คือเครื่องมือวิเคราะห์พฤติกรรมมนุษย์ที่ช่วยให้เราเข้าใจสไตล์การทำงานและการสื่อสารของคนแต่ละแบบ`;
+            script += ` หากคุณต้องการทำความรู้จักกับ ดีไอเอสซี ให้มากขึ้น สามารถคลิกที่ปุ่มสีน้ำเงินได้เลยนะ`;
+            if (currentMember.DISC) script += ` และตอนนี้ระบบได้วิเคราะห์ผลลัพธ์ของคุณเรียบร้อยแล้ว คุณสามารถคลิกที่ปุ่มสีส้มเพื่อดูผลการวิเคราะห์ ดีไอเอสซี ของคุณได้ทันที`;
+            else script += ` แต่ดูเหมือนว่าคุณยังไม่ได้ทำแบบประเมินเลยนะ รบกวนคลิกที่ปุ่มสีส้ม เพื่อเริ่มทำแบบทดสอบ ดีไอเอสซี ของคุณ และค้นพบตัวตนที่แท้จริงของคุณกัน`;
             speak(script);
         };
 
         const triggerAssessmentIntroGreeting = () => {
             if (isMuted) return;
-            let script = "ดีไอเอสซี สี่จริตพิชิตใจค่ะ หากคุณยังไม่พร้อมสำหรับการทดสอบ สามารถคลิกที่ปุ่มกลับหน้าหลักได้นะคะ แต่หากคุณพร้อมที่จะทดสอบแล้ว ให้คลิกปุ่มสีส้ม เพื่อเข้าสู่การทดสอบคำถามยี่สิบข้อได้เลยค่ะ";
+            let script = "ดีไอเอสซี สี่จริตพิชิตใจ หากคุณยังไม่พร้อมสำหรับการทดสอบ สามารถคลิกที่ปุ่มกลับหน้าหลักได้นะ แต่หากคุณพร้อมที่จะทดสอบแล้ว ให้คลิกปุ่มสีส้ม เพื่อเข้าสู่การทดสอบคำถามยี่สิบข้อได้เลย";
             speak(script);
         };
 
         async function fetchIP() { try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); userIP = d.ip; } catch { userIP = "unknown"; } }
-        const showMessage = (t, ty = 'success') => { const m = document.getElementById('messageBox'); if (!m) return; m.textContent = t; m.className = `fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl shadow-lg font-normal transition-all duration-300 ${ty === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`; m.classList.remove('hidden', 'opacity-0'); setTimeout(() => { m.classList.add('opacity-0'); setTimeout(() => m.classList.add('hidden'), 300); }, 3000); };
+        
+        const showMessage = (t, ty = 'success') => { 
+            const m = document.getElementById('messageBox'); 
+            if (!m) return; 
+            m.textContent = t; 
+            m.className = `fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl shadow-lg font-normal transition-all duration-300 ${ty === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`; 
+            m.classList.remove('hidden', 'opacity-0'); 
+            setTimeout(() => { 
+                m.classList.add('opacity-0'); 
+                setTimeout(() => m.classList.add('hidden'), 300); 
+            }, 3000); 
+        };
 
         window.switchTab = (n) => { 
             unlockVoice();
@@ -566,6 +578,7 @@
         };
 
         const showMainPage = (u) => {
+            if (!u) return;
             const landing = document.getElementById('landingPage');
             const main = document.getElementById('mainDiscPage');
             const assess = document.getElementById('assessmentPage');
@@ -597,6 +610,7 @@
 
         window.startAssessmentFlow = () => { 
             unlockVoice();
+            if (!currentMember) return;
             if (currentMember.DISC) { showMessage("คุณทำแบบทดสอบไปแล้ว ไม่สามารถทำซ้ำได้", "error"); return; }
             window.speechSynthesis.cancel();
             document.getElementById('mainDiscPage').classList.add('hidden'); 
@@ -625,7 +639,7 @@
             document.getElementById('assessmentProgress').style.width = `${((currentQIndex) / discQuestions.length) * 100}%`;
             
             if (shouldSpeak) {
-                speak(`คำถามข้อที่ ${currentQIndex + 1} ${q.prompt} ค่ะ กรุณาเลือกข้อที่เป็นคุณมากที่สุดและน้อยที่สุดนะคะ`);
+                speak(`คำถามข้อที่ ${currentQIndex + 1} ${q.prompt} กรุณาเลือกข้อที่เป็นคุณมากที่สุดและน้อยที่สุด`);
             }
 
             const con = document.getElementById('qChoices'); con.innerHTML = '';
@@ -648,7 +662,7 @@
             document.getElementById('prevBtn').disabled = currentQIndex === 0;
             const next = document.getElementById('nextBtn'); 
             next.disabled = !(ans.most && ans.least);
-            next.innerHTML = currentQIndex === discQuestions.length - 1 ? 'ดูผลการทดสอบ' : 'ถัดไป <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>';
+            next.innerHTML = currentQIndex === discQuestions.length - 1 ? 'ดูผลการประเมิน DiSC ของคุณ' : 'ถัดไป <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>';
             lucide.createIcons();
         };
 
@@ -656,11 +670,20 @@
             unlockVoice();
             const q = discQuestions[currentQIndex], choice = q.choices[idx], type = choice.type, ans = assessmentAnswers[currentQIndex]; 
             const modeText = mode === 'most' ? "เป็นคุณมากที่สุด" : "เป็นคุณน้อยที่สุด";
-            speak(`${choice.text} ${modeText} ค่ะ`);
-
+            
             if (mode === 'most') { if (ans.least === type) ans.least = null; ans.most = type; } 
             else { if (ans.most === type) ans.most = null; ans.least = type; } 
             
+            let speech = `${choice.text} ${modeText}`;
+            if (ans.most && ans.least) {
+                speech += " . . . "; 
+                if (currentQIndex === discQuestions.length - 1) {
+                    speech += "กรุณาคลิกเพื่อดูผลประเมิน ดีไอเอสซี ของคุณ";
+                } else {
+                    speech += "กรุณาคลิกปุ่มถัดไปด้านล่าง";
+                }
+            }
+            speak(speech);
             renderQuestion(false); 
         };
 
@@ -668,10 +691,10 @@
         window.nextQuestion = async () => { unlockVoice(); if (currentQIndex < discQuestions.length - 1) { currentQIndex++; renderQuestion(true); } else await calculateAndSaveResult(); };
 
         const calculateAndSaveResult = async () => {
+            if (!currentMember) return;
             document.getElementById('globalLoader').classList.remove('hidden');
             const scores = { D: 0, I: 0, S: 0, C: 0 };
             
-            // บันทึกคำตอบแบบละเอียด
             const detailedResponses = assessmentAnswers.map((ans, index) => {
                 if (ans.most) scores[ans.most] += 1;
                 if (ans.least) scores[ans.least] -= 1;
@@ -687,12 +710,12 @@
             const finalPrimary = sortedResults[0][0], finalSecondary = sortedResults[1][0]; 
 
             try {
-                // อัปเดตในตารางหลัก
+                // อัปเดตตารางหลัก
                 const memberDocRef = doc(db, COLLECTION_NAME, currentMember.docId);
                 await updateDoc(memberDocRef, { DISC: finalPrimary, DISC2: finalSecondary, updatedAt: serverTimestamp() });
                 
-                // บันทึกลงในตาราง DISC_Results (Rule 1: artifacts/appId/public/data/collection)
-                const resultsColRef = collection(db, 'artifacts', appId, 'public', 'data', 'DISC_Results');
+                // บันทึกตาราง DISC_Results
+                const resultsColRef = collection(db, 'DISC_Results');
                 await addDoc(resultsColRef, {
                     EmpID: currentMember.EmpID,
                     FullName: currentMember.FullName,
@@ -715,13 +738,14 @@
 
         window.confirmReset = () => resetAssessment();
         window.resetAssessment = async () => {
+            if (!currentMember) return;
             unlockVoice();
             document.getElementById('globalLoader').classList.remove('hidden');
             try {
                 const docRef = doc(db, COLLECTION_NAME, currentMember.docId);
                 await updateDoc(docRef, { DISC: null, DISC2: null, updatedAt: serverTimestamp() });
                 currentMember.DISC = null; currentMember.DISC2 = null;
-                showInfoModal("Reset ข้อมูลเรียบร้อยแล้ว", "คุณสามารถเริ่มต้นทำแบบทดสอบ DiSC ใหม่ได้ทันทีค่ะ", "check-circle", "green");
+                showInfoModal("Reset ข้อมูลเรียบร้อยแล้ว", "คุณสามารถเริ่มต้นทำแบบทดสอบ DiSC ใหม่ได้ทันที", "check-circle", "green");
                 showMainPage(currentMember); switchTab('home');
             } catch (e) { showMessage("เกิดข้อผิดพลาดในการ Reset", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
         };
@@ -739,7 +763,14 @@
         window.closeInfoModal = () => document.getElementById('infoModal').classList.add('hidden');
         const closeRegModal = () => { document.getElementById('regModalBackdrop').classList.add('hidden'); inputPinValue = ""; };
         const updatePinDisplay = () => { for(let i=0; i<6; i++) { const box = document.getElementById(`pin-${i}`); if (box) { box.textContent = i < inputPinValue.length ? "•" : ""; box.classList.toggle('active', i < inputPinValue.length); } } };
-        window.pressKey = (k) => { unlockVoice(); if (k === 'del') inputPinValue = inputPinValue.slice(0, -1); else if (k === 'clear') inputPinValue = ""; else if (inputPinValue.length < 6) inputPinValue += k; updatePinDisplay(); };
+        
+        window.pressKey = (k) => { 
+            unlockVoice(); 
+            if (k === 'del') inputPinValue = inputPinValue.slice(0, -1); 
+            else if (k === 'clear') inputPinValue = ""; 
+            else if (inputPinValue.length < 6) inputPinValue += k; 
+            updatePinDisplay(); 
+        };
 
         const handleIdSubmission = async () => {
             unlockVoice();
@@ -749,43 +780,80 @@
                 if (!auth.currentUser) await signInAnonymously(auth);
                 const snap = await getDocs(collection(db, COLLECTION_NAME)); currentMember = null;
                 snap.forEach(d => { if (String(d.data().EmpID).trim() === val) currentMember = { docId: d.id, ...d.data() }; });
+                
                 if (!currentMember) { showMessage("ไม่พบรหัสพนักงาน", "error"); btn.disabled = false; return; }
                 document.getElementById('stepEmployeeId').classList.add('hidden');
+                
                 if (currentMember.pin) {
                     if (currentMember.IPAddress === userIP) {
-                        const dr = doc(db, COLLECTION_NAME, currentMember.docId); const t = (currentMember.Times || 0) + 1;
-                        await updateDoc(dr, { Times: t, lastLogin: serverTimestamp() }); showMainPage({ ...currentMember, Times: t });
-                    } else { document.getElementById('stepEnterPinKeypad').classList.remove('hidden'); document.getElementById('loginUserName').textContent = currentMember.FullName; lucide.createIcons(); }
+                        const dr = doc(db, COLLECTION_NAME, currentMember.docId); 
+                        const t = (currentMember.Times || 0) + 1;
+                        await updateDoc(dr, { Times: t, lastLogin: serverTimestamp() }); 
+                        showMainPage({ ...currentMember, Times: t });
+                    } else { 
+                        document.getElementById('stepEnterPinKeypad').classList.remove('hidden'); 
+                        document.getElementById('loginUserName').textContent = currentMember.FullName; 
+                        lucide.createIcons(); 
+                    }
                 } else {
                     document.getElementById('stepSetupProfile').classList.remove('hidden');
-                    document.getElementById('dispName').textContent = currentMember.FullName; document.getElementById('dispGroup').textContent = currentMember.Group; document.getElementById('dispSubGroup').textContent = currentMember.SubGroup || '-';
+                    document.getElementById('dispName').textContent = currentMember.FullName; 
+                    document.getElementById('dispGroup').textContent = currentMember.Group; 
+                    document.getElementById('dispSubGroup').textContent = currentMember.SubGroup || '-';
                 }
-            } catch { showMessage("ขัดข้อง", "error"); } finally { btn.disabled = false; load.classList.add('hidden'); }
+            } catch (err) { 
+                console.error(err);
+                showMessage("การเชื่อมต่อล้มเหลว", "error"); 
+            } finally { btn.disabled = false; load.classList.add('hidden'); }
         };
 
-        onAuthStateChanged(auth, (u) => { if (u) { document.getElementById('globalLoader').classList.add('hidden'); document.getElementById('landingPage').classList.remove('hidden'); } });
+        onAuthStateChanged(auth, (u) => { 
+            if (u) { 
+                document.getElementById('globalLoader').classList.add('hidden'); 
+                document.getElementById('landingPage').classList.remove('hidden'); 
+            } 
+        });
         
         window.speechSynthesis.getVoices();
         if (window.speechSynthesis.onvoiceschanged !== undefined) window.speechSynthesis.onvoiceschanged = window.speechSynthesis.getVoices;
 
         const startApp = async () => {
-            await fetchIP(); try { await signInAnonymously(auth); } catch { document.getElementById('globalLoader').classList.add('hidden'); document.getElementById('landingPage').classList.remove('hidden'); }
+            await fetchIP();
+            await signInAnonymously(auth).catch(() => {
+                document.getElementById('globalLoader').classList.add('hidden');
+                document.getElementById('landingPage').classList.remove('hidden');
+            });
+
             document.getElementById('openModalBtn').onclick = () => { unlockVoice(); document.getElementById('regModalBackdrop').classList.remove('hidden'); document.getElementById('stepEmployeeId').classList.remove('hidden'); document.getElementById('EmpID').value = ""; };
             document.getElementById('cancelBtn').onclick = closeRegModal;
             document.getElementById('submitIdBtn').onclick = handleIdSubmission;
             document.getElementById('setPin').oninput = document.getElementById('confirmPin').oninput = () => { const p1 = document.getElementById('setPin').value, p2 = document.getElementById('confirmPin').value; document.getElementById('confirmRegBtn').disabled = !(p1.length === 6 && p1 === p2); };
             document.getElementById('EmpID').oninput = (e) => { e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5); document.getElementById('submitIdBtn').disabled = e.target.value.length !== 5; };
+            
             document.getElementById('confirmRegBtn').onclick = async () => {
+                if (!currentMember) return;
                 unlockVoice();
                 const p = document.getElementById('setPin').value, bt = document.getElementById('confirmRegBtn'); bt.disabled = true;
-                try { const dr = doc(db, COLLECTION_NAME, currentMember.docId); const ud = { pin: String(p), Times: 1, ActivatedAt: serverTimestamp(), lastLogin: serverTimestamp(), IPAddress: userIP }; await updateDoc(dr, ud); showMainPage({ ...currentMember, ...ud }); } catch { showMessage("ล้มเหลว", "error"); bt.disabled = false; }
+                try { 
+                    const dr = doc(db, COLLECTION_NAME, currentMember.docId); 
+                    const ud = { pin: String(p), Times: 1, ActivatedAt: serverTimestamp(), lastLogin: serverTimestamp(), IPAddress: userIP }; 
+                    await updateDoc(dr, ud); 
+                    showMainPage({ ...currentMember, ...ud }); 
+                } catch (e) { showMessage("ลงทะเบียนล้มเหลว", "error"); bt.disabled = false; }
             };
+            
             document.getElementById('savePinLoginBtn').onclick = async () => {
+                if (!currentMember) return;
                 unlockVoice();
-                if (inputPinValue.length !== 6) return; if (String(inputPinValue) === String(currentMember.pin)) {
-                    const dr = doc(db, COLLECTION_NAME, currentMember.docId); const t = (currentMember.Times || 0) + 1;
-                    await updateDoc(dr, { Times: t, lastLogin: serverTimestamp() }); showMainPage({ ...currentMember, Times: t });
-                } else { showMessage("PIN ผิด", "error"); inputPinValue = ""; updatePinDisplay(); }
+                if (inputPinValue.length !== 6) return; 
+                if (String(inputPinValue) === String(currentMember.pin)) {
+                    const dr = doc(db, COLLECTION_NAME, currentMember.docId); 
+                    const t = (currentMember.Times || 0) + 1;
+                    await updateDoc(dr, { Times: t, lastLogin: serverTimestamp() }); 
+                    showMainPage({ ...currentMember, Times: t });
+                } else { 
+                    showMessage("PIN ไม่ถูกต้อง", "error"); inputPinValue = ""; updatePinDisplay(); 
+                }
             };
             lucide.createIcons();
         };
