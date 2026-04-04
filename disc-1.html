@@ -140,13 +140,11 @@
         .bottom-nav-item.active {
             color: #f97316;
         }
-        /* Style สำหรับข้อความเมนูด้านล่าง ปรับระยะบรรทัด 3px */
         .bottom-nav-item span {
             font-size: 11px;
-            line-height: 14px; /* 11px font + 3px gap = 14px line-height */
+            line-height: 14px;
             display: block;
         }
-        /* เฉพาะปุ่ม Check Out ปรับระยะห่างตัวอักษร 3px */
         .nav-checkout span {
             letter-spacing: 3px;
         }
@@ -228,9 +226,8 @@
                     <p id="userSub" class="text-[10px] opacity-80 font-normal"></p>
                 </div>
             </div>
-            <!-- ปุ่มควบคุมเสียง -->
             <div class="flex items-center gap-1">
-                <button id="voiceMuteBtn" onclick="toggleMute()" class="p-2 text-white hover:bg-white/10 transition-all"><i id="muteIcon" data-lucide="volume-2" class="w-5 h-5"></i></button>
+                <button onclick="toggleMute()" class="p-2 text-white hover:bg-white/10 transition-all"><i id="muteIcon" data-lucide="volume-2" class="w-5 h-5"></i></button>
             </div>
         </div>
         
@@ -320,53 +317,56 @@
             </div>
         </div>
 
-        <!-- เมนูนำทางด้านล่าง -->
         <div class="fixed bottom-0 w-full max-w-[500px] bg-slate-50 border-t border-slate-200 h-20 flex items-center justify-around px-2 z-50 shadow-[0_-4px_15px_rgba(0,0,0,0.05)]">
             <button class="bottom-nav-item active" onclick="switchTab('home')"><i data-lucide="house" class="w-6 h-6"></i><span>Home</span></button>
             <button class="bottom-nav-item" onclick="switchTab('about')"><i data-lucide="info" class="w-6 h-6"></i><span>รู้จัก<br><span class="font-bold">DiSC</span></span></button>
             <button class="bottom-nav-item" onclick="switchTab('user')"><i data-lucide="user" class="w-6 h-6"></i><span><span class="font-bold">DiSC</span> ของคุณ</span></button>
             <button class="bottom-nav-item" onclick="switchTab('team')"><i data-lucide="users" class="w-6 h-6"></i><span><span class="font-bold">DiSC</span> ของทีม</span></button>
-            <!-- ปุ่ม Check Out: ปรับเป็น 2 บรรทัด และระยะห่างตัวอักษร 3px -->
-            <button class="bottom-nav-item nav-checkout" onclick="location.reload()">
-                <i data-lucide="log-out" class="w-6 h-6"></i>
-                <span>Check<br>Out</span>
-            </button>
+            <button class="bottom-nav-item nav-checkout" onclick="location.reload()"><i data-lucide="log-out" class="w-6 h-6"></i><span>Check<br>Out</span></button>
         </div>
     </div>
 
     <!-- หน้าแบบทดสอบ -->
     <div id="assessmentPage" class="w-full max-w-[500px] flex flex-col bg-white min-h-screen relative hidden">
-        <div class="sticky top-0 z-[70] w-full">
+        <div class="sticky top-0 z-[70] w-full bg-white border-b border-slate-50">
             <div class="color-bar-container">
                 <div class="flex-1 color-d"></div><div class="flex-1 color-i"></div><div class="flex-1 color-s"></div><div class="flex-1 color-c"></div>
             </div>
             <div class="w-full h-2 bg-slate-100">
                 <div id="assessmentProgress" class="h-full bg-orange-500 progress-bar-fill w-0"></div>
             </div>
+            <!-- ส่วนหัวหน้าแบบทดสอบพร้อมไอคอนเสียงและรูปโลโก้ -->
+            <div class="flex justify-end px-4 py-1">
+                <button onclick="toggleMute()" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full transition-all">
+                    <i id="muteIconAssess" data-lucide="volume-2" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="w-full flex justify-center pb-3">
+                <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[50%] h-auto">
+            </div>
         </div>
 
-        <div id="assessmentContainer" class="flex-1 overflow-y-auto px-6 py-8 space-y-8 pb-32">
+        <div id="assessmentContainer" class="flex-1 overflow-y-auto px-6 py-4 space-y-8 pb-32">
             <div id="assessmentIntro" class="space-y-6 text-center">
-                <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" alt="DiSC Assessment Header" class="w-[60%] mx-auto mb-2">
                 <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FCarl%20Jung.jpg?alt=media&token=4f683dc5-0f68-432d-b15c-679db17ee7f7" alt="Carl Jung" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover">
                 <div class="text-sm text-slate-500 text-left space-y-4 bg-slate-50 p-6 rounded-2xl leading-relaxed">
-                    <p><b>คาร์ล จุง (Carl Jung)</b> ทฤษฎีทางบุคลิกภาพของจุงได้รับการยกย่องว่าครอบคลุมปรากฏการณ์ของมนุษยชาติอย่างทั่วถึง เป็นผลงานที่เด่นที่สุดในปัจจุบัน เรามาดูกันดีกว่าว่าการสื่อสารของคุณเป็นแบบไหนใน 4 แบบ เป็น D, i, S หรือ C</p>
+                    <h2 class="text-xl font-bold text-center text-slate-800">DiSC 4 จริตพิชิตใจ</h2>
+                    <p>ทฤษฎีทางบุคลิกภาพของคาร์ล จุง ได้รับการยกย่องว่าครอบคลุมปรากฏการณ์ของมนุษยชาติอย่างทั่วถึง เรามาดูกันดีกว่าว่าการสื่อสารของคุณเป็นแบบไหน</p>
                     <p><b>กติกา:</b> ในแต่ละชุด ให้คุณเลือกพฤติกรรมที่เป็นตัวคุณ <span class="text-d font-bold">↑ มากสุด</span> และ <span class="text-i font-bold">↓ น้อยสุด</span> และอย่าลังเล</p>
-                    <p class="text-red-500 font-medium border-t pt-4 text-center">การตอบคำถามจะใช้เวลาในการทำ และหากคุณเริ่มทำแล้วคุณจะไม่สามารถทำแบบสอบถามได้อีก คุณพร้อมหรือไม่</p>
+                    <p class="text-red-500 font-medium border-t pt-4 text-center">หากคุณยังไม่พร้อมสำหรับการทดสอบ<br>สามารถกลับสู่หน้าหลักได้ที่ปุ่มด้านล่างครับ</p>
                 </div>
                 <div class="flex gap-4 pt-4">
                     <button onclick="exitAssessment()" class="btn-standard flex-1 bg-slate-500 hover:bg-slate-600 text-white h-[54px]">
                         <i data-lucide="house" class="w-4 h-4"></i><span>กลับหน้าหลัก</span>
                     </button>
                     <button onclick="beginActualTest()" class="btn-standard flex-[2] bg-orange-500 hover:bg-orange-600 text-white h-[54px]">
-                        <i data-lucide="play" class="w-4 h-4"></i><span>เข้าสู่การทดสอบ <span class="font-bold text-white">DiSC</span></span>
+                        <i data-lucide="play" class="w-4 h-4"></i><span>เข้าสู่การทดสอบ 20 ข้อ</span>
                     </button>
                 </div>
             </div>
 
             <div id="assessmentQuestion" class="hidden space-y-8">
                 <div class="text-center">
-                    <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" alt="DiSC Logo" class="w-[80%] mx-auto mb-4">
                     <span class="text-orange-500 font-normal text-xs uppercase tracking-widest">Question <span id="qNumber">1</span> of 20</span>
                     <h3 id="qPrompt" class="text-lg font-normal text-slate-700 mt-2 leading-snug">คำถาม...</h3>
                 </div>
@@ -451,23 +451,46 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, updateDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, updateDoc, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyAciknEYhZU7AwOdfYytC1t_AnW2Ee11us", authDomain: "faifah-ttb.firebaseapp.com", projectId: "faifah-ttb", storageBucket: "faifah-ttb.appspot.com", messagingSenderId: "842980876200", appId: "1:842980876200:web:f33bfad2ccbf263075079d" };
         const COLLECTION_NAME = "DISC_Member";
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
         let currentMember = null, userIP = "", inputPinValue = "";
         let currentQIndex = 0, assessmentAnswers = [];
         let isMuted = false;
         let isAudioUnlocked = false; 
 
-        // ระบบเสียง (Web Speech API - Non-API)
+        // ชุดคำถาม DiSC ทั้ง 20 ข้อ
+        const discQuestions = [
+            { id: 1, prompt: "ในการประชุม ถ้าเลือกได้ คุณชอบที่จะตรงไป ...", choices: [{text: "นั่งที่หัวโต๊ะ", type: "D"}, {text: "นั่งตรงไหนที่ก็ได้ที่ทุกคนจะเห็นคุณได้ชัดเจน", type: "I"}, {text: "นั่งข้างๆ ตรงที่มีคนรู้จักนั่งอยู่แล้ว", type: "S"}, {text: "นั่งข้างๆ คนที่รู้จัก โดยเว้นเก้าอี้ว่างระหว่างเขากับคุณไว้ 1 ตัว", type: "C"}] },
+            { id: 2, prompt: "ในการสนทนา สายตาของคุณมักอยู่ที่ ...", choices: [{text: "คู่สนทนาตลอดการสนทนา", type: "D"}, {text: "คู่สนทนาเป็นส่วนใหญ่", type: "I"}, {text: "พื้นห้องสลับกับที่คู่สนทนา", type: "S"}, {text: "ความเคลื่อนไหวรอบๆ ห้องมากกว่าคู่สนทนา", type: "C"}] },
+            { id: 3, prompt: "ในระหว่างการสนทนากับคนรู้จัก คุณ ...", choices: [{text: "ไม่ชอบถ้าอีกฝ่ายเข้ามาประชิดคุณมากเกินไป", type: "D"}, {text: "ชอบคุยเคียงบ่าเคียงไหล่", type: "I"}, {text: "เฉยๆ เห็นเป็นเรื่องธรรมดา ถ้าอีกฝ่ายเข้ามาใกล้ๆ", type: "S"}, {text: "รู้สึกอึดอัดทันทีที่อีกฝ่ายเข้ามา", type: "C"}] },
+            { id: 4, prompt: "ลักษณะการเดินของคุณ …", choices: [{text: "เดินเร็ว", type: "D"}, {text: "กระตือรือร้น มีชีวิต ชีวา", type: "I"}, {text: "ช้าๆ และตามสบาย", type: "S"}, {text: "มีจังหวะสม่ำเสมอ", type: "C"}] },
+            { id: 5, prompt: "ในขณะที่ฟังคนอื่นพูด คุณ ...", choices: [{text: "ต้องการหาประเด็นสำคัญให้เร็วที่สุด", type: "D"}, {text: "หูผึ่งกับเรื่องราวดีๆ มากกว่าอย่างอื่น", type: "I"}, {text: "มักคิดไปด้วยว่าผู้ที่พูดเขามีความรู้สึกอย่างไรในขณะนั้น", type: "S"}, {text: "ฟังหาข้อมูลสนับสนุนประเด็นที่เขาพูด", type: "C"}] },
+            { id: 6, prompt: "ในการพูดต่อหน้าสาธารณชนคุณเน้นที่จะ ...", choices: [{text: "พูดเสียงดัง ฟังชัดอย่างมั่นใจ", type: "D"}, {text: "พูดอย่างมีท่วงทำนอง ไม่ลืมที่จะใช้เสียงสูงและต่ำสลับกันไป", type: "I"}, {text: "พูดเสียงเบา พูดไปเรื่อยๆ", type: "S"}, {text: "พูดให้ชัดถ้อยชัดคำ ให้ชัดเจนแต่ไม่ดัง", type: "C"}] },
+            { id: 7, prompt: "ในสถานการณ์ที่ต้องเปลี่ยนแผนงานกะทันหัน คุณ ...", choices: [{text: "พร้อมลุยและปรับเปลี่ยนทันที", type: "D"}, {text: "มองว่าเป็นการผจญภัยที่น่าตื่นเต้น", type: "I"}, {text: "ขอเวลาทำใจและค่อยๆ ปรับตาม", type: "S"}, {text: "ตรวจสอบผลกระทบและแผนสำรองอย่างละเอียด", type: "C"}] },
+            { id: 8, prompt: "เมื่อมีผู้มาเยี่ยมเยียนที่ห้องทำงานของคุณ คุณ ...", choices: [{text: "บอกให้เขานั่งลงได้", type: "D"}, {text: "เลื่อนเก้าอี้ออกมาและเชิญให้เขานั่ง", type: "I"}, {text: "ถามเขาว่าอยากจะนั่งลงก่อนไหม", type: "S"}, {text: "ให้เขาตัดสินใจว่าจะนั่งหรือจะยืน หรือว่าจะนั่งตรงไหน", type: "C"}] },
+            { id: 9, prompt: "เมื่อคุณกำลังร่วมวงในการร่วมกันแก้ไขปัญหา คุณ ...", choices: [{text: "เป็นผู้นำการสนทนา", type: "D"}, {text: "ใส่ใจกับภาพรวมมากกว่าลงไปในรายละเอียด", type: "I"}, {text: "เป็นผู้รับฟังที่ดี", type: "S"}, {text: "ใส่ใจกับรายละเอียดและความเป็นจริง", type: "C"}] },
+            { id: 10, prompt: "เมื่อนัดผู้ร่วมงานมาปรึกษาหารือกัน คุณมักเริ่มการสนทนาโดย ...", choices: [{text: "จะคุยกันในประเด็นอะไร ก็ว่าไปเลย", type: "D"}, {text: "เล่าเรื่องโน้น เรื่องนี้ซะหน่อยก่อน", type: "I"}, {text: "ถามสารทุกข์สุกดิบของอีกฝ่ายซะก่อน", type: "S"}, {text: "กล่าวถึงจุดประสงค์ของเรื่องที่จะคุยก่อน", type: "C"}] },
+            { id: 11, prompt: "ในการตัดสินใจ คุณตัดสินใจจาก ...", choices: [{text: "สิ่งที่คุณเชื่อและการสรุปของคุณ", type: "D"}, {text: "การที่ทุกคนเห็นด้วยกับการตัดสินใจนั้นๆ", type: "I"}, {text: "การที่จะมีผู้ได้รับผลกระทบมากเท่าไหร่ แค่ไหน", type: "S"}, {text: "เหตุผล และจากข้อมูลที่พิสูจ็นได้", type: "C"}] },
+            { id: 12, prompt: "เวลาฟังการนำเสนอ คุณ ...", choices: [{text: "ชอบให้รวบรัด", type: "D"}, {text: "ชอบให้เฮฮา", type: "I"}, {text: "มักถามในใจว่า คนพูดเขารู้สึกยังไงอยู่นะ", type: "S"}, {text: "ประเมินถึงความเป็นไปได้/ เป็นไปไม่ได้ในเนื้อหาที่นำเสนอ", type: "C"}] },
+            { id: 13, prompt: "เมื่อคุณพยายามที่จะไขว่คว้าอะไรมาสักอย่าง คุณ ...", choices: [{text: "รู้ว่าคุณทำได้ และถึงมีคู่แข่ง คุณก็ไม่หวั่น", type: "D"}, {text: "หว่านล้อมจูงใจเก่ง", type: "I"}, {text: "พยายามทำความเข้าใจก่อนว่าอีกฝ่ายต้องการอะไร", type: "S"}, {text: "ใช้ข้อมูลที่เพียบพร้อมของคุณให้เป็นประโยชน์", type: "C"}] },
+            { id: 14, prompt: "ผู้อื่นมักจะ ...", choices: [{text: "รู้จักความเป็นคุณในขอบเขตที่คุณต้องการเท่านั้น", type: "D"}, {text: "มองว่าคุณเป็นคนเปิดเผย", type: "I"}, {text: "มองว่าคุณเป็นที่ปรึกษาที่ดีทั้งเรื่องงานและส่วนตัว", type: "S"}, {text: "มองว่าคุณเป็นคนลึกลับ เก็บตัว", type: "C"}] },
+            { id: 15, prompt: "ในการประชุมกลุ่ม คุณเห็นว่าเป็นสิ่งสำคัญที่ ...", choices: [{text: "คุณรับหน้าที่ดำเนินรายการเอง", type: "D"}, {text: "คุณทำให้ทุกคนมีส่วนร่วม", type: "I"}, {text: "คุณรับฟังผู้อื่น และผู้อื่นรับฟังคุณ", type: "S"}, {text: "คุณประเมินข้อดี ข้อเสียของแต่ละความคิดอย่างรอบคอบ", type: "C"}] },
+            { id: 16, prompt: "คุณคิดว่าการเปิดเผยความรู้สึกส่วนตัวให้ผู้อื่นรับทราบนั้น ...", choices: [{text: "ทำให้การทำงานช้าลง", type: "D"}, {text: "น่าสนใจดี", type: "I"}, {text: "ช่วยให้ปรับตัวเข้าหากันง่ายขึ้น", type: "S"}, {text: "เป็นเรื่องที่อึดอัดจะตายไป", type: "C"}] },
+            { id: 17, prompt: "ตอนที่คุณเล่าเรื่องอะไรสักอย่าง คุณ ...", choices: [{text: "ตรงไปที่ประเด็นสำคัญเลย", type: "D"}, {text: "ทำให้ผู้ฟังเคลิ้ม ไม่ลุกไปไหนได้ตั้งแต่ต้นจนจบ", type: "I"}, {text: "พูดระบุถึงสถานการณ์ของตัวประกอบในเรื่องได้ดี", type: "S"}, {text: "พูดอย่างเป็นระบบ มีข้อมูลสนับสนุน", type: "C"}] },
+            { id: 18, prompt: "เมื่อคุณนำเสนอสิ่งที่สำคัญมาก คุณ ...", choices: [{text: "ดูจริงจัง น่าเกรงขาม", type: "D"}, {text: "เป็นนักแสดงที่สร้างความบันเทิงได้ดี", type: "I"}, {text: "อ่อนโยน คำนึงถึงผู้ฟัง", type: "S"}, {text: "เรียบเรียงข้อมูลอย่างดี มีขั้นตอนชัดเจน", type: "C"}] },
+            { id: 19, prompt: "เมื่อมีใครสักคนมาร้องไห้อยู่ตรงหน้าคุณ คุณ ...", choices: [{text: "บอกให้เขาหยุดร้องไห้จะดีกว่า", type: "D"}, {text: "พยายามพูดให้เขาอารมณ์ดีขึ้น", type: "I"}, {text: "ให้คำปรึกษา แสดงความเข้าใจ", type: "S"}, {text: "ลำบากใจ และอยากปลีกตัวออกไป", type: "C"}] },
+            { id: 20, prompt: "การคุยโทรศัพท์ของคุณ …", choices: [{text: "มุ่งไปที่ประเด็นสำคัญ", type: "D"}, {text: "สร้างความสดใส มีชีวิตชีวา", type: "I"}, {text: "มักยืดเยื้อ อ้อมค้อม", type: "S"}, {text: "สั้นที่สุดเท่าที่จะเป็นไปได้", type: "C"}] }
+        ];
+
         function unlockVoice() {
             if (isAudioUnlocked) return;
-            // สร้างประโยคเปล่าเพื่อหลอกระบบเบราว์เซอร์ให้ปลดล็อคเสียงบนมือถือ
             const utterance = new SpeechSynthesisUtterance("");
             window.speechSynthesis.speak(utterance);
             isAudioUnlocked = true;
@@ -476,39 +499,34 @@
         function speak(text) {
             if (isMuted) return;
             unlockVoice();
-            
-            // หยุดเสียงที่กำลังพูดอยู่
             window.speechSynthesis.cancel();
-
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'th-TH';
-            utterance.rate = 1.1;  // เพิ่มความเร็วในการพูดให้เป็นธรรมชาติและกระชับขึ้น
-            utterance.pitch = 1.1; // ปรับโทนให้เป็นผู้หญิงมากขึ้น
-
-            // เลือกเสียงผู้หญิงที่เป็นธรรมชาติถ้ามีในระบบ
+            utterance.rate = 1.15; 
+            utterance.pitch = 1.1; 
             const voices = window.speechSynthesis.getVoices();
-            const femaleVoice = voices.find(v => 
-                v.lang === 'th-TH' && 
-                (v.name.includes('Female') || v.name.includes('Google') || v.name.includes('Kanya'))
-            );
-            
-            if (femaleVoice) {
-                utterance.voice = femaleVoice;
-            }
-
+            const femaleVoice = voices.find(v => v.lang === 'th-TH' && (v.name.includes('Female') || v.name.includes('Google') || v.name.includes('Kanya')));
+            if (femaleVoice) utterance.voice = femaleVoice;
             window.speechSynthesis.speak(utterance);
         }
 
         window.toggleMute = () => {
             unlockVoice();
             isMuted = !isMuted;
-            const icon = document.getElementById('muteIcon');
+            const iconName = isMuted ? 'volume-x' : 'volume-2';
+            const iconMain = document.getElementById('muteIcon');
+            const iconAssess = document.getElementById('muteIconAssess');
+            if(iconMain) iconMain.setAttribute('data-lucide', iconName);
+            if(iconAssess) iconAssess.setAttribute('data-lucide', iconName);
+            
             if (isMuted) {
-                icon.setAttribute('data-lucide', 'volume-x');
                 window.speechSynthesis.cancel();
             } else {
-                icon.setAttribute('data-lucide', 'volume-2');
-                triggerHomeGreeting();
+                if (!document.getElementById('mainDiscPage').classList.contains('hidden')) triggerHomeGreeting();
+                else if (!document.getElementById('assessmentPage').classList.contains('hidden')) {
+                    if (!document.getElementById('assessmentIntro').classList.contains('hidden')) triggerAssessmentIntroGreeting();
+                    else renderQuestion(true);
+                }
             }
             lucide.createIcons();
         };
@@ -519,6 +537,12 @@
             script += ` หากคุณต้องการทำความรู้จักกับ ดีไอเอสซี ให้มากขึ้น สามารถคลิกที่ปุ่มสีน้ำเงินได้เลยนะคะ`;
             if (currentMember.DISC) script += ` และตอนนี้ระบบได้วิเคราะห์ผลลัพธ์ของคุณเรียบร้อยแล้ว คุณสามารถคลิกที่ปุ่มสีส้มเพื่อดูผลการวิเคราะห์ ดีไอเอสซี ของคุณได้ทันทีค่ะ`;
             else script += ` แต่ดูเหมือนว่าคุณยังไม่ได้ทำแบบประเมินเลยนะคะ รบกวนคลิกที่ปุ่มสีส้ม เพื่อเริ่มทำแบบทดสอบ ดีไอเอสซี ของคุณ และค้นพบตัวตนที่แท้จริงของคุณกันค่ะ`;
+            speak(script);
+        };
+
+        const triggerAssessmentIntroGreeting = () => {
+            if (isMuted) return;
+            let script = "ดีไอเอสซี สี่จริตพิชิตใจค่ะ หากคุณยังไม่พร้อมสำหรับการทดสอบ สามารถคลิกที่ปุ่มกลับหน้าหลักได้นะคะ แต่หากคุณพร้อมที่จะทดสอบแล้ว ให้คลิกปุ่มสีส้ม เพื่อเข้าสู่การทดสอบคำถามยี่สิบข้อได้เลยค่ะ";
             speak(script);
         };
 
@@ -538,9 +562,7 @@
                     if ((n === 'home' && st === 'home') || (n === 'about' && st.includes('รู้จัก')) || (n === 'user' && st.includes('ของคุณ')) || (n === 'team' && st.includes('ของทีม'))) b.classList.add('active'); 
                 }
             }); 
-            if (n === 'home') triggerHomeGreeting(); else {
-                window.speechSynthesis.cancel();
-            }
+            if (n === 'home') triggerHomeGreeting(); else window.speechSynthesis.cancel();
         };
 
         const showMainPage = (u) => {
@@ -582,24 +604,31 @@
             document.getElementById('assessmentIntro').classList.remove('hidden'); 
             document.getElementById('assessmentQuestion').classList.add('hidden'); 
             lucide.createIcons(); 
+            setTimeout(triggerAssessmentIntroGreeting, 500);
         };
+
         window.exitAssessment = () => showMainPage(currentMember);
+
         window.beginActualTest = () => { 
             unlockVoice();
             currentQIndex = 0; 
             assessmentAnswers = new Array(discQuestions.length).fill(null).map(() => ({most: null, least: null})); 
             document.getElementById('assessmentIntro').classList.add('hidden'); 
             document.getElementById('assessmentQuestion').classList.remove('hidden'); 
-            renderQuestion(); 
+            renderQuestion(true); 
         };
 
-        const renderQuestion = () => {
+        const renderQuestion = (shouldSpeak = false) => {
             const q = discQuestions[currentQIndex], ans = assessmentAnswers[currentQIndex];
             document.getElementById('qNumber').textContent = currentQIndex + 1;
             document.getElementById('qPrompt').textContent = q.prompt;
             document.getElementById('assessmentProgress').style.width = `${((currentQIndex) / discQuestions.length) * 100}%`;
+            
+            if (shouldSpeak) {
+                speak(`คำถามข้อที่ ${currentQIndex + 1} ${q.prompt} ค่ะ กรุณาเลือกข้อที่เป็นคุณมากที่สุดและน้อยที่สุดนะคะ`);
+            }
+
             const con = document.getElementById('qChoices'); con.innerHTML = '';
-            const isAnyMostSelected = !!ans.most, isAnyLeastSelected = !!ans.least;
             q.choices.forEach((c, i) => {
                 const isThisMost = ans.most === c.type, isThisLeast = ans.least === c.type;
                 let cardStyle = "bg-white text-slate-700 border-slate-100";
@@ -607,10 +636,10 @@
                 else if (isThisLeast) cardStyle = "bg-red-500 text-white border-red-500";
                 let mostBtnStyle = "bg-green-500 text-white hover:bg-green-600";
                 if (isThisMost) mostBtnStyle = "bg-green-900 text-white border-green-800 scale-[1.05]";
-                else if (isAnyMostSelected) mostBtnStyle = "bg-green-200 text-green-800 opacity-40";
+                else if (ans.most) mostBtnStyle = "bg-green-200 text-green-800 opacity-40";
                 let leastBtnStyle = "bg-red-500 text-white hover:bg-red-600";
                 if (isThisLeast) leastBtnStyle = "bg-red-900 text-white border-red-800 scale-[1.05]";
-                else if (isAnyLeastSelected) leastBtnStyle = "bg-red-200 text-red-800 opacity-40";
+                else if (ans.least) leastBtnStyle = "bg-red-200 text-red-800 opacity-40";
                 const card = document.createElement('div');
                 card.className = `choice-card p-4 rounded-xl flex justify-between items-center transition-all duration-300 ${cardStyle}`;
                 card.innerHTML = `<span class="text-sm font-normal flex-1 pr-2">${c.text}</span><div class="flex gap-2 shrink-0"><button onclick="pickChoice(${i}, 'most')" class="btn-standard h-9 px-3 rounded-lg text-[11px] border flex items-center gap-1 transition-all ${mostBtnStyle}"><i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> มากสุด</button><button onclick="pickChoice(${i}, 'least')" class="btn-standard h-9 px-3 rounded-lg text-[11px] border flex items-center gap-1 transition-all ${leastBtnStyle}"><i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> น้อยสุด</button></div>`;
@@ -625,26 +654,63 @@
 
         window.pickChoice = (idx, mode) => { 
             unlockVoice();
-            const q = discQuestions[currentQIndex], type = q.choices[idx].type, ans = assessmentAnswers[currentQIndex]; 
+            const q = discQuestions[currentQIndex], choice = q.choices[idx], type = choice.type, ans = assessmentAnswers[currentQIndex]; 
+            const modeText = mode === 'most' ? "เป็นคุณมากที่สุด" : "เป็นคุณน้อยที่สุด";
+            speak(`${choice.text} ${modeText} ค่ะ`);
+
             if (mode === 'most') { if (ans.least === type) ans.least = null; ans.most = type; } 
             else { if (ans.most === type) ans.most = null; ans.least = type; } 
-            renderQuestion(); 
+            
+            renderQuestion(false); 
         };
-        window.prevQuestion = () => { unlockVoice(); if (currentQIndex > 0) { currentQIndex--; renderQuestion(); } };
-        window.nextQuestion = async () => { unlockVoice(); if (currentQIndex < discQuestions.length - 1) { currentQIndex++; renderQuestion(); } else await calculateAndSaveResult(); };
+
+        window.prevQuestion = () => { unlockVoice(); if (currentQIndex > 0) { currentQIndex--; renderQuestion(true); } };
+        window.nextQuestion = async () => { unlockVoice(); if (currentQIndex < discQuestions.length - 1) { currentQIndex++; renderQuestion(true); } else await calculateAndSaveResult(); };
 
         const calculateAndSaveResult = async () => {
             document.getElementById('globalLoader').classList.remove('hidden');
             const scores = { D: 0, I: 0, S: 0, C: 0 };
-            assessmentAnswers.forEach(ans => { if (ans.most) scores[ans.most] += 1; if (ans.least) scores[ans.least] -= 1; });
+            
+            // บันทึกคำตอบแบบละเอียด
+            const detailedResponses = assessmentAnswers.map((ans, index) => {
+                if (ans.most) scores[ans.most] += 1;
+                if (ans.least) scores[ans.least] -= 1;
+                return {
+                    qIndex: index + 1,
+                    most: ans.most,
+                    least: ans.least,
+                    prompt: discQuestions[index].prompt
+                };
+            });
+
             const sortedResults = Object.entries(scores).sort((a, b) => b[1] - a[1]);
             const finalPrimary = sortedResults[0][0], finalSecondary = sortedResults[1][0]; 
+
             try {
-                const docRef = doc(db, COLLECTION_NAME, currentMember.docId);
-                await updateDoc(docRef, { DISC: finalPrimary, DISC2: finalSecondary, updatedAt: serverTimestamp() });
+                // อัปเดตในตารางหลัก
+                const memberDocRef = doc(db, COLLECTION_NAME, currentMember.docId);
+                await updateDoc(memberDocRef, { DISC: finalPrimary, DISC2: finalSecondary, updatedAt: serverTimestamp() });
+                
+                // บันทึกลงในตาราง DISC_Results (Rule 1: artifacts/appId/public/data/collection)
+                const resultsColRef = collection(db, 'artifacts', appId, 'public', 'data', 'DISC_Results');
+                await addDoc(resultsColRef, {
+                    EmpID: currentMember.EmpID,
+                    FullName: currentMember.FullName,
+                    Group: currentMember.Group,
+                    responses: detailedResponses,
+                    scores: scores,
+                    primary: finalPrimary,
+                    secondary: finalSecondary,
+                    timestamp: serverTimestamp(),
+                    userIP: userIP
+                });
+
                 currentMember.DISC = finalPrimary; currentMember.DISC2 = finalSecondary;
                 showMessage("บันทึกผลสำเร็จ"); showMainPage(currentMember); switchTab('user');
-            } catch { showMessage("บันทึกผลผิดพลาด", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
+            } catch (err) { 
+                console.error(err);
+                showMessage("บันทึกผลผิดพลาด", "error"); 
+            } finally { document.getElementById('globalLoader').classList.add('hidden'); }
         };
 
         window.confirmReset = () => resetAssessment();
@@ -673,10 +739,7 @@
         window.closeInfoModal = () => document.getElementById('infoModal').classList.add('hidden');
         const closeRegModal = () => { document.getElementById('regModalBackdrop').classList.add('hidden'); inputPinValue = ""; };
         const updatePinDisplay = () => { for(let i=0; i<6; i++) { const box = document.getElementById(`pin-${i}`); if (box) { box.textContent = i < inputPinValue.length ? "•" : ""; box.classList.toggle('active', i < inputPinValue.length); } } };
-        window.pressKey = (k) => { 
-            unlockVoice();
-            if (k === 'del') inputPinValue = inputPinValue.slice(0, -1); else if (k === 'clear') inputPinValue = ""; else if (inputPinValue.length < 6) inputPinValue += k; updatePinDisplay(); 
-        };
+        window.pressKey = (k) => { unlockVoice(); if (k === 'del') inputPinValue = inputPinValue.slice(0, -1); else if (k === 'clear') inputPinValue = ""; else if (inputPinValue.length < 6) inputPinValue += k; updatePinDisplay(); };
 
         const handleIdSubmission = async () => {
             unlockVoice();
@@ -702,25 +765,19 @@
 
         onAuthStateChanged(auth, (u) => { if (u) { document.getElementById('globalLoader').classList.add('hidden'); document.getElementById('landingPage').classList.remove('hidden'); } });
         
-        // โหลดเสียงล่วงหน้า (จำเป็นสำหรับบางเบราว์เซอร์)
         window.speechSynthesis.getVoices();
-        if (window.speechSynthesis.onvoiceschanged !== undefined) {
-            window.speechSynthesis.onvoiceschanged = window.speechSynthesis.getVoices;
-        }
+        if (window.speechSynthesis.onvoiceschanged !== undefined) window.speechSynthesis.onvoiceschanged = window.speechSynthesis.getVoices;
 
         const startApp = async () => {
             await fetchIP(); try { await signInAnonymously(auth); } catch { document.getElementById('globalLoader').classList.add('hidden'); document.getElementById('landingPage').classList.remove('hidden'); }
-            document.getElementById('openModalBtn').onclick = () => { 
-                unlockVoice();
-                document.getElementById('regModalBackdrop').classList.remove('hidden'); document.getElementById('stepEmployeeId').classList.remove('hidden'); document.getElementById('EmpID').value = ""; 
-            };
+            document.getElementById('openModalBtn').onclick = () => { unlockVoice(); document.getElementById('regModalBackdrop').classList.remove('hidden'); document.getElementById('stepEmployeeId').classList.remove('hidden'); document.getElementById('EmpID').value = ""; };
             document.getElementById('cancelBtn').onclick = closeRegModal;
             document.getElementById('submitIdBtn').onclick = handleIdSubmission;
             document.getElementById('setPin').oninput = document.getElementById('confirmPin').oninput = () => { const p1 = document.getElementById('setPin').value, p2 = document.getElementById('confirmPin').value; document.getElementById('confirmRegBtn').disabled = !(p1.length === 6 && p1 === p2); };
             document.getElementById('EmpID').oninput = (e) => { e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5); document.getElementById('submitIdBtn').disabled = e.target.value.length !== 5; };
             document.getElementById('confirmRegBtn').onclick = async () => {
                 unlockVoice();
-                const p = document.getElementById('setPin').value; const bt = document.getElementById('confirmRegBtn'); bt.disabled = true;
+                const p = document.getElementById('setPin').value, bt = document.getElementById('confirmRegBtn'); bt.disabled = true;
                 try { const dr = doc(db, COLLECTION_NAME, currentMember.docId); const ud = { pin: String(p), Times: 1, ActivatedAt: serverTimestamp(), lastLogin: serverTimestamp(), IPAddress: userIP }; await updateDoc(dr, ud); showMainPage({ ...currentMember, ...ud }); } catch { showMessage("ล้มเหลว", "error"); bt.disabled = false; }
             };
             document.getElementById('savePinLoginBtn').onclick = async () => {
