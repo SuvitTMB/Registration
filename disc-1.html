@@ -143,8 +143,12 @@
         /* Style สำหรับข้อความเมนูด้านล่าง ปรับระยะบรรทัด 3px */
         .bottom-nav-item span {
             font-size: 11px;
-            line-height: 14px; /* 11px + 3px gap = 14px */
+            line-height: 14px; /* 11px font + 3px gap = 14px line-height */
             display: block;
+        }
+        /* เฉพาะปุ่ม Check Out ปรับระยะห่างตัวอักษร 3px */
+        .nav-checkout span {
+            letter-spacing: 3px;
         }
 
         .choice-card {
@@ -182,11 +186,6 @@
         .text-i { color: #ef4444; }
         .text-s { color: #3b82f6; }
         .text-c { color: #eab308; }
-
-        .voice-btn.active {
-            background-color: rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center m-0 p-0 text-gray-800">
@@ -229,7 +228,7 @@
                     <p id="userSub" class="text-[10px] opacity-80 font-normal"></p>
                 </div>
             </div>
-            <!-- ปุ่มควบคุมเสียง (เหลือเพียงปุ่มเปิด/ปิดเสียง) -->
+            <!-- ปุ่มควบคุมเสียง -->
             <div class="flex items-center gap-1">
                 <button id="voiceMuteBtn" onclick="toggleMute()" class="p-2 text-white hover:bg-white/10 transition-all"><i id="muteIcon" data-lucide="volume-2" class="w-5 h-5"></i></button>
             </div>
@@ -321,13 +320,17 @@
             </div>
         </div>
 
-        <!-- เมนูนำทางด้านล่าง ปรับให้นำ <br> ออกจากไอคอน 3 และ 4 -->
+        <!-- เมนูนำทางด้านล่าง -->
         <div class="fixed bottom-0 w-full max-w-[500px] bg-slate-50 border-t border-slate-200 h-20 flex items-center justify-around px-2 z-50 shadow-[0_-4px_15px_rgba(0,0,0,0.05)]">
             <button class="bottom-nav-item active" onclick="switchTab('home')"><i data-lucide="house" class="w-6 h-6"></i><span>Home</span></button>
             <button class="bottom-nav-item" onclick="switchTab('about')"><i data-lucide="info" class="w-6 h-6"></i><span>รู้จัก<br><span class="font-bold">DiSC</span></span></button>
             <button class="bottom-nav-item" onclick="switchTab('user')"><i data-lucide="user" class="w-6 h-6"></i><span><span class="font-bold">DiSC</span> ของคุณ</span></button>
             <button class="bottom-nav-item" onclick="switchTab('team')"><i data-lucide="users" class="w-6 h-6"></i><span><span class="font-bold">DiSC</span> ของทีม</span></button>
-            <button class="bottom-nav-item" onclick="location.reload()"><i data-lucide="log-out" class="w-6 h-6"></i><span>Check Out</span></button>
+            <!-- ปุ่ม Check Out: ปรับเป็น 2 บรรทัด และระยะห่างตัวอักษร 3px -->
+            <button class="bottom-nav-item nav-checkout" onclick="location.reload()">
+                <i data-lucide="log-out" class="w-6 h-6"></i>
+                <span>Check<br>Out</span>
+            </button>
         </div>
     </div>
 
@@ -455,151 +458,53 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const apiKey = ""; // API Key สำหรับ Gemini TTS
 
         let currentMember = null, userIP = "", inputPinValue = "";
         let currentQIndex = 0, assessmentAnswers = [];
-        let voiceGender = 'female'; // ล็อคเสียงผู้หญิงตามคำขอ
         let isMuted = false;
-        let audioPlayer = new Audio();
         let isAudioUnlocked = false; 
 
-        const discQuestions = [
-            { id: 1, prompt: "ในการประชุม ถ้าเลือกได้ คุณชอบที่จะตรงไป ...", choices: [{text: "นั่งที่หัวโต๊ะ", type: "D"}, {text: "นั่งตรงไหนที่ก็ได้ที่ทุกคนจะเห็นคุณได้ชัดเจน", type: "I"}, {text: "นั่งข้างๆ ตรงที่มีคนรู้จักนั่งอยู่แล้ว", type: "S"}, {text: "นั่งข้างๆ คนที่รู้จัก โดยเว้นเก้าอี้ว่างระหว่างเขากับคุณไว้ 1 ตัว", type: "C"}] },
-            { id: 2, prompt: "ในการสนทนา สายตาของคุณมักอยู่ที่ ...", choices: [{text: "คู่สนทนาตลอดการสนทนา", type: "D"}, {text: "คู่สนทนาเป็นส่วนใหญ่", type: "I"}, {text: "พื้นห้องสลับกับที่คู่สนทนา", type: "S"}, {text: "ความเคลื่อนไหวรอบๆ ห้องมากกว่าคู่สนทนา", type: "C"}] },
-            { id: 3, prompt: "ในระหว่างการสนทนากับคนรู้จัก คุณ ...", choices: [{text: "ไม่ชอบถ้าอีกฝ่ายเข้ามาประชิดคุณมากเกินไป", type: "D"}, {text: "ชอบคุยเคียงบ่าเคียงไหล่", type: "I"}, {text: "เฉยๆ เห็นเป็นเรื่องธรรมดา ถ้าอีกฝ่ายเข้ามาใกล้ๆ", type: "S"}, {text: "รู้สึกอึดอัดทันทีที่อีกฝ่ายเข้ามา", type: "C"}] },
-            { id: 4, prompt: "ลักษณะการเดินของคุณ …", choices: [{text: "เดินเร็ว", type: "D"}, {text: "กระตือรือร้น มีชีวิต ชีวา", type: "I"}, {text: "ช้าๆ และตามสบาย", type: "S"}, {text: "มีจังหวะสม่ำเสมอ", type: "C"}] },
-            { id: 5, prompt: "ในขณะที่ฟังคนอื่นพูด คุณ ...", choices: [{text: "ต้องการหาประเด็นสำคัญให้เร็วที่สุด", type: "D"}, {text: "หูผึ่งกับเรื่องราวดีๆ มากกว่าอย่างอื่น", type: "I"}, {text: "มักคิดไปด้วยว่าผู้ที่พูดเขามีความรู้สึกอย่างไรในขณะนั้น", type: "S"}, {text: "ฟังหาข้อมูลสนับสนุนประเด็นที่เขาพูด", type: "C"}] },
-            { id: 6, prompt: "ในการพูดต่อหน้าสาธารณชนคุณเน้นที่จะ ...", choices: [{text: "พูดเสียงดัง ฟังชัดอย่างมั่นใจ", type: "D"}, {text: "พูดอย่างมีท่วงทำนอง ไม่ลืมที่จะใช้เสียงสูงและต่ำสลับกันไป", type: "I"}, {text: "พูดเสียงเบา พูดไปเรื่อยๆ", type: "S"}, {text: "พูดให้ชัดถ้อยชัดคำ ให้ชัดเจนแต่ไม่ดัง", type: "C"}] },
-            { id: 7, prompt: "ในสถานการณ์ที่ต้องเปลี่ยนแผนงานกะทันหัน คุณ ...", choices: [{text: "พร้อมลุยและปรับเปลี่ยนทันที", type: "D"}, {text: "มองว่าเป็นการผจญภัยที่น่าตื่นเต้น", type: "I"}, {text: "ขอเวลาทำใจและค่อยๆ ปรับตาม", type: "S"}, {text: "ตรวจสอบผลกระทบและแผนสำรองอย่างละเอียด", type: "C"}] },
-            { id: 8, prompt: "เมื่อมีผู้มาเยี่ยมเยียนที่ห้องทำงานของคุณ คุณ ...", choices: [{text: "บอกให้เขานั่งลงได้", type: "D"}, {text: "เลื่อนเก้าอี้ออกมาและเชิญให้เขานั่ง", type: "I"}, {text: "ถามเขาว่าอยากจะนั่งลงก่อนไหม", type: "S"}, {text: "ให้เขาตัดสินใจว่าจะนั่งหรือจะยืน หรือว่าจะนั่งตรงไหน", type: "C"}] },
-            { id: 9, prompt: "เมื่อคุณกำลังร่วมวงในการร่วมกันแก้ไขปัญหา คุณ ...", choices: [{text: "เป็นผู้นำการสนทนา", type: "D"}, {text: "ใส่ใจกับภาพรวมมากกว่าลงไปในรายละเอียด", type: "I"}, {text: "เป็นผู้รับฟังที่ดี", type: "S"}, {text: "ใส่ใจกับรายละเอียดและความเป็นจริง", type: "C"}] },
-            { id: 10, prompt: "เมื่อนัดผู้ร่วมงานมาปรึกษาหารือกัน คุณมักเริ่มการสนทนาโดย ...", choices: [{text: "จะคุยกันในประเด็นอะไร ก็ว่าไปเลย", type: "D"}, {text: "เล่าเรื่องโน้น เรื่องนี้ซะหน่อยก่อน", type: "I"}, {text: "ถามสารทุกข์สุกดิบของอีกฝ่ายซะก่อน", type: "S"}, {text: "กล่าวถึงจุดประสงค์ของเรื่องที่จะคุยก่อน", type: "C"}] },
-            { id: 11, prompt: "ในการตัดสินใจ คุณตัดสินใจจาก ...", choices: [{text: "สิ่งที่คุณเชื่อและการสรุปของคุณ", type: "D"}, {text: "การที่ทุกคนเห็นด้วยกับการตัดสินใจนั้นๆ", type: "I"}, {text: "การที่จะมีผู้ได้รับผลกระทบมากเท่าไหร่ แค่ไหน", type: "S"}, {text: "เหตุผล และจากข้อมูลที่พิสูจ็นได้", type: "C"}] },
-            { id: 12, prompt: "เวลาฟังการนำเสนอ คุณ ...", choices: [{text: "ชอบให้รวบรัด", type: "D"}, {text: "ชอบให้เฮฮา", type: "I"}, {text: "มักถามในใจว่า คนพูดเขารู้สึกยังไงอยู่นะ", type: "S"}, {text: "ประเมินถึงความเป็นไปได้/ เป็นไปไม่ได้ในเนื้อหาที่นำเสนอ", type: "C"}] },
-            { id: 13, prompt: "เมื่อคุณพยายามที่จะไขว่คว้าอะไรมาสักอย่าง คุณ ...", choices: [{text: "รู้ว่าคุณทำได้ และถึงมีคู่แข่ง คุณก็ไม่หวั่น", type: "D"}, {text: "หว่านล้อมจูงใจเก่ง", type: "I"}, {text: "พยายามทำความเข้าใจก่อนว่าอีกฝ่ายต้องการอะไร", type: "S"}, {text: "ใช้ข้อมูลที่เพียบพร้อมของคุณให้เป็นประโยชน์", type: "C"}] },
-            { id: 14, prompt: "ผู้อื่นมักจะ ...", choices: [{text: "รู้จักความเป็นคุณในขอบเขตที่คุณต้องการเท่านั้น", type: "D"}, {text: "มองว่าคุณเป็นคนเปิดเผย", type: "I"}, {text: "มองว่าคุณเป็นที่ปรึกษาที่ดีทั้งเรื่องงานและส่วนตัว", type: "S"}, {text: "มองว่าคุณเป็นคนลึกลับ เก็บตัว", type: "C"}] },
-            { id: 15, prompt: "ในการประชุมกลุ่ม คุณเห็นว่าเป็นสิ่งสำคัญที่ ...", choices: [{text: "คุณรับหน้าที่ดำเนินรายการเอง", type: "D"}, {text: "คุณทำให้ทุกคนมีส่วนร่วม", type: "I"}, {text: "คุณรับฟังผู้อื่น และผู้อื่นรับฟังคุณ", type: "S"}, {text: "คุณประเมินข้อดี ข้อเสียของแต่ละความคิดอย่างรอบคอบ", type: "C"}] },
-            { id: 16, prompt: "คุณคิดว่าการเปิดเผยความรู้สึกส่วนตัวให้ผู้อื่นรับทราบนั้น ...", choices: [{text: "ทำให้การทำงานช้าลง", type: "D"}, {text: "น่าสนใจดี", type: "I"}, {text: "ช่วยให้ปรับตัวเข้าหากันง่ายขึ้น", type: "S"}, {text: "เป็นเรื่องที่อึดอัดจะตายไป", type: "C"}] },
-            { id: 17, prompt: "ตอนที่คุณเล่าเรื่องอะไรสักอย่าง คุณ ...", choices: [{text: "ตรงไปที่ประเด็นสำคัญเลย", type: "D"}, {text: "ทำให้ผู้ฟังเคลิ้ม ไม่ลุกไปไหนได้ตั้งแต่ต้นจนจบ", type: "I"}, {text: "พูดระบุถึงสถานการณ์ของตัวประกอบในเรื่องได้ดี", type: "S"}, {text: "พูดอย่างเป็นระบบ มีข้อมูลสนับสนุน", type: "C"}] },
-            { id: 18, prompt: "เมื่อคุณนำเสนอสิ่งที่สำคัญมาก คุณ ...", choices: [{text: "ดูจริงจัง น่าเกรงขาม", type: "D"}, {text: "เป็นนักแสดงที่สร้างความบันเทิงได้ดี", type: "I"}, {text: "อ่อนโยน คำนึงถึงผู้ฟัง", type: "S"}, {text: "เรียบเรียงข้อมูลอย่างดี มีขั้นตอนชัดเจน", type: "C"}] },
-            { id: 19, prompt: "เมื่อมีใครสักคนมาร้องไห้อยู่ตรงหน้าคุณ คุณ ...", choices: [{text: "บอกให้เขาหยุดร้องไห้จะดีกว่า", type: "D"}, {text: "พยายามพูดให้เขาอารมณ์ดีขึ้น", type: "I"}, {text: "ให้คำปรึกษา แสดงความเข้าใจ", type: "S"}, {text: "ลำบากใจ และอยากปลีกตัวออกไป", type: "C"}] },
-            { id: 20, prompt: "การคุยโทรศัพท์ของคุณ …", choices: [{text: "มุ่งไปที่ประเด็นสำคัญ", type: "D"}, {text: "สร้างความสดใส มีชีวิตชีวา", type: "I"}, {text: "มักยืดเยื้อ อ้อมค้อม", type: "S"}, {text: "สั้นที่สุดเท่าที่จะเป็นไปได้", type: "C"}] }
-        ];
-
-        function unlockAudio() {
+        // ระบบเสียง (Web Speech API - Non-API)
+        function unlockVoice() {
             if (isAudioUnlocked) return;
-            audioPlayer.play().then(() => {
-                audioPlayer.pause();
-                audioPlayer.currentTime = 0;
-                isAudioUnlocked = true;
-            }).catch(() => {});
+            // สร้างประโยคเปล่าเพื่อหลอกระบบเบราว์เซอร์ให้ปลดล็อคเสียงบนมือถือ
+            const utterance = new SpeechSynthesisUtterance("");
+            window.speechSynthesis.speak(utterance);
+            isAudioUnlocked = true;
         }
 
-        function pcmToWav(pcmData, sampleRate) {
-            const buffer = new ArrayBuffer(44 + pcmData.length);
-            const view = new DataView(buffer);
-            const writeString = (offset, string) => { for (let i = 0; i < string.length; i++) view.setUint8(offset + i, string.charCodeAt(i)); };
-            writeString(0, 'RIFF');
-            view.setUint32(4, 36 + pcmData.length, true);
-            writeString(8, 'WAVE');
-            writeString(12, 'fmt ');
-            view.setUint32(16, 16, true);
-            view.setUint16(20, 1, true);
-            view.setUint16(22, 1, true);
-            view.setUint32(24, sampleRate, true);
-            view.setUint32(28, sampleRate * 2, true);
-            view.setUint16(32, 2, true);
-            view.setUint16(34, 16, true);
-            writeString(36, 'data');
-            view.setUint32(40, pcmData.length, true);
-            const pcmView = new Uint8Array(pcmData);
-            new Uint8Array(buffer, 44).set(pcmView);
-            return new Blob([buffer], { type: 'audio/wav' });
-        }
-
-        async function speak(text) {
+        function speak(text) {
             if (isMuted) return;
-            unlockAudio();
-            audioPlayer.pause();
+            unlockVoice();
             
-            // ล็อคเสียงผู้หญิง Kore
-            const voiceName = 'Kore';
-            const promptPrefix = "Talk clearly in a gentle professional female voice in Thai: ";
+            // หยุดเสียงที่กำลังพูดอยู่
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'th-TH';
+            utterance.rate = 1.1;  // เพิ่มความเร็วในการพูดให้เป็นธรรมชาติและกระชับขึ้น
+            utterance.pitch = 1.1; // ปรับโทนให้เป็นผู้หญิงมากขึ้น
+
+            // เลือกเสียงผู้หญิงที่เป็นธรรมชาติถ้ามีในระบบ
+            const voices = window.speechSynthesis.getVoices();
+            const femaleVoice = voices.find(v => 
+                v.lang === 'th-TH' && 
+                (v.name.includes('Female') || v.name.includes('Google') || v.name.includes('Kanya'))
+            );
             
-            const fallbackSpeak = (txt) => {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(txt);
-                utterance.lang = 'th-TH';
-                utterance.rate = 1.0;
-                utterance.pitch = 1.15;
-                window.speechSynthesis.speak(utterance);
-            };
-
-            if (!apiKey || apiKey === "") {
-                fallbackSpeak(text);
-                return;
+            if (femaleVoice) {
+                utterance.voice = femaleVoice;
             }
 
-            const makeRequest = async () => {
-                return await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: promptPrefix + text }] }],
-                        generationConfig: { 
-                            responseModalities: ["AUDIO"], 
-                            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName } } } 
-                        }
-                    })
-                });
-            };
-
-            let response;
-            let retries = 0;
-            const delays = [1000, 2000, 4000];
-
-            while (retries <= 3) {
-                try {
-                    response = await makeRequest();
-                    if (response.ok) break;
-                } catch (e) {}
-                if (retries === 3) {
-                    fallbackSpeak(text);
-                    return;
-                }
-                await new Promise(res => setTimeout(res, delays[retries]));
-                retries++;
-            }
-
-            try {
-                const result = await response.json();
-                const part = result.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
-                if (!part || !part.inlineData || !part.inlineData.data) {
-                    fallbackSpeak(text);
-                    return;
-                }
-                const base64Data = part.inlineData.data;
-                const mimeType = part.inlineData.mimeType || 'audio/L16;rate=24000';
-                const sampleRateMatch = mimeType.match(/rate=(\d+)/);
-                const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1]) : 24000;
-                const pcmData = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
-                const wavBlob = pcmToWav(pcmData, sampleRate);
-                
-                audioPlayer.src = URL.createObjectURL(wavBlob);
-                audioPlayer.play().catch(() => fallbackSpeak(text));
-            } catch (e) { 
-                fallbackSpeak(text);
-            }
+            window.speechSynthesis.speak(utterance);
         }
 
         window.toggleMute = () => {
-            unlockAudio();
+            unlockVoice();
             isMuted = !isMuted;
             const icon = document.getElementById('muteIcon');
             if (isMuted) {
                 icon.setAttribute('data-lucide', 'volume-x');
-                audioPlayer.pause();
                 window.speechSynthesis.cancel();
             } else {
                 icon.setAttribute('data-lucide', 'volume-2');
@@ -610,7 +515,6 @@
 
         const triggerHomeGreeting = () => {
             if (isMuted) return;
-            const genderTerm = 'ค่ะ'; // ใช้ "ค่ะ" เสมอ
             let script = `สวัสดีค่ะ คุณ ${currentMember.FullName} ยินดีต้อนรับเข้าสู่ระบบ ดีไอเอสซี นาวีเกเตอร์ ค่ะ ดีไอเอสซี คือเครื่องมือวิเคราะห์พฤติกรรมมนุษย์ที่ช่วยให้เราเข้าใจสไตล์การทำงานและการสื่อสารของคนแต่ละแบบค่ะ`;
             script += ` หากคุณต้องการทำความรู้จักกับ ดีไอเอสซี ให้มากขึ้น สามารถคลิกที่ปุ่มสีน้ำเงินได้เลยนะคะ`;
             if (currentMember.DISC) script += ` และตอนนี้ระบบได้วิเคราะห์ผลลัพธ์ของคุณเรียบร้อยแล้ว คุณสามารถคลิกที่ปุ่มสีส้มเพื่อดูผลการวิเคราะห์ ดีไอเอสซี ของคุณได้ทันทีค่ะ`;
@@ -622,7 +526,7 @@
         const showMessage = (t, ty = 'success') => { const m = document.getElementById('messageBox'); if (!m) return; m.textContent = t; m.className = `fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl shadow-lg font-normal transition-all duration-300 ${ty === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`; m.classList.remove('hidden', 'opacity-0'); setTimeout(() => { m.classList.add('opacity-0'); setTimeout(() => m.classList.add('hidden'), 300); }, 3000); };
 
         window.switchTab = (n) => { 
-            unlockAudio();
+            unlockVoice();
             document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden')); 
             const tar = document.getElementById(`tab-${n}`); 
             if (tar) tar.classList.remove('hidden'); 
@@ -635,7 +539,6 @@
                 }
             }); 
             if (n === 'home') triggerHomeGreeting(); else {
-                audioPlayer.pause();
                 window.speechSynthesis.cancel();
             }
         };
@@ -649,7 +552,7 @@
             if (main) main.classList.remove('hidden');
             document.getElementById('topColorBar').classList.add('hidden');
             document.getElementById('bottomColorBar').classList.add('hidden');
-            document.getElementById('welcomeUser').textContent = u.FullName || 'พนักงาน'; // เอา "สวัสดีครับ," ออก
+            document.getElementById('welcomeUser').textContent = u.FullName || 'พนักงาน'; 
             document.getElementById('userSub').textContent = `${u.Group || '-'} | ${u.SubGroup || '-'}`;
             document.getElementById('profileName').textContent = u.FullName || '-';
             document.getElementById('profileDetail').textContent = `${u.Group || '-'} | ${u.SubGroup || '-'}`;
@@ -671,9 +574,8 @@
         };
 
         window.startAssessmentFlow = () => { 
-            unlockAudio();
+            unlockVoice();
             if (currentMember.DISC) { showMessage("คุณทำแบบทดสอบไปแล้ว ไม่สามารถทำซ้ำได้", "error"); return; }
-            audioPlayer.pause();
             window.speechSynthesis.cancel();
             document.getElementById('mainDiscPage').classList.add('hidden'); 
             document.getElementById('assessmentPage').classList.remove('hidden'); 
@@ -683,7 +585,7 @@
         };
         window.exitAssessment = () => showMainPage(currentMember);
         window.beginActualTest = () => { 
-            unlockAudio();
+            unlockVoice();
             currentQIndex = 0; 
             assessmentAnswers = new Array(discQuestions.length).fill(null).map(() => ({most: null, least: null})); 
             document.getElementById('assessmentIntro').classList.add('hidden'); 
@@ -722,14 +624,14 @@
         };
 
         window.pickChoice = (idx, mode) => { 
-            unlockAudio();
+            unlockVoice();
             const q = discQuestions[currentQIndex], type = q.choices[idx].type, ans = assessmentAnswers[currentQIndex]; 
             if (mode === 'most') { if (ans.least === type) ans.least = null; ans.most = type; } 
             else { if (ans.most === type) ans.most = null; ans.least = type; } 
             renderQuestion(); 
         };
-        window.prevQuestion = () => { unlockAudio(); if (currentQIndex > 0) { currentQIndex--; renderQuestion(); } };
-        window.nextQuestion = async () => { unlockAudio(); if (currentQIndex < discQuestions.length - 1) { currentQIndex++; renderQuestion(); } else await calculateAndSaveResult(); };
+        window.prevQuestion = () => { unlockVoice(); if (currentQIndex > 0) { currentQIndex--; renderQuestion(); } };
+        window.nextQuestion = async () => { unlockVoice(); if (currentQIndex < discQuestions.length - 1) { currentQIndex++; renderQuestion(); } else await calculateAndSaveResult(); };
 
         const calculateAndSaveResult = async () => {
             document.getElementById('globalLoader').classList.remove('hidden');
@@ -747,7 +649,7 @@
 
         window.confirmReset = () => resetAssessment();
         window.resetAssessment = async () => {
-            unlockAudio();
+            unlockVoice();
             document.getElementById('globalLoader').classList.remove('hidden');
             try {
                 const docRef = doc(db, COLLECTION_NAME, currentMember.docId);
@@ -772,12 +674,12 @@
         const closeRegModal = () => { document.getElementById('regModalBackdrop').classList.add('hidden'); inputPinValue = ""; };
         const updatePinDisplay = () => { for(let i=0; i<6; i++) { const box = document.getElementById(`pin-${i}`); if (box) { box.textContent = i < inputPinValue.length ? "•" : ""; box.classList.toggle('active', i < inputPinValue.length); } } };
         window.pressKey = (k) => { 
-            unlockAudio();
+            unlockVoice();
             if (k === 'del') inputPinValue = inputPinValue.slice(0, -1); else if (k === 'clear') inputPinValue = ""; else if (inputPinValue.length < 6) inputPinValue += k; updatePinDisplay(); 
         };
 
         const handleIdSubmission = async () => {
-            unlockAudio();
+            unlockVoice();
             const val = document.getElementById('EmpID').value.trim(); if (val.length !== 5) return;
             const btn = document.getElementById('submitIdBtn'), load = document.getElementById('submitIdLoader'); btn.disabled = true; load.classList.remove('hidden');
             try {
@@ -799,10 +701,17 @@
         };
 
         onAuthStateChanged(auth, (u) => { if (u) { document.getElementById('globalLoader').classList.add('hidden'); document.getElementById('landingPage').classList.remove('hidden'); } });
+        
+        // โหลดเสียงล่วงหน้า (จำเป็นสำหรับบางเบราว์เซอร์)
+        window.speechSynthesis.getVoices();
+        if (window.speechSynthesis.onvoiceschanged !== undefined) {
+            window.speechSynthesis.onvoiceschanged = window.speechSynthesis.getVoices;
+        }
+
         const startApp = async () => {
             await fetchIP(); try { await signInAnonymously(auth); } catch { document.getElementById('globalLoader').classList.add('hidden'); document.getElementById('landingPage').classList.remove('hidden'); }
             document.getElementById('openModalBtn').onclick = () => { 
-                unlockAudio();
+                unlockVoice();
                 document.getElementById('regModalBackdrop').classList.remove('hidden'); document.getElementById('stepEmployeeId').classList.remove('hidden'); document.getElementById('EmpID').value = ""; 
             };
             document.getElementById('cancelBtn').onclick = closeRegModal;
@@ -810,12 +719,12 @@
             document.getElementById('setPin').oninput = document.getElementById('confirmPin').oninput = () => { const p1 = document.getElementById('setPin').value, p2 = document.getElementById('confirmPin').value; document.getElementById('confirmRegBtn').disabled = !(p1.length === 6 && p1 === p2); };
             document.getElementById('EmpID').oninput = (e) => { e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5); document.getElementById('submitIdBtn').disabled = e.target.value.length !== 5; };
             document.getElementById('confirmRegBtn').onclick = async () => {
-                unlockAudio();
+                unlockVoice();
                 const p = document.getElementById('setPin').value; const bt = document.getElementById('confirmRegBtn'); bt.disabled = true;
                 try { const dr = doc(db, COLLECTION_NAME, currentMember.docId); const ud = { pin: String(p), Times: 1, ActivatedAt: serverTimestamp(), lastLogin: serverTimestamp(), IPAddress: userIP }; await updateDoc(dr, ud); showMainPage({ ...currentMember, ...ud }); } catch { showMessage("ล้มเหลว", "error"); bt.disabled = false; }
             };
             document.getElementById('savePinLoginBtn').onclick = async () => {
-                unlockAudio();
+                unlockVoice();
                 if (inputPinValue.length !== 6) return; if (String(inputPinValue) === String(currentMember.pin)) {
                     const dr = doc(db, COLLECTION_NAME, currentMember.docId); const t = (currentMember.Times || 0) + 1;
                     await updateDoc(dr, { Times: t, lastLogin: serverTimestamp() }); showMainPage({ ...currentMember, Times: t });
