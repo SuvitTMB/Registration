@@ -225,14 +225,12 @@
         <div class="w-full px-6 py-4 flex justify-between items-center bg-orange-500 text-white shadow-md z-10">
             <div class="flex items-center gap-2">
                 <div>
-                    <h1 id="welcomeUser" class="text-base font-normal tracking-tight leading-tight">สวัสดีครับ</h1>
+                    <h1 id="welcomeUser" class="text-base font-normal tracking-tight leading-tight">พนักงาน</h1>
                     <p id="userSub" class="text-[10px] opacity-80 font-normal"></p>
                 </div>
             </div>
-            <!-- ปุ่มควบคุมเสียง -->
+            <!-- ปุ่มควบคุมเสียง (เหลือเพียงปุ่มเปิด/ปิดเสียง) -->
             <div class="flex items-center gap-1">
-                <button id="voiceMaleBtn" onclick="toggleVoice('male')" class="voice-btn p-2 text-white hover:bg-white/10 transition-all"><i data-lucide="user" class="w-5 h-5"></i></button>
-                <button id="voiceFemaleBtn" onclick="toggleVoice('female')" class="voice-btn p-2 text-white hover:bg-white/10 transition-all"><i data-lucide="user-round" class="w-5 h-5"></i></button>
                 <button id="voiceMuteBtn" onclick="toggleMute()" class="p-2 text-white hover:bg-white/10 transition-all"><i id="muteIcon" data-lucide="volume-2" class="w-5 h-5"></i></button>
             </div>
         </div>
@@ -323,13 +321,13 @@
             </div>
         </div>
 
-        <!-- เมนูนำทางด้านล่าง ปรับให้ขึ้นบรรทัดใหม่เมื่อมีช่องว่าง -->
+        <!-- เมนูนำทางด้านล่าง ปรับให้นำ <br> ออกจากไอคอน 3 และ 4 -->
         <div class="fixed bottom-0 w-full max-w-[500px] bg-slate-50 border-t border-slate-200 h-20 flex items-center justify-around px-2 z-50 shadow-[0_-4px_15px_rgba(0,0,0,0.05)]">
             <button class="bottom-nav-item active" onclick="switchTab('home')"><i data-lucide="house" class="w-6 h-6"></i><span>Home</span></button>
             <button class="bottom-nav-item" onclick="switchTab('about')"><i data-lucide="info" class="w-6 h-6"></i><span>รู้จัก<br><span class="font-bold">DiSC</span></span></button>
-            <button class="bottom-nav-item" onclick="switchTab('user')"><i data-lucide="user" class="w-6 h-6"></i><span><span class="font-bold">DiSC</span>ของคุณ</span></button>
-            <button class="bottom-nav-item" onclick="switchTab('team')"><i data-lucide="users" class="w-6 h-6"></i><span><span class="font-bold">DiSC</span>ของทีม</span></button>
-            <button class="bottom-nav-item" onclick="location.reload()"><i data-lucide="log-out" class="w-6 h-6"></i><span>Check<br>Out</span></button>
+            <button class="bottom-nav-item" onclick="switchTab('user')"><i data-lucide="user" class="w-6 h-6"></i><span><span class="font-bold">DiSC</span> ของคุณ</span></button>
+            <button class="bottom-nav-item" onclick="switchTab('team')"><i data-lucide="users" class="w-6 h-6"></i><span><span class="font-bold">DiSC</span> ของทีม</span></button>
+            <button class="bottom-nav-item" onclick="location.reload()"><i data-lucide="log-out" class="w-6 h-6"></i><span>Check Out</span></button>
         </div>
     </div>
 
@@ -457,13 +455,14 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const apiKey = ""; // สำหรับ Gemini TTS API (แวดล้อม Canvas จะส่งให้เอง)
+        const apiKey = ""; // API Key สำหรับ Gemini TTS
 
         let currentMember = null, userIP = "", inputPinValue = "";
         let currentQIndex = 0, assessmentAnswers = [];
-        let voiceGender = 'male'; // 'male' or 'female'
+        let voiceGender = 'female'; // ล็อคเสียงผู้หญิงตามคำขอ
         let isMuted = false;
         let audioPlayer = new Audio();
+        let isAudioUnlocked = false; 
 
         const discQuestions = [
             { id: 1, prompt: "ในการประชุม ถ้าเลือกได้ คุณชอบที่จะตรงไป ...", choices: [{text: "นั่งที่หัวโต๊ะ", type: "D"}, {text: "นั่งตรงไหนที่ก็ได้ที่ทุกคนจะเห็นคุณได้ชัดเจน", type: "I"}, {text: "นั่งข้างๆ ตรงที่มีคนรู้จักนั่งอยู่แล้ว", type: "S"}, {text: "นั่งข้างๆ คนที่รู้จัก โดยเว้นเก้าอี้ว่างระหว่างเขากับคุณไว้ 1 ตัว", type: "C"}] },
@@ -488,7 +487,15 @@
             { id: 20, prompt: "การคุยโทรศัพท์ของคุณ …", choices: [{text: "มุ่งไปที่ประเด็นสำคัญ", type: "D"}, {text: "สร้างความสดใส มีชีวิตชีวา", type: "I"}, {text: "มักยืดเยื้อ อ้อมค้อม", type: "S"}, {text: "สั้นที่สุดเท่าที่จะเป็นไปได้", type: "C"}] }
         ];
 
-        // PCM to WAV Helper
+        function unlockAudio() {
+            if (isAudioUnlocked) return;
+            audioPlayer.play().then(() => {
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+                isAudioUnlocked = true;
+            }).catch(() => {});
+        }
+
         function pcmToWav(pcmData, sampleRate) {
             const buffer = new ArrayBuffer(44 + pcmData.length);
             const view = new DataView(buffer);
@@ -513,27 +520,22 @@
 
         async function speak(text) {
             if (isMuted) return;
+            unlockAudio();
             audioPlayer.pause();
             
-            const currentVoiceGender = voiceGender; // ล็อคค่าไว้ป้องกันการเปลี่ยนระหว่างทาง
-            const voiceName = currentVoiceGender === 'male' ? 'Zephyr' : 'Kore';
-            const promptPrefix = currentVoiceGender === 'male' ? "Speak clearly in a warm, helpful male voice: " : "Speak clearly in a gentle, professional female voice: ";
+            // ล็อคเสียงผู้หญิง Kore
+            const voiceName = 'Kore';
+            const promptPrefix = "Talk clearly in a gentle professional female voice in Thai: ";
             
-            // แผนสำรองสำหรับการใช้งานภายนอก (Fallback to Web Speech API)
             const fallbackSpeak = (txt) => {
+                window.speechSynthesis.cancel();
                 const utterance = new SpeechSynthesisUtterance(txt);
                 utterance.lang = 'th-TH';
-                // พยายามหาเสียงชาย/หญิงที่มีในระบบเบราว์เซอร์
-                const voices = window.speechSynthesis.getVoices();
-                if (currentVoiceGender === 'male') {
-                    utterance.pitch = 0.9; // ปรับโทนให้ต่ำลงสำหรับชาย
-                } else {
-                    utterance.pitch = 1.2; // ปรับโทนให้สูงขึ้นสำหรับหญิง
-                }
+                utterance.rate = 1.0;
+                utterance.pitch = 1.15;
                 window.speechSynthesis.speak(utterance);
             };
 
-            // หากเป็นสภาพแวดล้อมที่ไม่มี API Key หรือไม่ใช่ Canvas ให้ใช้ Fallback ทันที
             if (!apiKey || apiKey === "") {
                 fallbackSpeak(text);
                 return;
@@ -555,15 +557,15 @@
 
             let response;
             let retries = 0;
-            const delays = [1000, 2000, 4000, 8000, 16000];
+            const delays = [1000, 2000, 4000];
 
-            while (retries <= 5) {
+            while (retries <= 3) {
                 try {
                     response = await makeRequest();
                     if (response.ok) break;
                 } catch (e) {}
-                if (retries === 5) {
-                    fallbackSpeak(text); // ถ้า Gemini TTS ล้มเหลว ให้ใช้เบราว์เซอร์แทน
+                if (retries === 3) {
+                    fallbackSpeak(text);
                     return;
                 }
                 await new Promise(res => setTimeout(res, delays[retries]));
@@ -583,25 +585,16 @@
                 const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1]) : 24000;
                 const pcmData = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
                 const wavBlob = pcmToWav(pcmData, sampleRate);
+                
                 audioPlayer.src = URL.createObjectURL(wavBlob);
-                audioPlayer.play().catch(e => {
-                    console.error("Playback Error", e);
-                    fallbackSpeak(text);
-                });
+                audioPlayer.play().catch(() => fallbackSpeak(text));
             } catch (e) { 
-                console.error("TTS Result Parsing Error", e);
                 fallbackSpeak(text);
             }
         }
 
-        window.toggleVoice = (gender) => {
-            voiceGender = gender;
-            document.getElementById('voiceMaleBtn').classList.toggle('active', gender === 'male');
-            document.getElementById('voiceFemaleBtn').classList.toggle('active', gender === 'female');
-            if (!document.getElementById('mainDiscPage').classList.contains('hidden')) triggerHomeGreeting();
-        };
-
         window.toggleMute = () => {
+            unlockAudio();
             isMuted = !isMuted;
             const icon = document.getElementById('muteIcon');
             if (isMuted) {
@@ -617,12 +610,11 @@
 
         const triggerHomeGreeting = () => {
             if (isMuted) return;
-            const currentGender = voiceGender;
-            const genderTerm = currentGender === 'male' ? 'ครับ' : 'ค่ะ';
-            let script = `สวัสดี${genderTerm} คุณ ${currentMember.FullName} ยินดีต้อนรับเข้าสู่ระบบ ดีไอเอสซี นาวีเกเตอร์ ${genderTerm} ดีไอเอสซี คือเครื่องมือวิเคราะห์พฤติกรรมมนุษย์ที่ช่วยให้เราเข้าใจสไตล์การทำงานและการสื่อสารของคนแต่ละแบบ${genderTerm}`;
-            script += ` หากคุณต้องการทำความรู้จักกับ ดีไอเอสซี ให้มากขึ้น สามารถคลิกที่ปุ่มสีน้ำเงินได้เลยนะ${genderTerm === 'ครับ' ? 'ครับ' : 'คะ'}`;
-            if (currentMember.DISC) script += ` และตอนนี้ระบบได้วิเคราะห์ผลลัพธ์ของคุณเรียบร้อยแล้ว คุณสามารถคลิกที่ปุ่มสีส้มเพื่อดูผลการวิเคราะห์ ดีไอเอสซี ของคุณได้ทันที${genderTerm}`;
-            else script += ` แต่ดูเหมือนว่าคุณยังไม่ได้ทำแบบประเมินเลยนะ${genderTerm === 'ครับ' ? 'ครับ' : 'คะ'} รบกวนคลิกที่ปุ่มสีส้ม เพื่อเริ่มทำแบบทดสอบ ดีไอเอสซี ของคุณ และค้นพบตัวตนที่แท้จริงของคุณกัน${genderTerm === 'ครับ' ? 'ครับ' : 'คะ'}`;
+            const genderTerm = 'ค่ะ'; // ใช้ "ค่ะ" เสมอ
+            let script = `สวัสดีค่ะ คุณ ${currentMember.FullName} ยินดีต้อนรับเข้าสู่ระบบ ดีไอเอสซี นาวีเกเตอร์ ค่ะ ดีไอเอสซี คือเครื่องมือวิเคราะห์พฤติกรรมมนุษย์ที่ช่วยให้เราเข้าใจสไตล์การทำงานและการสื่อสารของคนแต่ละแบบค่ะ`;
+            script += ` หากคุณต้องการทำความรู้จักกับ ดีไอเอสซี ให้มากขึ้น สามารถคลิกที่ปุ่มสีน้ำเงินได้เลยนะคะ`;
+            if (currentMember.DISC) script += ` และตอนนี้ระบบได้วิเคราะห์ผลลัพธ์ของคุณเรียบร้อยแล้ว คุณสามารถคลิกที่ปุ่มสีส้มเพื่อดูผลการวิเคราะห์ ดีไอเอสซี ของคุณได้ทันทีค่ะ`;
+            else script += ` แต่ดูเหมือนว่าคุณยังไม่ได้ทำแบบประเมินเลยนะคะ รบกวนคลิกที่ปุ่มสีส้ม เพื่อเริ่มทำแบบทดสอบ ดีไอเอสซี ของคุณ และค้นพบตัวตนที่แท้จริงของคุณกันค่ะ`;
             speak(script);
         };
 
@@ -630,6 +622,7 @@
         const showMessage = (t, ty = 'success') => { const m = document.getElementById('messageBox'); if (!m) return; m.textContent = t; m.className = `fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl shadow-lg font-normal transition-all duration-300 ${ty === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`; m.classList.remove('hidden', 'opacity-0'); setTimeout(() => { m.classList.add('opacity-0'); setTimeout(() => m.classList.add('hidden'), 300); }, 3000); };
 
         window.switchTab = (n) => { 
+            unlockAudio();
             document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden')); 
             const tar = document.getElementById(`tab-${n}`); 
             if (tar) tar.classList.remove('hidden'); 
@@ -656,7 +649,7 @@
             if (main) main.classList.remove('hidden');
             document.getElementById('topColorBar').classList.add('hidden');
             document.getElementById('bottomColorBar').classList.add('hidden');
-            document.getElementById('welcomeUser').textContent = `สวัสดีครับ, ${u.FullName || 'พนักงาน'}`;
+            document.getElementById('welcomeUser').textContent = u.FullName || 'พนักงาน'; // เอา "สวัสดีครับ," ออก
             document.getElementById('userSub').textContent = `${u.Group || '-'} | ${u.SubGroup || '-'}`;
             document.getElementById('profileName').textContent = u.FullName || '-';
             document.getElementById('profileDetail').textContent = `${u.Group || '-'} | ${u.SubGroup || '-'}`;
@@ -673,12 +666,12 @@
                 if(noRes) noRes.classList.remove('hidden'); 
                 if(hasRes) hasRes.classList.add('hidden');
             }
-            document.getElementById('voiceMaleBtn').classList.add('active');
             closeRegModal(); lucide.createIcons();
             setTimeout(triggerHomeGreeting, 1000);
         };
 
         window.startAssessmentFlow = () => { 
+            unlockAudio();
             if (currentMember.DISC) { showMessage("คุณทำแบบทดสอบไปแล้ว ไม่สามารถทำซ้ำได้", "error"); return; }
             audioPlayer.pause();
             window.speechSynthesis.cancel();
@@ -690,6 +683,7 @@
         };
         window.exitAssessment = () => showMainPage(currentMember);
         window.beginActualTest = () => { 
+            unlockAudio();
             currentQIndex = 0; 
             assessmentAnswers = new Array(discQuestions.length).fill(null).map(() => ({most: null, least: null})); 
             document.getElementById('assessmentIntro').classList.add('hidden'); 
@@ -728,13 +722,14 @@
         };
 
         window.pickChoice = (idx, mode) => { 
+            unlockAudio();
             const q = discQuestions[currentQIndex], type = q.choices[idx].type, ans = assessmentAnswers[currentQIndex]; 
             if (mode === 'most') { if (ans.least === type) ans.least = null; ans.most = type; } 
             else { if (ans.most === type) ans.most = null; ans.least = type; } 
             renderQuestion(); 
         };
-        window.prevQuestion = () => { if (currentQIndex > 0) { currentQIndex--; renderQuestion(); } };
-        window.nextQuestion = async () => { if (currentQIndex < discQuestions.length - 1) { currentQIndex++; renderQuestion(); } else await calculateAndSaveResult(); };
+        window.prevQuestion = () => { unlockAudio(); if (currentQIndex > 0) { currentQIndex--; renderQuestion(); } };
+        window.nextQuestion = async () => { unlockAudio(); if (currentQIndex < discQuestions.length - 1) { currentQIndex++; renderQuestion(); } else await calculateAndSaveResult(); };
 
         const calculateAndSaveResult = async () => {
             document.getElementById('globalLoader').classList.remove('hidden');
@@ -752,12 +747,13 @@
 
         window.confirmReset = () => resetAssessment();
         window.resetAssessment = async () => {
+            unlockAudio();
             document.getElementById('globalLoader').classList.remove('hidden');
             try {
                 const docRef = doc(db, COLLECTION_NAME, currentMember.docId);
                 await updateDoc(docRef, { DISC: null, DISC2: null, updatedAt: serverTimestamp() });
                 currentMember.DISC = null; currentMember.DISC2 = null;
-                showInfoModal("Reset ข้อมูลเรียบร้อยแล้ว", "คุณสามารถเริ่มต้นทำแบบทดสอบ DiSC ใหม่ได้ทันทีครับ", "check-circle", "green");
+                showInfoModal("Reset ข้อมูลเรียบร้อยแล้ว", "คุณสามารถเริ่มต้นทำแบบทดสอบ DiSC ใหม่ได้ทันทีค่ะ", "check-circle", "green");
                 showMainPage(currentMember); switchTab('home');
             } catch (e) { showMessage("เกิดข้อผิดพลาดในการ Reset", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
         };
@@ -775,9 +771,13 @@
         window.closeInfoModal = () => document.getElementById('infoModal').classList.add('hidden');
         const closeRegModal = () => { document.getElementById('regModalBackdrop').classList.add('hidden'); inputPinValue = ""; };
         const updatePinDisplay = () => { for(let i=0; i<6; i++) { const box = document.getElementById(`pin-${i}`); if (box) { box.textContent = i < inputPinValue.length ? "•" : ""; box.classList.toggle('active', i < inputPinValue.length); } } };
-        window.pressKey = (k) => { if (k === 'del') inputPinValue = inputPinValue.slice(0, -1); else if (k === 'clear') inputPinValue = ""; else if (inputPinValue.length < 6) inputPinValue += k; updatePinDisplay(); };
+        window.pressKey = (k) => { 
+            unlockAudio();
+            if (k === 'del') inputPinValue = inputPinValue.slice(0, -1); else if (k === 'clear') inputPinValue = ""; else if (inputPinValue.length < 6) inputPinValue += k; updatePinDisplay(); 
+        };
 
         const handleIdSubmission = async () => {
+            unlockAudio();
             const val = document.getElementById('EmpID').value.trim(); if (val.length !== 5) return;
             const btn = document.getElementById('submitIdBtn'), load = document.getElementById('submitIdLoader'); btn.disabled = true; load.classList.remove('hidden');
             try {
@@ -801,16 +801,21 @@
         onAuthStateChanged(auth, (u) => { if (u) { document.getElementById('globalLoader').classList.add('hidden'); document.getElementById('landingPage').classList.remove('hidden'); } });
         const startApp = async () => {
             await fetchIP(); try { await signInAnonymously(auth); } catch { document.getElementById('globalLoader').classList.add('hidden'); document.getElementById('landingPage').classList.remove('hidden'); }
-            document.getElementById('openModalBtn').onclick = () => { document.getElementById('regModalBackdrop').classList.remove('hidden'); document.getElementById('stepEmployeeId').classList.remove('hidden'); document.getElementById('EmpID').value = ""; };
+            document.getElementById('openModalBtn').onclick = () => { 
+                unlockAudio();
+                document.getElementById('regModalBackdrop').classList.remove('hidden'); document.getElementById('stepEmployeeId').classList.remove('hidden'); document.getElementById('EmpID').value = ""; 
+            };
             document.getElementById('cancelBtn').onclick = closeRegModal;
             document.getElementById('submitIdBtn').onclick = handleIdSubmission;
             document.getElementById('setPin').oninput = document.getElementById('confirmPin').oninput = () => { const p1 = document.getElementById('setPin').value, p2 = document.getElementById('confirmPin').value; document.getElementById('confirmRegBtn').disabled = !(p1.length === 6 && p1 === p2); };
             document.getElementById('EmpID').oninput = (e) => { e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5); document.getElementById('submitIdBtn').disabled = e.target.value.length !== 5; };
             document.getElementById('confirmRegBtn').onclick = async () => {
+                unlockAudio();
                 const p = document.getElementById('setPin').value; const bt = document.getElementById('confirmRegBtn'); bt.disabled = true;
                 try { const dr = doc(db, COLLECTION_NAME, currentMember.docId); const ud = { pin: String(p), Times: 1, ActivatedAt: serverTimestamp(), lastLogin: serverTimestamp(), IPAddress: userIP }; await updateDoc(dr, ud); showMainPage({ ...currentMember, ...ud }); } catch { showMessage("ล้มเหลว", "error"); bt.disabled = false; }
             };
             document.getElementById('savePinLoginBtn').onclick = async () => {
+                unlockAudio();
                 if (inputPinValue.length !== 6) return; if (String(inputPinValue) === String(currentMember.pin)) {
                     const dr = doc(db, COLLECTION_NAME, currentMember.docId); const t = (currentMember.Times || 0) + 1;
                     await updateDoc(dr, { Times: t, lastLogin: serverTimestamp() }); showMainPage({ ...currentMember, Times: t });
