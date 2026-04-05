@@ -187,7 +187,7 @@
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center m-0 p-0 text-gray-800">
 
-    <div id="globalLoader">
+    <div id="globalLoader" class="hidden">
         <div id="loaderIcon" class="w-10 h-10 border-4 border-slate-100 border-t-blue-600 rounded-full animate-spin mb-6"></div>
     </div>
 
@@ -233,7 +233,7 @@
         <div id="homeContentArea" class="flex-1 overflow-y-auto pb-24 pt-4 px-6 space-y-4 text-center">
             <div id="tab-home" class="tab-content space-y-6">
                 <div class="w-full flex justify-center py-2">
-                    <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[60%] h-auto block">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[65%] h-auto block">
                 </div>
                 <div class="w-full flex justify-center">
                     <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-overall.jpg?alt=media&token=91607be6-5038-4509-afe7-6de5f6bb91e5" class="max-w-full h-auto block">
@@ -260,6 +260,9 @@
             </div>
 
             <div id="tab-about" class="tab-content hidden space-y-4 text-left">
+                <div class="w-full flex justify-center pb-4">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[65%] h-auto block">
+                </div>
                 <h3 class="text-lg font-normal text-slate-800">บุคลิกภาพทั้ง 4 แบบ</h3>
                 <div class="space-y-3">
                     <div class="bg-white p-4 rounded-xl border-l-4 border-green-600"><h4 class="text-d font-bold">Dominance (D) - เป้าประสงค์</h4><p class="text-xs text-slate-500">เน้นผลลัพธ์ รวดเร็ว กล้าตัดสินใจ และชอบความท้าทาย</p></div>
@@ -340,7 +343,6 @@
                 </button>
             </div>
             <div class="w-full flex justify-center pb-3">
-                <!-- ปรับรูป DiSC กว้าง 65% -->
                 <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[65%] h-auto">
             </div>
         </div>
@@ -350,8 +352,7 @@
                 <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FCarl%20Jung.jpg?alt=media&token=4f683dc5-0f68-432d-b15c-679db17ee7f7" alt="Carl Jung" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover">
                 <div class="text-sm text-slate-500 text-left space-y-4 bg-slate-50 p-6 rounded-2xl leading-relaxed">
                     <h2 class="text-xl font-bold text-center text-slate-800">DiSC 4 จริตพิชิตใจ</h2>
-                    <!-- ปรับปรุงข้อความเกี่ยวกับ คาร์ล จุง -->
-                    <p>คาร์ล จุง (Carl Jung) ทฤษฎีทางบุคคลิกภาพของจุงได้รับการยกย่องว่าครอบคลุมปรากฏการณ์ของมนุษยชาติอย่างทั่วถึง เป็นผลงานที่เด่นที่สุดในปัจจุบัน เรามาดูกันดีกว่าว่าการสื่อสารของคุณเป็นแบบไหนใน 4 แบบ เป็น D, I, S หรือ C</p>
+                    <p>คาร์ล จุง (Carl Jung) ทฤษฎีทางบุคลิกภาพของจุงได้รับการยกย่องว่าครอบคลุมปรากฏการณ์ของมนุษยชาติอย่างทั่วถึง เป็นผลงานที่เด่นที่สุดในปัจจุบัน เรามาดูกันดีกว่าว่าการสื่อสารของคุณเป็นแบบไหนใน 4 แบบ เป็น D, I, S หรือ C</p>
                     <p><b>กติกา:</b> ในแต่ละชุด ให้คุณเลือกพฤติกรรมที่เป็นตัวคุณ <span class="text-d font-bold">↑ มากสุด</span> และ <span class="text-i font-bold">↓ น้อยสุด</span> และอย่าลังเล</p>
                     <p class="text-red-500 font-medium border-t pt-4 text-center">หากคุณยังไม่พร้อมสำหรับการทดสอบ<br>สามารถกลับสู่หน้าหลักได้ที่ปุ่มด้านล่างครับ</p>
                 </div>
@@ -365,7 +366,6 @@
                 </div>
             </div>
 
-            <!-- หน้าส่วนคำถาม ปรับระยะ Question ห่างจากรูปด้านบน 15px -->
             <div id="assessmentQuestion" class="hidden space-y-8 mt-[15px]">
                 <div class="text-center">
                     <span class="text-orange-500 font-normal text-xs uppercase tracking-widest">Question <span id="qNumber">1</span> of 20</span>
@@ -402,17 +402,24 @@
                         <button id="submitIdBtn" disabled class="btn-standard btn-lightbox bg-blue-600 text-white transition-all font-normal"><span id="submitIdText">ถัดไป</span><i data-lucide="arrow-right" class="w-4 h-4"></i><div id="submitIdLoader" class="hidden w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div></button>
                     </div>
                 </div>
-                <div id="stepSetupProfile" class="hidden space-y-6">
-                    <div class="bg-white p-4 rounded-xl space-y-2 border border-slate-200 text-[15px]">
+                <div id="stepSetupProfile" class="hidden space-y-4">
+                    <div class="bg-white p-4 rounded-xl space-y-3 border border-slate-200 text-[12px]">
                         <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-400 font-normal">ชื่อ-นามสกุล:</span><span id="dispName" class="font-normal text-blue-700 text-right"></span></div>
-                        <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-400 font-normal">กลุ่มงาน:</span><span id="dispGroup" class="font-normal text-slate-700 text-right"></span></div>
-                        <div class="flex justify-between"><span class="text-slate-400 font-normal">หน่วยงาน:</span><span id="dispSubGroup" class="font-normal text-slate-600 text-right"></span></div>
+                        <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-400 font-normal">กลุ่มงาน:</span><span id="dispGroup" class="font-normal text-slate-700 text-right">-</span></div>
+                        <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-400 font-normal">หน่วยงาน:</span><span id="dispSubGroup" class="font-normal text-slate-700 text-right">-</span></div>
                     </div>
+                    
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-1"><label class="text-[11px] font-normal text-slate-400 tracking-wider">กำหนด PIN (6 หลัก)</label><input type="password" id="setPin" maxlength="6" inputmode="numeric" placeholder="••••••" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-center text-xl tracking-[0.2em] outline-none"></div>
-                        <div class="space-y-1"><label class="text-[11px] font-normal text-slate-400 tracking-wider">ยืนยัน PIN</label><input type="password" id="confirmPin" maxlength="6" inputmode="numeric" placeholder="••••••" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-center text-xl tracking-[0.2em] outline-none"></div>
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-normal text-slate-400 tracking-wider">กำหนด PIN (6 หลัก)</label>
+                            <input type="password" id="setPin" maxlength="6" inputmode="numeric" placeholder="••••••" class="w-full px-4 py-3 bg-white border-2 border-slate-400 rounded-xl text-center text-xl tracking-[0.2em] outline-none focus:border-blue-500">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[11px] font-normal text-slate-400 tracking-wider">ยืนยัน PIN</label>
+                            <input type="password" id="confirmPin" maxlength="6" inputmode="numeric" placeholder="••••••" class="w-full px-4 py-3 bg-white border-2 border-slate-400 rounded-xl text-center text-xl tracking-[0.2em] outline-none focus:border-blue-500">
+                        </div>
                     </div>
-                    <div class="flex justify-center gap-3">
+                    <div class="flex justify-center gap-3 pt-2">
                         <button id="cancelSetupBtn" class="btn-standard btn-lightbox btn-cancel-gray"><span>ยกเลิก</span></button>
                         <button id="confirmRegBtn" disabled class="btn-standard btn-lightbox bg-green-600 text-white shadow-lg disabled:opacity-50"><i data-lucide="user-check" class="w-4 h-4"></i><span>สร้างบัญชีและเข้าใช้งาน</span></button>
                     </div>
@@ -451,21 +458,20 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, updateDoc, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, updateDoc, addDoc, getDocs, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyAciknEYhZU7AwOdfYytC1t_AnW2Ee11us", authDomain: "faifah-ttb.firebaseapp.com", projectId: "faifah-ttb", storageBucket: "faifah-ttb.appspot.com", messagingSenderId: "842980876200", appId: "1:842980876200:web:f33bfad2ccbf263075079d" };
-        const COLLECTION_NAME = "DISC_Member";
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const COLLECTION_NAME = "DISC_Member";
 
         let currentMember = null, userIP = "", inputPinValue = "";
         let currentQIndex = 0, assessmentAnswers = [];
         let isMuted = false;
         let isAudioUnlocked = false; 
 
-        // ชุดคำถาม DiSC ทั้ง 20 ข้อ
         const discQuestions = [
             { id: 1, prompt: "ในการประชุม ถ้าเลือกได้ คุณชอบที่จะตรงไป ...", choices: [{text: "นั่งที่หัวโต๊ะ", type: "D"}, {text: "นั่งตรงไหนที่ก็ได้ที่ทุกคนจะเห็นคุณได้ชัดเจน", type: "I"}, {text: "นั่งข้างๆ ตรงที่มีคนรู้จักนั่งอยู่แล้ว", type: "S"}, {text: "นั่งข้างๆ คนที่รู้จัก โดยเว้นเก้าอี้ว่างระหว่างเขากับคุณไว้ 1 ตัว", type: "C"}] },
             { id: 2, prompt: "ในการสนทนา สายตาของคุณมักอยู่ที่ ...", choices: [{text: "คู่สนทนาตลอดการสนทนา", type: "D"}, {text: "คู่สนทนาเป็นส่วนใหญ่", type: "I"}, {text: "พื้นห้องสลับกับที่คู่สนทนา", type: "S"}, {text: "ความเคลื่อนไหวรอบๆ ห้องมากกว่าคู่สนทนา", type: "C"}] },
@@ -479,7 +485,7 @@
             { id: 10, prompt: "เมื่อนัดผู้ร่วมงานมาปรึกษาหารือกัน คุณมักเริ่มการสนทนาโดย ...", choices: [{text: "จะคุยกันในประเด็นอะไร ก็ว่าไปเลย", type: "D"}, {text: "เล่าเรื่องโน้น เรื่องนี้ซะหน่อยก่อน", type: "I"}, {text: "ถามสารทุกข์สุกดิบของอีกฝ่ายซะก่อน", type: "S"}, {text: "กล่าวถึงจุดประสงค์ของเรื่องที่จะคุยก่อน", type: "C"}] },
             { id: 11, prompt: "ในการตัดสินใจ คุณตัดสินใจจาก ...", choices: [{text: "สิ่งที่คุณเชื่อและการสรุปของคุณ", type: "D"}, {text: "การที่ทุกคนเห็นด้วยกับการตัดสินใจนั้นๆ", type: "I"}, {text: "การที่จะมีผู้ได้รับผลกระทบมากเท่าไหร่ แค่ไหน", type: "S"}, {text: "เหตุผล และจากข้อมูลที่พิสูจ็นได้", type: "C"}] },
             { id: 12, prompt: "เวลาฟังการนำเสนอ คุณ ...", choices: [{text: "ชอบให้รวบรัด", type: "D"}, {text: "ชอบให้เฮฮา", type: "I"}, {text: "มักถามในใจว่า คนพูดเขารู้สึกยังไงอยู่นะ", type: "S"}, {text: "ประเมินถึงความเป็นไปได้/ เป็นไปไม่ได้ในเนื้อหาที่นำเสนอ", type: "C"}] },
-            { id: 13, prompt: "เมื่อคุณพยายามที่จะไขว่คว้าอะไรมาสักอย่าง คุณ ...", choices: [{text: "รู้ว่าคุณทำได้ และถึงมีคู่แข่ง คุณก็ไม่หวั่น", type: "D"}, {text: "หว่านล้อมจูงใจเก่ง", type: "I"}, {text: "พยายามทำความเข้าใจก่อนว่าอีกฝ่ายต้องการอะไร", type: "S"}, {text: "ใช้ข้อมูลที่เพียบพร้อมของคุณให้เป็นประโยชน์", type: "C"}] },
+            { id: 13, prompt: "เมื่อคุณพยายามที่จะไข่คว้าอะไรมาสักอย่าง คุณ ...", choices: [{text: "รู้ว่าคุณทำได้ และถึงมีคู่แข่ง คุณก็ไม่หว่าน", type: "D"}, {text: "หว่านล้อมจูงใจเก่ง", type: "I"}, {text: "พยายามทำความเข้าใจก่อนว่าอีกฝ่ายต้องการอะไร", type: "S"}, {text: "ใช้ข้อมูลที่เพียบพร้อมของคุณให้เป็นประโยชน์", type: "C"}] },
             { id: 14, prompt: "ผู้อื่นมักจะ ...", choices: [{text: "รู้จักความเป็นคุณในขอบเขตที่คุณต้องการเท่านั้น", type: "D"}, {text: "มองว่าคุณเป็นคนเปิดเผย", type: "I"}, {text: "มองว่าคุณเป็นที่ปรึกษาที่ดีทั้งเรื่องงานและส่วนตัว", type: "S"}, {text: "มองว่าคุณเป็นคนลึกลับ เก็บตัว", type: "C"}] },
             { id: 15, prompt: "ในการประชุมกลุ่ม คุณเห็นว่าเป็นสิ่งสำคัญที่ ...", choices: [{text: "คุณรับหน้าที่ดำเนินรายการเอง", type: "D"}, {text: "คุณทำให้ทุกคนมีส่วนร่วม", type: "I"}, {text: "คุณรับฟังผู้อื่น และผู้อื่นรับฟังคุณ", type: "S"}, {text: "คุณประเมินข้อดี ข้อเสียของแต่ละความคิดอย่างรอบคอบ", type: "C"}] },
             { id: 16, prompt: "คุณคิดว่าการเปิดเผยความรู้สึกส่วนตัวให้ผู้อื่นรับทราบนั้น ...", choices: [{text: "ทำให้การทำงานช้าลง", type: "D"}, {text: "น่าสนใจดี", type: "I"}, {text: "ช่วยให้ปรับตัวเข้าหากันง่ายขึ้น", type: "S"}, {text: "เป็นเรื่องที่อึดอัดจะตายไป", type: "C"}] },
@@ -489,7 +495,6 @@
             { id: 20, prompt: "การคุยโทรศัพท์ของคุณ …", choices: [{text: "มุ่งไปที่ประเด็นสำคัญ", type: "D"}, {text: "สร้างความสดใส มีชีวิตชีวา", type: "I"}, {text: "มักยืดเยื้อ อ้อมค้อม", type: "S"}, {text: "สั้นที่สุดเท่าที่จะเป็นไปได้", type: "C"}] }
         ];
 
-        // ระบบเสียง
         function unlockVoice() {
             if (isAudioUnlocked) return;
             const utterance = new SpeechSynthesisUtterance("");
@@ -610,8 +615,7 @@
 
         window.startAssessmentFlow = () => { 
             unlockVoice();
-            if (!currentMember) return;
-            if (currentMember.DISC) { showMessage("คุณทำแบบทดสอบไปแล้ว ไม่สามารถทำซ้ำได้", "error"); return; }
+            if (currentMember && currentMember.DISC) { showMessage("คุณทำแบบทดสอบไปแล้ว ไม่สามารถทำทำซ้ำได้", "error"); return; }
             window.speechSynthesis.cancel();
             document.getElementById('mainDiscPage').classList.add('hidden'); 
             document.getElementById('assessmentPage').classList.remove('hidden'); 
@@ -636,7 +640,7 @@
             const q = discQuestions[currentQIndex], ans = assessmentAnswers[currentQIndex];
             document.getElementById('qNumber').textContent = currentQIndex + 1;
             document.getElementById('qPrompt').textContent = q.prompt;
-            document.getElementById('assessmentProgress').style.width = `${((currentQIndex) / discQuestions.length) * 100}%`;
+            document.getElementById('assessmentProgress').style.width = `${((currentQIndex) / 20) * 100}%`;
             
             if (shouldSpeak) {
                 speak(`คำถามข้อที่ ${currentQIndex + 1} ${q.prompt} กรุณาเลือกข้อที่เป็นคุณมากที่สุดและน้อยที่สุด`);
@@ -662,7 +666,7 @@
             document.getElementById('prevBtn').disabled = currentQIndex === 0;
             const next = document.getElementById('nextBtn'); 
             next.disabled = !(ans.most && ans.least);
-            next.innerHTML = currentQIndex === discQuestions.length - 1 ? 'ดูผลการประเมิน DiSC ของคุณ' : 'ถัดไป <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>';
+            next.innerHTML = currentQIndex === 19 ? 'ดูผลการประเมิน DiSC ของคุณ' : 'ถัดไป <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>';
             lucide.createIcons();
         };
 
@@ -677,18 +681,23 @@
             let speech = `${choice.text} ${modeText}`;
             if (ans.most && ans.least) {
                 speech += " . . . "; 
-                if (currentQIndex === discQuestions.length - 1) {
-                    speech += "กรุณาคลิกเพื่อดูผลประเมิน ดีไอเอสซี ของคุณ";
-                } else {
-                    speech += "กรุณาคลิกปุ่มถัดไปด้านล่าง";
-                }
+                if (currentQIndex === 19) speech += "กรุณาคลิกเพื่อดูผลประเมิน ดีไอเอสซี ของคุณ";
+                else speech += "กรุณาคลิกปุ่มถัดไปด้านล่าง";
             }
             speak(speech);
             renderQuestion(false); 
         };
 
         window.prevQuestion = () => { unlockVoice(); if (currentQIndex > 0) { currentQIndex--; renderQuestion(true); } };
-        window.nextQuestion = async () => { unlockVoice(); if (currentQIndex < discQuestions.length - 1) { currentQIndex++; renderQuestion(true); } else await calculateAndSaveResult(); };
+        window.nextQuestion = async () => { 
+            unlockVoice(); 
+            if (currentQIndex < 19) { 
+                currentQIndex++; 
+                renderQuestion(true); 
+            } else { 
+                await calculateAndSaveResult(); 
+            } 
+        };
 
         const calculateAndSaveResult = async () => {
             if (!currentMember) return;
@@ -698,56 +707,68 @@
             const detailedResponses = assessmentAnswers.map((ans, index) => {
                 if (ans.most) scores[ans.most] += 1;
                 if (ans.least) scores[ans.least] -= 1;
-                return {
-                    qIndex: index + 1,
-                    most: ans.most,
-                    least: ans.least,
-                    prompt: discQuestions[index].prompt
-                };
+                return { qIndex: index + 1, most: ans.most, least: ans.least, prompt: discQuestions[index].prompt };
             });
 
+            // เรียงลำดับเพื่อหาตัวหลัก (อันดับ 1) และตัวรอง (อันดับ 2)
             const sortedResults = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-            const finalPrimary = sortedResults[0][0], finalSecondary = sortedResults[1][0]; 
+            const finalPrimary = sortedResults[0][0]; 
+            const finalSecondary = sortedResults[1][0]; 
 
             try {
-                // อัปเดตตารางหลัก
+                // บันทึกผลลงในตารางหลัก DISC_Member
                 const memberDocRef = doc(db, COLLECTION_NAME, currentMember.docId);
-                await updateDoc(memberDocRef, { DISC: finalPrimary, DISC2: finalSecondary, updatedAt: serverTimestamp() });
+                await updateDoc(memberDocRef, { 
+                    DISC: finalPrimary, 
+                    DISC2: finalSecondary, 
+                    updatedAt: serverTimestamp() 
+                });
                 
-                // บันทึกตาราง DISC_Results
+                // บันทึกผลลงในตาราง DISC_Results
                 const resultsColRef = collection(db, 'DISC_Results');
-                await addDoc(resultsColRef, {
-                    EmpID: currentMember.EmpID,
-                    FullName: currentMember.FullName,
-                    Group: currentMember.Group,
-                    responses: detailedResponses,
-                    scores: scores,
-                    primary: finalPrimary,
-                    secondary: finalSecondary,
-                    timestamp: serverTimestamp(),
-                    userIP: userIP
+                await addDoc(resultsColRef, { 
+                    EmpID: currentMember.EmpID, 
+                    FullName: currentMember.FullName, 
+                    Group: currentMember.Group, 
+                    SubGroup: currentMember.SubGroup, 
+                    responses: detailedResponses, 
+                    scores: scores, 
+                    DISC: finalPrimary, // DiSC หลัก
+                    DISC2: finalSecondary, // DiSC รอง
+                    timestamp: serverTimestamp(), 
+                    userIP: userIP 
                 });
 
-                currentMember.DISC = finalPrimary; currentMember.DISC2 = finalSecondary;
-                showMessage("บันทึกผลสำเร็จ"); showMainPage(currentMember); switchTab('user');
+                currentMember.DISC = finalPrimary; 
+                currentMember.DISC2 = finalSecondary;
+                
+                showMessage("บันทึกผลสำเร็จ"); 
+                showMainPage(currentMember); 
+                switchTab('user'); // ย้ายไปหน้าแสดงผลลัพธ์
             } catch (err) { 
-                console.error(err);
+                console.error(err); 
                 showMessage("บันทึกผลผิดพลาด", "error"); 
-            } finally { document.getElementById('globalLoader').classList.add('hidden'); }
+            } finally { 
+                document.getElementById('globalLoader').classList.add('hidden'); 
+            }
         };
 
-        window.confirmReset = () => resetAssessment();
+        window.confirmReset = () => { if (confirm("ยืนยันการล้างข้อมูลแบบทดสอบและประวัติทั้งหมด?")) resetAssessment(); };
         window.resetAssessment = async () => {
             if (!currentMember) return;
             unlockVoice();
             document.getElementById('globalLoader').classList.remove('hidden');
             try {
+                const resultsSnap = await getDocs(collection(db, 'DISC_Results'));
+                const deletePromises = [];
+                resultsSnap.forEach((d) => { if (String(d.data().EmpID) === String(currentMember.EmpID)) deletePromises.push(deleteDoc(doc(db, 'DISC_Results', d.id))); });
+                await Promise.all(deletePromises);
                 const docRef = doc(db, COLLECTION_NAME, currentMember.docId);
                 await updateDoc(docRef, { DISC: null, DISC2: null, updatedAt: serverTimestamp() });
                 currentMember.DISC = null; currentMember.DISC2 = null;
                 showInfoModal("Reset ข้อมูลเรียบร้อยแล้ว", "คุณสามารถเริ่มต้นทำแบบทดสอบ DiSC ใหม่ได้ทันที", "check-circle", "green");
                 showMainPage(currentMember); switchTab('home');
-            } catch (e) { showMessage("เกิดข้อผิดพลาดในการ Reset", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
+            } catch (e) { console.error(e); showMessage("เกิดข้อผิดพลาดในการ Reset", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
         };
 
         const showInfoModal = (title, desc, iconName, color) => {
@@ -763,14 +784,7 @@
         window.closeInfoModal = () => document.getElementById('infoModal').classList.add('hidden');
         const closeRegModal = () => { document.getElementById('regModalBackdrop').classList.add('hidden'); inputPinValue = ""; };
         const updatePinDisplay = () => { for(let i=0; i<6; i++) { const box = document.getElementById(`pin-${i}`); if (box) { box.textContent = i < inputPinValue.length ? "•" : ""; box.classList.toggle('active', i < inputPinValue.length); } } };
-        
-        window.pressKey = (k) => { 
-            unlockVoice(); 
-            if (k === 'del') inputPinValue = inputPinValue.slice(0, -1); 
-            else if (k === 'clear') inputPinValue = ""; 
-            else if (inputPinValue.length < 6) inputPinValue += k; 
-            updatePinDisplay(); 
-        };
+        window.pressKey = (k) => { unlockVoice(); if (k === 'del') inputPinValue = inputPinValue.slice(0, -1); else if (k === 'clear') inputPinValue = ""; else if (inputPinValue.length < 6) inputPinValue += k; updatePinDisplay(); };
 
         const handleIdSubmission = async () => {
             unlockVoice();
@@ -778,12 +792,12 @@
             const btn = document.getElementById('submitIdBtn'), load = document.getElementById('submitIdLoader'); btn.disabled = true; load.classList.remove('hidden');
             try {
                 if (!auth.currentUser) await signInAnonymously(auth);
-                const snap = await getDocs(collection(db, COLLECTION_NAME)); currentMember = null;
-                snap.forEach(d => { if (String(d.data().EmpID).trim() === val) currentMember = { docId: d.id, ...d.data() }; });
+                const memberSnap = await getDocs(collection(db, COLLECTION_NAME));
+                currentMember = null;
+                memberSnap.forEach(d => { if (String(d.data().EmpID).trim() === val) currentMember = { docId: d.id, ...d.data() }; });
                 
                 if (!currentMember) { showMessage("ไม่พบรหัสพนักงาน", "error"); btn.disabled = false; return; }
-                document.getElementById('stepEmployeeId').classList.add('hidden');
-                
+
                 if (currentMember.pin) {
                     if (currentMember.IPAddress === userIP) {
                         const dr = doc(db, COLLECTION_NAME, currentMember.docId); 
@@ -791,57 +805,64 @@
                         await updateDoc(dr, { Times: t, lastLogin: serverTimestamp() }); 
                         showMainPage({ ...currentMember, Times: t });
                     } else { 
+                        document.getElementById('stepEmployeeId').classList.add('hidden');
                         document.getElementById('stepEnterPinKeypad').classList.remove('hidden'); 
                         document.getElementById('loginUserName').textContent = currentMember.FullName; 
                         lucide.createIcons(); 
                     }
                 } else {
+                    const groupSnap = await getDocs(collection(db, 'DISC_Group'));
+                    const groups = [];
+                    groupSnap.forEach(d => groups.push(d.data()));
+                    const matchedGroup = groups.find(g => String(g.GroupID) === String(currentMember.GroupID));
+                    
+                    if (matchedGroup) {
+                        currentMember.Group = matchedGroup.Group;
+                        currentMember.SubGroup = matchedGroup.SubGroup;
+                        document.getElementById('dispGroup').textContent = matchedGroup.Group;
+                        document.getElementById('dispSubGroup').textContent = matchedGroup.SubGroup;
+                    } else {
+                        currentMember.Group = "ไม่พบกลุ่มงาน";
+                        currentMember.SubGroup = "-";
+                        document.getElementById('dispGroup').textContent = "ไม่พบกลุ่มงาน";
+                        document.getElementById('dispSubGroup').textContent = "-";
+                    }
+                    document.getElementById('stepEmployeeId').classList.add('hidden');
                     document.getElementById('stepSetupProfile').classList.remove('hidden');
                     document.getElementById('dispName').textContent = currentMember.FullName; 
-                    document.getElementById('dispGroup').textContent = currentMember.Group; 
-                    document.getElementById('dispSubGroup').textContent = currentMember.SubGroup || '-';
                 }
-            } catch (err) { 
-                console.error(err);
-                showMessage("การเชื่อมต่อล้มเหลว", "error"); 
-            } finally { btn.disabled = false; load.classList.add('hidden'); }
+            } catch (err) { console.error(err); showMessage("เชื่อมต่อผิดพลาด", "error"); } finally { btn.disabled = false; load.classList.add('hidden'); }
         };
 
-        onAuthStateChanged(auth, (u) => { 
-            if (u) { 
-                document.getElementById('globalLoader').classList.add('hidden'); 
-                document.getElementById('landingPage').classList.remove('hidden'); 
-            } 
-        });
-        
+        onAuthStateChanged(auth, (u) => { if (u) { document.getElementById('globalLoader').classList.add('hidden'); document.getElementById('landingPage').classList.remove('hidden'); } });
         window.speechSynthesis.getVoices();
-        if (window.speechSynthesis.onvoiceschanged !== undefined) window.speechSynthesis.onvoiceschanged = window.speechSynthesis.getVoices;
-
         const startApp = async () => {
             await fetchIP();
             await signInAnonymously(auth).catch(() => {
                 document.getElementById('globalLoader').classList.add('hidden');
                 document.getElementById('landingPage').classList.remove('hidden');
             });
-
             document.getElementById('openModalBtn').onclick = () => { unlockVoice(); document.getElementById('regModalBackdrop').classList.remove('hidden'); document.getElementById('stepEmployeeId').classList.remove('hidden'); document.getElementById('EmpID').value = ""; };
             document.getElementById('cancelBtn').onclick = closeRegModal;
             document.getElementById('submitIdBtn').onclick = handleIdSubmission;
-            document.getElementById('setPin').oninput = document.getElementById('confirmPin').oninput = () => { const p1 = document.getElementById('setPin').value, p2 = document.getElementById('confirmPin').value; document.getElementById('confirmRegBtn').disabled = !(p1.length === 6 && p1 === p2); };
+            const checkRegForm = () => {
+                const p1 = document.getElementById('setPin').value, p2 = document.getElementById('confirmPin').value;
+                document.getElementById('confirmRegBtn').disabled = !(p1.length === 6 && p1 === p2);
+            };
+            const numericFilter = (e) => { e.target.value = e.target.value.replace(/\D/g, ''); checkRegForm(); };
+            document.getElementById('setPin').oninput = numericFilter;
+            document.getElementById('confirmPin').oninput = numericFilter;
             document.getElementById('EmpID').oninput = (e) => { e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5); document.getElementById('submitIdBtn').disabled = e.target.value.length !== 5; };
-            
             document.getElementById('confirmRegBtn').onclick = async () => {
                 if (!currentMember) return;
                 unlockVoice();
                 const p = document.getElementById('setPin').value, bt = document.getElementById('confirmRegBtn'); bt.disabled = true;
                 try { 
                     const dr = doc(db, COLLECTION_NAME, currentMember.docId); 
-                    const ud = { pin: String(p), Times: 1, ActivatedAt: serverTimestamp(), lastLogin: serverTimestamp(), IPAddress: userIP }; 
-                    await updateDoc(dr, ud); 
-                    showMainPage({ ...currentMember, ...ud }); 
+                    const ud = { pin: String(p), Group: currentMember.Group, SubGroup: currentMember.SubGroup, Times: 1, ActivatedAt: serverTimestamp(), lastLogin: serverTimestamp(), IPAddress: userIP }; 
+                    await updateDoc(dr, ud); showMainPage({ ...currentMember, ...ud }); 
                 } catch (e) { showMessage("ลงทะเบียนล้มเหลว", "error"); bt.disabled = false; }
             };
-            
             document.getElementById('savePinLoginBtn').onclick = async () => {
                 if (!currentMember) return;
                 unlockVoice();
@@ -849,11 +870,8 @@
                 if (String(inputPinValue) === String(currentMember.pin)) {
                     const dr = doc(db, COLLECTION_NAME, currentMember.docId); 
                     const t = (currentMember.Times || 0) + 1;
-                    await updateDoc(dr, { Times: t, lastLogin: serverTimestamp() }); 
-                    showMainPage({ ...currentMember, Times: t });
-                } else { 
-                    showMessage("PIN ไม่ถูกต้อง", "error"); inputPinValue = ""; updatePinDisplay(); 
-                }
+                    await updateDoc(dr, { Times: t, lastLogin: serverTimestamp() }); showMainPage({ ...currentMember, Times: t });
+                } else { showMessage("PIN ไม่ถูกต้อง", "error"); inputPinValue = ""; updatePinDisplay(); }
             };
             lucide.createIcons();
         };
