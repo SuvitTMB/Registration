@@ -26,10 +26,9 @@
         button { cursor: pointer; transition: all 0.2s; }
         button:disabled { cursor: not-allowed; opacity: 0.5; }
 
-        /* ปรับสไตล์กล่องกรอกรหัสพนักงานตามสั่ง */
         .emp-id-input {
             background-color: #ffffff !important;
-            border: 1px solid rgba(148, 163, 184, 0.15) !important; /* ความเข้มกรอบ 15% */
+            border: 1px solid rgba(148, 163, 184, 0.15) !important;
             color: #1e293b !important;
             font-weight: normal;
             outline: none;
@@ -129,23 +128,24 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 4px;
+            gap: 2px;
             color: #64748b;
-            font-size: 11px;
+            font-size: 10px;
             transition: all 0.2s;
             flex: 1;
             text-align: center;
+            padding: 4px 2px;
         }
         .bottom-nav-item.active {
             color: #f97316;
         }
         .bottom-nav-item span {
-            font-size: 11px;
-            line-height: 14px;
+            font-size: 10px;
+            line-height: 12px; 
             display: block;
-        }
-        .nav-checkout span {
-            letter-spacing: 3px;
+            max-width: 65px;
+            word-wrap: break-word;
+            margin-top: 2px;
         }
 
         .choice-card {
@@ -173,16 +173,16 @@
             font-weight: 700;
         }
 
-        /* มาตรฐานสี DiSC ใหม่ตามสั่ง */
-        .color-d { background-color: #05ae4b; } /* เขียวใหม่ */
-        .color-i { background-color: #cb3743; } /* แดงใหม่ */
-        .color-s { background-color: #13a1d3; } /* ฟ้าใหม่ */
-        .color-c { background-color: #fcd704; } /* เหลืองใหม่ */
+        /* มาตรฐานสี DiSC */
+        .color-d { background-color: #05ae4b; }
+        .color-i { background-color: #cb3743; }
+        .color-s { background-color: #13a1d3; }
+        .color-c { background-color: #fdd704; }
         
         .text-d { color: #05ae4b; }
         .text-i { color: #cb3743; }
         .text-s { color: #13a1d3; }
-        .text-c { color: #fcd704; }
+        .text-c { color: #fdd704; }
 
         .reg-input-field {
             width: 100%;
@@ -196,6 +196,40 @@
         .reg-input-field:focus {
             border-color: #3b82f6;
         }
+
+        /* Insights Cards */
+        .insight-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: left;
+            margin-top: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid #f1f5f9;
+        }
+        .insight-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #1e293b;
+        }
+        .dark-side-box {
+            background-color: #fff7ed;
+            border: 1px solid #ffedd5;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 12px;
+        }
+        .working-tip-box {
+            background-color: #f0fdf4;
+            border: 1px solid #dcfce7;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 12px;
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center m-0 p-0 text-gray-800">
@@ -206,12 +240,10 @@
 
     <div id="messageBox" class="hidden"></div>
 
-    <!-- แถบสี 4 สี ด้านบน -->
     <div id="topColorBar" class="fixed top-0 left-0 right-0 h-[13px] flex z-[60]">
         <div class="flex-1 color-d"></div><div class="flex-1 color-i"></div><div class="flex-1 color-s"></div><div class="flex-1 color-c"></div>
     </div>
 
-    <!-- แถบสี 4 สี ด้านล่าง -->
     <div id="bottomColorBar" class="fixed bottom-0 left-0 right-0 h-[13px] flex z-[60]">
         <div class="flex-1 color-d"></div><div class="flex-1 color-i"></div><div class="flex-1 color-s"></div><div class="flex-1 color-c"></div>
     </div>
@@ -223,12 +255,12 @@
                  alt="DiSC Chart" class="w-full h-auto block">
         </div>
         <div class="w-full px-8 py-6 flex flex-col items-center space-y-5">
-            <button id="openModalBtn" class="btn-standard w-[40%] bg-blue-600 hover:bg-blue-700 text-white shadow-md active:scale-[0.97]">
+            <button id="openModalBtn" class="btn-standard w-[45%] bg-blue-600 hover:bg-blue-700 text-white shadow-md active:scale-[0.97]">
                 <i data-lucide="user-plus" class="w-5 h-5"></i><span>ลงทะเบียน / เข้าสู่ระบบ</span>
             </button>
             <p class="text-[12px] text-gray-400 text-center leading-relaxed">กรุณาลงทะเบียนเพื่อบันทึกข้อมูล</p>
         </div>
-        <div class="mt-auto mb-8 text-center text-gray-300 text-[10px] uppercase tracking-[0.3em] font-bold"><span class="disc-brand">DiSC</span> PERSONALITY NAVIGATOR</div>
+        <div class="mt-auto mb-8 text-center text-gray-300 text-[10px] tracking-[0.1em] font-normal"><span class="disc-brand">DiSC</span> Personality Navigator</div>
     </div>
 
     <!-- หน้าหลัก DiSC -->
@@ -241,12 +273,17 @@
                 </div>
             </div>
             <div class="flex items-center gap-1">
-                <button onclick="toggleMute()" class="p-2 text-white hover:bg-white/10 transition-all"><i id="muteIcon" data-lucide="volume-2" class="w-5 h-5"></i></button>
+                <button onclick="toggleMute()" class="p-2 text-white hover:bg-white/10 transition-all">
+                    <i id="muteIcon" data-lucide="volume-2" class="w-5 h-5"></i>
+                </button>
+                <div class="h-5 w-[1px] bg-white/30 mx-1"></div>
+                <button id="logoutBtn" onclick="location.reload()" class="p-2 text-white hover:bg-white/10 transition-all">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                </button>
             </div>
         </div>
 
-        <!-- Banner DiSC แบบเต็มความกว้าง กว้าง 100% ไม่มีมุมมน (แสดงเฉพาะหน้า DiSC ของคุณ) -->
-        <div id="discResultBanner" class="hidden w-full h-[90px] border-b-2 border-slate-100 flex items-center justify-center z-[15]">
+        <div id="discResultBanner" class="hidden w-full h-[90px] border-b-2 border-slate-100 flex items-center justify-center z-[15] bg-white">
             <img id="discResultImg" src="" class="h-[80%] w-auto object-contain mx-auto">
         </div>
         
@@ -258,9 +295,9 @@
                 <div class="w-full flex justify-center">
                     <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-overall.jpg?alt=media&token=91607be6-5038-4509-afe7-6de5f6bb91e5" class="max-w-full h-auto block">
                 </div>
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm text-left">
                     <h3 class="text-lg font-normal text-slate-800 mb-3 text-center font-semibold"><span class="disc-brand">DiSC</span> คืออะไร</h3>
-                    <p class="text-sm text-slate-500 leading-relaxed text-left">
+                    <p class="text-sm text-slate-500 leading-relaxed">
                         เครื่องมือวิเคราะห์รูปแบบพฤติกรรมของมนุษย์ ใช้เพื่อทำความเข้าใจว่า คนคิด ตัดสินใจ สื่อสาร และทำงานร่วมกับผู้อื่นอย่างไร <span class="disc-brand">DiSC</span> ไม่ได้วัดความเก่งหรือฉลาด แต่ช่วยอธิบายว่า “เราเป็นคนแบบไหน และควรทำงานกับคนแบบอื่นอย่างไร”
                     </p>
                 </div>
@@ -288,15 +325,20 @@
                     <div class="bg-white p-4 rounded-xl border-l-4 border-[#05ae4b]"><h4 class="text-d font-bold">Dominance (D) - เป้าประสงค์</h4><p class="text-xs text-slate-500">เน้นผลลัพธ์ รวดเร็ว กล้าตัดสินใจ และชอบความท้าทาย</p></div>
                     <div class="bg-white p-4 rounded-xl border-l-4 border-[#cb3743]"><h4 class="text-i font-bold">Influence (i) - หนึ่งดารา</h4><p class="text-xs text-slate-500">เน้นการปฏิสัมพันธ์ กระตือรือร้น และสร้างแรงบันดาลใจ</p></div>
                     <div class="bg-white p-4 rounded-xl border-l-4 border-[#13a1d3]"><h4 class="text-s font-bold">Steadiness (S) - ถนอมจิต</h4><p class="text-xs text-slate-500">เน้นความมั่นคง สนับสนุน รับฟัง และใจเย็น</p></div>
-                    <div class="bg-white p-4 rounded-xl border-l-4 border-[#fcd704]"><h4 class="text-c font-bold">Conscientiousness (C) - คิดคำนวณ</h4><p class="text-xs text-slate-500">เน้นความถูกต้อง แม่นยำ มีระเบียบ และใช้ตรรกะเหตุผล</p></div>
+                    <div class="bg-white p-4 rounded-xl border-l-4 border-[#fdd704]"><h4 class="text-c font-bold">Conscientiousness (C) - คิดคำนวณ</h4><p class="text-xs text-slate-500">เน้นความถูกต้อง แม่นยำ มีระเบียบ และใช้ตรรกะเหตุผล</p></div>
                 </div>
             </div>
 
             <div id="tab-user" class="tab-content hidden space-y-6 text-center">
-                <div class="bg-white/80 p-6 rounded-2xl border border-slate-100 shadow-sm backdrop-blur-sm">
-                    <div class="w-20 h-20 bg-slate-100 rounded-full mx-auto mb-4 flex items-center justify-center border-4 border-white shadow-sm"><i data-lucide="user" class="w-10 h-10 text-slate-300"></i></div>
-                    <h3 class="text-lg font-normal text-slate-800" id="profileName">-</h3>
-                    <p class="text-xs text-slate-400" id="profileDetail">-</p>
+                <div class="bg-white/80 p-6 rounded-2xl border border-slate-100 shadow-sm backdrop-blur-sm relative overflow-hidden">
+                    <div id="profileSkillImgContainer" class="w-20 h-20 rounded-full mx-auto mb-4 border-4 border-white shadow-sm overflow-hidden flex items-center justify-center bg-slate-100">
+                        <!-- รูปทักษะหลักจะมาแสดงที่นี่ -->
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-800" id="profileName">-</h3>
+                    <p class="text-xs text-slate-500 mb-1" id="profileDetail">-</p>
+                    <div id="profilePersonalSummary" class="text-[12px] text-slate-600 px-2 leading-relaxed pt-2 border-t border-slate-100 mt-2 italic">
+                        <!-- สรุปตัวตนแบบย่อจะแสดงที่นี่ -->
+                    </div>
                 </div>
                 
                 <div id="noDiscResult" class="bg-orange-50 border border-orange-100 p-6 rounded-2xl">
@@ -307,17 +349,41 @@
                     </button>
                 </div>
                 
-                <div id="hasDiscResult" class="hidden p-6 rounded-2xl">
+                <div id="hasDiscResult" class="hidden pb-10">
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="p-4 bg-white/90 rounded-xl border border-slate-200 shadow-sm">
-                            <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">ทักษะหลัก (Primary)</span>
-                            <div id="discUpValue" class="text-5xl font-bold mt-2">-</div>
+                        <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col items-center">
+                            <span class="text-xs text-slate-400 font-normal">ทักษะหลัก (Primary)</span>
+                            <div id="discUpValue" class="mt-2 w-[70%] aspect-square rounded-full overflow-hidden shadow-sm">
+                                <!-- รูป Primary จะแสดงที่นี่ -->
+                            </div>
                         </div>
-                        <div class="p-4 bg-white/90 rounded-xl border border-slate-200 shadow-sm">
-                            <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">ทักษะรอง (Secondary)</span>
-                            <div id="disc2Value" class="text-5xl font-bold mt-2">-</div>
+                        <div class="p-4 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col items-center">
+                            <span class="text-xs text-slate-400 font-normal">ทักษะรอง (Secondary)</span>
+                            <div id="disc2Value" class="mt-2 w-[70%] aspect-square rounded-full overflow-hidden shadow-sm">
+                                <!-- รูป Secondary จะแสดงที่นี่ -->
+                            </div>
                         </div>
                     </div>
+                    
+                    <!-- Section: What Drives You? -->
+                    <div id="whatDrivesYouSection" class="insight-card">
+                        <h2 class="insight-title"><i data-lucide="zap" class="w-5 h-5 text-orange-500"></i> What Drives You ?</h2>
+                        <div id="drivesContent" class="space-y-5 text-sm"></div>
+                    </div>
+
+                    <!-- Section: Style Benefits and Challenges -->
+                    <div id="benefitsChallengesSection" class="insight-card">
+                        <h2 class="insight-title"><i data-lucide="star" class="w-5 h-5 text-yellow-500"></i> Style Benefits and Challenges</h2>
+                        <div id="benefitsContent" class="space-y-4 text-sm"></div>
+                    </div>
+
+                    <!-- Section: Build Better Relationships -->
+                    <div id="relationshipsSection" class="insight-card">
+                        <h2 class="insight-title"><i data-lucide="heart" class="w-5 h-5 text-red-500"></i> Build Better Relationships</h2>
+                        <div id="relationshipsContent" class="space-y-4 text-sm"></div>
+                    </div>
+
+                    <!-- ปุ่ม Reset ย้ายลงมาด้านล่างสุด -->
                     <button onclick="confirmReset()" class="mt-8 btn-standard bg-white border border-red-200 text-red-500 hover:bg-red-50 shadow-sm px-8 h-[54px] w-full">
                         <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
                         <span>ล้างข้อมูลและเริ่มทดสอบใหม่ (Reset <span class="font-bold">DiSC</span>)</span>
@@ -337,17 +403,22 @@
                     </div>
                 </div>
             </div>
+
+            <div id="tab-friends" class="tab-content hidden space-y-6 text-center">
+                <div class="bg-white p-10 rounded-2xl border border-slate-100 shadow-sm">
+                    <i data-lucide="users-round" class="w-16 h-16 text-slate-200 mx-auto mb-4"></i>
+                    <h3 class="text-lg font-normal text-slate-800">DiSC เพื่อนคุณ</h3>
+                    <p class="text-sm text-slate-400">ฟีเจอร์การดูข้อมูล DiSC ของเพื่อนคุณกำลังจะเปิดให้บริการเร็วๆ นี้</p>
+                </div>
+            </div>
         </div>
 
         <div class="fixed bottom-0 w-full max-w-[500px] bg-slate-50 border-t border-slate-200 h-20 flex items-center justify-around px-2 z-50 shadow-[0_-4px_15px_rgba(0,0,0,0.05)]">
             <button class="bottom-nav-item active" onclick="switchTab('home')"><i data-lucide="house" class="w-6 h-6"></i><span>Home</span></button>
-            <button class="bottom-nav-item" onclick="switchTab('about')"><i data-lucide="info" class="w-6 h-6"></i><span>รู้จัก<br><span class="font-bold">DiSC</span></span></button>
-            <button class="bottom-nav-item" onclick="switchTab('user')"><i data-lucide="user" class="w-6 h-6"></i><span><span class="font-bold">DiSC</span> ของคุณ</span></button>
-            <button class="bottom-nav-item" onclick="switchTab('team')"><i data-lucide="users" class="w-6 h-6"></i><span><span class="font-bold">DiSC</span> ของทีม</span></button>
-            <button id="logoutBtn" class="bottom-nav-item nav-checkout" onclick="location.reload()">
-                <i data-lucide="log-out" class="w-6 h-6"></i>
-                <span>Check<br>Out</span>
-            </button>
+            <button class="bottom-nav-item" onclick="switchTab('about')"><i data-lucide="info" class="w-6 h-6"></i><span>รู้จัก DiSC</span></button>
+            <button class="bottom-nav-item" onclick="switchTab('user')"><i data-lucide="user" class="w-6 h-6"></i><span>DiSC ของคุณ</span></button>
+            <button class="bottom-nav-item" onclick="switchTab('team')"><i data-lucide="users" class="w-6 h-6"></i><span>DiSC ของทีม</span></button>
+            <button class="bottom-nav-item" onclick="switchTab('friends')"><i data-lucide="user-search" class="w-6 h-6"></i><span>DiSC เพื่อนคุณ</span></button>
         </div>
     </div>
 
@@ -416,7 +487,6 @@
     <!-- Modals (Lightbox) -->
     <div id="regModalBackdrop" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden" onclick="window.closeRegModal()">
         <div class="bg-white w-full max-w-[450px] rounded-[12px] shadow-2xl overflow-hidden modal-enter relative" onclick="event.stopPropagation()">
-            <!-- ปุ่มปิดมุมขวาบน แก้ไขให้ทำงานได้ -->
             <div class="bg-[#0056ff] px-8 py-5">
                 <div class="flex justify-between items-center text-white font-normal uppercase tracking-tight">
                     <span>ลงทะเบียน / เข้าสู่ระบบ</span>
@@ -429,7 +499,6 @@
                 <div id="stepEmployeeId" class="space-y-6">
                     <div class="space-y-2 text-center">
                         <label class="text-[12px] font-normal text-slate-500 uppercase tracking-wider">ระบุรหัสพนักงาน 5 หลัก</label>
-                        <!-- ปรับสีพื้นขาว กรอบเทาอ่อน 15% ตามสั่ง -->
                         <input type="text" id="EmpID" maxlength="5" inputmode="numeric" placeholder="xxxxx" class="emp-id-input w-full px-4 py-3.5 border rounded-xl text-[18px] font-normal text-center shadow-sm transition-all">
                     </div>
                     <div class="flex justify-center gap-3">
@@ -440,18 +509,15 @@
                 <div id="stepSetupProfile" class="hidden space-y-4">
                     <div class="bg-white p-4 rounded-xl space-y-3 border border-slate-200 text-[12px]">
                         <div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-400 font-normal">ชื่อ-นามสกุล:</span><span id="dispName" class="font-normal text-blue-700 text-right"></span></div>
-                        
                         <div class="flex flex-col gap-1">
                             <label class="text-slate-400 font-normal">กลุ่มงาน:</label>
                             <input type="text" id="regGroupInput" placeholder="ระบุกลุ่มงาน" class="reg-input-field">
                         </div>
-                        
                         <div class="flex flex-col gap-1">
                             <label class="text-slate-400 font-normal">หน่วยงาน:</label>
                             <input type="text" id="regSubGroupInput" placeholder="ระบุหน่วยงาน" class="reg-input-field">
                         </div>
                     </div>
-                    
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-1">
                             <label class="text-[11px] font-normal text-slate-400 tracking-wider">กำหนด PIN (6 หลัก)</label>
@@ -467,7 +533,6 @@
                         <button id="confirmRegBtn" disabled class="btn-standard btn-lightbox bg-green-600 text-white shadow-lg disabled:opacity-50"><i data-lucide="user-check" class="w-4 h-4"></i><span>สร้างบัญชีและเข้าใช้งาน</span></button>
                     </div>
                 </div>
-                <!-- Step PIN Keypad (Login) -->
                 <div id="stepEnterPinKeypad" class="hidden space-y-6">
                     <div class="text-center space-y-4">
                         <p class="text-[14px] text-slate-600 font-normal">ยืนยันรหัส PIN, <br><span id="loginUserName" class="text-lg font-normal text-blue-700"></span></p>
@@ -488,18 +553,6 @@
         </div>
     </div>
 
-    <!-- Info Lightbox -->
-    <div id="infoModal" class="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm hidden">
-        <div class="bg-white w-full max-w-[350px] rounded-2xl shadow-2xl modal-enter p-8 text-center space-y-4">
-            <div id="infoModalIcon" class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto text-green-500">
-                <i data-lucide="check-circle" class="w-10 h-10"></i>
-            </div>
-            <h3 id="infoModalTitle" class="text-xl font-semibold text-slate-800">ดำเนินการสำเร็จ</h3>
-            <p id="infoModalDesc" class="text-sm text-slate-500">ข้อมูลของคุณได้รับการจัดการเรียบร้อยแล้ว</p>
-            <button onclick="closeInfoModal()" class="w-full btn-standard bg-blue-600 text-white mt-4 font-normal h-12 shadow-lg">ตกลง</button>
-        </div>
-    </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -516,217 +569,259 @@
         let isMuted = false;
         let isAudioUnlocked = false; 
 
-        // Mapping Data for ResultsRow with new requested standard Hex Colors
+        // ลิงก์รูปภาพ DiSC ที่กำหนดมาใหม่
+        const discTypeImages = {
+            'D': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-D.jpg?alt=media&token=c8ab4104-1ffc-4420-b2b8-8381dd422f43',
+            'i': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-i.jpg?alt=media&token=1abeb825-20c0-4002-9486-55eab2c223dc',
+            'S': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-S.jpg?alt=media&token=2c1f4acd-ea1c-46c2-a902-edc443354a87',
+            'C': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-C.jpg?alt=media&token=f7d7088c-7ed9-4258-8da0-6c784123b0c2'
+        };
+
         const discStyles = {
             'D': { color: '#05ae4b', lightColor: 'rgba(5, 174, 75, 0.1)', fontColor: 'text-d', img: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-D.jpg?alt=media&token=aa34506c-e29e-4d26-bc30-31815a46ef8d' },
             'i': { color: '#cb3743', lightColor: 'rgba(203, 55, 67, 0.1)', fontColor: 'text-i', img: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-i.jpg?alt=media&token=5e0bf3d4-212b-4565-8c4b-42a578f5a936' },
             'S': { color: '#13a1d3', lightColor: 'rgba(19, 161, 211, 0.1)', fontColor: 'text-s', img: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-S.jpg?alt=media&token=a41f7202-e29e-4d26-bc30-31815a46ef87' },
-            'C': { color: '#fcd704', lightColor: 'rgba(252, 215, 4, 0.1)', fontColor: 'text-c', img: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-C.jpg?alt=media&token=9c096580-03ac-45d5-8cde-ae8b936ef3b4' }
+            'C': { color: '#fdd704', lightColor: 'rgba(253, 215, 4, 0.1)', fontColor: 'text-c', img: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-C.jpg?alt=media&token=9c096580-03ac-45d5-8cde-ae8b936ef3b4' }
         };
 
-        const discQuestions = [
-            { id: 1, prompt: "ในการประชุม ถ้าเลือกได้ คุณชอบที่จะตรงไป ...", choices: [{text: "นั่งที่หัวโต๊ะ", type: "D"}, {text: "นั่งตรงไหนที่ก็ได้ที่ทุกคนจะเห็นคุณได้ชัดเจน", type: "i"}, {text: "นั่งข้างๆ ตรงที่มีคนรู้จักนั่งอยู่แล้ว", type: "S"}, {text: "นั่งข้างๆ คนที่รู้จัก โดยเว้นเก้าอี้ว่างระหว่างเขากับคุณไว้ 1 ตัว", type: "C"}] },
-            { id: 2, prompt: "ในการสนทนา สายตาของคุณมักอยู่ที่ ...", choices: [{text: "คู่สนทนาตลอดการสนทนา", type: "D"}, {text: "คู่สนทนาเป็นส่วนใหญ่", type: "i"}, {text: "พื้นห้องสลับกับที่คู่สนทนา", type: "S"}, {text: "ความเคลื่อนไหวรอบๆ ห้องมากกว่าคู่สนทนา", type: "C"}] },
-            { id: 3, prompt: "ในระหว่างการสนทนากับคนรู้จัก คุณ ...", choices: [{text: "ไม่ชอบถ้าอีกฝ่ายเข้ามาประชิดคุณมากเกินไป", type: "D"}, {text: "ชอบคุยเคียงบ่าเคียงไหล่", type: "i"}, {text: "เฉยๆ เห็นเป็นเรื่องธรรมดา ถ้าอีกฝ่ายเข้ามาใกล้ๆ", type: "S"}, {text: "รู้สึกอึดอัดทันทีที่อีกฝ่ายเข้ามา", type: "C"}] },
-            { id: 4, prompt: "ลักษณะการเดินของคุณ …", choices: [{text: "เดินเร็ว", type: "D"}, {text: "กระตือรือร้น มีชีวิต ชีวา", type: "i"}, {text: "ช้าๆ และตามสบาย", type: "S"}, {text: "มีจังหวะสม่ำเสมอ", type: "C"}] },
-            { id: 5, prompt: "ในขณะที่ฟังคนอื่นพูด คุณ ...", choices: [{text: "ต้องการหาประเด็นสำคัญให้เร็วที่สุด", type: "D"}, {text: "หูผึ่งกับเรื่องราวดีๆ มากกว่าอย่างอื่น", type: "i"}, {text: "มักคิดไปด้วยว่าผู้ที่พูดเขามีความรู้สึกอย่างไรในขณะนั้น", type: "S"}, {text: "ฟังหาข้อมูลสนับสนุนประเด็นที่เขาพูด", type: "C"}] },
-            { id: 6, prompt: "ในการพูดต่อหน้าสาธารณชนคุณเน้นที่จะ ...", choices: [{text: "พูดเสียงดัง ฟังชัดอย่างมั่นใจ", type: "D"}, {text: "พูดอย่างมีท่วงทำนอง ไม่ลืมที่จะใช้เสียงสูงและต่ำสลับกันไป", type: "i"}, {text: "พูดเสียงเบา พูดไปเรื่อยๆ", type: "S"}, {text: "พูดให้ชัดถ้อยชัดคำ ให้ชัดเจนแต่ไม่ดัง", type: "C"}] },
-            { id: 7, prompt: "ในสถานการณ์ที่ต้องเปลี่ยนแผนงานกะทันหัน คุณ ...", choices: [{text: "พร้อมลุยและปรับเปลี่ยนทันที", type: "D"}, {text: "มองว่าเป็นการผจญภัยที่น่าตื่นเต้น", type: "i"}, {text: "ขอเวลาทำใจและค่อยๆ ปรับตาม", type: "S"}, {text: "ตรวจสอบผลกระทบและแผนสำรองอย่างละเอียด", type: "C"}] },
-            { id: 8, prompt: "เมื่อมีผู้มาเยี่ยมเยียนที่ห้องทำงานของคุณ คุณ ...", choices: [{text: "บอกให้เขานั่งลงได้", type: "D"}, {text: "เลื่อนเก้าอี้ออกมาและเชิญให้เขานั่ง", type: "i"}, {text: "ถามเขาว่าอยากจะนั่งลงก่อนไหม", type: "S"}, {text: "ให้เขาตัดสินใจว่าจะนั่งหรือจะยืน หรือว่าจะนั่งตรงไหน", type: "C"}] },
-            { id: 9, prompt: "เมื่อคุณกำลังร่วมวงในการร่วมกันแก้ไขปัญหา คุณ ...", choices: [{text: "เป็นผู้นำการสนทนา", type: "D"}, {text: "ใส่ใจกับภาพรวมมากกว่าลงไปในรายละเอียด", type: "i"}, {text: "เป็นผู้รับฟังที่ดี", type: "S"}, {text: "ใส่ใจกับรายละเอียดและความเป็นจริง", type: "C"}] },
-            { id: 10, prompt: "เมื่อนัดผู้ร่วมงานมาปรึกษาหารือกัน คุณมักเริ่มการสนทนาโดย ...", choices: [{text: "จะคุยกันในประเด็นอะไร ก็ว่าไปเลย", type: "D"}, {text: "เล่าเรื่องโน้น เรื่องนี้ซะหน่อยก่อน", type: "i"}, {text: "ถามสารทุกข์สุกดิบของอีกฝ่ายซะก่อน", type: "S"}, {text: "กล่าวถึงจุดประสงค์ของเรื่องที่จะคุยก่อน", type: "C"}] },
-            { id: 11, prompt: "ในการตัดสินใจ คุณตัดสินใจจาก ...", choices: [{text: "สิ่งที่คุณเชื่อและการสรุปของคุณ", type: "D"}, {text: "การที่ทุกคนเห็นด้วยกับการตัดสินใจนั้นๆ", type: "i"}, {text: "การที่จะมีผู้ได้รับผลกระทบมากเท่าไหร่ แค่ไหน", type: "S"}, {text: "เหตุผล และจากข้อมูลที่พิสูจ็นได้", type: "C"}] },
-            { id: 12, prompt: "เวลาฟังการนำเสนอ คุณ ...", choices: [{text: "ชอบให้รวบรัด", type: "D"}, {text: "ชอบให้เฮฮา", type: "i"}, {text: "มักถามในใจว่า คนพูดเขารู้สึกยังไงอยู่นะ", type: "S"}, {text: "ประเมินถึงความเป็นไปได้/ เป็นไปไม่ได้ในเนื้อหาที่นำเสนอ", type: "C"}] },
-            { id: 13, prompt: "เมื่อคุณพยายามที่จะไข่คว้าอะไรมาสักอย่าง คุณ ...", choices: [{text: "รู้ว่าคุณทำได้ และถึงมีคู่แข่ง คุณก็ไม่หวั่น", type: "D"}, {text: "หว่านล้อมจูงใจเก่ง", type: "i"}, {text: "พยายามทำความเข้าใจก่อนว่าอีกฝ่ายต้องการอะไร", type: "S"}, {text: "ใช้ข้อมูลที่เพียบพร้อมของคุณให้เป็นประโยชน์", type: "C"}] },
-            { id: 14, prompt: "ผู้อื่นมักจะ ...", choices: [{text: "รู้จักความเป็นคุณในขอบเขตที่คุณต้องการเท่านั้น", type: "D"}, {text: "มองว่าคุณเป็นคนเปิดเผย", type: "i"}, {text: "มองว่าคุณเป็นที่ปรึกษาที่ดีทั้งเรื่องงานและส่วนตัว", type: "S"}, {text: "มองว่าคุณเป็นคนลึกลับ เก็บตัว", type: "C"}] },
-            { id: 15, prompt: "ในการประชุมกลุ่ม คุณเห็นว่าเป็นสิ่งสำคัญที่ ...", choices: [{text: "คุณรับหน้าที่ดำเนินรายการเอง", type: "D"}, {text: "คุณทำให้ทุกคนมีส่วนร่วม", type: "i"}, {text: "คุณรับฟังผู้อื่น และผู้อื่นรับฟังคุณ", type: "S"}, {text: "คุณประเมินข้อดี ข้อเสียของแต่ละความคิดอย่างรอบคอบ", type: "C"}] },
-            { id: 16, prompt: "คุณคิดว่าการเปิดเผยความรู้สึกส่วนตัวให้ผู้อื่นรับทราบนั้น ...", choices: [{text: "ทำให้การทำงานช้าลง", type: "D"}, {text: "น่าสนใจดี", type: "i"}, {text: "ช่วยให้ปรับตัวเข้าหากันง่ายขึ้น", type: "S"}, {text: "เป็นเรื่องที่อึดอัดจะตายไป", type: "C"}] },
-            { id: 17, prompt: "ตอนที่คุณเล่าเรื่องอะไรสักอย่าง คุณ ...", choices: [{text: "ตรงไปที่ประเด็นสำคัญเลย", type: "D"}, {text: "ทำให้ผู้ฟังเคลิ้ม ไม่ลุกไปไหนได้ตั้งแต่ต้นจนจบ", type: "i"}, {text: "พูดระบุถึงสถานการณ์ของตัวประกอบในเรื่องได้ดี", type: "S"}, {text: "พูดอย่างเป็นระบบ มีข้อมูลสนับสนุน", type: "C"}] },
-            { id: 18, prompt: "เมื่อคุณนำเสนอสิ่งที่สำคัญมาก คุณ ...", choices: [{text: "ดูจริงจัง น่าเกรงขาม", type: "D"}, {text: "เป็นนักแสดงที่สร้างความบันเทิงได้ดี", type: "i"}, {text: "อ่อนโยน คำนึงถึงผู้ฟัง", type: "S"}, {text: "เรียบเรียงข้อมูลอย่างดี มีขั้นตอนชัดเจน", type: "C"}] },
-            { id: 19, prompt: "เมื่อมีใครสักคนมาร้องไห้อยู่ตรงหน้าคุณ คุณ ...", choices: [{text: "บอกให้เขาหยุดร้องไห้จะดีกว่า", type: "D"}, {text: "พยายามพูดให้เขาอารมณ์ดีขึ้น", type: "i"}, {text: "ให้คำปรึกษา แสดงความเข้าใจ", type: "S"}, {text: "ลำบากใจ และอยากปลีกตัวออกไป", type: "C"}] },
-            { id: 20, prompt: "การคุยโทรศัพท์ของคุณ …", choices: [{text: "มุ่งไปที่ประเด็นสำคัญ", type: "D"}, {text: "สร้างความสดใส มีชีวิตชีวา", type: "i"}, {text: "มักยืดเยื้อ อ้อมค้อม", type: "S"}, {text: "สั้นที่สุดเท่าที่จะเป็นไปได้", type: "C"}] }
-        ];
+        const discPersonalSummaries = {
+            'D': 'คุณเป็นคนกล้าหาญและมุ่งเน้นผลลัพธ์ สไตล์การทำงานของคุณรวดเร็วและเด็ดขาด ความท้าทายคือการยอมรับความเห็นผู้อื่น ตัดสินใจโดยเน้นความสำเร็จของงานและประสิทธิภาพสูงสุด',
+            'i': 'คุณเป็นคนมีเสน่ห์และสร้างพลังบวก สไตล์ของคุณคือการทำงานร่วมกับผู้คนและสร้างแรงบันดาลใจ ความท้าทายคือความสม่ำเสมอ ตัดสินใจโดยใช้ความรู้สึกและบรรยากาศที่สนุกสนาน',
+            'S': 'คุณเป็นคนมีน้ำใจและใจเย็น สไตล์ของคุณคือการสนับสนุนทีมอย่างมั่นคงและอดทน ความท้าทายคือการรับมือกับการเปลี่ยนแปลงที่รวดเร็ว ตัดสินใจด้วยความรอบคอบและคำนึงถึงความรู้สึกผู้อื่น',
+            'C': 'คุณเป็นคนละเอียดและเน้นความถูกต้อง สไตล์ของคุณคือการทำงานอย่างมีระบบและระเบียบขั้นตอน ความท้าทายคือความยืดหยุ่น ตัดสินใจโดยใช้ข้อมูลและตรรกะที่พิสูจน์ได้จริง'
+        };
 
-        function unlockVoice() {
-            if (isAudioUnlocked) return;
-            const utterance = new SpeechSynthesisUtterance("");
-            window.speechSynthesis.speak(utterance);
-            isAudioUnlocked = true;
-        }
+        const discDrives = {
+            'D': [
+                { title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การทำงานที่มุ่งไปสู่ผลลัพธ์อย่างชัดเจน', 'การตัดสินใจและลงมือทำอย่างรวดเร็ว', 'ความท้าทายกับสิ่งไม่มีประสิทธิภาพหรือไม่ก่อให้เกิดผลลัพธ์'], color: '#05ae4b' },
+                { title: 'แรงจูงใจ', items: ['โอกาสได้รับผลตอบแทนก้อนใหญ่', 'การแข่งขัน', 'การได้เป็นผู้นำหรือควบคุมสถานการณ์'], color: '#05ae4b' },
+                { title: 'แรงกดดัน', items: ['ขาดอำนาจการควบคุม หรือขาดอิสระ', 'เมื่องานไม่มีความคืบหน้าที่ชัดเจน', 'การตัดสินใจที่ระมัดระวังเกินไปหรือใช้เวลานาน'], color: '#05ae4b' }
+            ],
+            'i': [
+                { title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การรักษาพลังในการทำงาน และความกระตือรือร้น', 'การลงมือทำอย่างรวดเร็วต่อโอกาสใหม่ๆ ที่น่าสนใจ', 'การให้ความร่วมมือและเข้าสังคมกับผู้อื่น'], color: '#cb3743' },
+                { title: 'แรงจูงใจ', items: ['การได้รับการยอมรับหรือได้รับความสนใจต่อหน้าสาธารณะ', 'การทำงานร่วมกันหรือกิจกรรมเข้าสังคม', 'สภาพแวดล้อมที่เต็มไปด้วยพลังและสีสัน'], color: '#cb3743' },
+                { title: 'แรงกดดัน', items: ['งานที่ช้า น่าเบื่อ หรือซ้ำซาก', 'เมื่อถูกแยกออกจากกลุ่ม / รู้สึกโดดเดี่ยว', 'บรรยากาศการทำงานที่ขาดสีสัน และการมองโลกในแง่ร้าย'], color: '#cb3743' }
+            ],
+            'S': [
+                { title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การสนับสนุนและความอดทนต่อผู้อื่น', 'การทำงานร่วมกัน การให้ความร่วมมือและแบ่งปัน', 'ความน่าเชื่อถือ / ความใจเย็นเพื่อสร้างความรู้สึกมั่นคง'], color: '#13a1d3' },
+                { title: 'แรงจูงใจ', items: ['การได้ช่วยเหลือผู้อื่น', 'การได้รับคำขอบคุณ หรือได้รับการเห็นคุณค่าอย่างจริงใจ', 'วัฒนธรรมการทำงานที่อบอุ่นและเข้าอกเข้าใจ'], color: '#13a1d3' },
+                { title: 'แรงกดดัน', items: ['ความตึงเครียด การขาดความกลมเกลียว หรือการถูกวิจารณ์', 'ความไม่มั่นคง ความไม่แน่นอน หรือความคาดหวังที่ไม่ชัดเจน', 'การที่ต้องทำงานภายใต้ความกดดัน'], color: '#13a1d3' }
+            ],
+            'C': [
+                { title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['ให้ความสำคัญกับความถูกต้องและงานที่มีคุณภาพสูง', 'การวางระบบและทำงานอย่างมีขั้นตอน', 'การตั้งคำถามหรือท้าทายแนวคิดที่ไม่สมบูรณ์แบบ'], color: '#fdd704' },
+                { title: 'แรงจูงใจ', items: ['การแก้ปัญหาที่ท้าทายหรือซับซ้อน', 'การได้วางโครงสร้างหรือระบบการทำงาน', 'โอกาสในการพัฒนาตนเองจนเป็นผู้เชี่ยวชาญ'], color: '#fdd704' },
+                { title: 'แรงกดดัน', items: ['กฎเกณฑ์หรือมาตรฐานที่ไม่ถูกต้อง / ไม่สม่ำเสมอ', 'การถูกตำหนิ / ความไม่พร้อม / ไร้ความสามารถ', 'ต้องลดมาตรฐานในการทำงาน'], color: '#fdd704' }
+            ]
+        };
 
-        function speak(text) {
-            if (isMuted) return;
-            unlockVoice();
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'th-TH';
-            utterance.rate = 1.2; 
-            utterance.pitch = 1.1; 
-            const voices = window.speechSynthesis.getVoices();
-            const femaleVoice = voices.find(v => v.lang === 'th-TH' && (v.name.includes('Female') || v.name.includes('Google') || v.name.includes('Kanya')));
-            if (femaleVoice) utterance.voice = femaleVoice;
-            window.speechSynthesis.speak(utterance);
-        }
+        const discBenefits = {
+            'D': { view: 'มีความมั่นใจ, พูดตรง, เด็ดขาด, ชอบเสี่ยง', judge: 'ความสามารถในการทำผลงานให้สำเร็จ', influence: 'ความกล้า, ความเด็ดขาด, การแข่งขัน', limit: 'ขาดการใส่ใจผู้อื่น, ความใจร้อน, อาจดูแข็งและไม่ละเอียดอ่อน', effective: 'มีความอดทน, ความเห็นอกเห็นใจ', dark: 'ความต้องการเอาชนะ ยิ่งนำไปสู่สถานการณ์แบบแพ้-ชนะ', pressure: 'หงุดหงิดง่ายและเรียกร้องมากขึ้น' },
+            'i': { view: 'มีเสน่ห์, กระตือรือร้น, ชอบเข้าสังคม, มองโลกในแง่ดี, พูดเก่ง', judge: 'ความเป็นมิตร, ทักษะทางสังคม, ความกระตือรือร้น', influence: 'เสน่ห์, การมองโลกในแง่ดี, พลัง', limit: 'หุนหันพลันแล่น, ขาดการจัดการที่เป็นระบบ, ขาดความต่อเนื่อง', effective: 'มีความเป็นกลางมากขึ้น, การติดตามงานให้จบ', dark: 'การมองโลกในแง่ดีเกินไป, การใช้คำชมเกินความจำเป็น', pressure: 'วุ่นวาย, ขาดระบบ และแสดงออกมากเกินไป' },
+            'S': { view: 'มีความอดทน, อารมณ์นิ่ง, การเข้าใจผู้อื่น, วิธีการที่นุ่มนวล, ความอ่อนน้อม', judge: 'ความน่าเชื่อถือ, ความจริงใจ', influence: 'ความเอื้อเฟื้อเผื่อแผ่, การทำงานอย่างสม่ำเสมอ', limit: 'ยอมตามคนอื่นมากเกินไป, หลีกเลี่ยงการเปลี่ยนแปลง, ตัดสินใจช้า', effective: 'มีการแสดงความมั่นใจ, เปิดเผยความรู้สึกที่แท้จริง', dark: 'ความน้อมน้อม การเกรงใจแบบเงียบๆ การประนีประนอมแบบมากเกินไป', pressure: 'เป็นฝ่ายยอม, หลีกเลี่ยงการเปิดเผยความผิดในสิ่งที่ทำลงไป' },
+            'C': { view: 'มีความแม่นยำ, การคิดวิเคราะห์, การสงวนท่าที, รักความเป็นระเบียบ', judge: 'ความเชี่ยวชาญ, กระบวนการทำงานที่เป็นระบบ', influence: 'เหตุผลและตรรกะ, มาตรฐานที่เข้มงวด', limit: 'คิดมากเกินไป, ระวังตัวสูง, แยกตัวจากคนอื่น', effective: 'มีการตระหนักถึงความรู้สึกของผู้อื่น, มองให้ไกลเกินกว่าแค่ข้อมูล', dark: 'การวิเคราะห์มากเกินไป ความระมัดระวังในการแสดงออก', pressure: 'ใช้เหตุผลเพื่อกดดันผู้อื่นมากเกินไปจนกลายเป็นยึดติดกฎเกณฑ์' }
+        };
+
+        const discRelationships = {
+            'D': { relate: ['ใช้เวลาอย่างคุ้มค่า', 'โฟกัสที่ประเด็นหลัก ไม่พูดออกนอกเรื่อง', 'เตรียมรับมือกับความชัดเจนและตรงไปตรงมา'], solving: ['ต้องตระหนักว่าเขามักเลือกทางเลือกที่ท้าทาย และกล้าตัดสินใจ', 'หลีกเลี่ยงข้อเสนอที่ดูไม่มีความเป็นไปได้', 'มองภาพใหญ่และหลีกเลี่ยงการวิเคราะห์ที่มากเกินไป'], stress: ['พูดคุยให้ชัดเจนและตรงไปตรงมา', 'อย่าเพียงยอมตามเขาไปทั้งหมด เพียงเพราะอยากให้บรรยากาศกลับมาสงบ', 'อย่าเอาความตรงของเขามาคิดว่าเป็นเรื่องส่วนตัว'], workingTip: 'ต้องสื่อสารให้ตรง เน้นจุดสำคัญ รวดเร็ว และโฟกัสผลลัพธ์ เพื่อให้เขารู้สึกว่าการทำงานเดินหน้าได้ทันที' },
+            'i': { relate: ['เปิดใจและให้ความร่วมมือ', 'เห็นคุณค่าพลังบวกและความกระตือรือร้นของเขา', 'หาวิธีทำให้เขารู้สึกเป็นที่ยอมรับและมีคนชื่นชม'], solving: ['รักษาทัศนคติเชิงบวก พร้อมพิจารณาปัญหาที่อาจเกิดขึ้น', 'ทำให้ชัดเจนว่าคุณเปิดรับการแก้ปัญหาอย่างสร้างสรรค์', 'เตรียมรับมือกับสิ่งที่ไม่คาดคิด'], stress: ['หลีกเลี่ยงสิ่งที่อาจทำให้ความขัดแย้งรุนแรงขึ้น', 'ให้ความสำคัญกับความรู้สึกของเขา', 'ชี้ให้เห็นว่าความสัมพันธ์ยังคงดีต่อกันแม้มีความเห็นต่าง'], workingTip: 'ควรใช้พลังบวก เปิดโอกาสให้เขาแสดงไอเดีย และตอบสนองอย่างทันท่วงที เพื่อให้เขารู้สึกมีส่วนร่วมและพร้อมทำงาน' },
+            'S': { relate: ['แสดงความอบอุ่นและความใส่ใจต่อความรู้สึกของเขา', 'เสนอความคิดเห็นอย่างนุ่มนวล', 'ร่วมมือและทำงานเป็นทีมอย่างจริงใจ'], solving: ['เคารพจังหวะการตัดสินใจที่ระมัดระวังของเขา', 'คำนึงถึงความรู้สึกของผู้อื่นในการตัดสินใจ', 'กำหนดกรอบเวลาให้เหมาะสมและตอบโจทย์กับทุกฝ่าย'], stress: ['แก้ไขปัญหาอย่างตรงจุดแต่ไม่เผชิญหน้าหรือใช้อารมณ์', 'หลีกเลี่ยงการกดดันหรือเพิกเฉยต่อความขัดแย้ง', 'แสดงให้เห็นว่าคุณตั้งใจแก้ไขปัญหาร่วมกันอย่างจริงใจ'], workingTip: 'ควรสื่อสารอย่างนุ่มนวล ให้เวลาในการปรับตัว และสร้างบรรยากาศปลอดภัย เพื่อให้เขาสบายใจ และร่วมงานได้อย่างราบรื่น' },
+            'C': { relate: ['พูดคุยด้วยข้อมูล ข้อเท็จจริง และตรรกะ', 'อย่ากดดันให้ตัดสินใจทันที', 'เตรียมรับมือกับความสงสัยและคำถามจากเขา'], solving: ['ให้เวลาเขาในการวิเคราะห์', 'แสดงความชื่นชมในตรรกะและเหตุผลของเขา', 'อย่าให้เขาติดอยู่ในรายละเอียดนานเกินไป'], stress: ['สนับสนุนความคิดของเขาด้วยข้อมูล', 'ให้พื้นที่เขาได้คิดและประมวลสถานการณ์ก่อนเผชิญหน้ากับปัญหา', 'หลีกเลี่ยงการใช้อารมณ์หรือการกดดัน'], workingTip: 'ควรใช้ข้อมูลชัดเจน เหตุผลเป็นระบบ และให้เวลาในการวิเคราะห์ เพื่อให้เขาตัดสินใจได้อย่างมั่นใจและแม่นยำ' }
+        };
+
+        function unlockVoice() { if (isAudioUnlocked) return; const u = new SpeechSynthesisUtterance(""); window.speechSynthesis.speak(u); isAudioUnlocked = true; }
+        function speak(text) { if (isMuted) return; unlockVoice(); window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = 'th-TH'; u.rate = 1.1; u.pitch = 1.0; window.speechSynthesis.speak(u); }
 
         window.toggleMute = () => {
-            unlockVoice();
-            isMuted = !isMuted;
+            unlockVoice(); isMuted = !isMuted;
             const iconName = isMuted ? 'volume-x' : 'volume-2';
-            const iconMain = document.getElementById('muteIcon');
-            const iconAssess = document.getElementById('muteIconAssess');
-            if(iconMain) iconMain.setAttribute('data-lucide', iconName);
-            if(iconAssess) iconAssess.setAttribute('data-lucide', iconName);
-            
-            if (isMuted) {
-                window.speechSynthesis.cancel();
-            } else {
-                if (currentMember && !document.getElementById('mainDiscPage').classList.contains('hidden')) triggerHomeGreeting();
-                else if (!document.getElementById('assessmentPage').classList.contains('hidden')) {
-                    if (!document.getElementById('assessmentIntro').classList.contains('hidden')) triggerAssessmentIntroGreeting();
-                    else renderQuestion(true);
-                }
-            }
+            document.getElementById('muteIcon').setAttribute('data-lucide', iconName);
+            if (isMuted) window.speechSynthesis.cancel();
+            else if (currentMember) switchTab('user'); // Re-trigger speech if unmuted
             lucide.createIcons();
         };
 
         const triggerHomeGreeting = () => {
             if (isMuted || !currentMember) return;
-            let script = `สวัสดี คุณ ${currentMember.FullName} ยินดีต้อนรับเข้าสู่ระบบ ดีไอเอสซี นาวีเกเตอร์ ดีไอเอสซี คือเครื่องมือวิเคราะห์พฤติกรรมมนุษย์ที่ช่วยให้เราเข้าใจสไตล์การทำงานและการสื่อสารของคนแต่ละแบบ`;
-            script += ` หากคุณต้องการทำความรู้จักกับ ดีไอเอสซี ให้มากขึ้น สามารถคลิกที่ปุ่มสีน้ำเงินได้เลยนะ`;
-            if (currentMember.DISC) script += ` และตอนนี้ระบบได้วิเคราะห์ผลลัพธ์ของคุณเรียบร้อยแล้ว คุณสามารถคลิกที่ปุ่มสีส้มเพื่อดูผลการวิเคราะห์ ดีไอเอสซี ของคุณได้ทันที`;
-            else script += ` แต่ดูเหมือนว่าคุณยังไม่ได้ทำแบบประเมินเลยนะ รบกวนคลิกที่ปุ่มสีส้ม เพื่อเริ่มทำแบบทดสอบ ดีไอเอสซี ของคุณ และค้นพบตัวตนที่แท้จริงของคุณกัน`;
-            speak(script);
-        };
-
-        const triggerAssessmentIntroGreeting = () => {
-            if (isMuted) return;
-            let script = "ดีไอเอสซี สี่จริตพิชิตใจ หากคุณยังไม่พร้อมสำหรับการทดสอบ สามารถคลิกที่ปุ่มกลับหน้าหลักได้นะ แต่หากคุณพร้อมที่จะทดสอบแล้ว ให้คลิกปุ่มสีส้ม เพื่อเข้าสู่การทดสอบคำถามยี่สิบข้อได้เลย";
-            speak(script);
+            let s = `สวัสดี คุณ ${currentMember.FullName} ยินดีต้อนรับเข้าสู่ระบบ ดีไอเอสซี นาวีเกเตอร์`;
+            speak(s);
         };
 
         async function fetchIP() { try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); userIP = d.ip; } catch { userIP = "unknown"; } }
         
         const showMessage = (t, ty = 'success') => { 
             const m = document.getElementById('messageBox'); 
-            if (!m) return; 
-            m.textContent = t; 
-            m.className = `fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl shadow-lg font-normal transition-all duration-300 ${ty === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`; 
+            m.textContent = t; m.className = `fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl shadow-lg font-normal transition-all duration-300 ${ty === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`; 
             m.classList.remove('hidden', 'opacity-0'); 
-            setTimeout(() => { 
-                m.classList.add('opacity-0'); 
-                setTimeout(() => m.classList.add('hidden'), 300); 
-            }, 3000); 
+            setTimeout(() => { m.classList.add('opacity-0'); setTimeout(() => m.classList.add('hidden'), 300); }, 3000); 
         };
 
         window.switchTab = (n) => { 
             unlockVoice();
             document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden')); 
-            const tar = document.getElementById(`tab-${n}`); 
-            if (tar) tar.classList.remove('hidden'); 
+            document.getElementById(`tab-${n}`).classList.remove('hidden'); 
             document.querySelectorAll('.bottom-nav-item').forEach(b => { 
                 b.classList.remove('active'); 
-                const span = b.querySelector('span');
-                if (span) {
-                    const st = span.innerText.toLowerCase(); 
-                    if ((n === 'home' && st === 'home') || (n === 'about' && st.includes('รู้จัก')) || (n === 'user' && st.includes('ของคุณ')) || (n === 'team' && st.includes('ของทีม'))) b.classList.add('active'); 
-                }
+                const text = b.innerText.toLowerCase();
+                if ((n === 'home' && text.includes('home')) || (n === 'about' && text.includes('รู้จัก')) || (n === 'user' && text.includes('ของคุณ')) || (n === 'team' && text.includes('ของทีม')) || (n === 'friends' && text.includes('เพื่อนคุณ'))) b.classList.add('active'); 
             }); 
             
-            // ปรับแต่ง Banner และสีพื้นหลังตามทักษะที่ได้
             const banner = document.getElementById('discResultBanner');
             const contentArea = document.getElementById('homeContentArea');
             
-            // แสดงแบนเนอร์เฉพาะหน้า "DiSC ของคุณ" (n === 'user')
-            if (n === 'user' && currentMember && currentMember.DISC) {
+            if (currentMember && currentMember.DISC && (n === 'user' || n === 'team')) {
                 const type = currentMember.DISC; 
                 const style = discStyles[type];
                 if (style) {
                     banner.style.backgroundColor = style.color;
-                    const bannerImg = document.getElementById('discResultImg');
-                    bannerImg.src = style.img;
+                    document.getElementById('discResultImg').src = style.img;
                     banner.classList.remove('hidden');
-                    contentArea.style.backgroundColor = style.lightColor;
+                    if (n === 'user') {
+                        contentArea.style.backgroundColor = style.lightColor;
+                        renderWhatDrivesYou(type);
+                        renderStyleBenefits(type);
+                        renderBuildBetterRelationships(type);
+                        renderUserSummary(type, currentMember.DISC2);
+                        
+                        // Speech summary for user page
+                        const pName = type === 'i' ? 'i หนึ่งดารา' : (type === 'D' ? 'D เป้าประสงค์' : (type === 'S' ? 'S ถนอมจิต' : 'C คิดคำนวณ'));
+                        const sName = currentMember.DISC2 ? (currentMember.DISC2 === 'i' ? 'i หนึ่งดารา' : (currentMember.DISC2 === 'D' ? 'D เป้าประสงค์' : (currentMember.DISC2 === 'S' ? 'S ถนอมจิต' : 'C คิดคำนวณ'))) : 'ไม่มี';
+                        speak(`สรุปผลการประเมินของคุณ ทักษะหลักคือ ${pName} และทักษะรองคือ ${sName} ตัวตนของคุณคือ ${discPersonalSummaries[type]}`);
+                    } else {
+                        contentArea.style.backgroundColor = '#ffffff';
+                    }
                 }
             } else {
                 banner.classList.add('hidden');
                 contentArea.style.backgroundColor = '#ffffff';
             }
+            if (n === 'home') triggerHomeGreeting(); else if (n !== 'user') window.speechSynthesis.cancel();
+        };
 
-            if (n === 'home') triggerHomeGreeting(); else window.speechSynthesis.cancel();
+        const renderUserSummary = (primary, secondary) => {
+            const summaryBox = document.getElementById('profilePersonalSummary');
+            summaryBox.innerText = discPersonalSummaries[primary] || '-';
+            
+            const profileSkillContainer = document.getElementById('profileSkillImgContainer');
+            profileSkillContainer.innerHTML = `<img src="${discTypeImages[primary]}" class="w-full h-full object-cover">`;
+
+            const primaryImgBox = document.getElementById('discUpValue');
+            primaryImgBox.innerHTML = `<img src="${discTypeImages[primary]}" class="w-full h-full object-cover">`;
+
+            const secondaryImgBox = document.getElementById('disc2Value');
+            if (secondary && discTypeImages[secondary]) {
+                secondaryImgBox.innerHTML = `<img src="${discTypeImages[secondary]}" class="w-full h-full object-cover">`;
+            } else {
+                secondaryImgBox.innerHTML = `<div class="w-full h-full bg-slate-100 flex items-center justify-center text-slate-300 text-xs">-</div>`;
+            }
+        };
+
+        const renderWhatDrivesYou = (type) => {
+            const data = discDrives[type];
+            const container = document.getElementById('drivesContent');
+            if (!data || !container) return;
+            container.innerHTML = '';
+            data.forEach(section => {
+                const div = document.createElement('div'); div.className = 'space-y-1';
+                const title = document.createElement('h4'); title.className = 'font-bold text-[13px] flex items-center gap-2'; title.style.color = section.color; title.innerText = section.title;
+                const list = document.createElement('ul'); list.className = 'list-disc list-inside space-y-1 pl-1 text-slate-500 text-[12px]';
+                section.items.forEach(item => { const li = document.createElement('li'); li.innerText = item; list.appendChild(li); });
+                div.appendChild(title); div.appendChild(list); container.appendChild(div);
+            });
+        };
+
+        const renderStyleBenefits = (type) => {
+            const data = discBenefits[type];
+            const style = discStyles[type];
+            const container = document.getElementById('benefitsContent');
+            if (!data || !container) return;
+            container.innerHTML = `
+                <div class="space-y-3">
+                    <div><span class="font-bold" style="color:${style.color}">คุณจะถูกมองว่า... :</span> <span class="text-slate-500">${data.view}</span></div>
+                    <div><span class="font-bold" style="color:${style.color}">ตัดสินผู้อื่นจาก... :</span> <span class="text-slate-500">${data.judge}</span></div>
+                    <div><span class="font-bold" style="color:${style.color}">มีอิทธิพลต่อผู้อื่นด้วย... :</span> <span class="text-slate-500">${data.influence}</span></div>
+                    <div><span class="font-bold" style="color:${style.color}">ข้อจำกัด/สิ่งที่เป็นอุปสรรค :</span> <span class="text-slate-500">${data.limit}</span></div>
+                </div>
+                <div class="dark-side-box">
+                    <h4 class="font-bold text-orange-700 flex items-center gap-2 mb-2"><i data-lucide="alert-triangle" class="w-4 h-4"></i> Dark Side</h4>
+                    <div class="text-[12px] space-y-1">
+                        <p><span class="font-semibold text-orange-800">Over-uses:</span> <span class="text-orange-600">${data.dark}</span></p>
+                        <p><span class="font-semibold text-orange-800">Under Pressure:</span> <span class="text-orange-600">${data.pressure}</span></p>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        };
+
+        const renderBuildBetterRelationships = (type) => {
+            const data = discRelationships[type];
+            const style = discStyles[type];
+            const container = document.getElementById('relationshipsContent');
+            if (!data || !container) return;
+            const listItems = (items) => items.map(it => `<li>${it}</li>`).join('');
+            container.innerHTML = `
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="font-bold flex items-center gap-2 text-[13px]" style="color:${style.color}"><i data-lucide="hand-metal" class="w-4 h-4"></i> เมื่อพยายามสร้างความสัมพันธ์</h4>
+                        <ul class="list-disc list-inside space-y-1 pl-1 text-slate-500 text-[12px] mt-1">${listItems(data.relate)}</ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold flex items-center gap-2 text-[13px]" style="color:${style.color}"><i data-lucide="help-circle" class="w-4 h-4"></i> เมื่อมีปัญหาที่ต้องแก้</h4>
+                        <ul class="list-disc list-inside space-y-1 pl-1 text-slate-500 text-[12px] mt-1">${listItems(data.solving)}</ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold flex items-center gap-2 text-[13px]" style="color:${style.color}"><i data-lucide="flame" class="w-4 h-4"></i> เมื่อสถานการณ์ตึงเครียด</h4>
+                        <ul class="list-disc list-inside space-y-1 pl-1 text-slate-500 text-[12px] mt-1">${listItems(data.stress)}</ul>
+                    </div>
+                    <div class="working-tip-box">
+                        <h4 class="font-bold text-green-700 flex items-center gap-2 mb-1 text-[13px]"><i data-lucide="check-circle" class="w-4 h-4"></i> วิธีทำงานให้ได้ผลกับคนสไตล์ ${type === 'i' ? 'i หนึ่งดารา' : (type === 'D' ? 'D เป้าประสงค์' : (type === 'S' ? 'S ถนอมจิต' : 'C คิดคำนวณ'))}</h4>
+                        <p class="text-[11px] text-green-600 leading-relaxed italic">"${data.workingTip}"</p>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
         };
 
         const showMainPage = (u) => {
-            if (!u) return;
-            const landing = document.getElementById('landingPage');
-            const main = document.getElementById('mainDiscPage');
-            const assess = document.getElementById('assessmentPage');
-            if (landing) landing.classList.add('hidden');
-            if (assess) assess.classList.add('hidden');
-            if (main) main.classList.remove('hidden');
-            document.getElementById('topColorBar').classList.add('hidden');
-            document.getElementById('bottomColorBar').classList.add('hidden');
+            currentMember = u;
+            document.getElementById('landingPage').classList.add('hidden');
+            document.getElementById('assessmentPage').classList.add('hidden');
+            document.getElementById('mainDiscPage').classList.remove('hidden');
             document.getElementById('welcomeUser').textContent = u.FullName || 'พนักงาน'; 
             document.getElementById('userSub').textContent = `${u.Group || '-'} | ${u.SubGroup || '-'}`;
             document.getElementById('profileName').textContent = u.FullName || '-';
             document.getElementById('profileDetail').textContent = `${u.Group || '-'} | ${u.SubGroup || '-'}`;
             
             const btn = document.getElementById('dynamicActionBtn'), txt = document.getElementById('dynamicActionText'), icon = document.getElementById('dynamicActionIcon'), noRes = document.getElementById('noDiscResult'), hasRes = document.getElementById('hasDiscResult');
-            const upVal = document.getElementById('discUpValue'), disc2Val = document.getElementById('disc2Value');
             
             if (u.DISC) {
-                const primaryType = u.DISC;
-                const secondaryType = u.DISC2 || '';
-                const pStyle = discStyles[primaryType];
-                const sStyle = discStyles[secondaryType];
-
-                txt.innerHTML = `<span class='font-bold'>DiSC</span><br>ของคุณ`; 
-                btn.className = "btn-standard bg-[#f97316] hover:bg-orange-600 text-white shadow-lg h-[64px]"; 
-                icon.setAttribute('data-lucide', 'user-check'); 
-                btn.onclick = () => switchTab('user'); 
-                
-                if(noRes) noRes.classList.add('hidden'); 
-                if(hasRes) hasRes.classList.remove('hidden'); 
-                
-                if(upVal) {
-                    upVal.textContent = primaryType;
-                    upVal.className = `text-5xl font-bold mt-2 ${pStyle ? pStyle.fontColor : 'text-slate-700'}`;
-                }
-                if(disc2Val) {
-                    disc2Val.textContent = secondaryType || '-';
-                    disc2Val.className = `text-5xl font-bold mt-2 ${sStyle ? sStyle.fontColor : 'text-slate-500'}`;
-                }
-                // Auto refresh color background for user tab
-                switchTab('user');
+                txt.innerHTML = `<span class='font-bold'>DiSC</span><br>ของคุณ`; btn.onclick = () => switchTab('user'); 
+                icon.setAttribute('data-lucide', 'user-check');
+                if(noRes) noRes.classList.add('hidden'); if(hasRes) hasRes.classList.remove('hidden'); 
             } else {
-                txt.innerHTML = "เริ่มทำ<br>แบบทดสอบ"; 
-                btn.className = "btn-standard bg-[#f97316] hover:bg-orange-600 text-white shadow-lg h-[64px]"; 
-                icon.setAttribute('data-lucide', 'clipboard-list'); 
-                btn.onclick = startAssessmentFlow; 
-                if(noRes) noRes.classList.remove('hidden'); 
-                if(hasRes) hasRes.classList.add('hidden');
+                txt.innerHTML = "เริ่มทำ<br>แบบทดสอบ"; btn.onclick = () => startAssessmentFlow(); 
+                icon.setAttribute('data-lucide', 'clipboard-list');
+                if(noRes) noRes.classList.remove('hidden'); if(hasRes) hasRes.classList.add('hidden');
             }
             window.closeRegModal(); lucide.createIcons();
+            switchTab('home');
             setTimeout(triggerHomeGreeting, 1000);
         };
 
         window.startAssessmentFlow = () => { 
-            unlockVoice();
-            if (currentMember && currentMember.DISC) { showMessage("คุณทำแบบทดสอบไปแล้ว ไม่สามารถทำซ้ำได้", "error"); return; }
+            unlockVoice(); if (currentMember && currentMember.DISC) return;
             window.speechSynthesis.cancel();
             document.getElementById('mainDiscPage').classList.add('hidden'); 
             document.getElementById('assessmentPage').classList.remove('hidden'); 
             document.getElementById('assessmentIntro').classList.remove('hidden'); 
             document.getElementById('assessmentQuestion').classList.add('hidden'); 
             lucide.createIcons(); 
-            setTimeout(triggerAssessmentIntroGreeting, 500);
         };
 
         window.exitAssessment = () => showMainPage(currentMember);
 
         window.beginActualTest = () => { 
-            unlockVoice();
-            currentQIndex = 0; 
-            assessmentAnswers = new Array(discQuestions.length).fill(null).map(() => ({most: null, least: null})); 
+            unlockVoice(); currentQIndex = 0; 
+            assessmentAnswers = new Array(20).fill(null).map(() => ({most: null, least: null})); 
             document.getElementById('assessmentIntro').classList.add('hidden'); 
             document.getElementById('assessmentQuestion').classList.remove('hidden'); 
             renderQuestion(true); 
@@ -736,297 +831,108 @@
             const q = discQuestions[currentQIndex], ans = assessmentAnswers[currentQIndex];
             document.getElementById('qNumber').textContent = currentQIndex + 1;
             document.getElementById('qPrompt').textContent = q.prompt;
-            document.getElementById('assessmentProgress').style.width = `${((currentQIndex) / discQuestions.length) * 100}%`;
-            
-            if (shouldSpeak) {
-                speak(`คำถามข้อที่ ${currentQIndex + 1} ${q.prompt} กรุณาเลือกข้อที่เป็นคุณมากที่สุดและน้อยที่สุด`);
-            }
-
+            document.getElementById('assessmentProgress').style.width = `${((currentQIndex) / 20) * 100}%`;
+            if (shouldSpeak) speak(`คำถามข้อที่ ${currentQIndex + 1} ${q.prompt}`);
             const con = document.getElementById('qChoices'); con.innerHTML = '';
             q.choices.forEach((c, i) => {
-                const isThisMost = ans.most === c.type, isThisLeast = ans.least === c.type;
+                const isMost = ans.most === c.type, isLeast = ans.least === c.type;
                 let cardStyle = "bg-white text-slate-700 border-slate-100";
-                if (isThisMost) cardStyle = "bg-green-600 text-white border-green-600";
-                else if (isThisLeast) cardStyle = "bg-red-500 text-white border-red-500";
-                
-                let mostBtnStyle = "bg-green-500 text-white hover:bg-green-600";
-                if (isThisMost) mostBtnStyle = "bg-green-900 text-white border-green-800 scale-[1.05]";
-                else if (ans.most) mostBtnStyle = "bg-green-200 text-green-800 opacity-40";
-                
-                let leastBtnStyle = "bg-red-500 text-white hover:bg-red-600";
-                if (isThisLeast) leastBtnStyle = "bg-red-900 text-white border-red-800 scale-[1.05]";
-                else if (ans.least) leastBtnStyle = "bg-red-200 text-red-800 opacity-40";
-
+                if (isMost) cardStyle = "bg-green-600 text-white border-green-600";
+                else if (isLeast) cardStyle = "bg-red-500 text-white border-red-500";
+                let mostBtnStyle = isMost ? "bg-green-900 text-white scale-[1.05]" : (ans.most ? "bg-green-200 opacity-40" : "bg-green-500 text-white");
+                let leastBtnStyle = isLeast ? "bg-red-900 text-white scale-[1.05]" : (ans.least ? "bg-red-200 opacity-40" : "bg-red-500 text-white");
                 const card = document.createElement('div');
                 card.className = `choice-card p-4 rounded-xl flex justify-between items-center transition-all duration-300 ${cardStyle}`;
-                card.innerHTML = `
-                    <span class="text-sm font-normal flex-1 pr-2">${c.text}</span>
-                    <div class="flex gap-2 shrink-0">
-                        <button onclick="pickChoice(${i}, 'most')" class="btn-standard h-9 px-3 rounded-lg text-[11px] border flex items-center gap-1 transition-all ${mostBtnStyle}"><i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> มากสุด</button>
-                        <button onclick="pickChoice(${i}, 'least')" class="btn-standard h-9 px-3 rounded-lg text-[11px] border flex items-center gap-1 transition-all ${leastBtnStyle}"><i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> น้อยสุด</button>
-                    </div>`;
+                card.innerHTML = `<span class="text-sm font-normal flex-1 pr-2">${c.text}</span><div class="flex gap-2 shrink-0"><button onclick="pickChoice(${i}, 'most')" class="btn-standard h-9 px-3 rounded-lg text-[11px] border flex items-center gap-1 transition-all ${mostBtnStyle}"><i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> มากสุด</button><button onclick="pickChoice(${i}, 'least')" class="btn-standard h-9 px-3 rounded-lg text-[11px] border flex items-center gap-1 transition-all ${leastBtnStyle}"><i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> น้อยสุด</button></div>`;
                 con.appendChild(card);
             });
             document.getElementById('prevBtn').disabled = currentQIndex === 0;
-            const next = document.getElementById('nextBtn'); 
-            next.disabled = !(ans.most && ans.least);
-            next.innerHTML = currentQIndex === discQuestions.length - 1 ? 'ดูผลการประเมิน DiSC ของคุณ' : 'ถัดไป <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>';
+            const next = document.getElementById('nextBtn'); next.disabled = !(ans.most && ans.least);
+            next.innerHTML = currentQIndex === 19 ? 'ดูผลการประเมิน DiSC ของคุณ' : 'ถัดไป <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>';
             lucide.createIcons();
         };
 
         window.pickChoice = (idx, mode) => { 
-            unlockVoice();
-            const q = discQuestions[currentQIndex], choice = q.choices[idx], type = choice.type, ans = assessmentAnswers[currentQIndex]; 
-            const modeText = mode === 'most' ? "เป็นคุณมากที่สุด" : "เป็นคุณน้อยที่สุด";
-            
+            unlockVoice(); const q = discQuestions[currentQIndex], type = q.choices[idx].type, ans = assessmentAnswers[currentQIndex]; 
             if (mode === 'most') { if (ans.least === type) ans.least = null; ans.most = type; } 
             else { if (ans.most === type) ans.most = null; ans.least = type; } 
-            
-            let speech = `${choice.text} ${modeText}`;
-            if (ans.most && ans.least) {
-                speech += " . . . "; 
-                if (currentQIndex === discQuestions.length - 1) {
-                    speech += "กรุณาคลิกเพื่อดูผลประเมิน ดีไอเอสซี ของคุณ";
-                } else {
-                    speech += "กรุณาคลิกปุ่มถัดไปด้านล่าง";
-                }
-            }
-            speak(speech);
             renderQuestion(false); 
         };
 
-        window.prevQuestion = () => { unlockVoice(); if (currentQIndex > 0) { currentQIndex--; renderQuestion(true); } };
-        window.nextQuestion = async () => { 
-            unlockVoice(); 
-            if (currentQIndex < discQuestions.length - 1) { 
-                currentQIndex++; 
-                renderQuestion(true); 
-            } else { 
-                await calculateAndSaveResult(); 
-            } 
-        };
+        window.prevQuestion = () => { if (currentQIndex > 0) { currentQIndex--; renderQuestion(true); } };
+        window.nextQuestion = async () => { if (currentQIndex < 19) { currentQIndex++; renderQuestion(true); } else await calculateAndSaveResult(); };
 
         const calculateAndSaveResult = async () => {
             if (!currentMember) return;
             document.getElementById('globalLoader').classList.remove('hidden');
             const scores = { D: 0, i: 0, S: 0, C: 0 };
-            const detailedResponses = assessmentAnswers.map((ans, index) => {
-                if (ans.most) scores[ans.most] += 1;
-                if (ans.least) scores[ans.least] -= 1;
-                return { qIndex: index + 1, most: ans.most, least: ans.least, prompt: discQuestions[index].prompt };
-            });
-
-            // ตรรกะใหม่: ตรวจสอบและแปลง I เป็น i ก่อนการเปรียบเทียบและการบันทึก
-            const sortedResults = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-            
-            let finalPrimary = sortedResults[0][0]; 
-            let finalSecondary = sortedResults[1][0]; 
-
-            // หากเป็น I ใหญ่ ให้เปลี่ยนเป็น i เล็ก
-            if (finalPrimary === 'I') finalPrimary = 'i';
-            if (finalSecondary === 'I') finalSecondary = 'i';
-
+            assessmentAnswers.forEach(ans => { if (ans.most) scores[ans.most] += 1; if (ans.least) scores[ans.least] -= 1; });
+            const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            let p = sorted[0][0], s = sorted[1][0]; if (p === 'I') p = 'i'; if (s === 'I') s = 'i';
             try {
-                const memberDocRef = doc(db, COLLECTION_NAME, currentMember.docId);
-                await updateDoc(memberDocRef, { 
-                    DISC: finalPrimary, 
-                    DISC2: finalSecondary, 
-                    updatedAt: serverTimestamp() 
-                });
-                
-                const resultsColRef = collection(db, 'DISC_Results');
-                await addDoc(resultsColRef, { 
-                    EmpID: currentMember.EmpID, 
-                    FullName: currentMember.FullName, 
-                    Group: currentMember.Group, 
-                    SubGroup: currentMember.SubGroup, 
-                    responses: detailedResponses, 
-                    scores: scores, 
-                    DISC: finalPrimary, 
-                    DISC2: finalSecondary, 
-                    timestamp: serverTimestamp(), 
-                    userIP: userIP 
-                });
-
-                currentMember.DISC = finalPrimary; 
-                currentMember.DISC2 = finalSecondary;
-                
-                showMessage("บันทึกผลสำเร็จ"); 
-                showMainPage(currentMember); 
-                switchTab('user'); 
-            } catch (err) { 
-                console.error(err); 
-                showMessage("บันทึกผลผิดพลาด", "error"); 
-            } finally { 
-                document.getElementById('globalLoader').classList.add('hidden'); 
-            }
+                await updateDoc(doc(db, COLLECTION_NAME, currentMember.docId), { DISC: p, DISC2: s, updatedAt: serverTimestamp() });
+                await addDoc(collection(db, 'DISC_Results'), { EmpID: currentMember.EmpID, FullName: currentMember.FullName, DISC: p, DISC2: s, timestamp: serverTimestamp() });
+                currentMember.DISC = p; currentMember.DISC2 = s; showMainPage(currentMember); 
+            } catch (err) { showMessage("บันทึกผลผิดพลาด", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
         };
 
-        window.confirmReset = () => { if (confirm("ยืนยันการล้างข้อมูลแบบทดสอบและประวัติทั้งหมด?")) resetAssessment(); };
+        window.confirmReset = () => { if (confirm("ยืนยันการล้างข้อมูลทดสอบ?")) resetAssessment(); };
         window.resetAssessment = async () => {
-            if (!currentMember) return;
-            unlockVoice();
             document.getElementById('globalLoader').classList.remove('hidden');
             try {
-                const resultsSnap = await getDocs(collection(db, 'DISC_Results'));
-                const deletePromises = [];
-                resultsSnap.forEach((d) => { if (String(d.data().EmpID) === String(currentMember.EmpID)) deletePromises.push(deleteDoc(doc(db, 'DISC_Results', d.id))); });
-                await Promise.all(deletePromises);
-                const docRef = doc(db, COLLECTION_NAME, currentMember.docId);
-                await updateDoc(docRef, { DISC: null, DISC2: null, updatedAt: serverTimestamp() });
-                currentMember.DISC = null; currentMember.DISC2 = null;
-                showInfoModal("Reset ข้อมูลเรียบร้อยแล้ว", "คุณสามารถเริ่มต้นทำแบบทดสอบ DiSC ใหม่ได้ทันที", "check-circle", "green");
-                showMainPage(currentMember); switchTab('home');
-            } catch (e) { console.error(e); showMessage("เกิดข้อผิดพลาดในการ Reset", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
+                const snap = await getDocs(collection(db, 'DISC_Results'));
+                const ps = []; snap.forEach(d => { if (String(d.data().EmpID) === String(currentMember.EmpID)) ps.push(deleteDoc(doc(db, 'DISC_Results', d.id))); });
+                await Promise.all(ps);
+                await updateDoc(doc(db, COLLECTION_NAME, currentMember.docId), { DISC: null, DISC2: null, updatedAt: serverTimestamp() });
+                currentMember.DISC = null; currentMember.DISC2 = null; showMainPage(currentMember);
+            } catch (e) { showMessage("Reset ผิดพลาด", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
         };
 
-        const showInfoModal = (title, desc, iconName, color) => {
-            document.getElementById('infoModalTitle').textContent = title;
-            document.getElementById('infoModalDesc').textContent = desc;
-            const iconDiv = document.getElementById('infoModalIcon');
-            iconDiv.innerHTML = `<i data-lucide="${iconName}" class="w-10 h-10"></i>`;
-            iconDiv.className = `w-16 h-16 rounded-full flex items-center justify-center mx-auto ${color === 'green' ? 'bg-green-100 text-green-500' : 'bg-blue-100 text-blue-500'}`;
-            document.getElementById('infoModal').classList.remove('hidden');
-            lucide.createIcons();
-        };
-
-        window.closeInfoModal = () => document.getElementById('infoModal').classList.add('hidden');
         window.closeRegModal = () => { 
-            document.getElementById('regModalBackdrop').classList.add('hidden'); 
-            inputPinValue = ""; 
-            // ล้างหน้า Modal กลับเป็น Step 1 เสมอ
-            document.getElementById('stepEmployeeId').classList.remove('hidden');
-            document.getElementById('stepSetupProfile').classList.add('hidden');
-            document.getElementById('stepEnterPinKeypad').classList.add('hidden');
+            document.getElementById('regModalBackdrop').classList.add('hidden'); inputPinValue = ""; 
+            document.getElementById('stepEmployeeId').classList.remove('hidden'); document.getElementById('stepSetupProfile').classList.add('hidden'); document.getElementById('stepEnterPinKeypad').classList.add('hidden');
         };
 
-        const updatePinDisplay = () => { for(let i=0; i<6; i++) { const box = document.getElementById(`pin-${i}`); if (box) { box.textContent = i < inputPinValue.length ? "•" : ""; box.classList.toggle('active', i < inputPinValue.length); } } };
+        const updatePinDisplay = () => { for(let i=0; i<6; i++) { const b = document.getElementById(`pin-${i}`); if (b) { b.textContent = i < inputPinValue.length ? "•" : ""; b.classList.toggle('active', i < inputPinValue.length); } } };
         window.pressKey = (k) => { unlockVoice(); if (k === 'del') inputPinValue = inputPinValue.slice(0, -1); else if (k === 'clear') inputPinValue = ""; else if (inputPinValue.length < 6) inputPinValue += k; updatePinDisplay(); };
 
         const handleIdSubmission = async () => {
-            unlockVoice();
             const val = document.getElementById('EmpID').value.trim(); if (val.length !== 5) return;
             const btn = document.getElementById('submitIdBtn'), load = document.getElementById('submitIdLoader'); btn.disabled = true; load.classList.remove('hidden');
             try {
                 const memberSnap = await getDocs(collection(db, COLLECTION_NAME));
-                currentMember = null;
-                memberSnap.forEach(d => { if (String(d.data().EmpID).trim() === val) currentMember = { docId: d.id, ...d.data() }; });
-                
-                if (!currentMember) { showMessage("ไม่พบรหัสพนักงาน", "error"); btn.disabled = false; return; }
-
-                if (currentMember.pin) {
-                    if (currentMember.IPAddress === userIP) {
-                        const dr = doc(db, COLLECTION_NAME, currentMember.docId); 
-                        const t = (currentMember.Times || 0) + 1;
-                        await updateDoc(dr, { Times: t, lastLogin: serverTimestamp() }); 
-                        showMainPage({ ...currentMember, Times: t });
-                    } else { 
-                        document.getElementById('stepEmployeeId').classList.add('hidden');
-                        document.getElementById('stepEnterPinKeypad').classList.remove('hidden'); 
-                        document.getElementById('loginUserName').textContent = currentMember.FullName; 
-                        lucide.createIcons(); 
-                    }
+                let found = null; memberSnap.forEach(d => { if (String(d.data().EmpID).trim() === val) found = { docId: d.id, ...d.data() }; });
+                if (!found) { showMessage("ไม่พบรหัสพนักงาน", "error"); btn.disabled = false; return; }
+                currentMember = found;
+                if (found.pin) {
+                    if (found.IPAddress === userIP) showMainPage(found);
+                    else { document.getElementById('stepEmployeeId').classList.add('hidden'); document.getElementById('stepEnterPinKeypad').classList.remove('hidden'); document.getElementById('loginUserName').textContent = found.FullName; lucide.createIcons(); }
                 } else {
                     const groupSnap = await getDocs(collection(db, 'DISC_Group'));
-                    const groups = [];
-                    groupSnap.forEach(d => groups.push(d.data()));
-                    const matchedGroup = groups.find(g => String(g.GroupID).trim() === String(currentMember.GroupID).trim());
-                    
-                    document.getElementById('stepEmployeeId').classList.add('hidden');
-                    document.getElementById('stepSetupProfile').classList.remove('hidden');
-                    document.getElementById('dispName').textContent = currentMember.FullName; 
-
-                    const groupInput = document.getElementById('regGroupInput');
-                    const subGroupInput = document.getElementById('regSubGroupInput');
-                    
-                    if (matchedGroup) {
-                        groupInput.value = matchedGroup.Group || "";
-                        subGroupInput.value = matchedGroup.SubGroup || "";
-                        currentMember.Group = matchedGroup.Group || "";
-                        currentMember.SubGroup = matchedGroup.SubGroup || "";
-                    } else {
-                        groupInput.value = "";
-                        subGroupInput.value = "";
-                    }
+                    let gInfo = null; groupSnap.forEach(g => { if (String(g.data().GroupID).trim() === String(found.GroupID).trim()) gInfo = g.data(); });
+                    document.getElementById('stepEmployeeId').classList.add('hidden'); document.getElementById('stepSetupProfile').classList.remove('hidden'); document.getElementById('dispName').textContent = found.FullName; 
+                    if (gInfo) { document.getElementById('regGroupInput').value = gInfo.Group || ""; document.getElementById('regSubGroupInput').value = gInfo.SubGroup || ""; currentMember.Group = gInfo.Group; currentMember.SubGroup = gInfo.SubGroup; }
                 }
-            } catch (err) { console.error(err); showMessage("เชื่อมต่อผิดพลาด", "error"); } finally { btn.disabled = false; load.classList.add('hidden'); }
+            } catch (err) { showMessage("เชื่อมต่อผิดพลาด", "error"); } finally { btn.disabled = false; load.classList.add('hidden'); }
         };
 
-        onAuthStateChanged(auth, async (u) => { 
-            if (!u) await signInAnonymously(auth);
-            document.getElementById('globalLoader').classList.add('hidden'); 
-            document.getElementById('landingPage').classList.remove('hidden'); 
-        });
+        onAuthStateChanged(auth, async (u) => { if (!u) await signInAnonymously(auth); document.getElementById('globalLoader').classList.add('hidden'); document.getElementById('landingPage').classList.remove('hidden'); });
         
-        window.speechSynthesis.getVoices();
         const startApp = async () => {
             await fetchIP();
-            document.getElementById('openModalBtn').onclick = () => { 
-                unlockVoice(); 
-                document.getElementById('regModalBackdrop').classList.remove('hidden'); 
-                document.getElementById('stepEmployeeId').classList.remove('hidden'); 
-                document.getElementById('EmpID').value = ""; 
-            };
-            
-            // เชื่อมปุ่มปิดและยกเลิก แก้ไข Bug
-            document.getElementById('closeModalIconBtn').onclick = window.closeRegModal;
-            document.getElementById('cancelBtn').onclick = window.closeRegModal;
-            document.getElementById('cancelSetupBtn').onclick = window.closeRegModal;
-            document.getElementById('closeKeypadBtn').onclick = window.closeRegModal;
-            
+            document.getElementById('openModalBtn').onclick = () => { unlockVoice(); document.getElementById('regModalBackdrop').classList.remove('hidden'); document.getElementById('EmpID').value = ""; };
+            document.getElementById('closeModalIconBtn').onclick = document.getElementById('cancelBtn').onclick = document.getElementById('cancelSetupBtn').onclick = document.getElementById('closeKeypadBtn').onclick = window.closeRegModal;
             document.getElementById('submitIdBtn').onclick = handleIdSubmission;
-            
-            const checkRegForm = () => {
-                const p1 = document.getElementById('setPin').value, p2 = document.getElementById('confirmPin').value;
-                const g = document.getElementById('regGroupInput').value.trim();
-                const s = document.getElementById('regSubGroupInput').value.trim();
-                document.getElementById('confirmRegBtn').disabled = !(p1.length === 6 && p1 === p2 && g !== "" && s !== "");
-            };
-
-            const numericFilter = (e) => { 
-                e.target.value = e.target.value.replace(/\D/g, ''); 
-                checkRegForm(); 
-            };
-            document.getElementById('setPin').oninput = numericFilter;
-            document.getElementById('confirmPin').oninput = numericFilter;
-            document.getElementById('regGroupInput').oninput = checkRegForm;
-            document.getElementById('regSubGroupInput').oninput = checkRegForm;
-
-            document.getElementById('EmpID').oninput = (e) => { 
-                e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5); 
-                document.getElementById('submitIdBtn').disabled = e.target.value.length !== 5; 
-            };
-            
+            const checkRegForm = () => { const p1 = document.getElementById('setPin').value, p2 = document.getElementById('confirmPin').value; document.getElementById('confirmRegBtn').disabled = !(p1.length === 6 && p1 === p2); };
+            document.getElementById('setPin').oninput = document.getElementById('confirmPin').oninput = (e) => { e.target.value = e.target.value.replace(/\D/g, ''); checkRegForm(); };
+            document.getElementById('EmpID').oninput = (e) => { e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5); document.getElementById('submitIdBtn').disabled = e.target.value.length !== 5; };
             document.getElementById('confirmRegBtn').onclick = async () => {
-                if (!currentMember) return;
-                unlockVoice();
-                const p = document.getElementById('setPin').value;
-                const g = document.getElementById('regGroupInput').value.trim();
-                const s = document.getElementById('regSubGroupInput').value.trim();
-                const bt = document.getElementById('confirmRegBtn'); bt.disabled = true;
-                try { 
-                    const dr = doc(db, COLLECTION_NAME, currentMember.docId); 
-                    const ud = { pin: String(p), Group: g, SubGroup: s, Times: 1, ActivatedAt: serverTimestamp(), lastLogin: serverTimestamp(), IPAddress: userIP }; 
-                    await updateDoc(dr, ud); 
-                    currentMember.Group = g; currentMember.SubGroup = s; 
-                    showMainPage({ ...currentMember, ...ud }); 
-                } catch (e) { showMessage("ลงทะเบียนล้มเหลว", "error"); bt.disabled = false; }
+                const p = document.getElementById('setPin').value, g = document.getElementById('regGroupInput').value.trim(), s = document.getElementById('regSubGroupInput').value.trim();
+                try { await updateDoc(doc(db, COLLECTION_NAME, currentMember.docId), { pin: String(p), Group: g, SubGroup: s, Times: 1, ActivatedAt: serverTimestamp(), lastLogin: serverTimestamp(), IPAddress: userIP }); showMainPage({ ...currentMember, pin: p, Group: g, SubGroup: s }); } catch (e) { showMessage("ลงทะเบียนล้มเหลว", "error"); }
             };
-            
             document.getElementById('savePinLoginBtn').onclick = async () => {
-                if (!currentMember) return;
-                unlockVoice();
-                if (inputPinValue.length !== 6) return; 
-                if (String(inputPinValue) === String(currentMember.pin)) {
-                    const dr = doc(db, COLLECTION_NAME, currentMember.docId); 
-                    const t = (currentMember.Times || 0) + 1;
-                    await updateDoc(dr, { Times: t, lastLogin: serverTimestamp() }); 
-                    showMainPage({ ...currentMember, Times: t });
-                } else { 
-                    showMessage("PIN ไม่ถูกต้อง", "error"); 
-                    inputPinValue = ""; 
-                    updatePinDisplay(); 
-                }
+                if (String(inputPinValue) === String(currentMember.pin)) { await updateDoc(doc(db, COLLECTION_NAME, currentMember.docId), { lastLogin: serverTimestamp() }); showMainPage(currentMember); } 
+                else { showMessage("PIN ไม่ถูกต้อง", "error"); inputPinValue = ""; updatePinDisplay(); }
             };
             lucide.createIcons();
         };
