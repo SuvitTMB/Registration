@@ -15,6 +15,9 @@
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Chart.js CDN for Radar Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         body { font-family: 'Kanit', sans-serif; }
         .modal-enter { animation: fadeIn 0.2s ease-out, zoomIn 0.2s ease-out; }
@@ -128,8 +131,8 @@
         .text-c { color: #fdd704; }
 
         .reg-input-field {
-            width: 100%; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px;
-            font-size: 12px; outline: none; transition: border-color 0.2s;
+            width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 10px;
+            font-size: 14px; outline: none; transition: border-color 0.2s;
         }
         .reg-input-field:focus { border-color: #3b82f6; }
 
@@ -145,13 +148,43 @@
         .dark-side-box { background-color: #fff7ed; border: 1px solid #ffedd5; border-radius: 12px; padding: 12px; margin-top: 12px; }
         .working-tip-box { background-color: #f0fdf4; border: 1px solid #dcfce7; border-radius: 12px; padding: 12px; margin-top: 12px; }
 
-        /* Table Styles */
+        /* Table Styles Updated */
         .custom-table { width: 100%; border-collapse: separate; border-spacing: 0; }
-        .custom-table th { background: #f8fafc; padding: 12px; font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; text-align: left; border-bottom: 1px solid #f1f5f9; }
-        .custom-table td { padding: 12px; font-size: 13px; color: #1e293b; border-bottom: 1px solid #f1f5f9; }
-        .pagination-btn { padding: 6px 12px; border-radius: 8px; background: #f1f5f9; color: #475569; font-size: 12px; transition: all 0.2s; }
+        .custom-table th { 
+            background: rgba(0, 0, 0, 0.08); 
+            padding: 14px 10px; 
+            font-size: 12px; 
+            font-weight: 700; 
+            color: #1e293b; 
+            text-transform: uppercase; 
+            text-align: center; 
+            border-bottom: 2px solid #e2e8f0; 
+        }
+        .custom-table td { 
+            padding: 10px 8px; 
+            font-size: 13px; 
+            color: #334155; 
+            border-bottom: 1px solid #f1f5f9; 
+            vertical-align: middle;
+            line-height: 1.5;
+        }
+        .pagination-btn { padding: 8px 16px; border-radius: 8px; background: #f1f5f9; color: #475569; font-size: 13px; transition: all 0.2s; border: 1px solid #e2e8f0; }
         .pagination-btn:hover:not(:disabled) { background: #e2e8f0; }
         .pagination-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .disc-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center m-0 p-0 text-gray-800">
@@ -268,28 +301,37 @@
             <div id="tab-friends" class="tab-content hidden space-y-4 text-left pb-10">
                 <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
                     <h3 class="text-lg font-bold text-slate-800 mb-2">การทำงานกับเพื่อนคุณด้วย DiSC</h3>
-                    <p class="text-xs text-slate-500 leading-relaxed mb-6">หากคุณต้องการทำงานกับเพื่อนๆ ของคุณ มาลองศึกษาวิธีสไตล์ที่เป็นตัวตนของเพื่อนคุณ เพื่อให้เราทำงานเข้ากันได้ดี และมีประสิทธิภาพมากยิ่งขึ้น</p>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-6">ศึกษาสไตล์ที่เป็นตัวตนของเพื่อนคุณ เพื่อให้เราทำงานเข้ากันได้ดี และมีประสิทธิภาพมากยิ่งขึ้น</p>
                     
-                    <div class="space-y-4 bg-slate-50 p-4 rounded-xl border border-slate-100 mb-6">
+                    <div class="space-y-4 bg-slate-50 p-5 rounded-xl border border-slate-100 mb-6">
                         <div class="flex flex-col gap-1">
-                            <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">สังกัดทีม</label>
+                            <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">สังกัดทีม</label>
                             <select id="friendGroupFilter" class="reg-input-field bg-white"><option value="">เลือกสังกัดทีมทั้งหมด</option></select>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">หน่วยงาน</label>
-                            <select id="friendSubGroupFilter" class="reg-input-field bg-white"><option value="">เลือกหน่วยงานทั้งหมด</option></select>
                         </div>
                     </div>
 
-                    <div class="overflow-x-auto">
+                    <!-- Spider Chart Container -->
+                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm mb-6 flex justify-center">
+                        <div class="w-full max-w-[320px]">
+                            <canvas id="friendsRadarChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto rounded-xl border border-slate-200">
                         <table class="custom-table" id="friendsTable">
-                            <thead><tr><th>ชื่อ-นามสกุล</th><th class="text-center">DiSC</th><th class="text-center">Action</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>ชื่อ-นามสกุล</th>
+                                    <th class="text-center">DiSC Style</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
                             <tbody id="friendsTableBody"></tbody>
                         </table>
                     </div>
 
                     <div class="flex justify-between items-center mt-6">
-                        <span id="pageInfo" class="text-[11px] text-slate-400">Page 1 of 1</span>
+                        <span id="pageInfo" class="text-[12px] font-medium text-slate-500">Page 1 of 1</span>
                         <div class="flex gap-2">
                             <button id="prevFriendPage" class="pagination-btn" disabled>ก่อนหน้า</button>
                             <button id="nextFriendPage" class="pagination-btn" disabled>ถัดไป</button>
@@ -342,7 +384,6 @@
             </div>
             <div id="assessmentQuestion" class="hidden space-y-8 mt-[15px]">
                 <div class="text-center">
-                    <!-- Adjusted Image Width to 70% and removed opacity-50 for full color -->
                     <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[70%] mx-auto mb-6">
                     <span class="text-orange-500 font-normal text-xs uppercase tracking-widest">Question <span id="qNumber">1</span> of 20</span>
                     <h3 id="qPrompt" class="text-lg font-normal text-slate-700 mt-2 leading-snug"></h3>
@@ -423,8 +464,9 @@
         const COLLECTION_NAME = "DISC_Member";
 
         let currentMember = null, userIP = "", inputPinValue = "";
-        let allFriends = [], filteredFriends = [], groupsData = [], currentPage = 1, itemsPerPage = 7;
+        let allFriends = [], filteredFriends = [], currentPage = 1, itemsPerPage = 30;
         let isMuted = false, isAudioUnlocked = false; 
+        let radarChartInstance = null;
 
         // -- DATA OBJECTS --
         const discQuestions = [
@@ -678,48 +720,119 @@
             lucide.createIcons();
         };
 
-        // -- FRIENDS LOGIC --
+        // -- FRIENDS LOGIC UPDATED --
         const loadFriendsData = async () => {
             document.getElementById('globalLoader').classList.remove('hidden');
             try {
-                const groupSnap = await getDocs(collection(db, 'DISC_Group'));
-                groupsData = [];
-                const gSel = document.getElementById('friendGroupFilter');
-                gSel.innerHTML = '<option value="">เลือกสังกัดทีมทั้งหมด</option>';
-                const uG = new Set();
-                groupSnap.forEach(d => { const data = { id: d.id, ...d.data() }; groupsData.push(data); if (data.Group) uG.add(data.Group); });
-                uG.forEach(g => { const opt = document.createElement('option'); opt.value = g; opt.textContent = g; gSel.appendChild(opt); });
-
+                // Fetch all members directly to get unique groups
                 const memberSnap = await getDocs(collection(db, COLLECTION_NAME));
                 allFriends = [];
-                memberSnap.forEach(d => { const dt = d.data(); if(dt.DISC && dt.FullName) allFriends.push(dt); });
+                const uniqueGroups = new Set();
+                
+                memberSnap.forEach(d => { 
+                    const dt = d.data(); 
+                    if(dt.FullName) {
+                        allFriends.push(dt); 
+                        if(dt.Group) uniqueGroups.add(dt.Group);
+                    }
+                });
+
+                // Update Group Dropdown from Member data
+                const gSel = document.getElementById('friendGroupFilter');
+                gSel.innerHTML = '<option value="">เลือกสังกัดทีมทั้งหมด</option>';
+                Array.from(uniqueGroups).sort().forEach(g => {
+                    const opt = document.createElement('option');
+                    opt.value = g; opt.textContent = g;
+                    gSel.appendChild(opt);
+                });
+
                 applyFriendsFilter();
-            } catch (err) { showMessage("เกิดข้อผิดพลาดในการโหลดข้อมูล", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
+            } catch (err) { 
+                showMessage("เกิดข้อผิดพลาดในการโหลดข้อมูล", "error"); 
+                console.error(err);
+            } finally { 
+                document.getElementById('globalLoader').classList.add('hidden'); 
+            }
         };
 
         const applyFriendsFilter = () => {
             const gVal = document.getElementById('friendGroupFilter').value;
-            const subId = document.getElementById('friendSubGroupFilter').value;
-            filteredFriends = allFriends.filter(f => {
-                const matchG = !gVal || f.Group === gVal;
-                const matchS = !subId || String(f.GroupID) === String(subId);
-                return matchG && matchS;
+            filteredFriends = allFriends.filter(f => !gVal || f.Group === gVal);
+            currentPage = 1; 
+            renderFriendsTable();
+            updateRadarChart();
+        };
+
+        const updateRadarChart = () => {
+            const counts = { D: 0, i: 0, S: 0, C: 0 };
+            filteredFriends.forEach(f => { if (f.DISC && counts[f.DISC] !== undefined) counts[f.DISC]++; });
+            
+            const data = [counts.D, counts.i, counts.S, counts.C];
+            const ctx = document.getElementById('friendsRadarChart').getContext('2d');
+            
+            if (radarChartInstance) radarChartInstance.destroy();
+            
+            radarChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Dominance (D)', 'Influence (i)', 'Steadiness (S)', 'Conscientiousness (C)'],
+                    datasets: [{
+                        label: 'จำนวนคนแบ่งตามสไตล์',
+                        data: data,
+                        fill: true,
+                        backgroundColor: 'rgba(249, 115, 22, 0.2)',
+                        borderColor: 'rgb(249, 115, 22)',
+                        pointBackgroundColor: 'rgb(249, 115, 22)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(249, 115, 22)'
+                    }]
+                },
+                options: {
+                    elements: { line: { borderWidth: 2 } },
+                    scales: {
+                        r: {
+                            angleLines: { display: true },
+                            suggestedMin: 0,
+                            ticks: { precision: 0 }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
             });
-            currentPage = 1; renderFriendsTable();
         };
 
         const renderFriendsTable = () => {
             const tb = document.getElementById('friendsTableBody'); tb.innerHTML = '';
             const start = (currentPage - 1) * itemsPerPage;
             const items = filteredFriends.slice(start, start + itemsPerPage);
-            if (!items.length) tb.innerHTML = '<tr><td colspan="3" class="text-center py-10 text-slate-400">ไม่พบข้อมูลเพื่อนพนักงาน</td></tr>';
-            else items.forEach(f => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td class="font-medium">${f.FullName}</td><td class="text-center font-bold text-${f.DISC.toLowerCase()}">${f.DISC}</td><td class="text-center"><button onclick="showFriendInsight('${f.FullName}', '${f.DISC}')" class="text-[11px] bg-orange-100 text-orange-600 px-3 py-1.5 rounded-lg font-semibold hover:bg-orange-200">วิธีร่วมงาน</button></td>`;
-                tb.appendChild(tr);
-            });
+            
+            if (!items.length) {
+                tb.innerHTML = '<tr><td colspan="3" class="text-center py-12 text-slate-400">ไม่พบข้อมูลเพื่อนพนักงาน</td></tr>';
+            } else {
+                items.forEach(f => {
+                    const tr = document.createElement('tr');
+                    const discType = f.DISC || '';
+                    const hasDisc = !!discType;
+                    const typeColor = hasDisc ? discStyles[discType].color : '#94a3b8';
+                    
+                    tr.innerHTML = `
+                        <td class="font-medium text-slate-700">${f.FullName}</td>
+                        <td class="text-center">
+                            ${hasDisc ? `<div class="disc-circle" style="background-color: ${typeColor}">${discType}</div>` : '<span class="text-slate-300">-</span>'}
+                        </td>
+                        <td class="text-center">
+                            ${hasDisc ? `<button onclick="showFriendInsight('${f.FullName}', '${f.DISC}')" class="text-[11px] bg-orange-100 text-orange-600 px-3 py-1.5 rounded-lg font-bold hover:bg-orange-200 transition-colors">วิธีร่วมงาน</button>` : ''}
+                        </td>
+                    `;
+                    tb.appendChild(tr);
+                });
+            }
+            
             const tot = Math.ceil(filteredFriends.length/itemsPerPage) || 1;
-            document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${tot}`;
+            document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${tot} (${filteredFriends.length} รายการ)`;
             document.getElementById('prevFriendPage').disabled = currentPage === 1;
             document.getElementById('nextFriendPage').disabled = currentPage === tot;
         };
@@ -765,18 +878,11 @@
                     document.getElementById('stepEnterPinKeypad').classList.remove('hidden');
                     document.getElementById('loginUserName').textContent = f.FullName;
                 } else {
-                    if (f.GroupID) {
-                        const gDoc = await getDoc(doc(db, 'DISC_Group', f.GroupID));
-                        if (gDoc.exists()) {
-                            const gd = gDoc.data();
-                            document.getElementById('dispGroup').textContent = gd.Group || "-";
-                            document.getElementById('dispSubGroup').textContent = gd.SubGroup || "-";
-                            currentMember.Group = gd.Group; currentMember.SubGroup = gd.SubGroup;
-                        }
-                    }
                     document.getElementById('stepEmployeeId').classList.add('hidden');
                     document.getElementById('stepSetupProfile').classList.remove('hidden');
                     document.getElementById('dispName').textContent = f.FullName;
+                    document.getElementById('dispGroup').textContent = f.Group || "-";
+                    document.getElementById('dispSubGroup').textContent = f.SubGroup || "-";
                 }
             } catch (err) { showMessage("เกิดข้อผิดพลาดในการเชื่อมต่อ", "error"); } finally { btn.disabled = false; lucide.createIcons(); }
         };
@@ -835,7 +941,6 @@
             document.getElementById('qPrompt').textContent = q.prompt;
             document.getElementById('assessmentProgress').style.width = `${((currentQIndex) / 20) * 100}%`;
             
-            // SYSTEM READING: Speak the question when sh is true
             if (sh) speak(`คำถามข้อที่ ${currentQIndex + 1} ${q.prompt}`);
             
             const con = document.getElementById('qChoices'); con.innerHTML = '';
@@ -845,13 +950,11 @@
                 if (isM) cStyle = "bg-green-600 text-white border-green-600";
                 else if (isL) cStyle = "bg-red-500 text-white border-red-500";
                 
-                // BUTTON STYLE LOGIC: Muted background when other choice is selected
                 const mStyle = isM ? "bg-green-900" : (ans.most ? "bg-green-200 text-green-700" : "bg-green-500");
                 const lStyle = isL ? "bg-red-900" : (ans.least ? "bg-red-200 text-red-700" : "bg-red-500");
                 
                 const card = document.createElement('div');
                 card.className = `choice-card p-4 rounded-xl flex justify-between items-center ${cStyle}`;
-                // BUTTONS WITH UNICODE SYMBOLS: 🡅 and 🡇
                 card.innerHTML = `
                     <span class="text-sm flex-1 pr-2">${c.text}</span>
                     <div class="flex gap-2">
@@ -921,14 +1024,8 @@
                 } catch (e) { showMessage("ลงทะเบียนล้มเหลว", "error"); }
             };
             
-            // Filters
-            document.getElementById('friendGroupFilter').onchange = (e) => {
-                const g = e.target.value; const sSel = document.getElementById('friendSubGroupFilter');
-                sSel.innerHTML = '<option value="">เลือกหน่วยงานทั้งหมด</option>';
-                if(g) groupsData.filter(i=>i.Group===g).forEach(i=>{ const o=document.createElement('option'); o.value=i.id; o.textContent=i.SubGroup; sSel.appendChild(o); });
-                applyFriendsFilter();
-            };
-            document.getElementById('friendSubGroupFilter').onchange = applyFriendsFilter;
+            // Friends Filter
+            document.getElementById('friendGroupFilter').onchange = applyFriendsFilter;
             document.getElementById('prevFriendPage').onclick = () => { if(currentPage>1) { currentPage--; renderFriendsTable(); } };
             document.getElementById('nextFriendPage').onclick = () => { if(currentPage < Math.ceil(filteredFriends.length/itemsPerPage)) { currentPage++; renderFriendsTable(); } };
             
