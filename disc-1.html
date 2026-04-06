@@ -81,8 +81,6 @@
             transform: scale(0.95);
         }
 
-        .btn-cancel-gray { background-color: #A6A6A6; color: white; }
-
         .btn-standard {
             height: 44px;
             padding-left: 10px;
@@ -97,8 +95,6 @@
             width: auto;
             min-width: fit-content;
         }
-
-        .btn-lightbox { padding-left: 35px; padding-right: 35px; }
 
         .pin-input-box {
             width: 40px; height: 50px; border: 2px solid #e2e8f0; border-radius: 8px;
@@ -332,18 +328,22 @@
         </div>
         <div id="assessmentContainer" class="flex-1 overflow-y-auto px-6 py-4 space-y-8 pb-32">
             <div id="assessmentIntro" class="space-y-6 text-center pt-10">
+                <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[80%] mx-auto mb-2">
                 <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FCarl%20Jung.jpg?alt=media&token=4f683dc5-0f68-432d-b15c-679db17ee7f7" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover shadow-md">
                 <div class="text-sm text-slate-500 text-left space-y-4 bg-slate-50 p-6 rounded-2xl leading-relaxed">
                     <h2 class="text-xl font-bold text-center text-slate-800">DiSC 4 จริตพิชิตใจ</h2>
-                    <p>คาร์ล จุง (Carl Jung) ทฤษฎีที่ได้รับการยอมรับมากที่สุด เรามาหาตัวตนที่แท้จริงของคุณกันครับ</p>
+                    <p>คาร์ล จุง (Carl Jung) บิดาแห่งจิตวิทยาเชิงลึก ได้กล่าวไว้ว่า "การรู้จักตัวเองคือจุดเริ่มต้นของปัญญาที่แท้จริง" DiSC คือเครื่องมือที่จะช่วยถอดรหัสพฤติกรรมของคุณ เพื่อให้คุณเข้าใจจุดแข็ง และพื้นที่ในการพัฒนาของตัวเองได้อย่างแม่นยำ</p>
+                    <p class="text-orange-600 font-medium">คำแนะนำ: เลือกคำตอบที่ตรงกับตัวตนของคุณมากที่สุดในสถานการณ์การทำงาน โดยไม่ต้องใช้เวลาคิดนานเกินไป</p>
                 </div>
                 <div class="flex gap-4 pt-4">
-                    <button onclick="exitAssessment()" class="btn-standard flex-1 bg-slate-500 text-white h-[54px]">กลับหน้าหลัก</button>
-                    <button onclick="beginActualTest()" class="btn-standard flex-[2] bg-orange-500 text-white h-[54px]">เข้าสู่การทดสอบ</button>
+                    <button onclick="exitAssessment()" class="btn-standard flex-1 bg-slate-500 text-white h-[54px]"><i data-lucide="x-circle"></i><span>กลับหน้าหลัก</span></button>
+                    <button onclick="beginActualTest()" class="btn-standard flex-[2] bg-orange-500 text-white h-[54px]"><span>เข้าสู่การทดสอบ</span><i data-lucide="play"></i></button>
                 </div>
             </div>
             <div id="assessmentQuestion" class="hidden space-y-8 mt-[15px]">
                 <div class="text-center">
+                    <!-- Adjusted Image Width to 70% and removed opacity-50 for full color -->
+                    <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[70%] mx-auto mb-6">
                     <span class="text-orange-500 font-normal text-xs uppercase tracking-widest">Question <span id="qNumber">1</span> of 20</span>
                     <h3 id="qPrompt" class="text-lg font-normal text-slate-700 mt-2 leading-snug"></h3>
                 </div>
@@ -366,7 +366,10 @@
             <div class="p-8">
                 <div id="stepEmployeeId" class="space-y-6">
                     <div class="text-center"><label class="text-[12px] text-slate-500 uppercase">ระบุรหัสพนักงาน 5 หลัก</label><input type="text" id="EmpID" maxlength="5" inputmode="numeric" placeholder="xxxxx" class="emp-id-input w-full px-4 py-3.5 border rounded-xl text-[18px] text-center mt-2"></div>
-                    <button id="submitIdBtn" disabled class="btn-standard bg-blue-600 text-white w-full">ถัดไป</button>
+                    <div class="flex gap-3">
+                        <button onclick="window.closeRegModal()" class="btn-standard bg-slate-500 text-white flex-1"><i data-lucide="x-circle"></i><span>ปิดหน้าต่าง</span></button>
+                        <button id="submitIdBtn" disabled class="btn-standard bg-blue-600 text-white flex-1"><span>ถัดไป</span><i data-lucide="chevron-right"></i></button>
+                    </div>
                 </div>
                 <div id="stepSetupProfile" class="hidden space-y-4">
                     <div class="bg-white p-4 rounded-xl space-y-3 border border-slate-200 text-[12px]">
@@ -386,7 +389,10 @@
                         <div class="flex justify-center gap-2"><div class="pin-input-box" id="pin-0"></div><div class="pin-input-box" id="pin-1"></div><div class="pin-input-box" id="pin-2"></div><div class="pin-input-box" id="pin-3"></div><div class="pin-input-box" id="pin-4"></div><div class="pin-input-box" id="pin-5"></div></div>
                     </div>
                     <div class="grid grid-cols-3 gap-3 max-w-[320px] mx-auto"><button class="keypad-btn" onclick="pressKey('1')">1</button><button class="keypad-btn" onclick="pressKey('2')">2</button><button class="keypad-btn" onclick="pressKey('3')">3</button><button class="keypad-btn" onclick="pressKey('4')">4</button><button class="keypad-btn" onclick="pressKey('5')">5</button><button class="keypad-btn" onclick="pressKey('6')">6</button><button class="keypad-btn" onclick="pressKey('7')">7</button><button class="keypad-btn" onclick="pressKey('8')">8</button><button class="keypad-btn" onclick="pressKey('9')">9</button><button class="keypad-btn" onclick="pressKey('del')"><i data-lucide="delete"></i></button><button class="keypad-btn" onclick="pressKey('0')">0</button><button class="keypad-btn text-red-500" onclick="pressKey('clear')">C</button></div>
-                    <button id="savePinLoginBtn" class="btn-standard bg-blue-600 text-white w-full mt-4">เข้าสู่ระบบ</button>
+                    <div class="flex gap-3 mt-4">
+                        <button onclick="window.closeRegModal()" class="btn-standard bg-slate-500 text-white flex-1"><i data-lucide="x-circle"></i><span>ยกเลิก</span></button>
+                        <button id="savePinLoginBtn" class="btn-standard bg-blue-600 text-white flex-1"><i data-lucide="log-in"></i><span>เข้าสู่ระบบ</span></button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -420,7 +426,7 @@
         let allFriends = [], filteredFriends = [], groupsData = [], currentPage = 1, itemsPerPage = 7;
         let isMuted = false, isAudioUnlocked = false; 
 
-        // -- DATA OBJECTS -- (EXTRACTED FROM IMAGES)
+        // -- DATA OBJECTS --
         const discQuestions = [
             { prompt: "ในสถานการณ์การทำงาน ปกติคุณมักจะ...", choices: [{ text: "กล้าตัดสินใจและเน้นผลลัพธ์", type: 'D' }, { text: "ชวนคุยสร้างบรรยากาศสนุกสนาน", type: 'i' }, { text: "รับฟังและช่วยเหลือคนรอบข้าง", type: 'S' }, { text: "เน้นความถูกต้องและรายละเอียด", type: 'C' }] },
             { prompt: "เมื่อต้องทำงานชิ้นใหม่ คุณมักจะเริ่มจาก...", choices: [{ text: "ลงมือทำทันทีเพื่อให้เห็นผล", type: 'D' }, { text: "หาเพื่อนร่วมงานและพูดคุยไอเดีย", type: 'i' }, { text: "วางแผนขั้นตอนอย่างค่อยเป็นค่อยไป", type: 'S' }, { text: "รวบรวมข้อมูลและวิเคราะห์ความเป็นไปได้", type: 'C' }] },
@@ -499,7 +505,7 @@
                 influence: 'ความเอื้อเฟื้อเผื่อแผ่, การทำงานอย่างสม่ำเสมอ',
                 limit: 'ยอมตามคนอื่นมากเกินไป, หลีกเลี่ยงการเปลี่ยนแปลง, ตัดสินใจช้า',
                 effective: 'มีการแสดงความมั่นใจ, เปิดเผยความรู้สึกที่แท้จริง',
-                dark: 'ความน้อมน้อม การเกรงใจแบบเงียบๆ การประนีประนอมแบบมากเกินไป', 
+                dark: 'ความน้อมน้อม การเกรงใจแบบเงใจ การประนีประนอมแบบมากเกินไป', 
                 pressure: 'เป็นฝ่ายยอม, หลีกเลี่ยงการเปิดเผยความผิดในสิ่งที่ทำลงไป' 
             },
             'C': { 
@@ -543,7 +549,7 @@
         const discPersonalSummaries = {
             'D': 'คนสไตล์ D คือผู้ที่ขับเคลื่อนด้วยผลลัพธ์ ความเร็ว และความท้าทาย มีพลังในการตัดสินใจและผลักดันงานให้เดินหน้า จุดเด่นคือความเด็ดขาด กล้ารับความเสี่ยง และแก้ปัญหาได้รวดเร็ว แต่ก็อาจดูเร่งรัด ข้ามรายละเอียด หรือกดดันคนอื่นโดยไม่ตั้งใจ การตัดสินใจมักเกิดจากภาพรวมและความมั่นใจส่วนตัว ทำงานได้ดีในสถานการณ์ที่ต้องการความชัดเจนและความเร็ว สิ่งที่ต้องพัฒนาคือการฟัง เปิดรับความคิดเห็น และใส่ใจผลกระทบต่อทีม สิ่งที่ต้องระวังคืออารมณ์ ความหุนหัน และการใช้อำนาจมากเกินไปจนทำให้คนรอบตัวรู้สึกถูกกดทับ',
             'i': 'คนสไตล์ i คือผู้ที่ขับเคลื่อนด้วยผู้คน ความสัมพันธ์ และพลังบวก มีเสน่ห์ทางการสื่อสาร สร้างแรงบันดาลใจ และทำให้ทีมมีบรรยากาศสนุก จุดเด่นคือความเป็นมิตร ความคิดสร้างสรรค์ และความสามารถในการเชื่อมคนเข้าด้วยกัน แต่ก็อาจขาดวินัย ทำงานไม่ต่อเนื่อง หรือสัญญามากเกินไป การตัดสินใจมักอิงความรู้สึกและผลต่อความสัมพันธ์ ทำงานร่วมกับคนอื่นได้ดีในงานที่ต้องการพลังและการมีส่วนร่วม สิ่งที่ต้องพัฒนาคือการจัดลำดับความสำคัญและการติดตามงานให้จบ สิ่งที่ต้องระวังคือการหลีกเลี่ยงงานละเอียดและการใช้อารมณ์มากเกินไป',
-            'S': 'คนสไตล์ S คือผู้ที่ขับเคลื่อนด้วยความมั่นคง ความกลมกลืน และความสัมพันธ์ที่ดี เป็นคนใจเย็น รับฟังเก่ง และเชื่อถือได้ จุดเด่นคือความสม่ำเสมอ ความอดทน และความสามารถในการสนับสนุนผู้อื่น แต่ก็อาจลังเล ไม่กล้าปฏิเสธ และไม่ชอบการเปลี่ยนแปลงเร็ว การตัดสินใจมักใช้เวลาเพราะคิดถึงผลกระทบต่อคนอื่น ทำงานร่วมกับทุกคนได้ดีและเป็นตัวเชื่อมทีม สิ่งที่ต้องพัฒนาคือความกล้าแสดงออก การตั้งขอบเขต และการรับมือกับความเปลี่ยนแปลง สิ่งที่ต้องระวังคือการเก็บความรู้สึกจนเกิดความเครียดและงานล้นตัว',
+            'S': 'คนสไตล์ S คือผู้ที่ขับเคลื่อนด้วยความมั่นคง ความกลมกลืน และความสัมพันธ์ที่ดี เป็นคนใจเย็น รับฟังเก่ง และเชื่อถือได้ จุดเด่นคือความสม่ำเสมอ ความอดทน และความสามารถในการสนับสนุนผู้อื่น แต่ก็อาจลังเล ไม่กล้าปฏิเสธ และไม่ชอบการเปลี่ยนแปลงเร็ว การตัดสินใจมักใช้เวลาเพราะคิดถึงผลกระทบต่อคนอื่น ทำงานได้ดีในงานที่ต้องการความเสถียรและเป็นตัวเชื่อมทีม สิ่งที่ต้องพัฒนาคือความกล้าแสดงออก การตั้งขอบเขต และการรับมือกับความเปลี่ยนแปลง สิ่งที่ต้องระวังคือการเก็บความรู้สึกจนเกิดความเครียดและงานล้นตัว',
             'C': 'คนสไตล์ C คือผู้ที่ขับเคลื่อนด้วยความถูกต้อง มาตรฐาน และข้อมูล ชอบคิดวิเคราะห์และทำงานอย่างละเอียด จุดเด่นคือความแม่นยำ การวางระบบ และคุณภาพงานที่สูง แต่ก็อาจใช้เวลานาน กลัวความผิดพลาด และดูเย็นชาต่อคนอื่น การตัดสินใจมักต้องการข้อมูลครบถ้วนและเหตุผลที่หนักแน่น ทำงานได้ดีในงานที่ต้องการความละเอียดและความเป็นระบบ สิ่งที่ต้องพัฒนาคือความยืดหยุ่น การสื่อสารให้กระชับ และการยอมรับความไม่สมบูรณ์แบบ สิ่งที่ต้องระวังคือการคิดมากเกินไปและตั้งมาตรฐานสูงจนกดดันตัวเอง'
         };
 
@@ -559,7 +565,7 @@
         function unlockVoice() { if (isAudioUnlocked) return; window.speechSynthesis.speak(new SpeechSynthesisUtterance("")); isAudioUnlocked = true; }
         function speak(text) { if (isMuted) return; unlockVoice(); window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = 'th-TH'; u.rate = 1.05; window.speechSynthesis.speak(u); }
 
-        window.toggleMute = () => { unlockVoice(); isMuted = !isMuted; const ic = isMuted ? 'volume-x' : 'volume-2'; document.getElementById('muteIcon').setAttribute('data-lucide', ic); if (isMuted) window.speechSynthesis.cancel(); lucide.createIcons(); };
+        window.toggleMute = () => { unlockVoice(); isMuted = !isMuted; const ic = isMuted ? 'volume-x' : 'volume-2'; document.getElementById('muteIcon').setAttribute('data-lucide', ic); if (document.getElementById('muteIconAssess')) document.getElementById('muteIconAssess').setAttribute('data-lucide', ic); if (isMuted) window.speechSynthesis.cancel(); lucide.createIcons(); };
 
         const showMessage = (t, ty = 'success') => { 
             const m = document.getElementById('messageBox'); m.textContent = t; m.className = `fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl text-white shadow-xl ${ty==='success'?'bg-green-500':'bg-red-500'}`;
@@ -776,16 +782,6 @@
         };
 
         // -- UI HANDLERS --
-        document.getElementById('friendGroupFilter').onchange = (e) => {
-            const g = e.target.value; const sSel = document.getElementById('friendSubGroupFilter');
-            sSel.innerHTML = '<option value="">เลือกหน่วยงานทั้งหมด</option>';
-            if(g) groupsData.filter(i=>i.Group===g).forEach(i=>{ const o=document.createElement('option'); o.value=i.id; o.textContent=i.SubGroup; sSel.appendChild(o); });
-            applyFriendsFilter();
-        };
-        document.getElementById('friendSubGroupFilter').onchange = applyFriendsFilter;
-        document.getElementById('prevFriendPage').onclick = () => { if(currentPage>1) { currentPage--; renderFriendsTable(); } };
-        document.getElementById('nextFriendPage').onclick = () => { if(currentPage < Math.ceil(filteredFriends.length/itemsPerPage)) { currentPage++; renderFriendsTable(); } };
-        
         window.closeRegModal = () => document.getElementById('regModalBackdrop').classList.add('hidden');
         window.pressKey = (k) => {
             unlockVoice();
@@ -824,6 +820,8 @@
         window.exitAssessment = () => showMainPage(currentMember);
 
         // Assessment Logic
+        let currentQIndex = 0;
+        let assessmentAnswers = [];
         window.beginActualTest = () => {
             unlockVoice(); currentQIndex = 0; assessmentAnswers = new Array(20).fill(null).map(() => ({most: null, least: null}));
             document.getElementById('assessmentIntro').classList.add('hidden');
@@ -836,18 +834,34 @@
             document.getElementById('qNumber').textContent = currentQIndex + 1;
             document.getElementById('qPrompt').textContent = q.prompt;
             document.getElementById('assessmentProgress').style.width = `${((currentQIndex) / 20) * 100}%`;
+            
+            // SYSTEM READING: Speak the question when sh is true
             if (sh) speak(`คำถามข้อที่ ${currentQIndex + 1} ${q.prompt}`);
+            
             const con = document.getElementById('qChoices'); con.innerHTML = '';
             q.choices.forEach((c, i) => {
                 const isM = ans.most === c.type, isL = ans.least === c.type;
                 let cStyle = "bg-white text-slate-700 border-slate-100";
                 if (isM) cStyle = "bg-green-600 text-white border-green-600";
                 else if (isL) cStyle = "bg-red-500 text-white border-red-500";
-                const mStyle = isM ? "bg-green-900" : (ans.most ? "opacity-30" : "bg-green-500");
-                const lStyle = isL ? "bg-red-900" : (ans.least ? "opacity-30" : "bg-red-500");
+                
+                // BUTTON STYLE LOGIC: Muted background when other choice is selected
+                const mStyle = isM ? "bg-green-900" : (ans.most ? "bg-green-200 text-green-700" : "bg-green-500");
+                const lStyle = isL ? "bg-red-900" : (ans.least ? "bg-red-200 text-red-700" : "bg-red-500");
+                
                 const card = document.createElement('div');
                 card.className = `choice-card p-4 rounded-xl flex justify-between items-center ${cStyle}`;
-                card.innerHTML = `<span class="text-sm flex-1 pr-2">${c.text}</span><div class="flex gap-2"><button onclick="pick(${i},'most')" class="btn-standard h-8 px-2 text-[10px] text-white rounded-lg ${mStyle}">มากสุด</button><button onclick="pick(${i},'least')" class="btn-standard h-8 px-2 text-[10px] text-white rounded-lg ${lStyle}">น้อยสุด</button></div>`;
+                // BUTTONS WITH UNICODE SYMBOLS: 🡅 and 🡇
+                card.innerHTML = `
+                    <span class="text-sm flex-1 pr-2">${c.text}</span>
+                    <div class="flex gap-2">
+                        <button onclick="pick(${i},'most')" class="btn-standard h-8 px-2 text-[10px] text-white rounded-lg ${mStyle} flex items-center gap-1">
+                            <span class="text-xs">🡅</span> <span>มากสุด</span>
+                        </button>
+                        <button onclick="pick(${i},'least')" class="btn-standard h-8 px-2 text-[10px] text-white rounded-lg ${lStyle} flex items-center gap-1">
+                            <span class="text-xs">🡇</span> <span>น้อยสุด</span>
+                        </button>
+                    </div>`;
                 con.appendChild(card);
             });
             document.getElementById('prevBtn').disabled = currentQIndex === 0;
@@ -906,6 +920,18 @@
                     currentMember.pin = pin; showMainPage(currentMember);
                 } catch (e) { showMessage("ลงทะเบียนล้มเหลว", "error"); }
             };
+            
+            // Filters
+            document.getElementById('friendGroupFilter').onchange = (e) => {
+                const g = e.target.value; const sSel = document.getElementById('friendSubGroupFilter');
+                sSel.innerHTML = '<option value="">เลือกหน่วยงานทั้งหมด</option>';
+                if(g) groupsData.filter(i=>i.Group===g).forEach(i=>{ const o=document.createElement('option'); o.value=i.id; o.textContent=i.SubGroup; sSel.appendChild(o); });
+                applyFriendsFilter();
+            };
+            document.getElementById('friendSubGroupFilter').onchange = applyFriendsFilter;
+            document.getElementById('prevFriendPage').onclick = () => { if(currentPage>1) { currentPage--; renderFriendsTable(); } };
+            document.getElementById('nextFriendPage').onclick = () => { if(currentPage < Math.ceil(filteredFriends.length/itemsPerPage)) { currentPage++; renderFriendsTable(); } };
+            
             lucide.createIcons();
         };
         initApp();
