@@ -143,7 +143,7 @@
             font-size: 10px;
             line-height: 12px; 
             display: block;
-            max-width: 65px;
+            max-width: 70px;
             word-wrap: break-word;
             margin-top: 2px;
         }
@@ -234,8 +234,9 @@
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center m-0 p-0 text-gray-800">
 
-    <div id="globalLoader" class="hidden">
+    <div id="globalLoader">
         <div id="loaderIcon" class="w-10 h-10 border-4 border-slate-100 border-t-blue-600 rounded-full animate-spin mb-6"></div>
+        <p class="text-sm text-slate-400">กำลังเชื่อมต่อระบบ...</p>
     </div>
 
     <div id="messageBox" class="hidden"></div>
@@ -265,11 +266,11 @@
 
     <!-- หน้าหลัก DiSC -->
     <div id="mainDiscPage" class="w-full max-w-[500px] flex flex-col bg-white min-h-screen relative hidden">
-        <div class="w-full px-6 py-4 flex justify-between items-center bg-orange-500 text-white shadow-md z-[20]">
-            <div class="flex items-center gap-2">
-                <div>
-                    <h1 id="welcomeUser" class="text-base font-normal tracking-tight leading-tight">พนักงาน</h1>
-                    <p id="userSub" class="text-[10px] opacity-80 font-normal"></p>
+        <div class="w-full px-6 flex justify-between items-center bg-orange-500 text-white shadow-md z-[20] h-[72px]">
+            <div class="flex items-center h-full">
+                <div class="flex flex-col justify-center">
+                    <h1 id="welcomeUser" class="text-base font-normal tracking-tight leading-none mb-1">พนักงาน</h1>
+                    <p id="userSub" class="text-[10px] opacity-80 font-normal leading-none"></p>
                 </div>
             </div>
             <div class="flex items-center gap-1">
@@ -383,7 +384,7 @@
                         <div id="relationshipsContent" class="space-y-4 text-sm"></div>
                     </div>
 
-                    <!-- ปุ่ม Reset ย้ายลงมาด้านล่างสุด -->
+                    <!-- ปุ่ม Reset -->
                     <button onclick="confirmReset()" class="mt-8 btn-standard bg-white border border-red-200 text-red-500 hover:bg-red-50 shadow-sm px-8 h-[54px] w-full">
                         <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
                         <span>ล้างข้อมูลและเริ่มทดสอบใหม่ (Reset <span class="font-bold">DiSC</span>)</span>
@@ -569,12 +570,56 @@
         let isMuted = false;
         let isAudioUnlocked = false; 
 
-        // ลิงก์รูปภาพ DiSC ที่กำหนดมาใหม่
+        // ชุดคำถาม DiSC (20 ข้อ)
+        const discQuestions = [
+            { prompt: "ในสถานการณ์การทำงาน ปกติคุณมักจะ...", choices: [{ text: "กล้าตัดสินใจและเน้นผลลัพธ์", type: 'D' }, { text: "ชวนคุยสร้างบรรยากาศสนุกสนาน", type: 'i' }, { text: "รับฟังและช่วยเหลือคนรอบข้าง", type: 'S' }, { text: "เน้นความถูกต้องและรายละเอียด", type: 'C' }] },
+            { prompt: "เมื่อต้องทำงานชิ้นใหม่ คุณมักจะเริ่มจาก...", choices: [{ text: "ลงมือทำทันทีเพื่อให้เห็นผล", type: 'D' }, { text: "หาเพื่อนร่วมงานและพูดคุยไอเดีย", type: 'i' }, { text: "วางแผนขั้นตอนอย่างค่อยเป็นค่อยไป", type: 'S' }, { text: "รวบรวมข้อมูลและวิเคราะห์ความเป็นไปได้", type: 'C' }] },
+            { prompt: "คนอื่นมักจะมองว่าคุณเป็นคน...", choices: [{ text: "มีความมั่นใจและเด็ดขาด", type: 'D' }, { text: "ร่าเริงและเข้ากับคนง่าย", type: 'i' }, { text: "ใจเย็นและน่าเชื่อถือ", type: 'S' }, { text: "ละเอียดรอบคอบและเป็นระบบ", type: 'C' }] },
+            { prompt: "เมื่อเกิดความขัดแย้งในทีม คุณมักจะ...", choices: [{ text: "พูดตรงๆ เพื่อแก้ปัญหาให้จบ", type: 'D' }, { text: "ใช้อารมณ์ขันหรือการพูดคุยเพื่อคลายเครียด", type: 'i' }, { text: "ประนีประนอมเพื่อรักษาความสัมพันธ์", type: 'S' }, { text: "ใช้เหตุผลและข้อมูลพิสูจน์ข้อเท็จจริง", type: 'C' }] },
+            { prompt: "สิ่งที่ทำให้คุณรู้สึกกดดันที่สุดคือ...", choices: [{ text: "การสูญเสียอำนาจการควบคุม", type: 'D' }, { text: "การถูกเพิกเฉยหรือไม่ได้รับการยอมรับ", type: 'i' }, { text: "การเปลี่ยนแปลงที่กะทันหัน", type: 'S' }, { text: "การถูกวิจารณ์ว่าทำงานผิดพลาด", type: 'C' }] },
+            { prompt: "เวลาประชุม คุณมักจะ...", choices: [{ text: "นำเสนอประเด็นหลักอย่างรวดเร็ว", type: 'D' }, { text: "ชวนคนอื่นมีส่วนร่วมและสร้างพลังบวก", type: 'i' }, { text: "คอยสังเกตและสนับสนุนความเห็นผู้อื่น", type: 'S' }, { text: "จดรายละเอียดและตั้งคำถามเชิงลึก", type: 'C' }] },
+            { prompt: "เป้าหมายการทำงานของคุณคือ...", choices: [{ text: "การเป็นที่หนึ่งหรือบรรลุยอดที่ตั้งไว้", type: 'D' }, { text: "การเป็นที่รักและมีเครือข่ายกว้างขวาง", type: 'i' }, { text: "การสร้างทีมที่สามัคคีและมั่นคง", type: 'S' }, { text: "การสร้างผลงานที่มีคุณภาพสมบูรณ์แบบ", type: 'C' }] },
+            { prompt: "สไตล์การสื่อสารของคุณคือ...", choices: [{ text: "สั้น กระชับ และตรงประเด็น", type: 'D' }, { text: "กระตือรือร้นและใช้ภาษาท่าทาง", type: 'i' }, { text: "สุภาพ นุ่มนวล และเน้นการรับฟัง", type: 'S' }, { text: "มีหลักการ มีที่มาที่ไป และชัดเจน", type: 'C' }] },
+            { prompt: "เมื่อได้รับคำชม คุณจะรู้สึกดีที่สุดเมื่อ...", choices: [{ text: "ชมที่ผลงานและความสามารถ", type: 'D' }, { text: "ชมต่อหน้าสาธารณะหรือเพื่อนร่วมงาน", type: 'i' }, { text: "ชมถึงความทุ่มเทและการช่วยเหลือทีม", type: 'S' }, { text: "ชมถึงความแม่นยำและความเป็นมืออาชีพ", type: 'C' }] },
+            { prompt: "คุณชอบสภาพแวดล้อมการทำงานแบบไหน...", choices: [{ text: "ท้าทายและเปลี่ยนแปลงรวดเร็ว", type: 'D' }, { text: "มีกิจกรรมและได้พบปะผู้คน", type: 'i' }, { text: "สงบ เป็นกันเอง และมั่นคง", type: 'S' }, { text: "มีระเบียบ มีขั้นตอน และชัดเจน", type: 'C' }] },
+            { prompt: "เมื่อต้องตัดสินใจเรื่องสำคัญ คุณมักจะ...", choices: [{ text: "ใช้สัญชาตญาณและความรวดเร็ว", type: 'D' }, { text: "ดูความรู้สึกและความเห็นของส่วนรวม", type: 'i' }, { text: "ปรึกษาทีมเพื่อให้ทุกคนสบายใจ", type: 'S' }, { text: "ใช้ข้อมูลสถิติมาวิเคราะห์ประกอบ", type: 'C' }] },
+            { prompt: "จุดเด่นของคุณที่ทีมยอมรับคือ...", choices: [{ text: "ความเด็ดเดี่ยวในสภาวะวิกฤต", type: 'D' }, { text: "ความสามารถในการจูงใจคน", type: 'i' }, { text: "ความอดทนและเป็นที่พักพิงให้ทีม", type: 'S' }, { text: "ความละเอียดถี่ถ้วนไม่ตกหล่น", type: 'C' }] },
+            { prompt: "เวลาคุณโกรธ คุณมักจะ...", choices: [{ text: "แสดงออกอย่างชัดเจนและรุนแรง", type: 'D' }, { text: "ประชดประชันหรือบ่นให้คนอื่นฟัง", type: 'i' }, { text: "เก็บไว้ข้างในและเงียบเฉย", type: 'S' }, { text: "แยกตัวออกมาและใช้เหตุผลทบทวน", type: 'C' }] },
+            { prompt: "คุณมักจะจูงใจผู้อื่นด้วยการ...", choices: [{ text: "ท้าทายด้วยผลลัพธ์ที่ยิ่งใหญ่", type: 'D' }, { text: "สร้างแรงบันดาลใจด้วยวิสัยทัศน์", type: 'i' }, { text: "ให้ความมั่นใจและความสม่ำเสมอ", type: 'S' }, { text: "อธิบายด้วยตรรกะที่ปฏิเสธไม่ได้", type: 'C' }] },
+            { prompt: "ในงานปาร์ตี้ของบริษัท คุณมักจะเป็นคน...", choices: [{ text: "คุยเรื่องงานหรือเรื่องเป้าหมาย", type: 'D' }, { text: "เป็นจุดสนใจหรือสร้างความสนุก", type: 'i' }, { text: "นั่งคุยกับเพื่อนสนิทเงียบๆ", type: 'S' }, { text: "สังเกตการณ์รอบๆ และคุยเรื่องทั่วไป", type: 'C' }] },
+            { prompt: "เวลาทำงานเป็นทีม คุณชอบบทบาท...", choices: [{ text: "ผู้นำที่กำหนดทิศทาง", type: 'D' }, { text: "ฝ่ายประชาสัมพันธ์ที่ประสานงาน", type: 'i' }, { text: "ฝ่ายสนับสนุนที่คอยช่วยเหลือ", type: 'S' }, { text: "ฝ่ายตรวจสอบที่ดูความถูกต้อง", type: 'C' }] },
+            { prompt: "เมื่อเจออุปสรรค คุณจะ...", choices: [{ text: "พุ่งชนและหาทางข้ามไปให้ได้", type: 'D' }, { text: "หาทางออกที่สร้างสรรค์และสนุก", type: 'i' }, { text: "ขอความร่วมมือจากเพื่อนร่วมทีม", type: 'S' }, { text: "วิเคราะห์สาเหตุของปัญหาอย่างละเอียด", type: 'C' }] },
+            { prompt: "สิ่งที่ทำให้คุณเบื่อที่สุดคือ...", choices: [{ text: "การทำอะไรที่ซ้ำซากและช้า", type: 'D' }, { text: "การต้องนั่งทำงานคนเดียวนานๆ", type: 'i' }, { text: "การเผชิญหน้ากับความขัดแย้ง", type: 'S' }, { text: "การทำงานที่ขาดโครงสร้างที่ชัดเจน", type: 'C' }] },
+            { prompt: "คุณต้องการได้รับการยอมรับในเรื่อง...", choices: [{ text: "ความสำเร็จและชัยชนะ", type: 'D' }, { text: "ความเป็นมิตรและเสน่ห์ส่วนตัว", type: 'i' }, { text: "ความภักดีและความจริงใจ", type: 'S' }, { text: "ความเชี่ยวชาญและความแม่นยำ", type: 'C' }] },
+            { prompt: "คำจำกัดความสั้นๆ ของคุณคือ...", choices: [{ text: "นักสู้ (Fighter)", type: 'D' }, { text: "นักสร้างความสุข (Entertainer)", type: 'i' }, { text: "นักซัพพอร์ต (Supporter)", type: 'S' }, { text: "นักวิเคราะห์ (Analyst)", type: 'C' }] }
+        ];
+
         const discTypeImages = {
             'D': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-D.jpg?alt=media&token=c8ab4104-1ffc-4420-b2b8-8381dd422f43',
             'i': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-i.jpg?alt=media&token=1abeb825-20c0-4002-9486-55eab2c223dc',
             'S': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-S.jpg?alt=media&token=2c1f4acd-ea1c-46c2-a902-edc443354a87',
             'C': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-C.jpg?alt=media&token=f7d7088c-7ed9-4258-8da0-6c784123b0c2'
+        };
+
+        const discDrives = {
+            'D': [{ title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การทำงานที่มุ่งไปสู่ผลลัพธ์อย่างชัดเจน', 'การตัดสินใจและลงมือทำอย่างรวดเร็ว', 'ความท้าทายกับสิ่งไม่มีประสิทธิภาพหรือไม่ก่อให้เกิดผลลัพธ์'], color: '#05ae4b' }, { title: 'แรงจูงใจ', items: ['โอกาสได้รับผลตอบแทนก้อนใหญ่', 'การแข่งขัน', 'การได้เป็นผู้นำหรือควบคุมสถานการณ์'], color: '#05ae4b' }, { title: 'แรงกดดัน', items: ['ขาดอำนาจการควบคุม หรือขาดอิสระ', 'เมื่องานไม่มีความคืบหน้าที่ชัดเจน', 'การตัดสินใจที่ระมัดระวังเกินไปหรือใช้เวลานาน'], color: '#05ae4b' }],
+            'i': [{ title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การรักษาพลังในการทำงาน และความกระตือรือร้น', 'การลงมือทำอย่างรวดเร็วต่อโอกาสใหม่ๆ ที่น่าสนใจ', 'การให้ความร่วมมือและเข้าสังคมกับผู้อื่น'], color: '#cb3743' }, { title: 'แรงจูงใจ', items: ['การได้รับการยอมรับหรือได้รับความสนใจต่อหน้าสาธารณะ', 'การทำงานร่วมกันหรือกิจกรรมเข้าสังคม', 'สภาพแวดล้อมที่เต็มไปด้วยพลังและสีสัน'], color: '#cb3743' }, { title: 'แรงกดดัน', items: ['งานที่ช้า น่าเบื่อ หรือซ้ำซาก', 'เมื่อถูกแยกออกจากกลุ่ม / รู้สึกโดดเดี่ยว', 'บรรยากาศการทำงานที่ขาดสีสัน และการมองโลกในแง่ร้าย'], color: '#cb3743' }],
+            'S': [{ title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การสนับสนุนและความอดทนต่อผู้อื่น', 'การทำงานร่วมกัน การให้ความร่วมมือและแบ่งปัน', 'ความน่าเชื่อถือ / ความใจเย็นเพื่อสร้างความรู้สึกมั่นคง'], color: '#13a1d3' }, { title: 'แรงจูงใจ', items: ['การได้ช่วยเหลือผู้อื่น', 'การได้รับคำขอบคุณ หรือได้รับการเห็นคุณค่าอย่างจริงใจ', 'วัฒนธรรมการทำงานที่อบอุ่นและเข้าอกเข้าใจ'], color: '#13a1d3' }, { title: 'แรงกดดัน', items: ['ความตึงเครียด การขาดความกลมเกลียว หรือการถูกวิจารณ์', 'ความไม่มั่นคง ความไม่แน่นอน หรือความคาดหวังที่ไม่ชัดเจน', 'การที่ต้องทำงานภายใต้ความกดดัน'], color: '#13a1d3' }],
+            'C': [{ title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['ให้ความสำคัญกับความถูกต้องและงานที่มีคุณภาพสูง', 'การวางระบบและทำงานอย่างมีขั้นตอน', 'การตั้งคำถามหรือท้าทายแนวคิดที่ไม่สมบูรณ์แบบ'], color: '#fdd704' }, { title: 'แรงจูงใจ', items: ['การแก้ปัญหาที่ท้าทายหรือซับซ้อน', 'การได้วางโครงสร้างหรือระบบการทำงาน', 'โอกาสในการพัฒนาตนเองจนเป็นผู้เชี่ยวชาญ'], color: '#fdd704' }, { title: 'แรงกดดัน', items: ['กฎเกณฑ์หรือมาตรฐานที่ไม่ถูกต้อง / ไม่สม่ำเสมอ', 'การถูกตำหนิ / ความไม่พร้อม / ไร้ความสามารถ', 'ต้องลดมาตรฐานในการทำงาน'], color: '#fdd704' }]
+        };
+
+        const discBenefits = {
+            'D': { view: 'มีความมั่นใจ, พูดตรง, เด็ดขาด, ชอบเสี่ยง', judge: 'ความสามารถในการทำผลงานให้สำเร็จ', influence: 'ความกล้า, ความเด็ดขาด, การแข่งขัน', limit: 'ขาดการใส่ใจผู้อื่น, ความใจร้อน, อาจดูแข็งและไม่ละเอียดอ่อน', dark: 'ความต้องการเอาชนะ ยิ่งนำไปสู่สถานการณ์แบบแพ้-ชนะ', pressure: 'หงุดหงิดง่ายและเรียกร้องมากขึ้น' },
+            'i': { view: 'มีเสน่ห์, กระตือรือร้น, ชอบเข้าสังคม, มองโลกในแง่ดี, พูดเก่ง', judge: 'ความเป็นมิตร, ทักษะทางสังคม, ความกระตือรือร้น', influence: 'เสน่ห์, การมองโลกในแง่ดี, พลัง', limit: 'หุนหันพลันแล่น, ขาดการจัดการที่เป็นระบบ, ขาดความต่อเนื่อง', dark: 'การมองโลกในแง่ดีเกินไป, การใช้คำชมเกินความจำเป็น', pressure: 'วุ่นวาย, ขาดระบบ และแสดงออกมากเกินไป' },
+            'S': { view: 'มีความอดทน, อารมณ์นิ่ง, การเข้าใจผู้อื่น, วิธีการที่นุ่มนวล, ความอ่อนน้อม', judge: 'ความน่าเชื่อถือ, ความจริงใจ', influence: 'ความเอื้อเฟื้อเผื่อแผ่, การทำงานอย่างสม่ำเสมอ', limit: 'ยอมตามคนอื่นมากเกินไป, หลีกเลี่ยงการเปลี่ยนแปลง, ตัดสินใจช้า', dark: 'ความน้อมน้อม การเกรงใจแบบเงียบๆ การประนีประนอมแบบมากเกินไป', pressure: 'เป็นฝ่ายยอม, หลีกเลี่ยงการเปิดเผยความผิดในสิ่งที่ทำลงไป' },
+            'C': { view: 'มีความแม่นยำ, การคิดวิเคราะห์, การสงวนท่าที, รักความเป็นระเบียบ', judge: 'ความเชี่ยวชาญ, กระบวนการทำงานที่เป็นระบบ', influence: 'เหตุผลและตรรกะ, มาตรฐานที่เข้มงวด', limit: 'คิดมากเกินไป, ระวังตัวสูง, แยกตัวจากคนอื่น', dark: 'การวิเคราะห์มากเกินไป ความระมัดระวังในการแสดงออก', pressure: 'ใช้เหตุผลเพื่อกดดันผู้อื่นมากเกินไปจนกลายเป็นยึดติดกฎเกณฑ์' }
+        };
+
+        const discRelationships = {
+            'D': { relate: ['ใช้เวลาอย่างคุ้มค่า', 'โฟกัสที่ประเด็นหลัก ไม่พูดออกนอกเรื่อง', 'เตรียมรับมือกับความชัดเจนและตรงไปตรงมา'], solving: ['ต้องตระหนักว่าเขามักเลือกทางเลือกที่ท้าทาย และกล้าตัดสินใจ', 'หลีกเลี่ยงข้อเสนอที่ดูไม่มีความเป็นไปได้', 'มองภาพใหญ่และหลีกเลี่ยงการวิเคราะห์ที่มากเกินไป'], stress: ['พูดคุยให้ชัดเจนและตรงไปตรงมา', 'อย่าเพียงยอมตามเขาไปทั้งหมด เพียงเพราะอยากให้บรรยากาศกลับมาสงบ', 'อย่าเอาความตรงของเขามาคิดว่าเป็นเรื่องส่วนตัว'], workingTip: 'ต้องสื่อสารให้ตรง เน้นจุดสำคัญ รวดเร็ว และโฟกัสผลลัพธ์ เพื่อให้เขารู้สึกว่าการทำงานเดินหน้าได้ทันที' },
+            'i': { relate: ['เปิดใจและให้ความร่วมมือ', 'เห็นคุณค่าพลังบวกและความกระตือรือร้นของเขา', 'หาวิธีทำให้เขารู้สึกเป็นที่ยอมรับและมีคนชื่นชม'], solving: ['รักษาทัศนคติเชิงบวก พร้อมพิจารณาปัญหาที่อาจเกิดขึ้น', 'ทำให้ชัดเจนว่าคุณเปิดรับการแก้ปัญหาอย่างสร้างสรรค์', 'เตรียมรับมือกับสิ่งที่ไม่คาดคิด'], stress: ['หลีกเลี่ยงสิ่งที่อาจทำให้ความขัดแย้งรุนแรงขึ้น', 'ให้ความสำคัญกับความรู้สึกของเขา', 'ชี้ให้เห็นว่าความสัมพันธ์ยังคงดีต่อกันแม้มีความเห็นต่าง'], workingTip: 'ควรใช้พลังบวก เปิดโอกาสให้เขาแสดงไอเดีย และตอบสนองอย่างทันท่วงที เพื่อให้เขารู้สึกมีส่วนร่วมและพร้อมทำงาน' },
+            'S': { relate: ['แสดงความอบอุ่นและความใส่ใจต่อความรู้สึกของเขา', 'เสนอความคิดเห็นอย่างนุ่มนวล', 'ร่วมมือและทำงานเป็นทีมอย่างจริงใจ'], solving: ['เคารพจังหวะการตัดสินใจที่ระมัดระวังของเขา', 'คำนึงถึงความรู้สึกของผู้อื่นในการตัดสินใจ', 'กำหนดกรอบเวลาให้เหมาะสมและตอบโจทย์กับทุกฝ่าย'], stress: ['แก้ไขปัญหาอย่างตรงจุดแต่ไม่เผชิญหน้าหรือใช้อารมณ์', 'หลีกเลี่ยงการกดดันหรือเพิกเฉยต่อความขัดแย้ง', 'แสดงให้เห็นว่าคุณตั้งใจแก้ไขปัญหาร่วมกันอย่างจริงใจ'], workingTip: 'ควรสื่อสารอย่างนุ่มนวล ให้เวลาในการปรับตัว และสร้างบรรยากาศปลอดภัย เพื่อให้เขาสบายใจ และร่วมงานได้อย่างราบรื่น' },
+            'C': { relate: ['พูดคุยด้วยข้อมูล ข้อเท็จจริง และตรรกะ', 'อย่ากดดันให้ตัดสินใจทันที', 'เตรียมรับมือกับความสงสัยและคำถามจากเขา'], solving: ['ให้เวลาเขาในการวิเคราะห์', 'แสดงความชื่นชมในตรรกะและเหตุผลของเขา', 'อย่าให้เขาติดอยู่ในรายละเอียดนานเกินไป'], stress: ['สนับสนุนความคิดของเขาด้วยข้อมูล', 'ให้พื้นที่เขาได้คิดและประมวลสถานการณ์ก่อนเผชิญหน้ากับปัญหา', 'หลีกเลี่ยงการใช้อารมณ์หรือการกดดัน'], workingTip: 'ควรใช้ข้อมูลชัดเจน เหตุผลเป็นระบบ และให้เวลาในการวิเคราะห์ เพื่อให้เขาตัดสินใจได้อย่างมั่นใจและแม่นยำ' }
         };
 
         const discStyles = {
@@ -591,59 +636,24 @@
             'C': 'คุณเป็นคนละเอียดและเน้นความถูกต้อง สไตล์ของคุณคือการทำงานอย่างมีระบบและระเบียบขั้นตอน ความท้าทายคือความยืดหยุ่น ตัดสินใจโดยใช้ข้อมูลและตรรกะที่พิสูจน์ได้จริง'
         };
 
-        const discDrives = {
-            'D': [
-                { title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การทำงานที่มุ่งไปสู่ผลลัพธ์อย่างชัดเจน', 'การตัดสินใจและลงมือทำอย่างรวดเร็ว', 'ความท้าทายกับสิ่งไม่มีประสิทธิภาพหรือไม่ก่อให้เกิดผลลัพธ์'], color: '#05ae4b' },
-                { title: 'แรงจูงใจ', items: ['โอกาสได้รับผลตอบแทนก้อนใหญ่', 'การแข่งขัน', 'การได้เป็นผู้นำหรือควบคุมสถานการณ์'], color: '#05ae4b' },
-                { title: 'แรงกดดัน', items: ['ขาดอำนาจการควบคุม หรือขาดอิสระ', 'เมื่องานไม่มีความคืบหน้าที่ชัดเจน', 'การตัดสินใจที่ระมัดระวังเกินไปหรือใช้เวลานาน'], color: '#05ae4b' }
-            ],
-            'i': [
-                { title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การรักษาพลังในการทำงาน และความกระตือรือร้น', 'การลงมือทำอย่างรวดเร็วต่อโอกาสใหม่ๆ ที่น่าสนใจ', 'การให้ความร่วมมือและเข้าสังคมกับผู้อื่น'], color: '#cb3743' },
-                { title: 'แรงจูงใจ', items: ['การได้รับการยอมรับหรือได้รับความสนใจต่อหน้าสาธารณะ', 'การทำงานร่วมกันหรือกิจกรรมเข้าสังคม', 'สภาพแวดล้อมที่เต็มไปด้วยพลังและสีสัน'], color: '#cb3743' },
-                { title: 'แรงกดดัน', items: ['งานที่ช้า น่าเบื่อ หรือซ้ำซาก', 'เมื่อถูกแยกออกจากกลุ่ม / รู้สึกโดดเดี่ยว', 'บรรยากาศการทำงานที่ขาดสีสัน และการมองโลกในแง่ร้าย'], color: '#cb3743' }
-            ],
-            'S': [
-                { title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การสนับสนุนและความอดทนต่อผู้อื่น', 'การทำงานร่วมกัน การให้ความร่วมมือและแบ่งปัน', 'ความน่าเชื่อถือ / ความใจเย็นเพื่อสร้างความรู้สึกมั่นคง'], color: '#13a1d3' },
-                { title: 'แรงจูงใจ', items: ['การได้ช่วยเหลือผู้อื่น', 'การได้รับคำขอบคุณ หรือได้รับการเห็นคุณค่าอย่างจริงใจ', 'วัฒนธรรมการทำงานที่อบอุ่นและเข้าอกเข้าใจ'], color: '#13a1d3' },
-                { title: 'แรงกดดัน', items: ['ความตึงเครียด การขาดความกลมเกลียว หรือการถูกวิจารณ์', 'ความไม่มั่นคง ความไม่แน่นอน หรือความคาดหวังที่ไม่ชัดเจน', 'การที่ต้องทำงานภายใต้ความกดดัน'], color: '#13a1d3' }
-            ],
-            'C': [
-                { title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['ให้ความสำคัญกับความถูกต้องและงานที่มีคุณภาพสูง', 'การวางระบบและทำงานอย่างมีขั้นตอน', 'การตั้งคำถามหรือท้าทายแนวคิดที่ไม่สมบูรณ์แบบ'], color: '#fdd704' },
-                { title: 'แรงจูงใจ', items: ['การแก้ปัญหาที่ท้าทายหรือซับซ้อน', 'การได้วางโครงสร้างหรือระบบการทำงาน', 'โอกาสในการพัฒนาตนเองจนเป็นผู้เชี่ยวชาญ'], color: '#fdd704' },
-                { title: 'แรงกดดัน', items: ['กฎเกณฑ์หรือมาตรฐานที่ไม่ถูกต้อง / ไม่สม่ำเสมอ', 'การถูกตำหนิ / ความไม่พร้อม / ไร้ความสามารถ', 'ต้องลดมาตรฐานในการทำงาน'], color: '#fdd704' }
-            ]
-        };
-
-        const discBenefits = {
-            'D': { view: 'มีความมั่นใจ, พูดตรง, เด็ดขาด, ชอบเสี่ยง', judge: 'ความสามารถในการทำผลงานให้สำเร็จ', influence: 'ความกล้า, ความเด็ดขาด, การแข่งขัน', limit: 'ขาดการใส่ใจผู้อื่น, ความใจร้อน, อาจดูแข็งและไม่ละเอียดอ่อน', effective: 'มีความอดทน, ความเห็นอกเห็นใจ', dark: 'ความต้องการเอาชนะ ยิ่งนำไปสู่สถานการณ์แบบแพ้-ชนะ', pressure: 'หงุดหงิดง่ายและเรียกร้องมากขึ้น' },
-            'i': { view: 'มีเสน่ห์, กระตือรือร้น, ชอบเข้าสังคม, มองโลกในแง่ดี, พูดเก่ง', judge: 'ความเป็นมิตร, ทักษะทางสังคม, ความกระตือรือร้น', influence: 'เสน่ห์, การมองโลกในแง่ดี, พลัง', limit: 'หุนหันพลันแล่น, ขาดการจัดการที่เป็นระบบ, ขาดความต่อเนื่อง', effective: 'มีความเป็นกลางมากขึ้น, การติดตามงานให้จบ', dark: 'การมองโลกในแง่ดีเกินไป, การใช้คำชมเกินความจำเป็น', pressure: 'วุ่นวาย, ขาดระบบ และแสดงออกมากเกินไป' },
-            'S': { view: 'มีความอดทน, อารมณ์นิ่ง, การเข้าใจผู้อื่น, วิธีการที่นุ่มนวล, ความอ่อนน้อม', judge: 'ความน่าเชื่อถือ, ความจริงใจ', influence: 'ความเอื้อเฟื้อเผื่อแผ่, การทำงานอย่างสม่ำเสมอ', limit: 'ยอมตามคนอื่นมากเกินไป, หลีกเลี่ยงการเปลี่ยนแปลง, ตัดสินใจช้า', effective: 'มีการแสดงความมั่นใจ, เปิดเผยความรู้สึกที่แท้จริง', dark: 'ความน้อมน้อม การเกรงใจแบบเงียบๆ การประนีประนอมแบบมากเกินไป', pressure: 'เป็นฝ่ายยอม, หลีกเลี่ยงการเปิดเผยความผิดในสิ่งที่ทำลงไป' },
-            'C': { view: 'มีความแม่นยำ, การคิดวิเคราะห์, การสงวนท่าที, รักความเป็นระเบียบ', judge: 'ความเชี่ยวชาญ, กระบวนการทำงานที่เป็นระบบ', influence: 'เหตุผลและตรรกะ, มาตรฐานที่เข้มงวด', limit: 'คิดมากเกินไป, ระวังตัวสูง, แยกตัวจากคนอื่น', effective: 'มีการตระหนักถึงความรู้สึกของผู้อื่น, มองให้ไกลเกินกว่าแค่ข้อมูล', dark: 'การวิเคราะห์มากเกินไป ความระมัดระวังในการแสดงออก', pressure: 'ใช้เหตุผลเพื่อกดดันผู้อื่นมากเกินไปจนกลายเป็นยึดติดกฎเกณฑ์' }
-        };
-
-        const discRelationships = {
-            'D': { relate: ['ใช้เวลาอย่างคุ้มค่า', 'โฟกัสที่ประเด็นหลัก ไม่พูดออกนอกเรื่อง', 'เตรียมรับมือกับความชัดเจนและตรงไปตรงมา'], solving: ['ต้องตระหนักว่าเขามักเลือกทางเลือกที่ท้าทาย และกล้าตัดสินใจ', 'หลีกเลี่ยงข้อเสนอที่ดูไม่มีความเป็นไปได้', 'มองภาพใหญ่และหลีกเลี่ยงการวิเคราะห์ที่มากเกินไป'], stress: ['พูดคุยให้ชัดเจนและตรงไปตรงมา', 'อย่าเพียงยอมตามเขาไปทั้งหมด เพียงเพราะอยากให้บรรยากาศกลับมาสงบ', 'อย่าเอาความตรงของเขามาคิดว่าเป็นเรื่องส่วนตัว'], workingTip: 'ต้องสื่อสารให้ตรง เน้นจุดสำคัญ รวดเร็ว และโฟกัสผลลัพธ์ เพื่อให้เขารู้สึกว่าการทำงานเดินหน้าได้ทันที' },
-            'i': { relate: ['เปิดใจและให้ความร่วมมือ', 'เห็นคุณค่าพลังบวกและความกระตือรือร้นของเขา', 'หาวิธีทำให้เขารู้สึกเป็นที่ยอมรับและมีคนชื่นชม'], solving: ['รักษาทัศนคติเชิงบวก พร้อมพิจารณาปัญหาที่อาจเกิดขึ้น', 'ทำให้ชัดเจนว่าคุณเปิดรับการแก้ปัญหาอย่างสร้างสรรค์', 'เตรียมรับมือกับสิ่งที่ไม่คาดคิด'], stress: ['หลีกเลี่ยงสิ่งที่อาจทำให้ความขัดแย้งรุนแรงขึ้น', 'ให้ความสำคัญกับความรู้สึกของเขา', 'ชี้ให้เห็นว่าความสัมพันธ์ยังคงดีต่อกันแม้มีความเห็นต่าง'], workingTip: 'ควรใช้พลังบวก เปิดโอกาสให้เขาแสดงไอเดีย และตอบสนองอย่างทันท่วงที เพื่อให้เขารู้สึกมีส่วนร่วมและพร้อมทำงาน' },
-            'S': { relate: ['แสดงความอบอุ่นและความใส่ใจต่อความรู้สึกของเขา', 'เสนอความคิดเห็นอย่างนุ่มนวล', 'ร่วมมือและทำงานเป็นทีมอย่างจริงใจ'], solving: ['เคารพจังหวะการตัดสินใจที่ระมัดระวังของเขา', 'คำนึงถึงความรู้สึกของผู้อื่นในการตัดสินใจ', 'กำหนดกรอบเวลาให้เหมาะสมและตอบโจทย์กับทุกฝ่าย'], stress: ['แก้ไขปัญหาอย่างตรงจุดแต่ไม่เผชิญหน้าหรือใช้อารมณ์', 'หลีกเลี่ยงการกดดันหรือเพิกเฉยต่อความขัดแย้ง', 'แสดงให้เห็นว่าคุณตั้งใจแก้ไขปัญหาร่วมกันอย่างจริงใจ'], workingTip: 'ควรสื่อสารอย่างนุ่มนวล ให้เวลาในการปรับตัว และสร้างบรรยากาศปลอดภัย เพื่อให้เขาสบายใจ และร่วมงานได้อย่างราบรื่น' },
-            'C': { relate: ['พูดคุยด้วยข้อมูล ข้อเท็จจริง และตรรกะ', 'อย่ากดดันให้ตัดสินใจทันที', 'เตรียมรับมือกับความสงสัยและคำถามจากเขา'], solving: ['ให้เวลาเขาในการวิเคราะห์', 'แสดงความชื่นชมในตรรกะและเหตุผลของเขา', 'อย่าให้เขาติดอยู่ในรายละเอียดนานเกินไป'], stress: ['สนับสนุนความคิดของเขาด้วยข้อมูล', 'ให้พื้นที่เขาได้คิดและประมวลสถานการณ์ก่อนเผชิญหน้ากับปัญหา', 'หลีกเลี่ยงการใช้อารมณ์หรือการกดดัน'], workingTip: 'ควรใช้ข้อมูลชัดเจน เหตุผลเป็นระบบ และให้เวลาในการวิเคราะห์ เพื่อให้เขาตัดสินใจได้อย่างมั่นใจและแม่นยำ' }
-        };
-
         function unlockVoice() { if (isAudioUnlocked) return; const u = new SpeechSynthesisUtterance(""); window.speechSynthesis.speak(u); isAudioUnlocked = true; }
         function speak(text) { if (isMuted) return; unlockVoice(); window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = 'th-TH'; u.rate = 1.1; u.pitch = 1.0; window.speechSynthesis.speak(u); }
 
         window.toggleMute = () => {
             unlockVoice(); isMuted = !isMuted;
             const iconName = isMuted ? 'volume-x' : 'volume-2';
-            document.getElementById('muteIcon').setAttribute('data-lucide', iconName);
+            const targets = ['muteIcon', 'muteIconAssess'];
+            targets.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.setAttribute('data-lucide', iconName);
+            });
             if (isMuted) window.speechSynthesis.cancel();
-            else if (currentMember) switchTab('user'); // Re-trigger speech if unmuted
             lucide.createIcons();
         };
 
         const triggerHomeGreeting = () => {
             if (isMuted || !currentMember) return;
-            let s = `สวัสดี คุณ ${currentMember.FullName} ยินดีต้อนรับเข้าสู่ระบบ ดีไอเอสซี นาวีเกเตอร์`;
-            speak(s);
+            speak(`สวัสดี คุณ ${currentMember.FullName} ยินดีต้อนรับเข้าสู่ระบบ ดีไอเอสซี นาวีเกเตอร์`);
         };
 
         async function fetchIP() { try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); userIP = d.ip; } catch { userIP = "unknown"; } }
@@ -658,7 +668,9 @@
         window.switchTab = (n) => { 
             unlockVoice();
             document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden')); 
-            document.getElementById(`tab-${n}`).classList.remove('hidden'); 
+            const tab = document.getElementById(`tab-${n}`);
+            if (tab) tab.classList.remove('hidden'); 
+            
             document.querySelectorAll('.bottom-nav-item').forEach(b => { 
                 b.classList.remove('active'); 
                 const text = b.innerText.toLowerCase();
@@ -681,37 +693,29 @@
                         renderStyleBenefits(type);
                         renderBuildBetterRelationships(type);
                         renderUserSummary(type, currentMember.DISC2);
-                        
-                        // Speech summary for user page
-                        const pName = type === 'i' ? 'i หนึ่งดารา' : (type === 'D' ? 'D เป้าประสงค์' : (type === 'S' ? 'S ถนอมจิต' : 'C คิดคำนวณ'));
-                        const sName = currentMember.DISC2 ? (currentMember.DISC2 === 'i' ? 'i หนึ่งดารา' : (currentMember.DISC2 === 'D' ? 'D เป้าประสงค์' : (currentMember.DISC2 === 'S' ? 'S ถนอมจิต' : 'C คิดคำนวณ'))) : 'ไม่มี';
-                        speak(`สรุปผลการประเมินของคุณ ทักษะหลักคือ ${pName} และทักษะรองคือ ${sName} ตัวตนของคุณคือ ${discPersonalSummaries[type]}`);
                     } else {
                         contentArea.style.backgroundColor = '#ffffff';
                     }
                 }
             } else {
-                banner.classList.add('hidden');
-                contentArea.style.backgroundColor = '#ffffff';
+                if (banner) banner.classList.add('hidden');
+                if (contentArea) contentArea.style.backgroundColor = '#ffffff';
             }
             if (n === 'home') triggerHomeGreeting(); else if (n !== 'user') window.speechSynthesis.cancel();
+            lucide.createIcons();
         };
 
         const renderUserSummary = (primary, secondary) => {
             const summaryBox = document.getElementById('profilePersonalSummary');
-            summaryBox.innerText = discPersonalSummaries[primary] || '-';
-            
+            if (summaryBox) summaryBox.innerText = discPersonalSummaries[primary] || '-';
             const profileSkillContainer = document.getElementById('profileSkillImgContainer');
-            profileSkillContainer.innerHTML = `<img src="${discTypeImages[primary]}" class="w-full h-full object-cover">`;
-
+            if (profileSkillContainer) profileSkillContainer.innerHTML = `<img src="${discTypeImages[primary]}" class="w-full h-full object-cover">`;
             const primaryImgBox = document.getElementById('discUpValue');
-            primaryImgBox.innerHTML = `<img src="${discTypeImages[primary]}" class="w-full h-full object-cover">`;
-
+            if (primaryImgBox) primaryImgBox.innerHTML = `<img src="${discTypeImages[primary]}" class="w-full h-full object-cover">`;
             const secondaryImgBox = document.getElementById('disc2Value');
-            if (secondary && discTypeImages[secondary]) {
-                secondaryImgBox.innerHTML = `<img src="${discTypeImages[secondary]}" class="w-full h-full object-cover">`;
-            } else {
-                secondaryImgBox.innerHTML = `<div class="w-full h-full bg-slate-100 flex items-center justify-center text-slate-300 text-xs">-</div>`;
+            if (secondaryImgBox) {
+                if (secondary && discTypeImages[secondary]) { secondaryImgBox.innerHTML = `<img src="${discTypeImages[secondary]}" class="w-full h-full object-cover">`; }
+                else { secondaryImgBox.innerHTML = `<div class="w-full h-full bg-slate-100 flex items-center justify-center text-slate-300 text-xs">-</div>`; }
             }
         };
 
@@ -773,7 +777,7 @@
                         <ul class="list-disc list-inside space-y-1 pl-1 text-slate-500 text-[12px] mt-1">${listItems(data.stress)}</ul>
                     </div>
                     <div class="working-tip-box">
-                        <h4 class="font-bold text-green-700 flex items-center gap-2 mb-1 text-[13px]"><i data-lucide="check-circle" class="w-4 h-4"></i> วิธีทำงานให้ได้ผลกับคนสไตล์ ${type === 'i' ? 'i หนึ่งดารา' : (type === 'D' ? 'D เป้าประสงค์' : (type === 'S' ? 'S ถนอมจิต' : 'C คิดคำนวณ'))}</h4>
+                        <h4 class="font-bold text-green-700 flex items-center gap-2 mb-1 text-[13px]"><i data-lucide="check-circle" class="w-4 h-4"></i> วิธีทำงานให้ได้ผลกับคนสไตล์ ${type}</h4>
                         <p class="text-[11px] text-green-600 leading-relaxed italic">"${data.workingTip}"</p>
                     </div>
                 </div>
@@ -792,7 +796,6 @@
             document.getElementById('profileDetail').textContent = `${u.Group || '-'} | ${u.SubGroup || '-'}`;
             
             const btn = document.getElementById('dynamicActionBtn'), txt = document.getElementById('dynamicActionText'), icon = document.getElementById('dynamicActionIcon'), noRes = document.getElementById('noDiscResult'), hasRes = document.getElementById('hasDiscResult');
-            
             if (u.DISC) {
                 txt.innerHTML = `<span class='font-bold'>DiSC</span><br>ของคุณ`; btn.onclick = () => switchTab('user'); 
                 icon.setAttribute('data-lucide', 'user-check');
@@ -804,7 +807,6 @@
             }
             window.closeRegModal(); lucide.createIcons();
             switchTab('home');
-            setTimeout(triggerHomeGreeting, 1000);
         };
 
         window.startAssessmentFlow = () => { 
@@ -839,8 +841,8 @@
                 let cardStyle = "bg-white text-slate-700 border-slate-100";
                 if (isMost) cardStyle = "bg-green-600 text-white border-green-600";
                 else if (isLeast) cardStyle = "bg-red-500 text-white border-red-500";
-                let mostBtnStyle = isMost ? "bg-green-900 text-white scale-[1.05]" : (ans.most ? "bg-green-200 opacity-40" : "bg-green-500 text-white");
-                let leastBtnStyle = isLeast ? "bg-red-900 text-white scale-[1.05]" : (ans.least ? "bg-red-200 opacity-40" : "bg-red-500 text-white");
+                let mostBtnStyle = isMost ? "bg-green-900 text-white" : (ans.most ? "bg-green-200 opacity-40" : "bg-green-500 text-white");
+                let leastBtnStyle = isLeast ? "bg-red-900 text-white" : (ans.least ? "bg-red-200 opacity-40" : "bg-red-500 text-white");
                 const card = document.createElement('div');
                 card.className = `choice-card p-4 rounded-xl flex justify-between items-center transition-all duration-300 ${cardStyle}`;
                 card.innerHTML = `<span class="text-sm font-normal flex-1 pr-2">${c.text}</span><div class="flex gap-2 shrink-0"><button onclick="pickChoice(${i}, 'most')" class="btn-standard h-9 px-3 rounded-lg text-[11px] border flex items-center gap-1 transition-all ${mostBtnStyle}"><i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> มากสุด</button><button onclick="pickChoice(${i}, 'least')" class="btn-standard h-9 px-3 rounded-lg text-[11px] border flex items-center gap-1 transition-all ${leastBtnStyle}"><i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> น้อยสุด</button></div>`;
@@ -848,7 +850,7 @@
             });
             document.getElementById('prevBtn').disabled = currentQIndex === 0;
             const next = document.getElementById('nextBtn'); next.disabled = !(ans.most && ans.least);
-            next.innerHTML = currentQIndex === 19 ? 'ดูผลการประเมิน DiSC ของคุณ' : 'ถัดไป <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>';
+            next.innerHTML = currentQIndex === 19 ? 'ดูผลการประเมิน' : 'ถัดไป <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>';
             lucide.createIcons();
         };
 
@@ -868,15 +870,16 @@
             const scores = { D: 0, i: 0, S: 0, C: 0 };
             assessmentAnswers.forEach(ans => { if (ans.most) scores[ans.most] += 1; if (ans.least) scores[ans.least] -= 1; });
             const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-            let p = sorted[0][0], s = sorted[1][0]; if (p === 'I') p = 'i'; if (s === 'I') s = 'i';
+            const p = sorted[0][0], s = sorted[1][0];
             try {
                 await updateDoc(doc(db, COLLECTION_NAME, currentMember.docId), { DISC: p, DISC2: s, updatedAt: serverTimestamp() });
                 await addDoc(collection(db, 'DISC_Results'), { EmpID: currentMember.EmpID, FullName: currentMember.FullName, DISC: p, DISC2: s, timestamp: serverTimestamp() });
                 currentMember.DISC = p; currentMember.DISC2 = s; showMainPage(currentMember); 
+                switchTab('user');
             } catch (err) { showMessage("บันทึกผลผิดพลาด", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
         };
 
-        window.confirmReset = () => { if (confirm("ยืนยันการล้างข้อมูลทดสอบ?")) resetAssessment(); };
+        window.confirmReset = () => { if (confirm("ยืนยันการล้างข้อมูลทดสอบและเริ่มทำใหม่?")) resetAssessment(); };
         window.resetAssessment = async () => {
             document.getElementById('globalLoader').classList.remove('hidden');
             try {
@@ -920,18 +923,27 @@
         
         const startApp = async () => {
             await fetchIP();
-            document.getElementById('openModalBtn').onclick = () => { unlockVoice(); document.getElementById('regModalBackdrop').classList.remove('hidden'); document.getElementById('EmpID').value = ""; };
-            document.getElementById('closeModalIconBtn').onclick = document.getElementById('cancelBtn').onclick = document.getElementById('cancelSetupBtn').onclick = document.getElementById('closeKeypadBtn').onclick = window.closeRegModal;
+            const openBtn = document.getElementById('openModalBtn');
+            if (openBtn) openBtn.onclick = () => { unlockVoice(); document.getElementById('regModalBackdrop').classList.remove('hidden'); document.getElementById('EmpID').value = ""; };
+            
+            const closeElements = ['closeModalIconBtn', 'cancelBtn', 'cancelSetupBtn', 'closeKeypadBtn'];
+            closeElements.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.onclick = window.closeRegModal;
+            });
+
             document.getElementById('submitIdBtn').onclick = handleIdSubmission;
             const checkRegForm = () => { const p1 = document.getElementById('setPin').value, p2 = document.getElementById('confirmPin').value; document.getElementById('confirmRegBtn').disabled = !(p1.length === 6 && p1 === p2); };
             document.getElementById('setPin').oninput = document.getElementById('confirmPin').oninput = (e) => { e.target.value = e.target.value.replace(/\D/g, ''); checkRegForm(); };
             document.getElementById('EmpID').oninput = (e) => { e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5); document.getElementById('submitIdBtn').disabled = e.target.value.length !== 5; };
+            
             document.getElementById('confirmRegBtn').onclick = async () => {
                 const p = document.getElementById('setPin').value, g = document.getElementById('regGroupInput').value.trim(), s = document.getElementById('regSubGroupInput').value.trim();
                 try { await updateDoc(doc(db, COLLECTION_NAME, currentMember.docId), { pin: String(p), Group: g, SubGroup: s, Times: 1, ActivatedAt: serverTimestamp(), lastLogin: serverTimestamp(), IPAddress: userIP }); showMainPage({ ...currentMember, pin: p, Group: g, SubGroup: s }); } catch (e) { showMessage("ลงทะเบียนล้มเหลว", "error"); }
             };
+
             document.getElementById('savePinLoginBtn').onclick = async () => {
-                if (String(inputPinValue) === String(currentMember.pin)) { await updateDoc(doc(db, COLLECTION_NAME, currentMember.docId), { lastLogin: serverTimestamp() }); showMainPage(currentMember); } 
+                if (String(inputPinValue) === String(currentMember.pin)) { await updateDoc(doc(db, COLLECTION_NAME, currentMember.docId), { lastLogin: serverTimestamp(), IPAddress: userIP }); showMainPage(currentMember); } 
                 else { showMessage("PIN ไม่ถูกต้อง", "error"); inputPinValue = ""; updatePinDisplay(); }
             };
             lucide.createIcons();
