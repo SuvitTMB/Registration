@@ -174,15 +174,15 @@
         }
 
         /* มาตรฐานสี DiSC ใหม่ตามสั่ง */
-        .color-d { background-color: #14A57D; } /* เขียว */
-        .color-i { background-color: #D22D37; } /* แดง */
-        .color-s { background-color: #4696C8; } /* ฟ้า/น้ำเงิน */
-        .color-c { background-color: #F5CD3C; } /* เหลืองทอง */
+        .color-d { background-color: #05ae4b; } /* เขียวใหม่ */
+        .color-i { background-color: #cb3743; } /* แดงใหม่ */
+        .color-s { background-color: #13a1d3; } /* ฟ้าใหม่ */
+        .color-c { background-color: #fcd704; } /* เหลืองใหม่ */
         
-        .text-d { color: #14A57D; }
-        .text-i { color: #D22D37; }
-        .text-s { color: #4696C8; }
-        .text-c { color: #F5CD3C; }
+        .text-d { color: #05ae4b; }
+        .text-i { color: #cb3743; }
+        .text-s { color: #13a1d3; }
+        .text-c { color: #fcd704; }
 
         .reg-input-field {
             width: 100%;
@@ -245,7 +245,7 @@
             </div>
         </div>
 
-        <!-- Banner DiSC แบบเต็มความกว้าง กว้าง 100% ไม่มีมุมมน -->
+        <!-- Banner DiSC แบบเต็มความกว้าง กว้าง 100% ไม่มีมุมมน (แสดงเฉพาะหน้า DiSC ของคุณ) -->
         <div id="discResultBanner" class="hidden w-full h-[90px] border-b-2 border-slate-100 flex items-center justify-center z-[15]">
             <img id="discResultImg" src="" class="h-[80%] w-auto object-contain mx-auto">
         </div>
@@ -285,10 +285,10 @@
                 </div>
                 <h3 class="text-lg font-normal text-slate-800">บุคลิกภาพทั้ง 4 แบบ</h3>
                 <div class="space-y-3">
-                    <div class="bg-white p-4 rounded-xl border-l-4 border-[#14A57D]"><h4 class="text-d font-bold">Dominance (D) - เป้าประสงค์</h4><p class="text-xs text-slate-500">เน้นผลลัพธ์ รวดเร็ว กล้าตัดสินใจ และชอบความท้าทาย</p></div>
-                    <div class="bg-white p-4 rounded-xl border-l-4 border-[#D22D37]"><h4 class="text-i font-bold">Influence (i) - หนึ่งดารา</h4><p class="text-xs text-slate-500">เน้นการปฏิสัมพันธ์ กระตือรือร้น และสร้างแรงบันดาลใจ</p></div>
-                    <div class="bg-white p-4 rounded-xl border-l-4 border-[#4696C8]"><h4 class="text-s font-bold">Steadiness (S) - ถนอมจิต</h4><p class="text-xs text-slate-500">เน้นความมั่นคง สนับสนุน รับฟัง และใจเย็น</p></div>
-                    <div class="bg-white p-4 rounded-xl border-l-4 border-[#F5CD3C]"><h4 class="text-c font-bold">Conscientiousness (C) - คิดคำนวณ</h4><p class="text-xs text-slate-500">เน้นความถูกต้อง แม่นยำ มีระเบียบ และใช้ตรรกะเหตุผล</p></div>
+                    <div class="bg-white p-4 rounded-xl border-l-4 border-[#05ae4b]"><h4 class="text-d font-bold">Dominance (D) - เป้าประสงค์</h4><p class="text-xs text-slate-500">เน้นผลลัพธ์ รวดเร็ว กล้าตัดสินใจ และชอบความท้าทาย</p></div>
+                    <div class="bg-white p-4 rounded-xl border-l-4 border-[#cb3743]"><h4 class="text-i font-bold">Influence (i) - หนึ่งดารา</h4><p class="text-xs text-slate-500">เน้นการปฏิสัมพันธ์ กระตือรือร้น และสร้างแรงบันดาลใจ</p></div>
+                    <div class="bg-white p-4 rounded-xl border-l-4 border-[#13a1d3]"><h4 class="text-s font-bold">Steadiness (S) - ถนอมจิต</h4><p class="text-xs text-slate-500">เน้นความมั่นคง สนับสนุน รับฟัง และใจเย็น</p></div>
+                    <div class="bg-white p-4 rounded-xl border-l-4 border-[#fcd704]"><h4 class="text-c font-bold">Conscientiousness (C) - คิดคำนวณ</h4><p class="text-xs text-slate-500">เน้นความถูกต้อง แม่นยำ มีระเบียบ และใช้ตรรกะเหตุผล</p></div>
                 </div>
             </div>
 
@@ -518,10 +518,10 @@
 
         // Mapping Data for ResultsRow with new requested standard Hex Colors
         const discStyles = {
-            'D': { color: '#14A57D', lightColor: 'rgba(20, 165, 125, 0.1)', fontColor: 'text-d', img: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-D.jpg?alt=media&token=aa34506c-e29e-4d26-bc30-31815a46ef8d' },
-            'i': { color: '#D22D37', lightColor: 'rgba(210, 45, 55, 0.1)', fontColor: 'text-i', img: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-i.jpg?alt=media&token=5e0bf3d4-212b-4565-8c4b-42a578f5a936' },
-            'S': { color: '#4696C8', lightColor: 'rgba(70, 150, 200, 0.1)', fontColor: 'text-s', img: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-S.jpg?alt=media&token=a41f7202-e29e-4d26-bc30-31815a46ef87' },
-            'C': { color: '#F5CD3C', lightColor: 'rgba(245, 205, 60, 0.1)', fontColor: 'text-c', img: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-C.jpg?alt=media&token=9c096580-03ac-45d5-8cde-ae8b936ef3b4' }
+            'D': { color: '#05ae4b', lightColor: 'rgba(5, 174, 75, 0.1)', fontColor: 'text-d', img: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-D.jpg?alt=media&token=aa34506c-e29e-4d26-bc30-31815a46ef8d' },
+            'i': { color: '#cb3743', lightColor: 'rgba(203, 55, 67, 0.1)', fontColor: 'text-i', img: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-i.jpg?alt=media&token=5e0bf3d4-212b-4565-8c4b-42a578f5a936' },
+            'S': { color: '#13a1d3', lightColor: 'rgba(19, 161, 211, 0.1)', fontColor: 'text-s', img: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-S.jpg?alt=media&token=a41f7202-e29e-4d26-bc30-31815a46ef87' },
+            'C': { color: '#fcd704', lightColor: 'rgba(252, 215, 4, 0.1)', fontColor: 'text-c', img: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-C.jpg?alt=media&token=9c096580-03ac-45d5-8cde-ae8b936ef3b4' }
         };
 
         const discQuestions = [
@@ -636,22 +636,16 @@
             const banner = document.getElementById('discResultBanner');
             const contentArea = document.getElementById('homeContentArea');
             
-            if (currentMember && currentMember.DISC) {
-                const type = currentMember.DISC; // "D", "i", "S", "C"
+            // แสดงแบนเนอร์เฉพาะหน้า "DiSC ของคุณ" (n === 'user')
+            if (n === 'user' && currentMember && currentMember.DISC) {
+                const type = currentMember.DISC; 
                 const style = discStyles[type];
                 if (style) {
-                    // ปรับแถบรูปภาพแบบ 100%
                     banner.style.backgroundColor = style.color;
                     const bannerImg = document.getElementById('discResultImg');
                     bannerImg.src = style.img;
                     banner.classList.remove('hidden');
-                    
-                    // ปรับสีพื้นเนื้อหา (10% opacity) เฉพาะหน้า User Tab
-                    if (n === 'user') {
-                        contentArea.style.backgroundColor = style.lightColor;
-                    } else {
-                        contentArea.style.backgroundColor = '#ffffff';
-                    }
+                    contentArea.style.backgroundColor = style.lightColor;
                 }
             } else {
                 banner.classList.add('hidden');
@@ -822,9 +816,15 @@
                 return { qIndex: index + 1, most: ans.most, least: ans.least, prompt: discQuestions[index].prompt };
             });
 
+            // ตรรกะใหม่: ตรวจสอบและแปลง I เป็น i ก่อนการเปรียบเทียบและการบันทึก
             const sortedResults = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-            const finalPrimary = sortedResults[0][0]; 
-            const finalSecondary = sortedResults[1][0]; 
+            
+            let finalPrimary = sortedResults[0][0]; 
+            let finalSecondary = sortedResults[1][0]; 
+
+            // หากเป็น I ใหญ่ ให้เปลี่ยนเป็น i เล็ก
+            if (finalPrimary === 'I') finalPrimary = 'i';
+            if (finalSecondary === 'I') finalSecondary = 'i';
 
             try {
                 const memberDocRef = doc(db, COLLECTION_NAME, currentMember.docId);
@@ -968,7 +968,7 @@
                 document.getElementById('EmpID').value = ""; 
             };
             
-            // เชื่อมปุ่มปิดและยกเลิก
+            // เชื่อมปุ่มปิดและยกเลิก แก้ไข Bug
             document.getElementById('closeModalIconBtn').onclick = window.closeRegModal;
             document.getElementById('cancelBtn').onclick = window.closeRegModal;
             document.getElementById('cancelSetupBtn').onclick = window.closeRegModal;
@@ -1008,7 +1008,7 @@
                     const dr = doc(db, COLLECTION_NAME, currentMember.docId); 
                     const ud = { pin: String(p), Group: g, SubGroup: s, Times: 1, ActivatedAt: serverTimestamp(), lastLogin: serverTimestamp(), IPAddress: userIP }; 
                     await updateDoc(dr, ud); 
-                    currentMember.Group = g; currentMember.SubGroup = s; // Update local state
+                    currentMember.Group = g; currentMember.SubGroup = s; 
                     showMainPage({ ...currentMember, ...ud }); 
                 } catch (e) { showMessage("ลงทะเบียนล้มเหลว", "error"); bt.disabled = false; }
             };
