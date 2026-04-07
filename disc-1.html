@@ -47,9 +47,9 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 9999;
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: 12px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             transition: all 0.3s ease;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
@@ -66,29 +66,11 @@
             justify-content: center;
         }
 
-        .keypad-btn {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            height: 44px;
-            font-size: 13px;
-            font-weight: normal;
-            color: #1e293b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.1s;
-        }
-        .keypad-btn:active {
-            background: #e2e8f0;
-            transform: scale(0.95);
-        }
-
         .btn-standard {
             height: 44px;
             padding-left: 10px;
             padding-right: 10px;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: normal;
             border-radius: 12px;
             display: inline-flex;
@@ -99,23 +81,15 @@
             min-width: fit-content;
         }
 
-        .pin-input-box {
-            width: 40px; height: 50px; border: 2px solid #e2e8f0; border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; font-weight: normal; background: #ffffff;
-        }
-        .pin-input-box.active { border-color: #3b82f6; background: #eff6ff; }
-
         .bottom-nav-item {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             gap: 2px; color: #64748b; font-size: 10px; transition: all 0.2s; flex: 1;
-            text-align: center; padding: 4px 2px;
+            text-align: center; padding: 4px 2px; cursor: pointer;
         }
         .bottom-nav-item.active { color: #f97316 !important; }
         .bottom-nav-item.active i { stroke: #f97316 !important; }
-        .bottom-nav-item span { font-size: 10px; line-height: 12px; display: block; max-width: 70px; word-wrap: break-word; margin-top: 2px; }
 
-        .choice-card { transition: all 0.3s ease; border-width: 2px; border-style: solid; }
+        .choice-card { transition: all 0.3s ease; border-width: 1px; border-style: solid; }
         .progress-bar-fill { transition: width 0.4s ease-out; }
         .tab-content { width: 100%; }
         .color-bar-container { height: 13px; width: 100%; display: flex; }
@@ -131,36 +105,33 @@
         .text-s { color: #13a1d3; }
         .text-c { color: #fdd704; }
 
-        .reg-input-field {
-            width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 10px;
-            font-size: 14px; outline: none; transition: border-color 0.2s;
-        }
-        .reg-input-field:focus { border-color: #3b82f6; }
-
         .insight-card {
-            background-color: white; border-radius: 16px; padding: 20px; text-align: left;
+            background-color: white; border-radius: 16px; padding: 18px; text-align: left;
             margin-top: 1.2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #f1f5f9;
         }
         .insight-title {
             font-size: 1rem; font-weight: 700; margin-bottom: 10px;
             display: flex; align-items: center; gap: 8px; color: #1e293b;
         }
-        .dark-side-box { background-color: #fff7ed; border: 1px solid #ffedd5; border-radius: 12px; padding: 12px; margin-top: 12px; }
-        .working-tip-box { background-color: #f0fdf4; border: 1px solid #dcfce7; border-radius: 12px; padding: 12px; margin-top: 12px; }
+        .dark-side-box { background-color: #fff7ed; border: 1px solid #ffedd5; border-radius: 12px; padding: 10px; margin-top: 10px; }
+        .working-tip-box { background-color: #f0fdf4; border: 1px solid #dcfce7; border-radius: 12px; padding: 10px; margin-top: 10px; }
 
         .custom-table { width: 100%; border-collapse: separate; border-spacing: 0; }
         .custom-table th { 
             background: rgba(0, 0, 0, 0.08); 
-            padding: 12px 10px; 
-            font-size: 11px; 
+            padding: 10px 4px; 
+            font-size: 10.5px; 
             font-weight: 700; 
             color: #1e293b; 
             text-transform: uppercase; 
             text-align: center; 
             border-bottom: 2px solid #e2e8f0; 
+            border-right: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
         }
+        .custom-table th:hover { background: rgba(0, 0, 0, 0.12); }
         .custom-table td { 
-            padding: 8px 8px; 
+            padding: 10px 8px; 
             font-size: 12px; 
             color: #334155; 
             border-bottom: 1px solid #f1f5f9; 
@@ -168,12 +139,10 @@
             line-height: 1.4;
         }
         .pagination-btn { padding: 6px 12px; border-radius: 8px; background: #f1f5f9; color: #475569; font-size: 12px; transition: all 0.2s; border: 1px solid #e2e8f0; }
-        .pagination-btn:hover:not(:disabled) { background: #e2e8f0; }
-        .pagination-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
         .disc-circle {
-            width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            margin: 0 auto; color: white; font-weight: 700; font-size: 11px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto; color: white; font-weight: 700; font-size: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
     </style>
 </head>
@@ -197,7 +166,7 @@
     <!-- Landing Page -->
     <div id="landingPage" class="w-full max-w-[500px] flex flex-col items-center bg-white min-h-screen pt-[13px] pb-[13px] hidden">
         <div class="relative w-[80%] mt-[60px] select-none mx-auto">
-            <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc.jpg?alt=media&token=328a617d-07b1-419b-bc5d-00a85dc455e2" class="w-full h-auto block">
+            <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc.jpg?alt=media&token=328a617d-07b1-419b-bc5d-00a85dc455e2" class="w-full h-auto block" alt="DiSC Personality">
         </div>
         <div class="w-full px-8 py-6 flex flex-col items-center space-y-5">
             <button id="openModalBtn" disabled class="btn-standard w-[45%] bg-blue-600 hover:bg-blue-700 text-white shadow-md active:scale-[0.97]">
@@ -210,20 +179,20 @@
 
     <!-- Main Page -->
     <div id="mainDiscPage" class="w-full max-w-[500px] flex flex-col bg-white min-h-screen relative hidden">
-        <!-- Adjusted: pt-[11px] instead of pt-2 (+3px) -->
-        <div class="w-full px-6 flex justify-between items-center bg-orange-500 text-white shadow-md z-[20] h-[88px] pt-[11px]">
+        <!-- Header pt-[23px] as requested -->
+        <div class="w-full px-6 flex justify-between items-center bg-orange-500 text-white shadow-md z-[20] h-[88px] pt-[23px]">
             <div class="flex items-center h-full">
-                <div class="flex flex-col justify-center">
+                <div class="flex flex-col justify-center text-left">
                     <h1 id="welcomeUser" class="text-[15px] font-normal tracking-tight leading-none mb-1">พนักงาน</h1>
                     <p id="userSub" class="text-[10px] opacity-80 font-normal leading-none"></p>
                 </div>
             </div>
             <div class="flex items-center gap-1">
-                <button onclick="toggleMute()" class="p-2 text-white hover:bg-white/10 transition-all">
+                <button onclick="toggleMute()" class="p-1.5 text-white hover:bg-white/10 transition-all">
                     <i id="muteIcon" data-lucide="volume-2" class="w-5 h-5"></i>
                 </button>
                 <div class="h-5 w-[1px] bg-white/30 mx-1"></div>
-                <button id="logoutBtn" onclick="location.reload()" class="p-2 text-white hover:bg-white/10 transition-all">
+                <button id="logoutBtn" onclick="location.reload()" class="p-1.5 text-white hover:bg-white/10 transition-all">
                     <i data-lucide="log-out" class="w-5 h-5"></i>
                 </button>
             </div>
@@ -235,113 +204,146 @@
         
         <div id="homeContentArea" class="flex-1 overflow-y-auto pb-24 pt-4 px-6 space-y-4 text-center bg-white transition-colors duration-300">
             <!-- TAB: Home -->
-            <div id="tab-home" class="tab-content space-y-6">
-                <div class="w-full flex justify-center py-2"><img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[65%] h-auto block"></div>
-                <div class="w-full flex justify-center"><img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-overall.jpg?alt=media&token=91607be6-5038-4509-afe7-6de5f6bb91e5" class="max-w-full h-auto block"></div>
+            <div id="tab-home" class="tab-content space-y-6 text-center">
+                <div class="w-full flex justify-center py-2"><img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[65%] h-auto block" alt="DiSC Logo"></div>
+                <div class="w-full flex justify-center"><img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-overall.jpg?alt=media&token=91607be6-5038-4509-afe7-6de5f6bb91e5" class="max-w-full h-auto block" alt="DiSC Overall"></div>
                 <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm text-left">
-                    <h3 class="text-[16px] font-bold text-slate-800 mb-3 text-center"><span class="disc-brand">DiSC</span> คืออะไร</h3>
+                    <h3 class="text-[16px] font-bold text-slate-800 mb-2 text-center"><span class="disc-brand">DiSC</span> คืออะไร</h3>
                     <p id="homeDiscDesc" class="text-[13px] text-slate-500 leading-relaxed text-center">
                         DiSC คือรูปแบบพฤติกรรมที่เกิดจากความสัมพันธ์ระหว่างการตอบสนองของคนต่อสิ่งเร้าหรือต่อสภาพแวดล้อม ก่อให้เกิดพฤติกรรมรูปแบบต่างๆ เพื่อให้ง่ายต่อการจดจำและทำความเข้าใจ
                     </p>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
-                    <button onclick="switchTab('about')" class="btn-standard bg-[#0056ff] text-white shadow-lg h-[64px] flex-col"><i data-lucide="book-open-check"></i><span class="text-[12px]">รู้จัก DiSC</span></button>
-                    <button id="dynamicActionBtn" class="btn-standard bg-[#f97316] text-white shadow-lg h-[64px] flex-col"><i id="dynamicActionIcon" data-lucide="clipboard-list"></i><span id="dynamicActionText" class="text-[12px]">เริ่มทำแบบทดสอบ</span></button>
+                    <button onclick="window.switchTab('about')" class="btn-standard bg-[#0056ff] text-white shadow-lg h-[60px] flex-col"><i data-lucide="book-open-check" class="w-5 h-5"></i><span class="text-[11px]">รู้จัก DiSC</span></button>
+                    <!-- Home Page Smart Button: Toggles between Start and View result -->
+                    <button id="dynamicHomeActionBtn" class="btn-standard bg-[#f97316] text-white shadow-lg h-[60px] flex-col">
+                        <i id="dynamicHomeActionIcon" data-lucide="clipboard-list" class="w-5 h-5"></i>
+                        <span id="dynamicHomeActionText" class="text-[11px]">เริ่มทำแบบทดสอบ</span>
+                    </button>
                 </div>
             </div>
 
             <!-- TAB: Your DiSC -->
             <div id="tab-user" class="tab-content hidden space-y-6 text-center">
-                <div class="bg-white/90 p-6 rounded-2xl border border-slate-100 shadow-md relative overflow-hidden">
-                    <div class="flex w-full mb-6">
-                        <div class="w-1/2 flex flex-col items-center">
-                            <div id="primaryImgTop" class="w-[70%] aspect-square rounded-full overflow-hidden shadow-sm bg-slate-50"></div>
-                            <span class="mt-[10px] text-[10px] text-slate-500 font-medium uppercase tracking-wide">สไตล์หลักของคุณ</span>
+                <!-- Logo added under header -->
+                <div class="w-full flex justify-center py-2 border-b border-slate-50 mb-2">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[65%] h-auto block" alt="Logo">
+                </div>
+
+                <div id="primarySecondaryBox" class="bg-white/90 p-5 rounded-2xl border border-slate-100 shadow-md relative overflow-hidden text-center hidden">
+                    <div class="flex justify-center items-center gap-10 mb-4">
+                        <div class="flex flex-col items-center">
+                            <div id="primaryImgTop" class="w-20 h-20 rounded-full overflow-hidden shadow-sm bg-slate-50 border-2 border-slate-100"></div>
+                            <span class="mt-2 text-[11px] text-slate-500 font-bold text-center">Style หลัก</span>
                         </div>
-                        <div class="w-1/2 flex flex-col items-center">
-                            <div id="secondaryImgTop" class="w-[70%] aspect-square rounded-full overflow-hidden shadow-sm bg-slate-50"></div>
-                            <span class="mt-[10px] text-[10px] text-slate-500 font-medium uppercase tracking-wide">สไตล์รองของคุณ</span>
+                        <div class="flex flex-col items-center">
+                            <div id="secondaryImgTop" class="w-20 h-20 rounded-full overflow-hidden shadow-sm bg-slate-50 border-2 border-slate-100"></div>
+                            <span class="mt-2 text-[11px] text-slate-500 font-bold text-center">Style รอง</span>
                         </div>
                     </div>
+                    <!-- User detail section -->
                     <h3 class="text-[16px] font-bold text-slate-800" id="profileName">-</h3>
                     <p class="text-[12px] text-slate-500 mb-1" id="profileDetail">-</p>
-                    <div id="profilePersonalSummary" class="text-[12px] text-slate-600 px-3 leading-relaxed pt-3 border-t border-slate-100 mt-4 text-left italic"></div>
+                    <div id="profilePersonalSummary" class="text-[12px] text-slate-600 px-3 leading-relaxed pt-3 border-t border-slate-100 mt-3 text-left italic"></div>
                 </div>
                 
                 <div id="noDiscResult" class="bg-orange-50 border border-orange-100 p-6 rounded-2xl text-center">
                     <p class="text-[13px] text-orange-700">คุณยังไม่ได้ทำแบบทดสอบ</p>
-                    <button onclick="startAssessmentFlow()" class="mt-4 btn-standard bg-[#f97316] text-white px-8 h-[54px]"><i data-lucide="play"></i><span>เริ่มทำแบบประเมิน</span></button>
+                    <button onclick="window.startAssessmentFlow()" class="mt-4 btn-standard bg-[#f97316] text-white px-8 h-[54px]"><i data-lucide="play" class="w-4 h-4"></i><span>เริ่มทำแบบประเมิน</span></button>
                 </div>
                 
-                <div id="hasDiscResult" class="hidden pb-10">
+                <div id="hasDiscResult" class="hidden pb-10 text-left">
                     <div id="whatDrivesYouSection" class="insight-card">
-                        <h2 class="insight-title"><i data-lucide="zap" class="text-orange-500"></i> I. What Drives You ?</h2>
-                        <div id="drivesContent" class="space-y-4 text-[13px]"></div>
+                        <h2 class="insight-title"><i data-lucide="zap" class="text-orange-500 w-4 h-4"></i> I. What Drives You ?</h2>
+                        <div id="drivesContent" class="space-y-4 text-[12.5px]"></div>
                     </div>
                     <div id="benefitsChallengesSection" class="insight-card">
-                        <h2 class="insight-title"><i data-lucide="star" class="text-yellow-500"></i> II. Style Benefits and Challenges</h2>
-                        <div id="benefitsContent" class="space-y-4 text-[13px]"></div>
+                        <h2 class="insight-title"><i data-lucide="star" class="text-yellow-500 w-4 h-4"></i> II. Style Benefits and Challenges</h2>
+                        <div id="benefitsContent" class="space-y-4 text-[12.5px]"></div>
                     </div>
                     <div id="relationshipsSection" class="insight-card">
-                        <h2 class="insight-title"><i data-lucide="heart" class="text-red-500"></i> III. Build Better Relationships</h2>
-                        <div id="relationshipsContent" class="space-y-4 text-[13px]"></div>
+                        <h2 class="insight-title"><i data-lucide="heart" class="text-red-500 w-4 h-4"></i> III. Build Better Relationships</h2>
+                        <div id="relationshipsContent" class="space-y-4 text-[12.5px]"></div>
                     </div>
-                    <!-- Reset Button removed as requested -->
                 </div>
             </div>
 
             <!-- TAB: Friends -->
-            <div id="tab-friends" class="tab-content hidden space-y-4 text-left pb-10">
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-                    <h3 class="text-[15px] font-bold text-slate-800 mb-2">การทำงานกับเพื่อนคุณด้วย DiSC</h3>
-                    <p class="text-[12px] text-slate-500 leading-relaxed mb-6">ศึกษาสไตล์ที่เป็นตัวตนของเพื่อนคุณ เพื่อให้เราทำงานเข้ากันได้ดี และมีประสิทธิภาพมากยิ่งขึ้น</p>
-                    <div class="space-y-4 bg-slate-50 p-5 rounded-xl border border-slate-100 mb-6">
+            <div id="tab-friends" class="tab-content hidden space-y-4 text-left pb-10 text-center">
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                    <h3 class="text-[14px] font-bold text-slate-800 mb-2 text-center">การทำงานกับเพื่อนคุณด้วย DiSC</h3>
+                    <p class="text-[11.5px] text-slate-500 leading-relaxed mb-6">คุณจะเห็นภาพรวมของทั้งทีมว่ามีสไตล์การทำงานแบบไหน และยังสามารถที่จะดูวิธีการทำงานร่วมกันได้ เพื่อให้สามารถได้ผลลัพธ์ที่ดีที่สุดในการทำงานร่วมกัน</p>
+                    <div class="space-y-4 bg-slate-50 p-4 rounded-xl border border-slate-100 mb-4 text-left">
                         <div class="flex flex-col gap-1">
-                            <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">สังกัดทีม</label>
+                            <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wide">สังกัดทีม</label>
                             <select id="friendGroupFilter" class="reg-input-field bg-white text-[12px]"><option value="">เลือกสังกัดทีมทั้งหมด</option></select>
                         </div>
                     </div>
-                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm mb-6 flex justify-center"><div class="w-full max-w-[300px]"><canvas id="friendsRadarChart"></canvas></div></div>
-                    <div class="overflow-x-auto rounded-xl border border-slate-200">
-                        <table class="custom-table" id="friendsTable">
-                            <thead><tr><th>ชื่อ-นามสกุล</th><th class="text-center">DiSC Style</th><th class="text-center">Action</th></tr></thead>
+                    <div class="bg-white p-3 rounded-xl border border-slate-100 shadow-sm mb-2 flex justify-center"><div class="w-full max-w-[280px]"><canvas id="friendsRadarChart"></canvas></div></div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm mt-2 text-left">
+                    <div class="overflow-x-auto">
+                        <table class="custom-table w-full">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" class="text-left px-3" onclick="window.handleSort('FullName', 'friends')">ชื่อ-นามสกุล <i data-lucide="arrow-up-down" class="w-3 h-3 inline"></i></th>
+                                    <th colspan="2" class="text-center border-x border-slate-200">DiSC Style</th>
+                                    <th rowspan="2" class="text-center px-1" style="width: 100px;">Action</th>
+                                </tr>
+                                <tr>
+                                    <th class="text-center border-r border-slate-200" style="width: 45px;" onclick="window.handleSort('DISC', 'friends')">หลัก <i data-lucide="arrow-up-down" class="w-3 h-3 inline"></i></th>
+                                    <th class="text-center" style="width: 45px;" onclick="window.handleSort('DISC2', 'friends')">รอง <i data-lucide="arrow-up-down" class="w-3 h-3 inline"></i></th>
+                                </tr>
+                            </thead>
                             <tbody id="friendsTableBody"></tbody>
                         </table>
                     </div>
-                    <div class="flex justify-between items-center mt-6">
+                    <div class="flex justify-between items-center p-3 bg-slate-50 border-t border-slate-100">
                         <span id="pageInfo" class="text-[10px] font-medium text-slate-500">Page 1 of 1</span>
                         <div class="flex gap-2">
-                            <button id="prevFriendPage" class="pagination-btn" disabled>ก่อนหน้า</button>
-                            <button id="nextFriendPage" class="pagination-btn" disabled>ถัดไป</button>
+                            <button id="prevFriendPage" class="pagination-btn">ก่อนหน้า</button>
+                            <button id="nextFriendPage" class="pagination-btn">ถัดไป</button>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- TAB: Team DiSC -->
-            <div id="tab-team" class="tab-content hidden space-y-4 text-left pb-10">
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-                    <h3 class="text-[15px] font-bold text-slate-800 mb-2">การทำงานกับทีมของคุณด้วย DiSC</h3>
-                    <p class="text-[12px] text-slate-500 leading-relaxed mb-6">วิเคราะห์สัดส่วนพฤติกรรมของคนในหน่วยงานเดียวกัน เพื่อการทำงานร่วมกันที่มีประสิทธิภาพสูงสุด</p>
-                    <div class="bg-orange-50 p-4 rounded-xl border border-orange-100 mb-6">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="building-2" class="w-4 h-4 text-orange-600"></i>
-                            <span class="text-[11px] font-bold text-orange-800 uppercase tracking-wide">หน่วยงานของคุณ:</span>
-                            <span id="teamSubGroupDisplay" class="text-[12px] text-orange-700 font-medium">ไม่ระบุ</span>
-                        </div>
+            <div id="tab-team" class="tab-content hidden space-y-4 text-left pb-10 text-center">
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm text-center">
+                    <h3 class="text-[14px] font-bold text-slate-800 mb-2">การทำงานกับทีมของคุณด้วย DiSC</h3>
+                    <p class="text-[11.5px] text-slate-500 leading-relaxed mb-4 italic text-center">คุณจะเห็นภาพรวมสไตล์การทำงานของแต่ละคนในทีม และคุณสามารถดูวิธีการทำงานร่วมกับเพื่อนคุณได้</p>
+                    <div class="bg-orange-50 p-3 rounded-xl border border-orange-100 mb-4 inline-flex items-center justify-center gap-2">
+                        <i data-lucide="building-2" class="w-3.5 h-3.5 text-orange-600"></i>
+                        <span class="text-[10px] font-bold text-orange-800 uppercase tracking-wide">หน่วยงานของคุณ:</span>
+                        <span id="teamSubGroupDisplay" class="text-[11.5px] text-orange-700 font-medium">ไม่ระบุ</span>
                     </div>
-                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm mb-6 flex justify-center"><div class="w-full max-w-[300px]"><canvas id="teamRadarChart"></canvas></div></div>
-                    <div class="overflow-x-auto rounded-xl border border-slate-200">
-                        <table class="custom-table" id="teamTable">
-                            <thead><tr><th>ชื่อ-นามสกุล</th><th class="text-center">DiSC Style</th><th class="text-center">Action</th></tr></thead>
+                    <div class="bg-white p-3 rounded-xl border border-slate-100 shadow-sm mb-2 flex justify-center"><div class="w-full max-w-[280px]"><canvas id="teamRadarChart"></canvas></div></div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm mt-2 text-left">
+                    <div class="overflow-x-auto">
+                        <table class="custom-table w-full">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" class="text-left px-3" onclick="window.handleSort('FullName', 'team')">ชื่อ-นามสกุล <i data-lucide="arrow-up-down" class="w-3 h-3 inline"></i></th>
+                                    <th colspan="2" class="text-center border-x border-slate-200">DiSC Style</th>
+                                    <th rowspan="2" class="text-center px-1" style="width: 100px;">Action</th>
+                                </tr>
+                                <tr>
+                                    <th class="text-center border-r border-slate-200" style="width: 45px;" onclick="window.handleSort('DISC', 'team')">หลัก <i data-lucide="arrow-up-down" class="w-3 h-3 inline"></i></th>
+                                    <th class="text-center" style="width: 45px;" onclick="window.handleSort('DISC2', 'team')">รอง <i data-lucide="arrow-up-down" class="w-3 h-3 inline"></i></th>
+                                </tr>
+                            </thead>
                             <tbody id="teamTableBody"></tbody>
                         </table>
                     </div>
-                    <div class="flex justify-between items-center mt-6">
+                    <div class="flex justify-between items-center p-3 bg-slate-50 border-t border-slate-100">
                         <span id="teamPageInfo" class="text-[10px] font-medium text-slate-500">Page 1 of 1</span>
                         <div class="flex gap-2">
-                            <button id="prevTeamPage" class="pagination-btn" disabled>ก่อนหน้า</button>
-                            <button id="nextTeamPage" class="pagination-btn" disabled>ถัดไป</button>
+                            <button id="prevTeamPage" class="pagination-btn">ก่อนหน้า</button>
+                            <button id="nextTeamPage" class="pagination-btn">ถัดไป</button>
                         </div>
                     </div>
                 </div>
@@ -349,129 +351,103 @@
             
             <!-- TAB: About DiSC -->
             <div id="tab-about" class="tab-content hidden space-y-8 text-left pb-10">
-                <div class="w-full flex justify-center py-4 border-b border-slate-50"><img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[65%] h-auto block"></div>
-                <div class="bg-blue-50 p-6 rounded-2xl border border-blue-100">
-                    <h3 class="text-[16px] font-bold text-blue-800 mb-2">DiSC คืออะไร?</h3>
-                    <p class="text-[13px] text-slate-600 leading-relaxed">
-                        DiSC คือรูปแบบพฤติกรรมที่เกิดจากความสัมพันธ์ระหว่างการตอบสนองของคนต่อสิ่งเร้าหรือต่อสภาพแวดล้อม ก่อให้เกิดพฤติกรรมรูปแบบต่างๆ เพื่อให้ง่ายต่อการจดจำและทำความเข้าใจ ขออธิบายเบื้องต้นดังนี้
+                <div class="w-full flex justify-center py-4 border-b border-slate-50"><img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[65%] h-auto block" alt="DiSC Logo"></div>
+                <div class="bg-blue-50 p-5 rounded-2xl border border-blue-100 text-center">
+                    <h3 class="text-[15px] font-bold text-blue-800 mb-2 text-center">DiSC คืออะไร?</h3>
+                    <p class="text-[13px] text-slate-600 leading-relaxed text-center">
+                        DiSC คือรูปแบบพฤติกรรมที่เกิดจากความสัมพันธ์ระหว่างการตอบสนองของคนต่อสิ่งเร้าหรือต่อสภาพแวดล้อม ก่อให้เกิดพฤติกรรมรูปแบบต่างๆ เพื่อให้ง่ายต่อการจดจำและทำความเข้าใจ
                     </p>
                 </div>
-                <div class="space-y-6">
-                    <div>
-                        <h4 class="text-[14px] font-bold text-slate-800 flex items-center gap-2 mb-3"><i data-lucide="arrow-up-down" class="text-blue-600"></i> แกนตั้ง (Vertical Axis)</h4>
-                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                            <p class="text-[12px] text-slate-600 mb-4">แทนรูปแบบพฤติกรรมการตอบสนองของคน แบ่งได้เป็น 2 รูปแบบ:</p>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="p-3 bg-orange-50 rounded-xl border border-orange-100 text-center"><span class="block font-bold text-orange-600 text-[11px] mb-1 uppercase tracking-wider">ACTIVE</span><span class="text-[10px] text-slate-500 leading-tight">เชิงรุก บุกเบิก<br>(ตัวอย่างเช่น การพูด)</span></div>
-                                <div class="p-3 bg-blue-50 rounded-xl border border-blue-100 text-center"><span class="block font-bold text-blue-600 text-[10px] mb-1 uppercase tracking-wider">PASSIVE</span><span class="text-[10px] text-slate-500 leading-tight">ตั้งรับ สนับสนุน<br>(ตัวอย่างเช่น การฟัง)</span></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="text-[14px] font-bold text-slate-800 flex items-center gap-2 mb-3"><i data-lucide="arrow-left-right" class="text-blue-600"></i> แกนนอน (Horizontal Axis)</h4>
-                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
-                            <p class="text-[12px] text-slate-600 mb-4">แทนสภาพแวดล้อมในการทำงาน โดยแบ่งเป็น 2 ด้าน:</p>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="p-3 bg-green-50 rounded-xl border border-orange-100 text-center"><span class="block font-bold text-green-600 text-[11px] mb-1 uppercase tracking-wider">TASK</span><span class="text-[10px] text-slate-500 leading-tight">เน้นงาน หรือผลงานที่วัดและจับต้องได้</span></div>
-                                <div class="p-3 bg-red-50 rounded-xl border border-red-100 text-center"><span class="block font-bold text-red-600 text-[11px] mb-1 uppercase tracking-wider">PEOPLE</span><span class="text-[10px] text-slate-500 leading-tight">เน้นคน ความสัมพันธ์ หรือความรู้สึก</span></div>
-                            </div>
+                <div class="space-y-6 text-center">
+                    <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm text-left">
+                        <h4 class="text-[14px] font-bold text-slate-800 flex items-center gap-2 mb-3 text-center"><i data-lucide="arrow-up-down" class="text-blue-600 w-4 h-4"></i> แกนตั้ง (Vertical Axis)</h4>
+                        <div class="grid grid-cols-2 gap-3 mt-2 text-center text-[11px]">
+                            <div class="p-2 bg-orange-50 rounded-lg"><span class="block text-orange-600 font-bold uppercase">Active</span><span>เชิงรุก (พูด)</span></div>
+                            <div class="p-2 bg-blue-50 rounded-lg"><span class="block text-blue-600 font-bold uppercase">Passive</span><span>สนับสนุน (ฟัง)</span></div>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-md">
-                    <h4 class="font-bold text-slate-800 mb-4 text-center">สไตล์พฤติกรรมทั้ง 4 แบบ</h4>
-                    <div class="grid grid-cols-1 gap-4">
-                        <div class="bg-white p-4 rounded-xl border-l-4 border-[#05ae4b] shadow-sm"><h4 class="text-d font-bold text-[14px]">Dominance (D)</h4><p class="text-[12px] text-slate-500 mt-1">ACTIVE + TASK: คือพฤติกรรมตอบสนองแบบเน้นงาน สร้างผลงานที่วัดและจับต้องได้ เน้นผลลัพธ์ รวดเร็ว และท้าทาย</p></div>
-                        <div class="bg-white p-4 rounded-xl border-l-4 border-[#cb3743] shadow-sm"><h4 class="text-i font-bold text-[14px]">Influence (i)</h4><p class="text-[12px] text-slate-500 mt-1">ACTIVE + PEOPLE: คือพฤติกรรมตอบสนองแบบเน้นคน เน้นการสร้างความสัมพันธ์ สร้างบรรยากาศสนุกสนานและพลังบวก</p></div>
-                        <div class="bg-white p-4 rounded-xl border-l-4 border-[#13a1d3] shadow-sm"><h4 class="text-s font-bold text-[14px]">Steadiness (S)</h4><p class="text-[12px] text-slate-500 mt-1">PASSIVE + PEOPLE: คือพฤติกรรมตอบสนองแบบเน้นคน เน้นการรักษาความสัมพันธ์ ใจเย็น เป็นผู้รับฟัง และสนับสนุนผู้อื่น</p></div>
-                        <div class="bg-white p-4 rounded-xl border-l-4 border-[#fdd704] shadow-sm"><h4 class="text-c font-bold text-[14px]">Compliance (C)</h4><p class="text-[12px] text-slate-500 mt-1">PASSIVE + TASK: คือพฤติกรรมตอบสนองแบบเน้นงาน รักษามาตรฐานผลงาน ตรวจสอบความถูกต้อง และเน้นระบบข้อมูล</p></div>
-                    </div>
-                </div>
-                <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 italic text-slate-500 text-[11px] leading-relaxed text-center">การศึกษาพฤติกรรมเราจะไม่ตัดสินว่าแบบใดดีหรือแบบใดไม่ดี แต่เราจะพิจารณาว่าจะใช้รูปแบบพฤติกรรมแบบใดให้เกิดประสิทธิภาพในแต่ละสถานการณ์... <span class="font-bold">PEOPLE PUZZLE</span></div>
             </div>
         </div>
 
         <div class="fixed bottom-0 w-full max-w-[500px] bg-slate-50 border-t border-slate-200 h-20 flex items-center justify-around px-2 z-50 shadow-lg">
-            <button class="bottom-nav-item" id="nav-home" onclick="switchTab('home')"><i data-lucide="house" class="w-6 h-6"></i><span>Home</span></button>
-            <button class="bottom-nav-item" id="nav-about" onclick="switchTab('about')"><i data-lucide="info" class="w-6 h-6"></i><span>รู้จัก DiSC</span></button>
-            <button class="bottom-nav-item" id="nav-user" onclick="switchTab('user')"><i data-lucide="user" class="w-6 h-6"></i><span>DiSC ของคุณ</span></button>
-            <button class="bottom-nav-item" id="nav-team" onclick="switchTab('team')"><i data-lucide="users" class="w-6 h-6"></i><span>DiSC ของทีม</span></button>
-            <button class="bottom-nav-item" id="nav-friends" onclick="switchTab('friends')"><i data-lucide="user-search" class="w-6 h-6"></i><span>DiSC เพื่อนคุณ</span></button>
+            <button class="bottom-nav-item" id="nav-home" onclick="window.switchTab('home')"><i data-lucide="house" class="w-6 h-6"></i><span>Home</span></button>
+            <button class="bottom-nav-item" id="nav-about" onclick="window.switchTab('about')"><i data-lucide="info" class="w-6 h-6"></i><span>รู้จัก DiSC</span></button>
+            <button class="bottom-nav-item" id="nav-user" onclick="window.switchTab('user')"><i data-lucide="user" class="w-6 h-6"></i><span>DiSC ของคุณ</span></button>
+            <button class="bottom-nav-item" id="nav-team" onclick="window.switchTab('team')"><i data-lucide="users" class="w-6 h-6"></i><span>DiSC ของทีม</span></button>
+            <button class="bottom-nav-item" id="nav-friends" onclick="window.switchTab('friends')"><i data-lucide="user-search" class="w-6 h-6"></i><span>DiSC เพื่อนคุณ</span></button>
+        </div>
+    </div>
+
+    <!-- Lightbox Modal for Insights (การร่วมงาน) -->
+    <div id="friendInsightModal" class="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md hidden" onclick="window.closeFriendInsight()">
+        <div class="bg-white w-full max-w-[420px] max-h-[85vh] rounded-[20px] overflow-hidden flex flex-col shadow-2xl modal-enter" onclick="event.stopPropagation()">
+            <div id="friendModalHeader" class="p-6 text-white text-center relative pt-8">
+                <button onclick="window.closeFriendInsight()" class="absolute right-4 top-4 p-1 hover:bg-black/10 rounded-full transition-all text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+                <div class="flex justify-center gap-10 mb-3">
+                    <div id="friendModalImg" class="w-16 h-16 rounded-full border-4 border-white/50 overflow-hidden bg-white shadow-sm"></div>
+                    <div id="friendModalImg2" class="w-16 h-16 rounded-full border-4 border-white/50 overflow-hidden bg-white shadow-sm"></div>
+                </div>
+                <h3 id="friendModalName" class="text-xl font-bold"></h3><p id="friendModalType" class="text-[14px] opacity-90"></p>
+            </div>
+            <div id="friendModalContent" class="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50 text-[13px] text-left"></div>
+            <div class="p-4 bg-white border-t flex justify-center"><button onclick="window.closeFriendInsight()" class="btn-standard bg-slate-800 text-white w-full h-[48px] font-medium text-[14px]">ปิดหน้าต่าง</button></div>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="regModalBackdrop" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden" onclick="window.closeRegModal()">
+        <div class="bg-white w-full max-w-[400px] rounded-[12px] shadow-2xl overflow-hidden modal-enter relative" onclick="event.stopPropagation()">
+            <div class="bg-[#0056ff] px-6 py-4 flex justify-between items-center text-white"><span class="font-medium">เข้าสู่ระบบ</span><button onclick="window.closeRegModal()"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+            <div class="p-8 space-y-6 text-center">
+                <div><label class="text-[12px] text-slate-500 uppercase tracking-wide">รหัสพนักงาน 5 หลัก</label><input type="text" id="EmpID" maxlength="5" inputmode="numeric" placeholder="xxxxx" class="emp-id-input w-full px-4 py-3 border rounded-xl text-[20px] text-center mt-2"></div>
+                <div class="flex gap-3"><button onclick="window.closeRegModal()" class="btn-standard bg-slate-500 text-white flex-1"><i data-lucide="x-circle" class="w-4 h-4"></i><span>ปิด</span></button><button id="submitIdBtn" disabled class="btn-standard bg-blue-600 text-white flex-1"><span>ตกลง</span><i data-lucide="chevron-right" class="w-4 h-4"></i></button></div>
+            </div>
         </div>
     </div>
 
     <!-- Assessment Pages -->
-    <div id="assessmentPage" class="w-full max-w-[500px] flex flex-col bg-white min-h-screen relative hidden">
+    <div id="assessmentPage" class="w-full max-w-[500px] flex flex-col bg-white min-h-screen relative hidden text-center">
         <div class="sticky top-0 z-[70] w-full bg-white border-b border-slate-50">
             <div class="color-bar-container"><div class="flex-1 color-d"></div><div class="flex-1 color-i"></div><div class="flex-1 color-s"></div><div class="flex-1 color-c"></div></div>
             <div class="w-full h-2 bg-slate-100"><div id="assessmentProgress" class="h-full bg-orange-500 progress-bar-fill w-0"></div></div>
-            <div class="flex justify-end px-4 py-1"><button onclick="toggleMute()" class="p-2 text-slate-400"><i id="muteIconAssess" data-lucide="volume-2" class="w-6 h-6"></i></button></div>
+            <div class="flex justify-end px-4 py-1"><button onclick="window.toggleMute()" class="p-2 text-slate-400"><i id="muteIconAssess" data-lucide="volume-2" class="w-6 h-6"></i></button></div>
         </div>
-        <div id="assessmentContainer" class="flex-1 overflow-y-auto px-6 py-4 space-y-8 pb-32">
+        <div id="assessmentContainer" class="flex-1 overflow-y-auto px-5 py-4 space-y-6 pb-40 relative">
             <div id="assessmentIntro" class="space-y-6 text-center pt-10 px-2">
-                <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[80%] mx-auto mb-2">
-                <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FCarl%20Jung.jpg?alt=media&token=4f683dc5-0f68-432d-b15c-679db17ee7f7" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
-                <div class="text-[13px] text-slate-500 text-left space-y-4 bg-slate-50 p-6 rounded-2xl leading-relaxed">
-                    <h2 class="text-[17px] font-bold text-center text-slate-800">DiSC 4 จริตพิชิตใจ</h2>
-                    <p>คาร์ล จุง (Carl Jung) บิดาแห่งจิตวิทยาเชิงลึก ได้กล่าวไว้ว่า "การรู้จักตัวเองคือจุดเริ่มต้นของปัญญาที่แท้จริง" DiSC คือเครื่องมือที่จะช่วยถอดรหัสพฤติกรรมของคุณ เพื่อให้คุณเข้าใจจุดแข็ง และพื้นที่ในการพัฒนาของตัวเองได้อย่างแม่นยำ</p>
-                    <p class="text-orange-600 font-medium text-center">คำแนะนำ: เลือกคำตอบที่ตรงกับตัวตนของคุณมากที่สุดในสถานการณ์การทำงาน โดยไม่ต้องใช้เวลาคิดนานเกินไป</p>
+                <div class="w-full flex justify-center py-2" style="margin-top: -20px; padding-top: 30px;">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[65%] h-auto block" alt="DiSC Logo">
                 </div>
-                <div class="flex gap-4 pt-4">
-                    <button onclick="exitAssessment()" class="btn-standard flex-1 bg-slate-500 text-white h-[54px]"><i data-lucide="x-circle"></i><span class="text-[13px]">กลับหน้าหลัก</span></button>
-                    <button onclick="beginActualTest()" class="btn-standard flex-[2] bg-orange-500 text-white h-[54px]"><span class="text-[13px]">เข้าสู่การทดสอบ</span><i data-lucide="play"></i></button>
+                <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FCarl%20Jung.jpg?alt=media&token=4f683dc5-0f68-432d-b15c-679db17ee7f7" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md" alt="Carl Jung">
+                <div class="text-[13px] text-slate-500 text-left space-y-4 bg-slate-50 p-6 rounded-2xl leading-relaxed text-center">
+                    <h2 class="text-[18px] font-bold text-center text-slate-800">DiSC 4 จริตพิชิตใจ</h2>
+                    <p>คาร์ล จุง ได้กล่าวไว้ว่า "การรู้จักตัวเองคือจุดเริ่มต้นของปัญญาที่แท้จริง" DiSC คือเครื่องมือช่วยถอดรหัสพฤติกรรมเพื่อให้คุณเข้าใจจุดแข็งของตัวเองได้อย่างแม่นยำ</p>
+                    <p class="text-orange-600 font-medium">หากคุณพร้อมที่จะทำแบบทดสอบ ให้คลิก "เข้าสู่การทดสอบ" โดยจะมีคำถาม 20 ข้อให้ตอบครับ</p>
+                </div>
+                <div class="flex gap-4 pt-4 px-2">
+                    <button onclick="window.exitAssessment()" class="btn-standard flex-1 bg-slate-500 text-white h-[50px]"><i data-lucide="x-circle" class="w-4 h-4"></i><span class="text-[12px]">กลับหน้าหลัก</span></button>
+                    <button onclick="window.beginActualTest()" class="btn-standard flex-[2] bg-orange-500 text-white h-[50px]"><span class="text-[12px]">เข้าสู่การทดสอบ</span><i data-lucide="play" class="w-4 h-4"></i></button>
                 </div>
             </div>
-            <div id="assessmentQuestion" class="hidden space-y-8 mt-[15px] px-2">
+            <div id="assessmentQuestion" class="hidden space-y-8 mt-[15px] px-2 text-center">
                 <div class="text-center">
-                    <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[70%] mx-auto mb-6">
-                    <span class="text-orange-500 font-normal text-[11px] uppercase tracking-widest">Question <span id="qNumber">1</span> of 20</span>
-                    <h3 id="qPrompt" class="text-[15px] font-normal text-slate-700 mt-2 leading-snug"></h3>
-                </div>
-                <div id="qChoices" class="space-y-4"></div>
-                <div class="flex justify-between pt-4 gap-4">
-                    <button onclick="prevQuestion()" id="prevBtn" class="btn-standard px-6 bg-gray-100 text-slate-400 text-[12px]">ก่อนหน้า</button>
-                    <button id="nextBtn" disabled onclick="nextQuestion()" class="btn-standard px-10 bg-orange-500 text-white text-[12px]">ถัดไป</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modals -->
-    <div id="regModalBackdrop" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden" onclick="window.closeRegModal()">
-        <div class="bg-white w-full max-w-[450px] rounded-[12px] shadow-2xl overflow-hidden modal-enter relative" onclick="event.stopPropagation()">
-            <div class="bg-[#0056ff] px-8 py-5 flex justify-between items-center text-white"><span class="font-medium">ลงทะเบียน / เข้าสู่ระบบ</span><button onclick="window.closeRegModal()"><i data-lucide="x" class="w-5 h-5"></i></button></div>
-            <div class="p-8">
-                <div id="stepEmployeeId" class="space-y-6 text-center">
-                    <div><label class="text-[12px] text-slate-500 uppercase">ระบุรหัสพนักงาน 5 หลัก</label><input type="text" id="EmpID" maxlength="5" inputmode="numeric" placeholder="xxxxx" class="emp-id-input w-full px-4 py-3.5 border rounded-xl text-[18px] text-center mt-2"></div>
-                    <div class="flex gap-3">
-                        <button onclick="window.closeRegModal()" class="btn-standard bg-slate-500 text-white flex-1"><i data-lucide="x-circle"></i><span>ปิด</span></button>
-                        <button id="submitIdBtn" disabled class="btn-standard bg-blue-600 text-white flex-1"><span>ถัดไป</span><i data-lucide="chevron-right"></i></button>
+                    <div class="w-full flex justify-center py-2" style="margin-top: -20px; padding-top: 30px;">
+                        <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[60%] h-auto block" alt="DiSC Logo">
                     </div>
+                    <span class="text-orange-500 font-normal text-[15px] uppercase tracking-widest text-center block mb-2">คำถามข้อที่ <span id="qNumberDisplay">1</span> จาก 20</span>
+                    <h3 id="qPromptText" class="text-[17px] font-bold text-slate-700 mt-2 leading-snug text-center"></h3>
                 </div>
-                <div id="stepSetupProfile" class="hidden space-y-4">
-                    <div class="bg-white p-4 rounded-xl space-y-3 border border-slate-200 text-[12px]"><div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-400">ชื่อ:</span><span id="dispName" class="text-blue-700"></span></div><div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-400">กลุ่มงาน:</span><span id="dispGroup" class="text-slate-700"></span></div><div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-400">หน่วยงาน:</span><span id="dispSubGroup" class="text-slate-700"></span></div></div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <!-- Numeric check added via javascript -->
-                        <input type="password" id="setPin" maxlength="6" inputmode="numeric" placeholder="PIN 6 หลัก" class="reg-input-field text-center text-lg tracking-[0.2em]">
-                        <input type="password" id="confirmPin" maxlength="6" inputmode="numeric" placeholder="ยืนยัน PIN" class="reg-input-field text-center text-lg tracking-[0.2em]">
-                    </div>
-                    <button id="confirmRegBtn" disabled class="btn-standard bg-green-600 text-white w-full">เข้าใช้งาน</button>
-                </div>
-                <div id="stepEnterPinKeypad" class="hidden space-y-6">
-                    <div class="text-center space-y-4"><p class="text-[15px]">ยืนยัน PIN, <span id="loginUserName" class="text-blue-700 font-bold"></span></p><div class="flex justify-center gap-2"><div class="pin-input-box" id="pin-0"></div><div class="pin-input-box" id="pin-1"></div><div class="pin-input-box" id="pin-2"></div><div class="pin-input-box" id="pin-3"></div><div class="pin-input-box" id="pin-4"></div><div class="pin-input-box" id="pin-5"></div></div></div>
-                    <div class="grid grid-cols-3 gap-3 max-w-[320px] mx-auto"><button class="keypad-btn" onclick="pressKey('1')">1</button><button class="keypad-btn" onclick="pressKey('2')">2</button><button class="keypad-btn" onclick="pressKey('3')">3</button><button class="keypad-btn" onclick="pressKey('4')">4</button><button class="keypad-btn" onclick="pressKey('5')">5</button><button class="keypad-btn" onclick="pressKey('6')">6</button><button class="keypad-btn" onclick="pressKey('7')">7</button><button class="keypad-btn" onclick="pressKey('8')">8</button><button class="keypad-btn" onclick="pressKey('9')">9</button><button class="keypad-btn" onclick="pressKey('del')"><i data-lucide="delete" class="w-4 h-4"></i></button><button class="keypad-btn" onclick="pressKey('0')">0</button><button class="keypad-btn text-red-500" onclick="pressKey('clear')">C</button></div>
-                    <div class="flex gap-3 mt-4"><button onclick="window.closeRegModal()" class="btn-standard bg-slate-500 text-white flex-1"><i data-lucide="x-circle"></i><span>ยกเลิก</span></button><button id="savePinLoginBtn" class="btn-standard bg-blue-600 text-white flex-1"><i data-lucide="log-in"></i><span>เข้าสู่ระบบ</span></button></div>
-                </div>
+                <div id="qChoicesContainer" class="space-y-4"></div>
             </div>
-        </div>
-    </div>
-
-    <!-- Friend Modal -->
-    <div id="friendInsightModal" class="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md hidden">
-        <div class="bg-white w-full max-w-[450px] max-h-[85vh] rounded-[20px] overflow-hidden flex flex-col shadow-2xl modal-enter">
-            <div id="friendModalHeader" class="p-6 text-white text-center relative"><button onclick="closeFriendInsight()" class="absolute right-4 top-4 p-1"><i data-lucide="x" class="w-5 h-5"></i></button><div id="friendModalImg" class="w-20 h-20 rounded-full border-4 border-white/50 mx-auto mb-3 overflow-hidden bg-white shadow-sm"></div><h3 id="friendModalName" class="text-xl font-bold"></h3><p id="friendModalType" class="text-[14px] opacity-90"></p></div>
-            <div id="friendModalContent" class="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50 text-[12px]"></div>
-            <div class="p-4 bg-white border-t flex justify-center"><button onclick="closeFriendInsight()" class="btn-standard bg-slate-800 text-white w-full h-[50px]">ปิดหน้าต่าง</button></div>
+            
+            <div id="assessmentInstructions" class="hidden absolute bottom-[20px] left-0 right-0 px-6">
+                <p class="text-[11px] text-gray-400 text-center">ให้ทำการเลือกตัวเลือก ↑ มากสุด 1 ตัวเลือก และ เลือก ↓ น้อยสุด 1 ตัวเลือก และกดหน้าถัดไป</p>
+            </div>
+            
+            <div id="assessmentNav" class="hidden absolute bottom-[60px] left-0 right-0 flex justify-between px-8 gap-4">
+                <button onclick="window.prevQuestion()" id="prevBtn" class="btn-standard px-5 bg-gray-100 text-slate-400 text-[12px]">ก่อนหน้า</button>
+                <button id="nextBtn" disabled onclick="window.nextQuestion()" class="btn-standard px-10 bg-orange-500 text-white text-[12px]">ถัดไป</button>
+            </div>
         </div>
     </div>
 
@@ -486,6 +462,7 @@
         const db = getFirestore(app);
         const COLLECTION_NAME = "DISC_Member";
 
+        // -- EXTENDED DATA FROM JPGs --
         const discPersonalSummaries = {
             'D': 'คนสไตล์ D (Dominance) คือผู้ที่ขับเคลื่อนด้วยผลลัพธ์ ความเร็ว และความท้าทาย มีพลังในการตัดสินใจและผลักดันงานให้เดินหน้า จุดเด่นคือความเด็ดขาด กล้ารับความเสี่ยง และแก้ปัญหาได้รวดเร็ว แต่ก็อาจดูเร่งรัด ข้ามรายละเอียด หรือกดดันคนอื่นโดยไม่ตั้งใจ การตัดสินใจมักเกิดจากภาพรวมและความมั่นใจส่วนตัว ทำงานได้ดีในสถานการณ์ที่ต้องการความชัดเจนและความเร็ว สิ่งที่ต้องพัฒนาคือการฟัง เปิดรับความคิดเห็น และใส่ใจผลกระทบต่อทีม สิ่งที่ต้องระวังคืออารมณ์ ความหุนหัน และการใช้อำนาจมากเกินไปจนทำให้คนรอบตัวรู้สึกถูกกดทับ',
             'i': 'คนสไตล์ i (Influence) คือผู้ที่ขับเคลื่อนด้วยผู้คน ความสัมพันธ์ และพลังบวก มีเสน่ห์ทางการสื่อสาร สร้างแรงบันดาลใจ และทำให้ทีมมีบรรยากาศสนุก จุดเด่นคือความเป็นมิตร ความคิดสร้างสรรค์ และความสามารถในการเชื่อมคนเข้าด้วยกัน แต่ก็อาจขาดวินัย ทำงานไม่ต่อเนื่อง หรือสัญญามากเกินไป การตัดสินใจมักอิงความรู้สึกและผลต่อความสัมพันธ์ ทำงานร่วมกับคนอื่นได้ดีในงานที่ต้องการพลังและการมีส่วนร่วม สิ่งที่ต้องพัฒนาคือการจัดลำดับความสำคัญและการติดตามงานให้จบ สิ่งที่ต้องระวังคือการหลีกเลี่ยงงานละเอียดและการใช้ออมรณ์มากเกินไป',
@@ -493,257 +470,346 @@
             'C': 'คนสไตล์ C (Conscientiousness) คือผู้ที่ขับเคลื่อนด้วยความถูกต้อง มาตรฐาน และข้อมูล ชอบคิดวิเคราะห์และทำงานอย่างละเอียด จุดเด่นคือความแม่นยำ การวางระบบ และคุณภาพงานที่สูง แต่ก็อาจใช้เวลานาน กลัวความผิดพลาด และดูเย็นชาต่อคนอื่น การตัดสินใจมักต้องการข้อมูลครบถ้วนและเหตุผลที่หนักแน่น ทำงานได้ดีในงานที่ต้องการความละเอียดและความเป็นระบบ สิ่งที่ต้องพัฒนาคือความยืดหยุ่น การสื่อสารให้กระชับ และการยอมรับความไม่สมบูรณ์แบบ สิ่งที่ต้องระวังคือการคิดมากเกินไปและตั้งมาตรฐานสูงจนกดดันตัวเอง'
         };
 
-        const discDrives = { 'D': [{ title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การทำงานที่มุ่งไปสู่ผลลัพธ์อย่างชัดเจน (Results)', 'การตัดสินใจและลงมือทำอย่างรวดเร็ว (Action)', 'ความท้าทายกับสิ่งไม่มีประสิทธิภาพหรือไม่ก่อให้เกิดผลลัพธ์ (Challenge)'], color: '#05ae4b' }, { title: 'แรงจูงใจ', items: ['โอกาสได้รับผลตอบแทนก้อนใหญ่', 'การแข่งขัน', 'การได้เป็นผู้นำหรือควบคุมสถานการณ์'], color: '#05ae4b' }, { title: 'แรงกดดัน', items: ['ขาดอำนาจการควบคุม หรือขาดอิสระ', 'เมื่องานไม่มีความคืบหน้าที่ชัดเจน', 'การตัดสินใจที่ระมัดระวังเกินไปหรือใช้เวลานาน'], color: '#05ae4b' }], 'i': [{ title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การรักษาพลังในการทำงาน และความกระตือรือร้น (Enthusiasm)', 'การลงมือทำอย่างรวดเร็วต่อโอกาสใหม่ๆ ที่น่าสนใจ (Action)', 'การให้ความร่วมมือและเข้าสังคมกับผู้อื่น (Collaboration)'], color: '#cb3743' }, { title: 'แรงจูงใจ', items: ['การได้รับการยอมรับหรือได้รับความสนใจต่อหน้าสาธารณะ', 'การทำงานร่วมกันหรือกิจกรรมเข้าสังคม', 'สภาพแวดล้อมที่เต็มไปด้วยพลังและสีสัน'], color: '#cb3743' }, { title: 'แรงกดดัน', items: ['งานที่ช้า น่าเบื่อ หรือซ้ำซาก', 'เมื่อถูกแยกออกจากกลุ่ม / รู้สึกโดดเดี่ยว', 'บรรยากาศการทำงานที่ขาดสีสัน และการมองโลกในแง่ร้าย'], color: '#cb3743' }], 'S': [{ title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การสนับสนุนและความอดทนต่อผู้อื่น (Support)', 'การทำงานร่วมกัน การให้ความร่วมมือและแบ่งปัน (Collaboration)', 'ความน่าเชื่อถือ / ความใจเย็นเพื่อสร้างความรู้สึกมั่นคง (Stability)'], color: '#13a1d3' }, { title: 'แรงจูงใจ', items: ['การได้ช่วยเหลือผู้อื่น', 'การได้รับคำขอบคุณ หรือได้รับการเห็นคุณค่าอย่างจริงใจ', 'วัฒนธรรมการทำงานที่อบอุ่นและเข้าอกเข้าใจ'], color: '#13a1d3' }, { title: 'แรงกดดัน', items: ['ความตึงเครียด การขาดความกลมเกลียว หรือการถูกวิจารณ์', 'ความไม่มั่นคง ความไม่แน่นอน หรือความคาดหวังที่ไม่ชัดเจน', 'การที่ต้องทำงานภายใต้ความกดดัน'], color: '#13a1d3' }], 'C': [{ title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['ให้ความสำคัญกับความถูกต้องและงานที่มีคุณภาพสูง (Accuracy)', 'การวางระบบและทำงานอย่างมีขั้นตอน (Stability)', 'การตั้งคำถามหรือท้าทายแนวคิดที่ไม่สมบูรณ์แบบ (Challenge)'], color: '#fdd704' }, { title: 'แรงจูงใจ', items: ['การแก้ปัญหาที่ท้าทายหรือซับซ้อน', 'การได้วางโครงสร้างหรือระบบการทำงาน', 'โอกาสในการพัฒนาตนเองจนเป็นผู้เชี่ยวชาญ'], color: '#fdd704' }, { title: 'แรงกดดัน', items: ['กฎเกณฑ์หรือมาตรฐานที่ไม่ถูกต้อง / ไม่สม่ำเสมอ', 'การถูกตำหนิ / ความไม่พร้อม / ไร้ความสามารถ', 'ต้องลดมาตรฐานในการทำงาน'], color: '#fdd704' }] };
-        const discBenefits = { 'D': { view: 'มีความมั่นใจ, พูดตรง, เด็ดขาด, ชอบเสี่ยง', judge: 'ความสามารถในการทำผลงานให้สำเร็จ', influence: 'ความกล้า, ความเด็ดขาด, การแข่งขัน', limit: 'ขาดการใส่ใจผู้อื่น, ความใจร้อน, อาจดูแข็งและไม่ละเอียดอ่อน', effective: 'มีความอดทน, ความเห็นอกเห็นใจ', dark: 'ความต้องการเอาชนะ ยิ่งนำไปสู่สถานการณ์แบบแพ้-ชนะ', pressure: 'หงุดหงิดง่ายและเรียกร้องมากขึ้น' }, 'i': { view: 'มีเสน่ห์, กระตือรือร้น, ชอบเข้าสังคม, มองโลกในแง่ดี, พูดเก่ง', judge: 'ความเป็นมิตร, ทักษะทางสังคม, ความกระตือรือร้น', influence: 'เสน่อห์, การมองโลกในแง่ดี, พลัง', limit: 'หุนหันพลันแล่น, ขาดการจัดการที่เป็นระบบ, ขาดความต่อเนื่อง', effective: 'มีความเป็นกลางมากขึ้น, การติดตามงานให้จบ', dark: 'การมองโลกในแง่ดีเกินไป, การใช้คำชมเกินความจำเป็น', pressure: 'วุ่นวาย, ขาดระบบ และแสดงออกมากเกินไป' }, 'S': { view: 'มีความอดทน, อารมณ์นิ่ง, การเข้าใจผู้อื่น, วิธีการที่นุ่มนวล, ความอ่อนน้อม', judge: 'ความน่าเชื่อถือ, ความจริงใจ', influence: 'ความเอื้อเฟื้อเผื่อแผ่, การทำงานอย่างสม่ำเสมอ', limit: 'ยอมตามคนอื่นมากเกินไป, หลีกเลี่ยงการเปลี่ยนแปลง, ตัดสินใจช้า', effective: 'มีการแสดงความมั่นใจ, เปิดเผยความรู้สึกที่แท้จริง', dark: 'ความน้อมน้อม การเกรงใจแบบเงใจ การประนีประนอมแบบมากเกินไป', pressure: 'เป็นฝ่ายยอม, หลีกเลี่ยงการเปิดเผยความผิดในสิ่งที่ทำลงไป' }, 'C': { view: 'มีความแม่นยำ, การคิดวิเคราะห์, การสงวนท่าที, รักความเป็นระเบียบ', judge: 'ความเชี่ยวชาญ, กระบวนการทำงานที่เป็นระบบ', influence: 'เหตุผลและตรรกะ, มาตรฐานที่เข้มงวด', limit: 'คิดมากเกินไป, ระวังตัวสูง, แยกตัวจากคนอื่น', effective: 'มีการตระหนักถึงความรู้สึกของผู้อื่น, มองให้ไกลเกินกว่าแค่ข้อมูล', dark: 'การวิเคราะห์มากเกินไป ความระมัดระวังในการแสดงออก', pressure: 'ใช้เหตุผลเพื่อกดดันผู้อื่นมากเกินไปจนกลายเป็นยึดติดกฎเกณฑ์' } };
-        const discRelationships = { 'D': { relate: ['ใช้เวลาอย่างคุ้มค่า', 'โฟกัสที่ประเด็นหลัก ไม่พูดออกนอกเรื่อง', 'เตรียมรับมือกับความชัดเจนและตรงไปตรงมา'], solving: ['ต้องตระหนักว่าเขามักเลือกทางเลือกที่ท้าทาย และกล้าตัดสินใจ', 'หลีกเลี่ยงข้อเสนอที่ดูไม่มีความเป็นไปได้', 'มองภาพใหญ่และหลีกเลี่ยงการวิเคราะห์ที่มากเกินไป'], stress: ['พูดคุยให้ชัดเจนและตรงไปตรงมา', 'อย่าเพียงยอมตามเขาไปทั้งหมด เพียงเพราะอยากให้บรรยากาศกลับมาสงบ', 'อย่าเอาความตรงของเขามาคิดว่าเป็นเรื่องส่วนตัว'], workingTip: 'ต้องสื่อสารให้ตรง เน้นจุดสำคัญ รวดเร็ว และโฟกัสผลลัพธ์ เพื่อให้เขารู้สึกว่าการทำงานเดินหน้าได้ทันที' }, 'i': { relate: ['เปิดใจและให้ความร่วมมือ', 'เห็นคุณค่าพลังบวกและความกระตือรือร้นของเขา', 'หาวิธีทำให้เขารู้สึกเป็นที่ยอมรับและมีคนชื่นชม'], solving: ['รักษาทัศนคติเชิงบวก พร้อมพิจารณาปัญหาที่อาจเกิดขึ้น', 'ทำให้ชัดเจนว่าคุณเปิดรับการแก้ปัญหาอย่างสร้างสรรค์', 'เตรียมรับมือกับสิ่งที่ไม่คาดคิด'], stress: ['หลีกเลี่ยงสิ่งที่อาจทำให้ความขัดแย้งรุนแรงขึ้น', 'ให้ความสำคัญกับความรู้สึกของเขา', 'ชี้ให้เห็นว่าความสัมพันธ์ยังคงดีต่อกันแม้มีความเห็นต่าง'], workingTip: 'ควรใช้พลังบวก เปิดโอกาสให้เขาแสดงไอเดีย และตอบสนองอย่างทันท่วงที เพื่อให้เขารู้สึกมีส่วนร่วมและพร้อมทำงาน' }, 'S': { relate: ['แสดงความอบอุ่นและความใส่ใจต่อความรู้สึกของเขา', 'เสนอความคิดเห็นอย่างนุ่มนวล', 'ร่วมมือและทำงานเป็นทีมอย่างจริงใจ'], solving: ['เคารพจังหวะการตัดสินใจที่ระมัดระวังของเขา', 'คำนึงถึงความรู้สึกของผู้อื่นในการตัดสินใจ', 'กำหนดกรอบเวลาให้เหมาะสมและตอบโจทย์กับทุกฝ่าย'], stress: ['แก้ไขปัญหาอย่างตรงจุดแต่ไม่เผชิญหน้าหรือใช้อารมณ์', 'หลีกเลี่ยงการกดดันหรือเพิกเฉยต่อความขัดแย้ง', 'แสดงให้เห็นว่าคุณตั้งใจแก้ไขปัญหาร่วมกันอย่างจริงใจ'], workingTip: 'ควรสื่อสารอย่างนุ่มนวล ให้เวลาในการปรับตัว และสร้างบรรยากาศปลอดภัย เพื่อให้เขาสบายใจ และร่วมงานได้อย่างราบรื่น' }, 'C': { relate: ['พูดคุยด้วยข้อมูล ข้อเท็จจริง และตรรกะ', 'อย่ากดดันให้ตัดสินใจทันที', 'เตรียมรับมือกับความสงสัยและคำถามจากเขา'], solving: ['ให้เวลาเขาในการวิเคราะห์', 'แสดงความชื่นชมในตรรกะและเหตุผลของเขา', 'อย่าให้เขาติดอยู่ในรายละเอียดนานเกินไป'], stress: ['สนับสนุนความคิดของเขาด้วยข้อมูล', 'ให้พื้นที่เขาได้คิดและประมวลสถานการณ์ก่อนเผชิญหน้ากับปัญหา', 'หลีกเลี่ยงการใช้อารมณ์หรือการกดดัน'], workingTip: 'ควรใช้ข้อมูลชัดเจน เหตุผลเป็นระบบ และให้เวลาในการวิเคราะห์ เพื่อให้เขาตัดสินใจได้อย่างมั่นใจและแม่นยำ' } };
-        const discQuestions = [ { prompt: "ในสถานการณ์การทำงาน ปกติคุณมักจะ...", choices: [{ text: "กล้าตัดสินใจและเน้นผลลัพธ์", type: 'D' }, { text: "ชวนคุยสร้างบรรยากาศสนุกสนาน", type: 'i' }, { text: "รับฟังและช่วยเหลือคนรอบข้าง", type: 'S' }, { text: "เน้นความถูกต้องและรายละเอียด", type: 'C' }] }, { prompt: "เมื่อต้องทำงานชิ้นใหม่ คุณมักจะเริ่มจาก...", choices: [{ text: "ลงมือทำทันทีเพื่อให้เห็นผล", type: 'D' }, { text: "หาเพื่อนร่วมงานและพูดคุยไอเดีย", type: 'i' }, { text: "วางแผนขั้นตอนอย่างค่อยเป็นค่อยไป", type: 'S' }, { text: "รวบรวมข้อมูลและวิเคราะห์ความเป็นไปได้", type: 'C' }] }, { prompt: "คนอื่นมักจะมองว่าคุณเป็นคน...", choices: [{ text: "มีความมั่นใจและเด็ดขาด", type: 'D' }, { text: "ร่าเริงและเข้ากับคนง่าย", type: 'i' }, { text: "ใจเย็นและน่าเชื่อถือ", type: 'S' }, { text: "ละเอียดรอบคอบและเป็นระบบ", type: 'C' }] }, { prompt: "เมื่อเกิดความขัดแย้งในทีม คุณมักจะ...", choices: [{ text: "พูดตรงๆ เพื่อแก้ปัญหาให้จบ", type: 'D' }, { text: "ใช้อารมณ์ขันหรือการพูดคุยเพื่อคลายเครียด", type: 'i' }, { text: "ประนีประนอมเพื่อรักษาความสัมพันธ์", type: 'S' }, { text: "ใช้เหตุผลและข้อมูลพิสูจน์ข้อเท็จจริง", type: 'C' }] }, { prompt: "สิ่งที่ทำให้คุณรู้สึกกดดันที่สุดคือ...", choices: [{ text: "การสูญเสียอำนาจการควบคุม", type: 'D' }, { text: "การถูกเพิกเฉยหรือไม่ได้รับการยอมรับ", type: 'i' }, { text: "การเปลี่ยนแปลงที่กะทันหัน", type: 'S' }, { text: "การถูกวิจารณ์ว่าทำงานผิดพลาด", type: 'C' }] }, { prompt: "เวลาประชุม คุณมักจะ...", choices: [{ text: "นำเสนอประเด็นหลักอย่างรวดเร็ว", type: 'D' }, { text: "ชวนคนอื่นมีส่วนร่วมและสร้างพลังบวก", type: 'i' }, { text: "คอยสังเกตและสนับสนุนความเห็นผู้อื่น", type: 'S' }, { text: "จดรายละเอียดและตั้งคำถามเชิงลึก", type: 'C' }] }, { prompt: "เป้าหมายการทำงานของคุณคือ...", choices: [{ text: "การเป็นที่หนึ่งหรือบรรลุยอดที่ตั้งไว้", type: 'D' }, { text: "การเป็นที่รักและมีเครือข่ายกว้างขวาง", type: 'i' }, { text: "การสร้างทีมที่สามัคคีและมั่นคง", type: 'S' }, { text: "การสร้างผลงานที่มีคุณภาพสมบูรณ์แบบ", type: 'C' }] }, { prompt: "สไตล์การสื่อสารของคุณคือ...", choices: [{ text: "สั้น กระชับ และตรงประเด็น", type: 'D' }, { text: "กระตือรือร้นและใช้ภาษาท่าทาง", type: 'i' }, { text: "สุภาพ นุ่มนวล และเน้นการรับฟัง", type: 'S' }, { text: "มีหลักการ มีที่มาที่ไป และชัดเจน", type: 'C' }] }, { prompt: "เมื่อได้รับคำชม คุณจะรู้สึกดีที่สุดเมื่อ...", choices: [{ text: "ชมที่ผลงานและความสามารถ", type: 'D' }, { text: "ชมต่อหน้าสาธารณะหรือเพื่อนร่วมงาน", type: 'i' }, { text: "ชมถึงความทุ่มเทและการช่วยเหลือทีม", type: 'S' }, { text: "ชมถึงความแม่นยำและความเป็นมืออาชีพ", type: 'C' }] }, { prompt: "คุณชอบสภาพแวดล้อมการทำงานแบบไหน...", choices: [{ text: "ท้าทายและเปลี่ยนแปลงรวดเร็ว", type: 'D' }, { text: "มีกิจกรรมและได้พบปะผู้คน", type: 'i' }, { text: "สงบ เป็นกันเอง และมั่นคง", type: 'S' }, { text: "มีระเบียบ มีขั้นตอน และชัดเจน", type: 'C' }] }, { prompt: "เมื่อต้องตัดสินใจเรื่องสำคัญ คุณมักจะ...", choices: [{ text: "ใช้สัญชาตญาณและความรวดเร็ว", type: 'D' }, { text: "ดูความรู้สึกและความเห็นของส่วนรวม", type: 'i' }, { text: "ปรึกษาทีมเพื่อให้ทุกคนสบายใจ", type: 'S' }, { text: "ใช้ข้อมูลสถิติมาวิเคราะห์ประกอบ", type: 'C' }] }, { prompt: "จุดเด่นของคุณที่ทีมยอมรับคือ...", choices: [{ text: "ความเด็ดเดี่ยวในสภาวะวิกฤต", type: 'D' }, { text: "ความสามารถในการจูงใจคน", type: 'i' }, { text: "ความอดทนและเป็นที่พักพิงให้ทีม", type: 'S' }, { text: "ความละเอียดถี่ถ้วนไม่ตกหล่น", type: 'C' }] }, { prompt: "เวลาคุณโกรธ คุณมักจะ...", choices: [{ text: "แสดงออกอย่างชัดเจนและรุนแรง", type: 'D' }, { text: "ประชดประชันหรือบ่นให้คนอื่นฟัง", type: 'i' }, { text: "เก็บไว้ข้างในและเงียบเฉย", type: 'S' }, { text: "แยกตัวออกมาและใช้เหตุผลทบทวน", type: 'C' }] }, { prompt: "คุณมักจะจูงใจผู้อื่นด้วยการ...", choices: [{ text: "ท้าทายด้วยผลลัพธ์ที่ยิ่งใหญ่", type: 'D' }, { text: "สร้างแรงบันดาลใจด้วยวิสัยทัศน์", type: 'i' }, { text: "ให้ความมั่นใจและความสม่ำเสมอ", type: 'S' }, { text: "อธิบายด้วยตรรกะที่ปฏิเสธไม่ได้", type: 'C' }] }, { prompt: "ในงานปาร์ตี้ของบริษัท คุณมักจะเป็นคน...", choices: [{ text: "คุยเรื่องงานหรือเรื่องเป้าหมาย", type: 'D' }, { text: "เป็นจุดสนใจหรือสร้างความสนุก", type: 'i' }, { text: "นั่งคุยกับเพื่อนสนิทเงียบๆ", type: 'S' }, { text: "สังเกตการณ์รอบๆ และคุยเรื่องทั่วไป", type: 'C' }] }, { prompt: "เวลาทำงานเป็นทีม คุณชอบบทบาท...", choices: [{ text: "ผู้นำที่กำหนดทิศทาง", type: 'D' }, { text: "ฝ่ายประชาสัมพันธ์ที่ประสานงาน", type: 'i' }, { text: "ฝ่ายสนับสนุนที่คอยช่วยเหลือ", type: 'S' }, { text: "ฝ่ายตรวจสอบที่ดูความถูกต้อง", type: 'C' }] }, { prompt: "เมื่อเจออุปสรรค คุณจะ...", choices: [{ text: "พุ่งชนและหาทางข้ามไปให้ได้", type: 'D' }, { text: "หาทางออกที่สร้างสรรค์และสนุก", type: 'i' }, { text: "ขอความร่วมมือจากเพื่อนร่วมทีม", type: 'S' }, { text: "วิเคราะห์สาเหตุของปัญหาอย่างละเอียด", type: 'C' }] }, { prompt: "สิ่งที่ทำให้คุณรู้สึกเบื่อที่สุดคือ...", choices: [{ text: "การทำอะไรที่ซ้ำซากและช้า", type: 'D' }, { text: "การต้องนั่งทำงานคนเดียวนานๆ", type: 'i' }, { text: "การเผชิญหน้ากับความขัดแย้ง", type: 'S' }, { text: "การทำงานที่ขาดโครงสร้างที่ชัดเจน", type: 'C' }] }, { prompt: "คุณต้องการได้รับการยอมรับในเรื่อง...", choices: [{ text: "ความสำเร็จและชัยชนะ", type: 'D' }, { text: "ความเป็นมิตรและเสน่อห์ส่วนตัว", type: 'i' }, { text: "ความภักดีและความจริงใจ", type: 'S' }, { text: "ความเชี่ยวชาญและความแม่นยำ", type: 'C' }] }, { prompt: "คำจำกัดความสั้นๆ ของคุณคือ...", choices: [{ text: "นักสู้ (Fighter)", type: 'D' }, { text: "นักสร้างความสุข (Entertainer)", type: 'i' }, { text: "นักซัพพอร์ต (Supporter)", type: 'S' }, { text: "นักวิเคราะห์ (Analyst)", type: 'C' }] } ];
+        const discDrives = {
+            'D': [{ title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การทำงานที่มุ่งไปสู่ผลลัพธ์อย่างชัดเจน (Results)', 'การตัดสินใจและลงมือทำอย่างรวดเร็ว (Action)', 'ความท้าทายกับสิ่งไม่มีประสิทธิภาพหรือไม่ก่อให้เกิดผลลัพธ์ (Challenge)'] }, { title: 'แรงจูงใจ', items: ['โอกาสได้รับผลตอบแทนก้อนใหญ่', 'การแข่งขัน', 'การได้เป็นผู้นำหรือควบคุมสถานการณ์'] }, { title: 'แรงกดดัน', items: ['ขาดอำนาจการควบคุม หรือขาดอิสระ', 'เมื่องานไม่มีความคืบหน้าที่ชัดเจน', 'การตัดสินใจที่ระมัดระวังเกินไปหรือใช้เวลานาน'] }],
+            'i': [{ title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การรักษาพลังในการทำงาน และความกระตือรือร้น (Enthusiasm)', 'การลงมือทำอย่างรวดเร็วต่อโอกาสใหม่ๆ ที่น่าสนใจ (Action)', 'การให้ความร่วมมือและเข้าสังคมกับผู้อื่น (Collaboration)'] }, { title: 'แรงจูงใจ', items: ['การได้รับการยอมรับหรือได้รับความสนใจต่อหน้าสาธารณะ', 'การทำงานร่วมกันหรือกิจกรรมเข้าสังคม', 'สภาพแวดล้อมที่เต็มไปด้วยพลังและสีสัน'] }, { title: 'แรงกดดัน', items: ['งานที่ช้า น่าเบื่อ หรือซ้ำซาก', 'เมื่อถูกแยกออกจากกลุ่ม / รู้สึกโดดเดี่ยว', 'บรรยากาศการทำงานที่ขาดสีสัน และการมองโลกในแง่ร้าย'] }],
+            'S': [{ title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การสนับสนุนและความอดทนต่อผู้อื่น (Support)', 'การทำงานร่วมกัน การให้ความร่วมมือและแบ่งปัน (Collaboration)', 'ความน่าเชื่อถือ / ความใจเย็นเพื่อสร้างความรู้สึกมั่นคง (Stability)'] }, { title: 'แรงจูงใจ', items: ['การได้ช่วยเหลือผู้อื่น', 'การได้รับคำขอบคุณ หรือได้รับการเห็นคุณค่าอย่างจริงใจ', 'วัฒนธรรมการทำงานที่อบอุ่นและเข้าอกเข้าใจ'] }, { title: 'แรงกดดัน', items: ['ความตึงเครียด การขาดความกลมเกลียว หรือการถูกวิจารณ์', 'ความไม่มั่นคง ความไม่แน่นอน หรือความคาดหวังที่ไม่ชัดเจน', 'การที่ต้องทำงานภายใต้ความกดดัน'] }],
+            'C': [{ title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['ให้ความสำคัญกับความถูกต้องและงานที่มีคุณภาพสูง (Accuracy)', 'การวางระบบและทำงานอย่างมีขั้นตอน (Stability)', 'การตั้งคำถามหรือท้าทายแนวคิดที่ไม่สมบูรณ์แบบ (Challenge)'] }, { title: 'แรงจูงใจ', items: ['การแก้ปัญหาที่ท้าทายหรือซับซ้อน', 'การได้วางโครงสร้างหรือระบบการทำงาน', 'โอกาสในการพัฒนาตนเองจนเป็นผู้เชี่ยวชาญ'] }, { title: 'แรงกดดัน', items: ['กฎเกณฑ์หรือมาตรฐานที่ไม่ถูกต้อง / ไม่สม่ำเสมอ', 'การถูกตำหนิ / ความไม่พร้อม / ไร้ความสามารถ', 'ต้องลดมาตรฐานในการทำงาน'] }]
+        };
 
-        const discTypeImages = { 'D': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-D.jpg?alt=media&token=c8ab4104-1ffc-4420-b2b8-8381dd422f43', 'i': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-i.jpg?alt=media&token=1abeb825-20c0-4002-9486-55eab2c223dc', 'S': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-S.jpg?alt=media&token=2c1f4acd-ea1c-46c2-a902-edc443354a87', 'C': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-C.jpg?alt=media&token=f7d7088c-7ed9-4258-8da0-6c784123b0c2' };
+        const discBenefits = {
+            'D': { view: 'มีความมั่นใจ, พูดตรง, เด็ดขาด, ชอบเสี่ยง', judge: 'ความสามารถในการทำผลงานให้สำเร็จ', influence: 'ความกล้า, ความเด็ดขาด, การแข่งขัน', limit: 'ขาดการใส่ใจผู้อื่น, ความใจร้อน, อาจดูแข็งและไม่ละเอียดอ่อน', effective: 'มีความอดทน, ความเห็นอกเห็นใจ', dark: 'ความต้องการเอาชนะ ยิ่งนำไปสู่สถานการณ์แบบแพ้-ชนะ', pressure: 'หงุดหงิดง่ายและเรียกร้องมากขึ้น' },
+            'i': { view: 'มีเสน่ห์, กระตือรือร้น, ชอบเข้าสังคม, มองโลกในแง่ดี, พูดเก่ง', judge: 'ความเป็นมิตร, ทักษะทางสังคม, ความกระตือรือร้น', influence: 'เสน่ห์, การมองโลกในแง่ดี, พลัง', limit: 'หุนหันพลันแล่น, ขาดการจัดการที่เป็นระบบ, ขาดความต่อเนื่อง', effective: 'มีความเป็นกลางมากขึ้น, การติดตามงานให้จบ', dark: 'การมองโลกในแง่ดีเกินไป, การใช้คำชมเกินความจำเป็น', pressure: 'วุ่นวาย, ขาดระบบ และแสดงออกมากเกินไป' },
+            'S': { view: 'มีความอดทน, อารมณ์นิ่ง, การเข้าใจผู้อื่น, วิธีการที่นุ่มนวล, ความอ่อนน้อม', judge: 'ความน่าเชื่อถือ, ความจริงใจ', influence: 'ความเอื้อเฟื้อเผื่อแผ่, การทำงานอย่างสม่ำเสมอ', limit: 'ยอมตามคนอื่นมากเกินไป, หลีกเลี่ยงการเปลี่ยนแปลง, ตัดสินใจช้า', effective: 'มีการแสดงความมั่นใจ, เปิดเผยความรู้สึกที่แท้จริง', dark: 'ความอ่อนน้อม การเกรงใจแบบเกรงใจ การประนีประนอมแบบมากเกินไป', pressure: 'เป็นฝ่ายยอม, หลีกเลี่ยงการเปิดเผยความผิดในสิ่งที่ทำลงไป' },
+            'C': { view: 'มีความแม่นยำ, การคิดวิเคราะห์, การสงวนท่าที, รักความเป็นระเบียบ', judge: 'ความเชี่ยวชาญ, กระบวนการทำงานที่เป็นระบบ', influence: 'เหตุผลและตรรกะ, มาตรฐานที่เข้มงวด', limit: 'คิดมากเกินไป, ระวังตัวสูง, แยกตัวจากคนอื่น', effective: 'มีการตระหนักถึงความรู้สึกของผู้อื่น, มองให้ไกลเกินกว่าแค่ข้อมูล', dark: 'การวิเคราะห์มากเกินไป ความระมัดระวังในการแสดงออก', pressure: 'ใช้เหตุผลเพื่อกดดันผู้อื่นมากเกินไปจนกลายเป็นยึดติดกฎเกณฑ์' }
+        };
+
+        const discRelationships = {
+            'D': { relate: ['ใช้เวลาอย่างคุ้มค่า', 'โฟกัสที่ประเด็นหลัก ไม่พูดออกนอกเรื่อง', 'เตรียมรับมือกับความชัดเจนและตรงไปตรงมา'], solving: ['ต้องตระหนักว่าเขามักเลือกทางเลือกที่ท้าทาย และกล้าตัดสินใจ', 'หลีกเลี่ยงข้อเสนอที่ดูไม่มีความเป็นไปได้', 'มองภาพใหญ่และหลีกเลี่ยงการวิเคราะห์ที่มากเกินไป'], stress: ['พูดคุยให้ชัดเจนและตรงไปตรงมา', 'อย่าเพียงยอมตามเขาไปทั้งหมด เพียงเพราะอยากให้บรรยากาศกลับมาสงบ', 'อย่าเอาความตรงของเขามาคิดว่าเป็นเรื่องส่วนตัว'], workingTip: 'ต้องสื่อสารให้ตรง เน้นจุดสำคัญ รวดเร็ว และโฟกัสผลลัพธ์ เพื่อให้เขารู้สึกว่าการทำงานเดินหน้าได้ทันที' },
+            'i': { relate: ['เปิดใจและให้ความร่วมมือ', 'เห็นคุณค่าพลังบวกและความกระตือรือร้นของเขา', 'หาวิธีทำให้เขารู้สึกเป็นที่ยอมรับและมีคนชื่นชม'], solving: ['รักษาทัศนคติเชิงบวก พร้อมพิจารณาปัญหาที่อาจเกิดขึ้น', 'ทำให้ชัดเจนว่าคุณเปิดรับการแก้ปัญหาอย่างสร้างสรรค์', 'เตรียมรับมือกับสิ่งที่ไม่คาดคิด'], stress: ['หลีกเลี่ยงสิ่งที่อาจทำให้ความขัดแย้งรุนแรงขึ้น', 'ให้ความสำคัญกับความรู้สึกของเขา', 'ชี้ให้เห็นว่าความสัมพันธ์ยังคงดีต่อกันแม้มีความเห็นต่าง'], workingTip: 'ควรใช้พลังบวก เปิดโอกาสให้เขาแสดงไอเดีย และตอบสนองอย่างทันท่วงที เพื่อให้เขารู้สึกมีส่วนร่วมและพร้อมทำงาน' },
+            'S': { relate: ['แสดงความอบอุ่นและความใส่ใจต่อความรู้สึกของเขา', 'เสนอความคิดเห็นอย่างนุ่มนวล', 'ร่วมมือและทำงานเป็นทีมอย่างจริงใจ'], solving: ['เคารพจังหวะการตัดสินใจที่ระมัดระวังของเขา', 'คำนึงถึงความรู้สึกของผู้อื่นในการตัดสินใจ', 'กำหนดกรอบเวลาให้เหมาะสมและตอบโจทย์กับทุกฝ่าย'], stress: ['แก้ไขปัญหาอย่างตรงจุดแต่ไม่เผชิญหน้าหรือใช้อารมณ์', 'หลีกเลี่ยงการกดดันหรือเพิกเฉยต่อความขัดแย้ง', 'แสดงให้เห็นว่าคุณตั้งใจแก้ไขปัญหาร่วมกันอย่างจริงใจ'], workingTip: 'ควรสื่อสารอย่างนุ่มนวล ให้เวลาในการปรับตัว และสร้างบรรยากาศปลอดภัย เพื่อให้เขาสบายใจ และร่วมงานได้อย่างราบรื่น' },
+            'C': { relate: ['พูดคุยด้วยข้อมูล ข้อเท็จจริง และตรรกะ', 'อย่ากดดันให้ตัดสินใจทันที', 'เตรียมรับมือกับความสงสัยและคำถามจากเขา'], solving: ['ให้เวลาเขาในการวิเคราะห์', 'แสดงความชื่นชมในตรรกะและเหตุผลของเขา', 'อย่าให้เขาติดอยู่ในรายละเอียดนานเกินไป'], stress: ['สนับสนุนความคิดของเขาด้วยข้อมูล', 'ให้พื้นที่เขาได้คิดและประมวลสถานการณ์ก่อนเผชิญหน้ากับปัญหา', 'หลีกเลี่ยงการใช้อามรณ์หรือการกดดัน'], workingTip: 'ควรใช้ข้อมูลชัดเจน เหตุผลเป็นระบบ และให้เวลาในการวิเคราะห์ เพื่อให้เขาตัดสินใจได้อย่างมั่นใจและแม่นยำ' }
+        };
+
         const discTypeNames = { 'D': 'Dominance', 'i': 'Influence', 'S': 'Steadiness', 'C': 'Conscientiousness' };
-        const discStyles = { 'D': { color: '#05ae4b', light: 'rgba(5, 174, 75, 0.05)', banner: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-D.jpg?alt=media&token=aa34506c-e29e-4d26-bc30-31815a46ef8d' }, 'i': { color: '#cb3743', light: 'rgba(203, 55, 67, 0.05)', banner: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-i.jpg?alt=media&token=5e0bf3d4-212b-4565-8c4b-42a578f5a936' }, 'S': { color: '#13a1d3', light: 'rgba(19, 161, 211, 0.05)', banner: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-S.jpg?alt=media&token=a41f7202-e29e-4d26-bc30-31815a46ef87' }, 'C': { color: '#fdd704', light: 'rgba(253, 215, 4, 0.05)', banner: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-C.jpg?alt=media&token=9c096580-03ac-45d5-8cde-ae8b936ef3b4' } };
+        const discStyles = { 
+            'D': { color: '#05ae4b', light: 'rgba(5, 174, 75, 0.05)', banner: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-D.jpg?alt=media&token=aa34506c-e29e-4d26-bc30-31815a46ef8d' },
+            'i': { color: '#cb3743', light: 'rgba(203, 55, 67, 0.05)', banner: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-i.jpg?alt=media&token=5e0bf3d4-212b-4565-8c4b-42a578f5a936' },
+            'S': { color: '#13a1d3', light: 'rgba(19, 161, 211, 0.05)', banner: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-S.jpg?alt=media&token=a41f7202-e29e-4d26-bc30-31815a46ef87' },
+            'C': { color: '#fdd704', light: 'rgba(253, 215, 4, 0.05)', banner: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-C.jpg?alt=media&token=9c096580-03ac-45d5-8cde-ae8b936ef3b4' }
+        };
+        const discTypeImages = { 'D': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-D.jpg?alt=media&token=c8ab4104-1ffc-4420-b2b8-8381dd422f43', 'i': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-i.jpg?alt=media&token=1abeb825-20c0-4002-9486-55eab2c223dc', 'S': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-S.jpg?alt=media&token=2c1f4acd-ea1c-46c2-a902-edc443354a87', 'C': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-C.jpg?alt=media&token=f7d7088c-7ed9-4258-8da0-6c784123b0c2' };
+        const discQuestionsData = [ { prompt: "ในสถานการณ์การทำงาน ปกติคุณมักจะ...", choices: [{ text: "กล้าตัดสินใจและเน้นผลลัพธ์", type: 'D' }, { text: "ชวนคุยสร้างบรรยากาศสนุกสนาน", type: 'i' }, { text: "รับฟังและช่วยเหลือคนรอบข้าง", type: 'S' }, { text: "เน้นความถูกต้องและรายละเอียด", type: 'C' }] }, { prompt: "เมื่อต้องทำงานชิ้นใหม่ คุณมักจะเริ่มจาก...", choices: [{ text: "ลงมือทำทันทีเพื่อให้เห็นผล", type: 'D' }, { text: "หาเพื่อนร่วมงานและพูดคุยไอเดีย", type: 'i' }, { text: "วางแผนขั้นตอนอย่างค่อยเป็นค่อยไป", type: 'S' }, { text: "รวบรวมข้อมูลและวิเคราะห์ความเป็นไปได้", type: 'C' }] }, { prompt: "คนอื่นมักจะมองว่าคุณเป็นคน...", choices: [{ text: "มีความมั่นใจและเด็ดขาด", type: 'D' }, { text: "ร่าเริงและเข้ากับคนง่าย", type: 'i' }, { text: "ใจเย็นและน่าเชื่อถือ", type: 'S' }, { text: "ละเอียดรอบคอบและเป็นระบบ", type: 'C' }] }, { prompt: "เมื่อเกิดความขัดแย้งในทีม คุณมักจะ...", choices: [{ text: "พูดตรงๆ เพื่อแก้ปัญหาให้จบ", type: 'D' }, { text: "ใช้อารมณ์ขันหรือการพูดคุยเพื่อคลายเครียด", type: 'i' }, { text: "ประนีประนอมเพื่อรักษาความสัมพันธ์", type: 'S' }, { text: "ใช้เหตุผลและข้อมูลพิสูจน์ข้อเท็จจริง", type: 'C' }] }, { prompt: "สิ่งที่ทำให้คุณรู้สึกกดดันที่สุดคือ...", choices: [{ text: "การสูญเสียอำนาจการควบคุม", type: 'D' }, { text: "การถูกเพิกเฉยหรือไม่ได้รับการยอมรับ", type: 'i' }, { text: "การเปลี่ยนแปลงที่กะทันหัน", type: 'S' }, { text: "การถูกวิจารณ์ว่าทำงานผิดพลาด", type: 'C' }] }, { prompt: "เวลาประชุม คุณมักจะ...", choices: [{ text: "นำเสนอประเด็นหลักอย่างรวดเร็ว", type: 'D' }, { text: "ชวนคนอื่นมีส่วนร่วมและสร้างพลังบวก", type: 'i' }, { text: "คอยสังเกตและสนับสนุนความเห็นผู้อื่น", type: 'S' }, { text: "จดรายละเอียดและตั้งคำถามเชิงลึก", type: 'C' }] }, { prompt: "เป้าหมายการทำงานของคุณคือ...", choices: [{ text: "การเป็นที่หนึ่งหรือบรรลุยอดที่ตั้งไว้", type: 'D' }, { text: "การเป็นที่รักและมีเครือข่ายกว้างขวาง", type: 'i' }, { text: "การสร้างทีมที่สามัคคีและมั่นคง", type: 'S' }, { text: "การสร้างผลงานที่มีคุณภาพสมบูรณ์แบบ", type: 'C' }] }, { prompt: "สไตล์การสื่อสารของคุณคือ...", choices: [{ text: "สั้น กระชับ และตรงประเด็น", type: 'D' }, { text: "กระตือรือร้นและใช้ภาษาท่าทาง", type: 'i' }, { text: "สุภาพ นุ่มนวล และเน้นการรับฟัง", type: 'S' }, { text: "มีหลักการ มีที่มาที่ไป และชัดเจน", type: 'C' }] }, { prompt: "เมื่อได้รับคำชม คุณจะรู้สึกดีที่สุดเมื่อ...", choices: [{ text: "ชมที่ผลงานและความสามารถ", type: 'D' }, { text: "ชมต่อหน้าสาธารณะหรือเพื่อนร่วมงาน", type: 'i' }, { text: "ชมถึงความทุ่มเทและการช่วยเหลือทีม", type: 'S' }, { text: "ชมถึงความแม่นยำและความเป็นมืออาชีพ", type: 'C' }] }, { prompt: "คุณชอบสภาพแวดล้อมการทำงานแบบไหน...", choices: [{ text: "ท้าทายและเปลี่ยนแปลงรวดเร็ว", type: 'D' }, { text: "มีกิจกรรมและได้พบปะผู้คน", type: 'i' }, { text: "สงบ เป็นกันเอง และมั่นคง", type: 'S' }, { text: "มีระเบียบ มีขั้นตอน และชัดเจน", type: 'C' }] }, { prompt: "เมื่อต้องตัดสินใจเรื่องสำคัญ คุณมักจะ...", choices: [{ text: "ใช้สัญชาตญาณและความรวดเร็ว", type: 'D' }, { text: "ดูความรู้สึกและความเห็นของส่วนรวม", type: 'i' }, { text: "ปรึกษาทีมเพื่อให้ทุกคนสบายใจ", type: 'S' }, { text: "ใช้ข้อมูลสถิติมาวิเคราะห์ประกอบ", type: 'C' }] }, { prompt: "จุดเดี่ยวของคุณที่ทีมยอมรับคือ...", choices: [{ text: "ความเด็ดเดี่ยวในสภาวะวิกฤต", type: 'D' }, { text: "ความสามารถในการจูงใจคน", type: 'i' }, { text: "ความอดทนและเป็นที่พักพิงให้ทีม", type: 'S' }, { text: "ความละเอียดถี่ถ้วนไม่ตกหล่น", type: 'C' }] }, { prompt: "เวลาคุณโกรธ คุณมักจะ...", choices: [{ text: "แสดงออกอย่างชัดเจนและรุนแรง", type: 'D' }, { text: "ประชดประชันหรือบ่นให้คนอื่นฟัง", type: 'i' }, { text: "เก็บไว้ข้างในและเงียบเฉย", type: 'S' }, { text: "แยกตัวออกมาและใช้เหตุผลทบทวน", type: 'C' }] }, { prompt: "คุณมักจะจูงใจผู้อื่นด้วยการ...", choices: [{ text: "ท้าทายด้วยผลลัพธ์ที่ยิ่งใหญ่", type: 'D' }, { text: "สร้างแรงบันดาลใจด้วยวิสัยทัศน์", type: 'i' }, { text: "ให้ความมั่นใจและความสม่ำเสมอ", type: 'S' }, { text: "อธิบายด้วยตรรกะที่ปฏิเสธไม่ได้", type: 'C' }] }, { prompt: "ในงานปาร์ตี้ของบริษัท คุณมักจะเป็นคน...", choices: [{ text: "คุยเรื่องงานหรือเรื่องเป้าหมาย", type: 'D' }, { text: "เป็นจุดสนใจหรือสร้างความสนุก", type: 'i' }, { text: "นั่งคุยกับเพื่อนสนิทเงียบๆ", type: 'S' }, { text: "สังเกตการณ์รอบๆ และคุยเรื่องทั่วไป", type: 'C' }] }, { prompt: "เวลาทำงานเป็นทีม คุณชอบบทบาท...", choices: [{ text: "ผู้นำที่กำหนดทิศทาง", type: 'D' }, { text: "ฝ่ายประชาสัมพันธ์ที่ประสานงาน", type: 'i' }, { text: "ฝ่ายสนับสนุนที่คอยช่วยเหลือ", type: 'S' }, { text: "ฝ่ายตรวจสอบที่ดูความถูกต้อง", type: 'C' }] }, { prompt: "เมื่อเจออุปสรรค คุณจะ...", choices: [{ text: "พุ่งชนและหาทางข้ามไปให้ได้", type: 'D' }, { text: "หาทางออกที่สร้างสรรค์และสนุก", type: 'i' }, { text: "ขอความร่วมมือจากเพื่อนร่วมทีม", type: 'S' }, { text: "วิเคราะห์สาเหตุของปัญหาอย่างละเอียด", type: 'C' }] }, { prompt: "สิ่งที่ทำให้คุณรู้สึกเบื่อที่สุดคือ...", choices: [{ text: "การทำอะไรที่ซ้ำซากและช้า", type: 'D' }, { text: "การต้องนั่งทำงานคนเดียวนานๆ", type: 'i' }, { text: "การเผชิญหน้ากับความขัดแย้ง", type: 'S' }, { text: "การทำงานที่ขาดโครงสร้างที่ชัดเจน", type: 'C' }] }, { prompt: "คุณต้องการได้รับการยอมรับในเรื่อง...", choices: [{ text: "ความสำเร็จและชัยชนะ", type: 'D' }, { text: "ความเป็นมิตรและเสน่อห์ส่วนตัว", type: 'i' }, { text: "ความภักดีและความจริงใจ", type: 'S' }, { text: "ความเชี่ยวชาญและความแม่นยำ", type: 'C' }] }, { prompt: "คำจำกัดความสั้นๆ ของคุณคือ...", choices: [{ text: "นักสู้ (Fighter)", type: 'D' }, { text: "นักสร้างความสุข (Entertainer)", type: 'i' }, { text: "นักซัพพอร์ต (Supporter)", type: 'S' }, { text: "นักวิเคราะห์ (Analyst)", type: 'C' }] } ];
 
         // -- STATE --
-        let currentMember = null, userIP = "";
-        let allFriends = [], filteredFriends = [], currentPage = 1, itemsPerPage = 15;
-        let filteredTeam = [], teamCurrentPage = 1;
-        let isMuted = false, isAudioUnlocked = false; 
-        let radarChartInstance = null, teamRadarChartInstance = null;
-        let inputPinValue = "";
-        let currentQIndex = 0, assessmentAnswers = [];
+        window.currentMember = null;
+        window.allFriends = [];
+        window.filteredFriends = [];
+        window.filteredTeam = [];
+        window.currentPage = 1;
+        window.teamCurrentPage = 1;
+        window.itemsPerPage = 15;
+        window.sortCol = '';
+        window.sortDir = 'asc';
+        window.isMuted = false;
+        window.isAudioUnlocked = false;
+        window.radarChartInstance = null;
+        window.teamRadarChartInstance = null;
+        window.currentQIndex = 0;
+        window.assessmentAnswers = [];
 
-        // -- CORE FUNCTIONS --
-        function unlockVoice() { if (isAudioUnlocked) return; window.speechSynthesis.speak(new SpeechSynthesisUtterance("")); isAudioUnlocked = true; }
-        function speak(text) { if (isMuted) return; unlockVoice(); window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = 'th-TH'; u.rate = 1.05; window.speechSynthesis.speak(u); }
+        // -- UTILITIES --
+        function unlockVoice() { if (window.isAudioUnlocked) return; window.speechSynthesis.speak(new SpeechSynthesisUtterance("")); window.isAudioUnlocked = true; }
+        function speak(text) { if (window.isMuted) return; unlockVoice(); window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = 'th-TH'; u.rate = 1.05; window.speechSynthesis.speak(u); }
+        function showMessage(t, ty = 'success') { const m = document.getElementById('messageBox'); if(!m) return; m.textContent = t; m.className = `fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl text-white shadow-xl ${ty==='success'?'bg-green-500':'bg-red-500'}`; m.classList.remove('hidden'); setTimeout(()=>m.classList.add('hidden'), 3000); }
 
-        window.speakAboutDisc = () => { speak(`ดีไอเอสซี คือรูปแบบพฤติกรรมที่เกิดจากความสัมพันธ์ระหว่างการตอบสนองของคนต่อสิ่งเร้าหรือต่อสภาพแวดล้อม โดยมีสองแกนหลัก คือแกนตั้ง แทนรูปแบบการตอบสนอง แบ่งเป็น แอ็กทีฟ เชิงรุก เช่นการพูด และ แพสซีฟ ตั้งรับ เช่นการฟัง ส่วนแกนนอน แทนสภาพแวดล้อมการทำงาน แบ่งเป็น ทาสก์ เน้นงาน และ พีเพิล เน้นคน โดยดีไอเอสซีแบ่งคนเป็นสี่สไตล์ คือ สไตล์ดี เน้นงานและรวดเร็ว สไตล์ไอ เน้นคนและสร้างความสัมพันธ์ สไตล์เอส เน้นคนและรักษาความสัมพันธ์ และสไตล์ซี เน้นงานและรักษามาตรฐานความถูกต้องครับ`); };
-
-        window.speakHome = () => {
-            const hasDisc = currentMember && currentMember.DISC;
-            let intro = "ดีไอเอสซี คือรูปแบบพฤติกรรมที่เกิดจากความสัมพันธ์ระหว่างการตอบสนองของคนต่อสิ่งเร้าหรือต่อสภาพแวดล้อม ก่อให้เกิดพฤติกรรมรูปแบบต่างๆ เพื่อให้ง่ายต่อการจดจำและทำความเข้าใจครับ สำหรับปุ่มด้านล่าง ปุ่มสีน้ำเงินจะแนะนำให้คุณรู้จัก ดีไอเอสซี มากขึ้น และ ";
-            if(!hasDisc) intro += "หากคุณยังไม่ได้ทำแบบทดสอบ คุณพร้อมที่จะทำแบบทดสอบ 20 ข้อแล้วหรือยัง ถ้าพร้อมให้กดปุ่มสีส้มได้เลยครับ";
-            else intro += "คุณสามารถดูผล ดีไอเอสซี ของทีมได้ เพื่อนำไปปรับการทำงานร่วมกันครับ";
-            speak(intro);
-        };
-
-        window.toggleMute = () => { unlockVoice(); isMuted = !isMuted; const ic = isMuted ? 'volume-x' : 'volume-2'; document.getElementById('muteIcon').setAttribute('data-lucide', ic); if (document.getElementById('muteIconAssess')) document.getElementById('muteIconAssess').setAttribute('data-lucide', ic); if (isMuted) window.speechSynthesis.cancel(); lucide.createIcons(); };
-
-        const showMessage = (t, ty = 'success') => { const m = document.getElementById('messageBox'); if(!m) return; m.textContent = t; m.className = `fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl text-white shadow-xl ${ty==='success'?'bg-green-500':'bg-red-500'}`; m.classList.remove('hidden'); setTimeout(()=>m.classList.add('hidden'), 3000); };
+        window.toggleMute = () => { window.isMuted = !window.isMuted; const ic = window.isMuted ? 'volume-x' : 'volume-2'; document.getElementById('muteIcon').setAttribute('data-lucide', ic); if(document.getElementById('muteIconAssess')) document.getElementById('muteIconAssess').setAttribute('data-lucide', ic); lucide.createIcons(); if (window.isMuted) window.speechSynthesis.cancel(); };
 
         window.switchTab = (n) => {
-            window.speechSynthesis.cancel();
-            unlockVoice();
-            const tabs = ['home', 'user', 'about', 'friends', 'team'];
-            tabs.forEach(t => { const el = document.getElementById(`tab-${t}`); if (el) el.classList.add('hidden'); });
-            const targetTab = document.getElementById(`tab-${n}`);
-            if (targetTab) targetTab.classList.remove('hidden');
-            document.querySelectorAll('.bottom-nav-item').forEach(b => { b.classList.remove('active'); });
-            const selectedBtn = document.getElementById(`nav-${n}`);
-            if(selectedBtn) selectedBtn.classList.add('active');
-            const banner = document.getElementById('discResultBanner');
-            const area = document.getElementById('homeContentArea');
-            if (n === 'home') speakHome();
-            if (currentMember && currentMember.DISC && n === 'user') {
-                const st = discStyles[currentMember.DISC];
-                if (st) {
-                    if(banner) { banner.style.backgroundColor = st.color; document.getElementById('discResultImg').src = st.banner; banner.classList.remove('hidden'); }
-                    if(area) area.style.backgroundColor = st.light;
-                    renderUserSummary(currentMember.DISC, currentMember.DISC2);
-                    renderInsights(currentMember.DISC);
-                    const pN = discTypeNames[currentMember.DISC] || currentMember.DISC;
-                    const sN = discTypeNames[currentMember.DISC2] || currentMember.DISC2 || 'ไม่มี';
-                    speak(`ทักษะหลักของคุณคือ ${pN} ทักษะรองคือ ${sN} บทวิเคราะห์สไตล์หลักของคุณคือ ${discPersonalSummaries[currentMember.DISC]}`);
-                }
-            } else { if(banner) banner.classList.add('hidden'); if(area) area.style.backgroundColor = 'white'; }
-            if (n === 'about') speakAboutDisc();
+            window.speechSynthesis.cancel(); unlockVoice();
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+            const target = document.getElementById(`tab-${n}`); if(target) target.classList.remove('hidden');
+            document.querySelectorAll('.bottom-nav-item').forEach(b => { b.classList.remove('active'); b.style.color = '#64748b'; });
+            const navBtn = document.getElementById(`nav-${n}`); if(navBtn) { navBtn.classList.add('active'); navBtn.style.color = '#f97316'; }
+            
+            if (n === 'home') {
+                updateHomeButtonState(); 
+                speak(document.getElementById('homeDiscDesc').innerText);
+            }
             if (n === 'team') { loadSharedData(); speak("การทำงานกับทีมของคุณ คุณจะเห็นภาพรวมสไตล์การทำงานของแต่ละคนในทีม และคุณสามารถดูวิธีการทำงานร่วมกับเพื่อนคุณได้"); }
             if (n === 'friends') { loadSharedData(); speak("คุณจะเห็นภาพรวมของทั้งทีมว่ามีสไตล์การทำงานแบบไหน และยังสามารถที่จะดูวิธีการทำงานร่วมกันได้ เพื่อให้สามารถได้ผลลัพธ์ที่ดีที่สุดในการทำงานร่วมกัน"); }
+            if (n === 'user') {
+                const ok = !!window.currentMember?.DISC;
+                document.getElementById('primarySecondaryBox').classList.toggle('hidden', !ok);
+                document.getElementById('hasDiscResult').classList.toggle('hidden', !ok);
+                document.getElementById('noDiscResult').classList.toggle('hidden', ok);
+                if (ok) {
+                    renderUserSummary(window.currentMember.DISC, window.currentMember.DISC2); renderInsights(window.currentMember.DISC);
+                    document.getElementById('profileName').textContent = window.currentMember.FullName;
+                    document.getElementById('profileDetail').textContent = `${window.currentMember.Group || '-'} | ${window.currentMember.SubGroup || '-'}`;
+                    const p = discTypeNames[window.currentMember.DISC]; const s = discTypeNames[window.currentMember.DISC2] || 'ไม่มี';
+                    speak(`ทักษะหลักของคุณคือ ${p} ทักษะรองคือ ${s} โดยสรุปคือ ${discPersonalSummaries[window.currentMember.DISC]}`);
+                }
+            }
             lucide.createIcons();
         };
 
-        const renderUserSummary = (p, s) => { const summaryBox = document.getElementById('profilePersonalSummary'); if (summaryBox) summaryBox.innerText = discPersonalSummaries[p] || '-'; const pBox = document.getElementById('primaryImgTop'); if (pBox) pBox.innerHTML = `<img src="${discTypeImages[p]}" class="w-full h-full object-cover">`; const sBox = document.getElementById('secondaryImgTop'); if (sBox) { if (s && discTypeImages[s]) sBox.innerHTML = `<img src="${discTypeImages[s]}" class="w-full h-full object-cover">`; else sBox.innerHTML = `<div class="h-full flex items-center justify-center text-slate-300 text-xs">ไม่มี</div>`; } };
-        const renderInsights = (type) => {
-            const drives = discDrives[type], benefits = discBenefits[type], relationships = discRelationships[type], style = discStyles[type];
-            if (!drives || !benefits || !relationships) return;
-            const dCon = document.getElementById('drivesContent'); if(dCon) { dCon.innerHTML = ''; drives.forEach(s => { const div = document.createElement('div'); div.className = 'space-y-1'; div.innerHTML = `<h4 class="font-bold text-[13px]" style="color:${style.color}">${s.title}</h4><ul class="list-disc list-inside text-[13px] text-slate-500">${s.items.map(i=>`<li>${i}</li>`).join('')}</ul>`; dCon.appendChild(div); }); }
-            const bCon = document.getElementById('benefitsContent'); if(bCon) { bCon.innerHTML = `<div class="space-y-3 text-[13px] text-slate-600"><p><span class="font-bold" style="color:${style.color}">คุณจะถูกมองว่า...:</span> ${benefits.view}</p><p><span class="font-bold" style="color:${style.color}">ตัดสินผู้อื่นจาก...:</span> ${benefits.judge}</p><p><span class="font-bold" style="color:${style.color}">มีอิทธิพลต่อผู้อื่นด้วย...:</span> ${benefits.influence}</p><p><span class="font-bold" style="color:${style.color}">ข้อจำกัด/สิ่งที่เป็นอุปสรรค:</span> ${benefits.limit}</p><p><span class="font-bold text-green-600">จะมีประสิทธิภาพมากขึ้นหาก...:</span> ${benefits.effective}</p><div class="dark-side-box"><h5 class="font-bold text-orange-800 mb-1 flex items-center gap-1"><i data-lucide="alert-triangle" class="w-4 h-4"></i> Dark Side</h5><p><span class="font-semibold">Over-uses:</span> ${benefits.dark}</p><p><span class="font-semibold">Under Pressure:</span> ${benefits.pressure}</p></div></div>`; }
-            const rCon = document.getElementById('relationshipsContent'); if(rCon) { const listItems = (items) => items.map(it => `<li>${it}</li>`).join(''); rCon.innerHTML = `<div class="space-y-4"><div><h4 class="font-bold text-[13px]" style="color:${style.color}">เมื่อพยายามสร้างความสัมพันธ์</h4><ul class="list-disc list-inside text-[12px] text-slate-500">${listItems(relationships.relate)}</ul></div><div><h4 class="font-bold text-[13px]" style="color:${style.color}">เมื่อมีปัญหาที่ต้องแก้</h4><ul class="list-disc list-inside text-[12px] text-slate-500">${listItems(relationships.solving)}</ul></div><div><h4 class="font-bold text-[13px]" style="color:${style.color}">เมื่อสถานการณ์ตึงเครียด</h4><ul class="list-disc list-inside text-[12px] text-slate-500">${listItems(relationships.stress)}</ul></div><div class="working-tip-box text-[12px] text-green-700 italic bg-green-50 border-green-100"><h5 class="font-bold mb-1 flex items-center gap-1 text-[12px]"><i data-lucide="check-circle" class="w-4 h-4"></i> วิธีทำงานให้ได้ผลกับคนสไตล์ ${discTypeNames[type]}</h5>"${relationships.workingTip}"</div></div>`; }
-            lucide.createIcons();
+        const updateHomeButtonState = () => {
+            const ok = !!window.currentMember?.DISC;
+            const btnText = document.getElementById('dynamicHomeActionText');
+            const btnIcon = document.getElementById('dynamicHomeActionIcon');
+            const btn = document.getElementById('dynamicHomeActionBtn');
+            if (btnText && btnIcon && btn) {
+                if (ok) {
+                    btnText.textContent = 'DiSC ของคุณ';
+                    btnIcon.setAttribute('data-lucide', 'user');
+                    btn.onclick = () => window.switchTab('user');
+                } else {
+                    btnText.textContent = 'เริ่มทำแบบทดสอบ';
+                    btnIcon.setAttribute('data-lucide', 'clipboard-list');
+                    btn.onclick = () => window.startAssessmentFlow();
+                }
+                lucide.createIcons();
+            }
+        };
+
+        const renderUserSummary = (p, s) => { 
+            const sumBox = document.getElementById('profilePersonalSummary'); if(sumBox) sumBox.innerText = discPersonalSummaries[p];
+            const pBox = document.getElementById('primaryImgTop'); if(pBox) pBox.innerHTML = `<img src="${discTypeImages[p]}" class="w-full h-full object-cover">`;
+            const sBox = document.getElementById('secondaryImgTop'); if(sBox) sBox.innerHTML = s ? `<img src="${discTypeImages[s]}" class="w-full h-full object-cover">` : '<div class="flex items-center h-full text-slate-300 justify-center font-bold text-lg">-</div>';
+        };
+
+        const renderInsights = (t) => {
+            const drives = discDrives[t], st = discStyles[t], ben = discBenefits[t], rel = discRelationships[t];
+            const dc = document.getElementById('drivesContent'); if(dc) dc.innerHTML = drives.map(s => `<div><h4 style="color:${st.color}" class="font-bold">${s.title}</h4><ul class="list-disc list-inside">${s.items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`).join('');
+            const bc = document.getElementById('benefitsContent'); if(bc) bc.innerHTML = `<div class="space-y-3">
+                <p><span class="font-bold" style="color:${st.color}">มุมมองคนอื่น:</span> ${ben.view}</p>
+                <p><span class="font-bold" style="color:${st.color}">ตัดสินผู้อื่นจาก:</span> ${ben.judge}</p>
+                <p><span class="font-bold" style="color:${st.color}">ประสิทธิผล:</span> ${ben.effective}</p>
+                <p><span class="font-bold text-orange-600">ข้อจำกัด:</span> ${ben.limit}</p>
+                <div class="dark-side-box"><p><strong>Dark Side:</strong> ${ben.dark}</p><p><strong>Under Pressure:</strong> ${ben.pressure}</p></div>
+            </div>`;
+            const rc = document.getElementById('relationshipsContent'); if(rc) rc.innerHTML = `
+                <div><h4 class="font-bold" style="color:${st.color}">เมื่อพยายามสร้างความสัมพันธ์:</h4><ul class="list-disc list-inside">${rel.relate.map(r=>`<li>${r}</li>`).join('')}</ul></div>
+                <div class="working-tip-box" style="background-color:${st.light}; border-left:4px solid ${st.color}"><strong>Working Tip:</strong> "${rel.workingTip}"</div>
+            `;
         };
 
         const loadSharedData = async () => {
-            if (allFriends.length > 0) { applyFriendsFilter(); applyTeamFilter(); return; }
+            if (window.allFriends.length > 0) { applyFilters(); return; }
             document.getElementById('globalLoader').classList.remove('hidden');
             try {
-                const memberSnap = await getDocs(collection(db, COLLECTION_NAME));
-                allFriends = []; const uniqueGroups = new Set();
-                memberSnap.forEach(d => { const dt = d.data(); if(dt.FullName) { allFriends.push({ docId: d.id, ...dt }); if(dt.Group) uniqueGroups.add(dt.Group); } });
-                const gSel = document.getElementById('friendGroupFilter');
-                if(gSel) { gSel.innerHTML = '<option value="">เลือกสังกัดทีมทั้งหมด</option>'; Array.from(uniqueGroups).sort().forEach(g => { const opt = document.createElement('option'); opt.value = g; opt.textContent = g; gSel.appendChild(opt); }); }
-                applyFriendsFilter(); applyTeamFilter();
-            } catch (err) { showMessage("เกิดข้อผิดพลาดในการโหลดข้อมูล", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
+                const snap = await getDocs(collection(db, COLLECTION_NAME));
+                window.allFriends = []; const grps = new Set();
+                snap.forEach(d => { const dt = d.data(); if(dt.FullName) { window.allFriends.push({ docId: d.id, ...dt }); if(dt.Group) grps.add(dt.Group); } });
+                const sel = document.getElementById('friendGroupFilter'); if(sel) { sel.innerHTML = '<option value="">เลือกทีมทั้งหมด</option>' + Array.from(grps).sort().map(g => `<option value="${g}">${g}</option>`).join(''); }
+                applyFilters();
+            } catch (e) { console.error(e); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
         };
 
-        const applyFriendsFilter = () => { const filterEl = document.getElementById('friendGroupFilter'); const gVal = filterEl ? filterEl.value : ""; filteredFriends = allFriends.filter(f => !gVal || f.Group === gVal); currentPage = 1; renderFriendsTable(); updateRadarChart('friendsRadarChart', filteredFriends, (inst) => radarChartInstance = inst); };
-        const applyTeamFilter = () => { const userSubGroup = currentMember?.SubGroup || ""; const displayEl = document.getElementById('teamSubGroupDisplay'); if(displayEl) displayEl.textContent = userSubGroup || "ไม่ระบุ"; filteredTeam = allFriends.filter(f => f.SubGroup === userSubGroup && f.FullName); teamCurrentPage = 1; renderTeamTable(); updateRadarChart('teamRadarChart', filteredTeam, (inst) => teamRadarChartInstance = inst); };
+        const applyFilters = () => {
+            const fVal = document.getElementById('friendGroupFilter')?.value || "";
+            window.filteredFriends = window.allFriends.filter(x => !fVal || x.Group === fVal);
+            renderTable('friendsTableBody', window.filteredFriends, 1);
+            updateRadarChart('friendsRadarChart', window.filteredFriends, (i) => window.radarChartInstance = i);
+            const sVal = window.currentMember?.SubGroup || "";
+            const display = document.getElementById('teamSubGroupDisplay'); if(display) display.textContent = sVal || "ไม่ระบุ";
+            window.filteredTeam = window.allFriends.filter(x => x.SubGroup === sVal && x.FullName);
+            renderTable('teamTableBody', window.filteredTeam, 1);
+            updateRadarChart('teamRadarChart', window.filteredTeam, (i) => window.teamRadarChartInstance = i);
+        };
+
+        const renderTable = (tid, data, page) => {
+            const tb = document.getElementById(tid); if(!tb) return;
+            tb.innerHTML = '';
+            data.slice((page-1)*window.itemsPerPage, page*window.itemsPerPage).forEach(f => {
+                const tr = document.createElement('tr');
+                const d1 = f.DISC || ''; const d2 = f.DISC2 || '';
+                const c1 = d1 ? discStyles[d1].color : '#e2e8f0'; const c2 = d2 ? discStyles[d2].color : '#e2e8f0';
+                const actionBtn = d1 ? `<button onclick="window.showFriendInsight('${f.FullName}', '${f.DISC}', '${f.DISC2}')" class="text-[10px] bg-orange-100 text-orange-600 px-2 py-1.5 rounded-lg font-bold">การร่วมงาน</button>` : '';
+                tr.innerHTML = `<td class="px-3 font-medium text-slate-700 text-left">${f.FullName}</td><td class="text-center py-2 border-r border-slate-100">${d1 ? `<div class="disc-circle" style="background-color:${c1}">${d1}</div>` : '-'}</td><td class="text-center py-2 border-r border-slate-100">${d2 ? `<div class="disc-circle" style="background-color:${c2}">${d2}</div>` : '-'}</td><td class="text-center">${actionBtn}</td>`;
+                tb.appendChild(tr);
+            });
+        };
+
+        window.handleSort = (col, mode) => {
+            const data = mode === 'team' ? window.filteredTeam : window.allFriends;
+            const tbody = mode === 'team' ? 'teamTableBody' : 'friendsTableBody';
+            if (window.sortCol === col) window.sortDir = window.sortDir === 'asc' ? 'desc' : 'asc';
+            else { window.sortCol = col; window.sortDir = 'asc'; }
+            data.sort((a, b) => {
+                const v1 = (a[col] || "").toString(); const v2 = (b[col] || "").toString();
+                return window.sortDir === 'asc' ? v1.localeCompare(v2) : v2.localeCompare(v1);
+            });
+            renderTable(tbody, data, 1);
+            lucide.createIcons();
+        };
 
         const updateRadarChart = (canvasId, dataSet, setInst) => {
-            const counts = { D: 0, i: 0, S: 0, C: 0 }; dataSet.forEach(f => { if (f.DISC && counts[f.DISC] !== undefined) counts[f.DISC]++; });
-            const data = [counts.D, counts.i, counts.S, counts.C]; const canvasEl = document.getElementById(canvasId); if (!canvasEl) return; const ctx = canvasEl.getContext('2d');
-            if (canvasId === 'friendsRadarChart' && radarChartInstance) radarChartInstance.destroy();
-            if (canvasId === 'teamRadarChart' && teamRadarChartInstance) teamRadarChartInstance.destroy();
-            const inst = new Chart(ctx, { type: 'radar', data: { labels: ['Dominance (D)', 'Influence (i)', 'Steadiness (S)', 'Conscientiousness (C)'], datasets: [{ label: 'จำนวนคนแบ่งตามสไตล์', data: data, fill: true, backgroundColor: 'rgba(249, 115, 22, 0.2)', borderColor: 'rgb(249, 115, 22)', pointBackgroundColor: 'rgb(249, 115, 22)', pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff', pointHoverBorderColor: 'rgb(249, 115, 22)' }] }, options: { elements: { line: { borderWidth: 2 } }, scales: { r: { angleLines: { display: true }, suggestedMin: 0, ticks: { precision: 0 } } }, plugins: { legend: { display: false } } } });
+            const counts = { D: 0, i: 0, S: 0, C: 0 }; dataSet.forEach(f => { if (f.DISC) counts[f.DISC]++; });
+            const data = [counts.D, counts.i, counts.S, counts.C]; const ctx = document.getElementById(canvasId)?.getContext('2d'); if (!ctx) return;
+            if (canvasId === 'friendsRadarChart' && window.radarChartInstance) window.radarChartInstance.destroy();
+            if (canvasId === 'teamRadarChart' && window.teamRadarChartInstance) window.teamRadarChartInstance.destroy();
+            const inst = new Chart(ctx, { type: 'radar', data: { labels: ['D','i','S','C'], datasets: [{ data: data, backgroundColor: 'rgba(249, 115, 22, 0.2)', borderColor: '#f97316' }] }, options: { plugins: { legend: { display: false } } } });
             setInst(inst);
         };
 
-        const renderFriendsTable = () => { const tb = document.getElementById('friendsTableBody'); if(!tb) return; tb.innerHTML = ''; const start = (currentPage - 1) * itemsPerPage; const items = filteredFriends.slice(start, start + itemsPerPage); if (!items.length) { tb.innerHTML = '<tr><td colspan="3" class="text-center py-12 text-slate-400">ไม่พบข้อมูลเพื่อนพนักงาน</td></tr>'; } else { items.forEach(f => { const tr = document.createElement('tr'); const discType = f.DISC || ''; const typeColor = discType ? discStyles[discType].color : '#94a3b8'; tr.innerHTML = `<td class="font-medium text-slate-700 text-[12px]">${f.FullName}</td><td class="text-center">${discType ? `<div class="disc-circle" style="background-color: ${typeColor}">${discType}</div>` : '<span class="text-slate-300">-</span>'}</td><td class="text-center">${discType ? `<button onclick="showFriendInsight('${f.FullName}', '${f.DISC}')" class="text-[11px] bg-orange-100 text-orange-600 px-3 py-1.5 rounded-lg font-bold hover:bg-orange-200 transition-colors">วิธีร่วมงาน</button>` : ''}</td>`; tb.appendChild(tr); }); } const tot = Math.ceil(filteredFriends.length/itemsPerPage) || 1; const pi = document.getElementById('pageInfo'); if(pi) pi.textContent = `Page ${currentPage} of ${tot} (${filteredFriends.length} รายการ)`; const pb = document.getElementById('prevFriendPage'); if(pb) pb.disabled = currentPage === 1; const nb = document.getElementById('nextFriendPage'); if(nb) nb.disabled = currentPage === tot; };
-        const renderTeamTable = () => { const tb = document.getElementById('teamTableBody'); if(!tb) return; tb.innerHTML = ''; const start = (teamCurrentPage - 1) * itemsPerPage; const items = filteredTeam.slice(start, start + itemsPerPage); if (!items.length) { tb.innerHTML = '<tr><td colspan="3" class="text-center py-12 text-slate-400">ไม่พบสมาชิกในหน่วยงานนี้</td></tr>'; } else { items.forEach(f => { const tr = document.createElement('tr'); const discType = f.DISC || ''; const typeColor = discType ? discStyles[discType].color : '#94a3b8'; tr.innerHTML = `<td class="font-medium text-slate-700 text-[12px]">${f.FullName}</td><td class="text-center">${discType ? `<div class="disc-circle" style="background-color: ${typeColor}">${discType}</div>` : '<span class="text-slate-300">-</span>'}</td><td class="text-center">${discType ? `<button onclick="showFriendInsight('${f.FullName}', '${f.DISC}')" class="text-[11px] bg-orange-100 text-orange-600 px-3 py-1.5 rounded-lg font-bold hover:bg-orange-200 transition-colors">วิธีร่วมงาน</button>` : ''}</td>`; tb.appendChild(tr); }); } const tot = Math.ceil(filteredTeam.length/itemsPerPage) || 1; const pi = document.getElementById('teamPageInfo'); if (pi) pi.textContent = `Page ${teamCurrentPage} of ${tot} (${filteredTeam.length} รายการ)`; const pb = document.getElementById('prevTeamPage'); if (pb) pb.disabled = teamCurrentPage === 1; const nb = document.getElementById('nextTeamPage'); if (nb) nb.disabled = teamCurrentPage === tot; };
+        window.showFriendInsight = (name, d1, d2) => {
+            window.speechSynthesis.cancel();
+            const m = document.getElementById('friendInsightModal'); if(!m) return;
+            const st = discStyles[d1] || { color: '#64748b' }; 
+            const drives = discDrives[d1] || []; const rel = discRelationships[d1] || {};
+            const ben = discBenefits[d1] || {};
+            
+            document.getElementById('friendModalHeader').style.backgroundColor = st.color;
+            document.getElementById('friendModalImg').innerHTML = `<img src="${discTypeImages[d1]}" class="w-full h-full object-cover">`;
+            document.getElementById('friendModalImg2').innerHTML = d2 ? `<img src="${discTypeImages[d2]}" class="w-full h-full object-cover">` : '<div class="flex items-center h-full text-slate-300 justify-center font-bold text-lg">-</div>';
+            document.getElementById('friendModalName').textContent = name;
+            document.getElementById('friendModalType').textContent = `${discTypeNames[d1]} ${d2 ? '/ '+discTypeNames[d2] : ''}`;
+            
+            document.getElementById('friendModalContent').innerHTML = `
+                <div class="bg-white p-4 rounded-xl text-left mb-4 italic text-slate-600 leading-relaxed text-center">"${discPersonalSummaries[d1]}"</div>
+                <div class="space-y-4 text-left">
+                    <div class="p-3 bg-white rounded-lg border border-slate-100">
+                        <h4 class="font-bold text-orange-600 mb-1 text-left">สิ่งที่ขับเคลื่อน (Drives):</h4>
+                        <ul class="list-disc list-inside text-slate-500 text-left">${drives[0]?.items.map(i=>`<li>${i}</li>`).join('')}</ul>
+                    </div>
+                    <div class="p-3 bg-white rounded-lg border border-slate-100">
+                        <h4 class="font-bold text-blue-600 mb-1 text-left">จุดเด่นและการร่วมงาน:</h4>
+                        <p class="text-slate-600"><strong>จุดเด่น:</strong> ${ben.view}</p>
+                        <p class="text-slate-600"><strong>ประสิทธิภาพ:</strong> ${ben.effective}</p>
+                    </div>
+                    <div class="working-tip-box text-left" style="background-color:${st.light}; border-radius: 12px; padding: 12px; border-left: 4px solid ${st.color}">
+                        <h4 class="font-bold mb-1 text-left">วิธีทำงานร่วมกัน (Working Tip):</h4>
+                        "${rel.workingTip}"
+                    </div>
+                </div>`;
+            m.classList.remove('hidden'); lucide.createIcons();
+            const driveVoice = drives[0] ? `สิ่งที่ขับเคลื่อนคือ ${drives[0].items.join(' และ ')}` : "";
+            speak(`นี่คือการร่วมงานกับ ${name} สไตล์หลักคือ ${discTypeNames[d1]} สไตล์รองคือ ${d2 ? discTypeNames[d2] : 'ไม่มี'} โดยสรุปคือ ${discPersonalSummaries[d1]} ${driveVoice} และหัวข้อวิธีทำงานร่วมกันคือ ${rel.workingTip}`);
+        };
 
-        window.showFriendInsight = (name, type) => { window.speechSynthesis.cancel(); const modal = document.getElementById('friendInsightModal'); const st = discStyles[type] || { color: '#64748b' }; const relations = discRelationships[type]; const header = document.getElementById('friendModalHeader'); if(header) header.style.backgroundColor = st.color; const imgBox = document.getElementById('friendModalImg'); if(imgBox) imgBox.innerHTML = `<img src="${discTypeImages[type]}" class="w-full h-full object-cover">`; const nameBox = document.getElementById('friendModalName'); if(nameBox) nameBox.textContent = name; const typeBox = document.getElementById('friendModalType'); if(typeBox) typeBox.textContent = discTypeNames[type] || type; const listItems = (items) => items ? items.map(it => `<li>${it}</li>`).join('') : ''; const content = document.getElementById('friendModalContent'); if(content) { content.innerHTML = `<div class="bg-white p-4 rounded-xl text-[13px] text-slate-600 italic border border-slate-100 shadow-sm leading-relaxed text-center">"${discPersonalSummaries[type]}"</div><div class="space-y-4 text-left"><h4 class="font-bold text-[14px]" style="color:${st.color}">วิธีร่วมงานให้ได้ผล</h4><div class="bg-white p-4 rounded-xl border-l-4 border-slate-200"><p class="font-bold text-[13px] mb-1">การสร้างความสัมพันธ์</p><ul class="list-disc list-inside text-[13px] text-slate-500">${listItems(relations?.relate)}</ul></div><div class="working-tip-box text-[13px] text-green-700 italic border-green-100 bg-green-50">"${relations?.workingTip || '-'}"</div></div>`; } if(modal) modal.classList.remove('hidden'); lucide.createIcons(); speak(`นี่คือวิธีร่วมงานกับ ${name} สไตล์ ${discTypeNames[type] || type} โดยสรุปคือ ${discPersonalSummaries[type]}`); };
-        window.closeFriendInsight = () => { const modal = document.getElementById('friendInsightModal'); if(modal) modal.classList.add('hidden'); window.speechSynthesis.cancel(); };
+        window.closeFriendInsight = () => { document.getElementById('friendInsightModal').classList.add('hidden'); window.speechSynthesis.cancel(); };
 
         const handleIdSubmission = async () => {
             const v = document.getElementById('EmpID').value.trim(); if (v.length !== 5) return;
-            const btn = document.getElementById('submitIdBtn'); if(btn) btn.disabled = true;
+            const btn = document.getElementById('submitIdBtn'); btn.disabled = true;
             try {
                 const snap = await getDocs(collection(db, COLLECTION_NAME));
                 let f = null; snap.forEach(d => { if(String(d.data().EmpID).trim() === v) f = { docId: d.id, ...d.data() }; });
-                if (!f) { showMessage("ไม่พบรหัสพนักงาน", "error"); if(btn) btn.disabled = false; return; }
-                currentMember = f;
-                if (f.pin) { document.getElementById('stepEmployeeId').classList.add('hidden'); document.getElementById('stepEnterPinKeypad').classList.remove('hidden'); document.getElementById('loginUserName').textContent = f.FullName; }
-                else { document.getElementById('stepEmployeeId').classList.add('hidden'); document.getElementById('stepSetupProfile').classList.remove('hidden'); document.getElementById('dispName').textContent = f.FullName; document.getElementById('dispGroup').textContent = f.Group || "-"; document.getElementById('dispSubGroup').textContent = f.SubGroup || "-"; }
+                if (!f) { showMessage("รหัสพนักงานไม่ถูกต้อง", "error"); btn.disabled = false; return; }
+                window.currentMember = f; window.closeRegModal();
+                document.getElementById('welcomeUser').textContent = f.FullName;
+                document.getElementById('userSub').textContent = `${f.Group || '-'} | ${f.SubGroup || '-'}`;
+                showMessage("พบข้อมูลสำเร็จ", "success"); showMainPage(f);
             } catch (err) { showMessage("เกิดข้อผิดพลาดในการเชื่อมต่อ", "error"); } finally { if(btn) btn.disabled = false; lucide.createIcons(); }
         };
 
-        window.closeRegModal = () => { const el = document.getElementById('regModalBackdrop'); if(el) el.classList.add('hidden'); };
-        window.pressKey = (k) => { unlockVoice(); if(k==='del') inputPinValue=inputPinValue.slice(0,-1); else if(k==='clear') inputPinValue=""; else if(inputPinValue.length<6) inputPinValue+=k; for(let i=0; i<6; i++) { const b = document.getElementById(`pin-${i}`); if(b) { b.textContent = i<inputPinValue.length ? "•" : ""; b.classList.toggle('active', i<inputPinValue.length); } } };
-        
-        const showMainPage = (u) => {
-            currentMember = u; document.getElementById('landingPage').classList.add('hidden'); document.getElementById('mainDiscPage').classList.remove('hidden'); if(document.getElementById('assessmentPage')) document.getElementById('assessmentPage').classList.add('hidden');
-            document.getElementById('welcomeUser').textContent = u.FullName || 'พนักงาน'; document.getElementById('userSub').textContent = `${u.Group || '-'} | ${u.SubGroup || '-'}`; document.getElementById('profileName').textContent = u.FullName || '-'; document.getElementById('profileDetail').textContent = `${u.Group || '-'} | ${u.SubGroup || '-'}`;
-            const ok = !!u.DISC; document.getElementById('dynamicActionText').textContent = ok ? 'ดู DiSC ของทีม' : 'เริ่มทำแบบทดสอบ'; document.getElementById('dynamicActionBtn').onclick = () => ok ? switchTab('team') : window.startAssessmentFlow();
-            const noRes = document.getElementById('noDiscResult'); if(noRes) noRes.classList.toggle('hidden', ok);
-            const hasRes = document.getElementById('hasDiscResult'); if(hasRes) hasRes.classList.toggle('hidden', !ok);
-            window.closeRegModal(); switchTab('home');
+        const showMainPage = (u) => { 
+            document.getElementById('landingPage').classList.add('hidden'); 
+            document.getElementById('assessmentPage').classList.add('hidden'); 
+            document.getElementById('mainDiscPage').classList.remove('hidden'); 
+            window.switchTab('home'); 
         };
-
-        window.startAssessmentFlow = () => {
-            window.speechSynthesis.cancel(); unlockVoice(); document.getElementById('mainDiscPage').classList.add('hidden'); document.getElementById('assessmentPage').classList.remove('hidden'); document.getElementById('assessmentIntro').classList.remove('hidden'); document.getElementById('assessmentQuestion').classList.add('hidden');
-            speak(`ยินดีต้อนรับสู่แบบทดสอบ ดีไอเอสซี 4 จริตพิชิตใจครับ ในหน้านี้คุณจะได้พบกับคำกล่าวของคาร์ล จุง เกี่ยวกับการรู้จักตนเองเป็นจุดเริ่มต้นของปัญญาที่แท้จริง และคุณสามารถใช้เมนูด้านล่างเพื่อศึกษาข้อมูลอื่นๆ หากคุณพร้อมที่จะทำแบบทดสอบซึ่งมีทั้งหมด 20 ข้อ ให้คลิกปุ่มเข้าสู่การทดสอบได้เลยครับ`);
-            lucide.createIcons();
-        };
-
-        window.exitAssessment = () => showMainPage(currentMember);
-        window.beginActualTest = () => { unlockVoice(); currentQIndex = 0; assessmentAnswers = new Array(20).fill(null).map(() => ({most: null, least: null})); document.getElementById('assessmentIntro').classList.add('hidden'); document.getElementById('assessmentQuestion').classList.remove('hidden'); renderQuestion(true); };
-        
-        const renderQuestion = (sh = false) => {
-            const q = discQuestions[currentQIndex], ans = assessmentAnswers[currentQIndex];
-            document.getElementById('qNumber').textContent = currentQIndex + 1; document.getElementById('qPrompt').textContent = q.prompt; document.getElementById('assessmentProgress').style.width = `${((currentQIndex) / 20) * 100}%`;
-            if (sh) speak(`คำถามข้อที่ ${currentQIndex + 1} ${q.prompt}`);
-            const con = document.getElementById('qChoices'); if(con) {
-                con.innerHTML = '';
-                q.choices.forEach((c, i) => {
-                    const isM = ans.most === c.type, isL = ans.least === c.type;
-                    let cStyle = "bg-white text-slate-700 border-slate-100"; if (isM) cStyle = "bg-green-600 text-white border-green-600"; else if (isL) cStyle = "bg-red-500 text-white border-red-500";
-                    const mStyle = isM ? "bg-green-900" : (ans.most ? "bg-green-200 text-green-700" : "bg-green-500");
-                    const lStyle = isL ? "bg-red-900" : (ans.least ? "bg-red-200 text-red-700" : "bg-red-500");
-                    const card = document.createElement('div'); card.className = `choice-card p-4 rounded-xl flex justify-between items-center ${cStyle}`;
-                    card.innerHTML = `<span class="text-[13px] flex-1 pr-2">${c.text}</span><div class="flex gap-2"><button onclick="pick(${i},'most')" class="btn-standard h-8 px-2 text-[11px] text-white rounded-lg ${mStyle} flex items-center gap-1"><span>↑ มากสุด</span></button><button onclick="pick(${i},'least')" class="btn-standard h-8 px-2 text-[11px] text-white rounded-lg ${lStyle} flex items-center gap-1"><span>↓ น้อยสุด</span></button></div>`;
-                    con.appendChild(card);
-                });
-            }
-            document.getElementById('prevBtn').disabled = currentQIndex === 0;
-            const nb = document.getElementById('nextBtn'); if(nb) { nb.disabled = !(ans.most && ans.least); nb.innerHTML = currentQIndex === 19 ? 'ดูผลการประเมิน' : 'ถัดไป'; }
-            lucide.createIcons();
-        };
-
-        window.pick = (idx, mode) => {
-            const q = discQuestions[currentQIndex], choice = q.choices[idx], type = choice.type, ans = assessmentAnswers[currentQIndex];
-            if (mode === 'most') { if (ans.least === type) ans.least = null; ans.most = type; speak(`${choice.text} มากที่สุด`); }
-            else { if (ans.most === type) ans.most = null; ans.least = type; speak(`${choice.text} น้อยที่สุด`); }
-            renderQuestion();
-        };
-
-        window.prevQuestion = () => { if (currentQIndex > 0) { currentQIndex--; renderQuestion(true); } };
-        window.nextQuestion = () => { if (currentQIndex < 19) { currentQIndex++; renderQuestion(true); } else calc(); };
-
-        const calc = async () => {
-            document.getElementById('globalLoader').classList.remove('hidden');
-            const scores = { D: 0, i: 0, S: 0, C: 0 }; assessmentAnswers.forEach(a => { if (a.most) scores[a.most]++; if (a.least) scores[a.least]--; });
-            const srt = Object.entries(scores).sort((a,b) => b[1] - a[1]); const p = srt[0][0], s = srt[1][0];
-            try {
-                await updateDoc(doc(db, COLLECTION_NAME, currentMember.docId), { DISC: p, DISC2: s, updatedAt: serverTimestamp() });
-                await addDoc(collection(db, 'DISC_Results'), { EmpID: currentMember.EmpID, FullName: currentMember.FullName, DISC: p, DISC2: s, timestamp: serverTimestamp() });
-                currentMember.DISC = p; currentMember.DISC2 = s; showMainPage(currentMember); switchTab('user');
-            } catch (e) { showMessage("บันทึกผิดพลาด", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
-        };
-
-        window.confirmReset = async () => { 
-            if (!currentMember || !currentMember.docId) return;
-            if(confirm("ต้องการล้างข้อมูลและเริ่มทำแบบทดสอบใหม่หรือไม่?")) {
-                document.getElementById('globalLoader').classList.remove('hidden');
-                try {
-                    const memberRef = doc(db, COLLECTION_NAME, currentMember.docId);
-                    await updateDoc(memberRef, { DISC: null, DISC2: null, updatedAt: serverTimestamp() });
-                    const snapRes = await getDocs(collection(db, 'DISC_Results'));
-                    const delPromises = [];
-                    snapRes.forEach(d => { if(d.data().EmpID === currentMember.EmpID) delPromises.push(deleteDoc(doc(db, 'DISC_Results', d.id))); });
-                    await Promise.all(delPromises);
-                    currentMember.DISC = null; currentMember.DISC2 = null; 
-                    showMessage("รีเซ็ตข้อมูลสำเร็จ", "success"); showMainPage(currentMember); 
-                } catch (e) { showMessage("เกิดข้อผิดพลาดในการรีเซ็ต", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
-            }
-        };
+        window.closeRegModal = () => { const r = document.getElementById('regModalBackdrop'); if(r) r.classList.add('hidden'); };
 
         onAuthStateChanged(auth, async (u) => { 
             if(!u) await signInAnonymously(auth); 
             document.getElementById('globalLoader').classList.add('hidden'); 
             document.getElementById('landingPage').classList.remove('hidden'); 
             const btn = document.getElementById('openModalBtn');
-            if(btn) {
-                btn.disabled = false;
-                const icon = document.getElementById('loginIcon');
-                if(icon) { icon.setAttribute('data-lucide', 'user-plus'); icon.classList.remove('animate-spin'); }
-                lucide.createIcons();
-            }
+            if(btn) { btn.disabled = false; const i = document.getElementById('loginIcon'); if(i) { i.setAttribute('data-lucide', 'user-plus'); i.classList.remove('animate-spin'); } lucide.createIcons(); }
         });
         
-        const initApp = async () => {
-            await fetchIP();
-            document.getElementById('openModalBtn').onclick = () => { unlockVoice(); document.getElementById('regModalBackdrop').classList.remove('hidden'); };
-            document.getElementById('submitIdBtn').onclick = handleIdSubmission;
-            document.getElementById('EmpID').oninput = (e) => { 
-                e.target.value = e.target.value.replace(/[^0-9]/g, ''); // Ensure numeric only
-                document.getElementById('submitIdBtn').disabled = e.target.value.length !== 5; 
-            };
-            document.getElementById('savePinLoginBtn').onclick = () => { if(String(inputPinValue) === String(currentMember.pin)) showMainPage(currentMember); else { showMessage("PIN ไม่ถูกต้อง", "error"); inputPinValue = ""; for(let i=0; i<6; i++) { const b = document.getElementById(`pin-${i}`); if(b) b.textContent = ""; } } };
-            
-            const pSet = document.getElementById('setPin');
-            const pConf = document.getElementById('confirmPin');
-            const cReg = document.getElementById('confirmRegBtn');
-            const validate = (e) => { 
-                if(e) e.target.value = e.target.value.replace(/[^0-9]/g, ''); // Numeric PIN check
-                if(cReg && pSet && pConf) cReg.disabled = !(pSet.value.length === 6 && pSet.value === pConf.value); 
-            };
-            if(pSet) pSet.oninput = validate;
-            if(pConf) pConf.oninput = validate;
-            if(cReg) cReg.onclick = async () => {
-                document.getElementById('globalLoader').classList.remove('hidden');
-                try {
-                    await updateDoc(doc(db, COLLECTION_NAME, currentMember.docId), { pin: pSet.value, IPAddress: userIP, ActivatedAt: serverTimestamp() });
-                    currentMember.pin = pSet.value;
-                    showMessage("ลงทะเบียนสำเร็จ", "success");
-                    showMainPage(currentMember);
-                } catch (e) { showMessage("ลงทะเบียนล้มเหลว", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
-            };
+        window.startAssessmentFlow = () => {
+            window.speechSynthesis.cancel(); unlockVoice(); 
+            document.getElementById('mainDiscPage').classList.add('hidden');
+            document.getElementById('assessmentPage').classList.remove('hidden'); 
+            document.getElementById('assessmentIntro').classList.remove('hidden'); 
+            document.getElementById('assessmentQuestion').classList.add('hidden');
+            document.getElementById('assessmentNav').classList.add('hidden');
+            document.getElementById('assessmentInstructions').classList.add('hidden');
+            speak("ยินดีต้อนรับสู่แบบทดสอบ ดีไอเอสซี 4 จริตพิชิตใจครับ โดยจะมีคำถาม 20 ข้อให้ตอบ หากคุณพร้อมแล้วให้คลิกปุ่มเข้าสู่การทดสอบได้เลยครับ");
+            lucide.createIcons();
+        };
 
-            document.getElementById('prevFriendPage').onclick = () => { if(currentPage>1) { currentPage--; renderFriendsTable(); } };
-            document.getElementById('nextFriendPage').onclick = () => { if(currentPage < Math.ceil(filteredFriends.length/itemsPerPage)) { currentPage++; renderFriendsTable(); } };
-            document.getElementById('prevTeamPage').onclick = () => { if(teamCurrentPage>1) { teamCurrentPage--; renderTeamTable(); } };
-            document.getElementById('nextTeamPage').onclick = () => { if(teamCurrentPage < Math.ceil(filteredTeam.length/itemsPerPage)) { teamCurrentPage++; renderTeamTable(); } };
+        window.exitAssessment = () => showMainPage(window.currentMember);
+
+        window.beginActualTest = () => {
+            unlockVoice(); window.currentQIndex = 0; window.assessmentAnswers = new Array(20).fill(null).map(() => ({most: null, least: null}));
+            document.getElementById('assessmentIntro').classList.add('hidden'); 
+            document.getElementById('assessmentQuestion').classList.remove('hidden');
+            document.getElementById('assessmentNav').classList.remove('hidden');
+            document.getElementById('assessmentInstructions').classList.remove('hidden');
+            renderQuestion(true);
+        };
+
+        const renderQuestion = (sh = false) => {
+            const q = discQuestionsData[window.currentQIndex], ans = window.assessmentAnswers[window.currentQIndex];
+            const qn = document.getElementById('qNumberDisplay'); if(qn) qn.textContent = window.currentQIndex + 1;
+            const qp = document.getElementById('qPromptText'); if(qp) qp.textContent = `Q: ${q.prompt}`;
+            if (sh) speak(`คำถามข้อที่ ${window.currentQIndex + 1} ${q.prompt}`);
+            const con = document.getElementById('qChoicesContainer'); if(con) {
+                con.innerHTML = q.choices.map((c, i) => {
+                    const isM = ans.most === c.type; const isL = ans.least === c.type;
+                    const isAnyM = ans.most !== null; const isAnyL = ans.least !== null;
+                    
+                    let cardBg = "bg-white";
+                    if (isM) cardBg = "bg-green-600 text-white border-green-600";
+                    else if (isL) cardBg = "bg-red-500 text-white border-red-500";
+
+                    let mBtnStyle = isM ? "bg-green-800 text-white border-green-900" : (isAnyM ? "bg-green-100 text-green-300 opacity-40" : "bg-green-700 text-white");
+                    let lBtnStyle = isL ? "bg-red-800 text-white border-red-900" : (isAnyL ? "bg-red-100 text-red-300 opacity-40" : "bg-red-700 text-white");
+
+                    return `<div class="choice-card p-3 rounded-xl flex justify-between items-center border-slate-100 shadow-sm ${cardBg}"><span class="text-[13.5px] flex-1 text-left font-medium ${isM||isL?'text-white':'text-slate-700'}">${c.text}</span><div class="flex gap-1"><button onclick="window.pick(${i},'most')" class="font-normal text-[11px] px-3 py-1.5 rounded-lg transition-all ${mBtnStyle}">↑ มากสุด</button><button onclick="window.pick(${i},'least')" class="font-normal text-[11px] px-3 py-1.5 rounded-lg transition-all ${lBtnStyle}">↓ น้อยสุด</button></div></div>`;
+                }).join('');
+            }
+            document.getElementById('prevBtn').disabled = window.currentQIndex === 0;
+            const nb = document.getElementById('nextBtn'); if(nb) { nb.disabled = !(ans.most && ans.least); nb.innerHTML = window.currentQIndex === 19 ? 'ดูผลการประเมิน' : 'ถัดไป'; }
+        };
+
+        window.pick = (idx, mode) => {
+            const q = discQuestionsData[window.currentQIndex]; const type = q.choices[idx].type; const ans = window.assessmentAnswers[window.currentQIndex];
+            if (mode === 'most') { ans.most = type; speak(`${q.choices[idx].text} มากที่สุด`); }
+            else { ans.least = type; speak(`${q.choices[idx].text} น้อยที่สุด`); }
+            renderQuestion();
+        };
+
+        window.nextQuestion = () => { if (window.currentQIndex < 19) { window.currentQIndex++; renderQuestion(true); } else calc(); };
+        window.prevQuestion = () => { if (window.currentQIndex > 0) { window.currentQIndex--; renderQuestion(true); } };
+
+        const calc = async () => {
+            document.getElementById('globalLoader').classList.remove('hidden');
+            const sc = { D: 0, i: 0, S: 0, C: 0 }; window.assessmentAnswers.forEach(a => { if (a.most) sc[a.most]++; if (a.least) sc[a.least]--; });
+            const srt = Object.entries(sc).sort((a,b) => b[1] - a[1]); const p = srt[0][0], s = srt[1][0];
+            try {
+                await updateDoc(doc(db, COLLECTION_NAME, window.currentMember.docId), { DISC: p, DISC2: s, updatedAt: serverTimestamp() });
+                await addDoc(collection(db, 'DISC_Results'), { EmpID: window.currentMember.EmpID, FullName: window.currentMember.FullName, DISC: p, DISC2: s, timestamp: serverTimestamp() });
+                window.currentMember.DISC = p; window.currentMember.DISC2 = s; showMainPage(window.currentMember); window.switchTab('user');
+            } catch (e) { showMessage("เกิดข้อผิดพลาดในการบันทึก", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
+        };
+
+        window.confirmReset = async () => {
+            if(!confirm("ต้องการล้างข้อมูลและเริ่มทำแบบทดสอบใหม่หรือไม่?")) return;
+            document.getElementById('globalLoader').classList.remove('hidden');
+            try {
+                const snapRes = await getDocs(query(collection(db, 'DISC_Results'), where("EmpID", "==", window.currentMember.EmpID)));
+                await Promise.all(snapRes.docs.map(d => deleteDoc(doc(db, 'DISC_Results', d.id))));
+                await updateDoc(doc(db, COLLECTION_NAME, window.currentMember.docId), { DISC: null, DISC2: null });
+                window.currentMember.DISC = null; window.currentMember.DISC2 = null; 
+                showMainPage(window.currentMember); 
+                window.switchTab('user');
+            } catch (e) { showMessage("ผิดพลาดในการรีเซ็ต", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
+        };
+
+        const initApp = async () => {
+            document.getElementById('openModalBtn').onclick = () => document.getElementById('regModalBackdrop').classList.remove('hidden');
+            document.getElementById('submitIdBtn').onclick = handleIdSubmission;
+            document.getElementById('EmpID').oninput = (e) => { e.target.value = e.target.value.replace(/[^0-9]/g, ''); document.getElementById('submitIdBtn').disabled = e.target.value.length !== 5; };
+            const f = document.getElementById('friendGroupFilter'); if(f) f.onchange = applyFilters;
             lucide.createIcons();
         };
         initApp();
-        async function fetchIP() { try { const r = await fetch('https://api.ipify.org?format=json'); const d = await r.json(); userIP = d.ip; } catch { userIP = "unknown"; } }
     </script>
 </body>
 </html>
