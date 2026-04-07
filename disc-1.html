@@ -112,6 +112,7 @@
             text-align: center; padding: 4px 2px;
         }
         .bottom-nav-item.active { color: #f97316 !important; }
+        .bottom-nav-item.active i { stroke: #f97316 !important; }
         .bottom-nav-item span { font-size: 10px; line-height: 12px; display: block; max-width: 70px; word-wrap: break-word; margin-top: 2px; }
 
         .choice-card { transition: all 0.3s ease; border-width: 2px; border-style: solid; }
@@ -171,8 +172,8 @@
         .pagination-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
         .disc-circle {
-            width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            margin: 0 auto; color: white; font-weight: 700; font-size: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto; color: white; font-weight: 700; font-size: 11px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
     </style>
 </head>
@@ -199,9 +200,8 @@
             <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc.jpg?alt=media&token=328a617d-07b1-419b-bc5d-00a85dc455e2" class="w-full h-auto block">
         </div>
         <div class="w-full px-8 py-6 flex flex-col items-center space-y-5">
-            <!-- Adjusted: Button starts as disabled and spinning -->
             <button id="openModalBtn" disabled class="btn-standard w-[45%] bg-blue-600 hover:bg-blue-700 text-white shadow-md active:scale-[0.97]">
-                <i data-lucide="loader" id="loginIcon" class="w-5 h-5 animate-spin"></i><span id="loginText">ลงทะเบียนเข้าสู่ระบบ</span>
+                <i data-lucide="loader" id="loginIcon" class="w-5 h-5 animate-spin"></i><span id="loginText">ลงทะเบียน</span>
             </button>
             <p class="text-[11px] text-gray-400 text-center leading-relaxed">กรุณาลงทะเบียนเพื่อบันทึกข้อมูล</p>
         </div>
@@ -210,7 +210,8 @@
 
     <!-- Main Page -->
     <div id="mainDiscPage" class="w-full max-w-[500px] flex flex-col bg-white min-h-screen relative hidden">
-        <div class="w-full px-6 flex justify-between items-center bg-orange-500 text-white shadow-md z-[20] h-[88px] pt-2">
+        <!-- Adjusted: pt-[11px] instead of pt-2 (+3px) -->
+        <div class="w-full px-6 flex justify-between items-center bg-orange-500 text-white shadow-md z-[20] h-[88px] pt-[11px]">
             <div class="flex items-center h-full">
                 <div class="flex flex-col justify-center">
                     <h1 id="welcomeUser" class="text-[15px] font-normal tracking-tight leading-none mb-1">พนักงาน</h1>
@@ -239,7 +240,7 @@
                 <div class="w-full flex justify-center"><img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-overall.jpg?alt=media&token=91607be6-5038-4509-afe7-6de5f6bb91e5" class="max-w-full h-auto block"></div>
                 <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm text-left">
                     <h3 class="text-[16px] font-bold text-slate-800 mb-3 text-center"><span class="disc-brand">DiSC</span> คืออะไร</h3>
-                    <p class="text-[13px] text-slate-500 leading-relaxed">
+                    <p id="homeDiscDesc" class="text-[13px] text-slate-500 leading-relaxed text-center">
                         DiSC คือรูปแบบพฤติกรรมที่เกิดจากความสัมพันธ์ระหว่างการตอบสนองของคนต่อสิ่งเร้าหรือต่อสภาพแวดล้อม ก่อให้เกิดพฤติกรรมรูปแบบต่างๆ เพื่อให้ง่ายต่อการจดจำและทำความเข้าใจ
                     </p>
                 </div>
@@ -267,8 +268,8 @@
                     <div id="profilePersonalSummary" class="text-[12px] text-slate-600 px-3 leading-relaxed pt-3 border-t border-slate-100 mt-4 text-left italic"></div>
                 </div>
                 
-                <div id="noDiscResult" class="bg-orange-50 border border-orange-100 p-6 rounded-2xl">
-                    <p class="text-sm text-orange-700">คุณยังไม่ได้ทำแบบทดสอบ</p>
+                <div id="noDiscResult" class="bg-orange-50 border border-orange-100 p-6 rounded-2xl text-center">
+                    <p class="text-[13px] text-orange-700">คุณยังไม่ได้ทำแบบทดสอบ</p>
                     <button onclick="startAssessmentFlow()" class="mt-4 btn-standard bg-[#f97316] text-white px-8 h-[54px]"><i data-lucide="play"></i><span>เริ่มทำแบบประเมิน</span></button>
                 </div>
                 
@@ -285,7 +286,7 @@
                         <h2 class="insight-title"><i data-lucide="heart" class="text-red-500"></i> III. Build Better Relationships</h2>
                         <div id="relationshipsContent" class="space-y-4 text-[13px]"></div>
                     </div>
-                    <button onclick="confirmReset()" class="mt-8 btn-standard bg-white border border-red-200 text-red-500 w-full h-[54px]"><i data-lucide="rotate-ccw"></i><span>Reset DiSC</span></button>
+                    <!-- Reset Button removed as requested -->
                 </div>
             </div>
 
@@ -297,10 +298,10 @@
                     <div class="space-y-4 bg-slate-50 p-5 rounded-xl border border-slate-100 mb-6">
                         <div class="flex flex-col gap-1">
                             <label class="text-[11px] font-bold text-slate-500 uppercase tracking-wide">สังกัดทีม</label>
-                            <select id="friendGroupFilter" class="reg-input-field bg-white text-[13px]"><option value="">เลือกสังกัดทีมทั้งหมด</option></select>
+                            <select id="friendGroupFilter" class="reg-input-field bg-white text-[12px]"><option value="">เลือกสังกัดทีมทั้งหมด</option></select>
                         </div>
                     </div>
-                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm mb-6 flex justify-center"><div class="w-full max-w-[320px]"><canvas id="friendsRadarChart"></canvas></div></div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm mb-6 flex justify-center"><div class="w-full max-w-[300px]"><canvas id="friendsRadarChart"></canvas></div></div>
                     <div class="overflow-x-auto rounded-xl border border-slate-200">
                         <table class="custom-table" id="friendsTable">
                             <thead><tr><th>ชื่อ-นามสกุล</th><th class="text-center">DiSC Style</th><th class="text-center">Action</th></tr></thead>
@@ -308,7 +309,7 @@
                         </table>
                     </div>
                     <div class="flex justify-between items-center mt-6">
-                        <span id="pageInfo" class="text-[11px] font-medium text-slate-500">Page 1 of 1</span>
+                        <span id="pageInfo" class="text-[10px] font-medium text-slate-500">Page 1 of 1</span>
                         <div class="flex gap-2">
                             <button id="prevFriendPage" class="pagination-btn" disabled>ก่อนหน้า</button>
                             <button id="nextFriendPage" class="pagination-btn" disabled>ถัดไป</button>
@@ -329,7 +330,7 @@
                             <span id="teamSubGroupDisplay" class="text-[12px] text-orange-700 font-medium">ไม่ระบุ</span>
                         </div>
                     </div>
-                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm mb-6 flex justify-center"><div class="w-full max-w-[320px]"><canvas id="teamRadarChart"></canvas></div></div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm mb-6 flex justify-center"><div class="w-full max-w-[300px]"><canvas id="teamRadarChart"></canvas></div></div>
                     <div class="overflow-x-auto rounded-xl border border-slate-200">
                         <table class="custom-table" id="teamTable">
                             <thead><tr><th>ชื่อ-นามสกุล</th><th class="text-center">DiSC Style</th><th class="text-center">Action</th></tr></thead>
@@ -337,7 +338,7 @@
                         </table>
                     </div>
                     <div class="flex justify-between items-center mt-6">
-                        <span id="teamPageInfo" class="text-[11px] font-medium text-slate-500">Page 1 of 1</span>
+                        <span id="teamPageInfo" class="text-[10px] font-medium text-slate-500">Page 1 of 1</span>
                         <div class="flex gap-2">
                             <button id="prevTeamPage" class="pagination-btn" disabled>ก่อนหน้า</button>
                             <button id="nextTeamPage" class="pagination-btn" disabled>ถัดไป</button>
@@ -361,8 +362,8 @@
                         <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
                             <p class="text-[12px] text-slate-600 mb-4">แทนรูปแบบพฤติกรรมการตอบสนองของคน แบ่งได้เป็น 2 รูปแบบ:</p>
                             <div class="grid grid-cols-2 gap-4">
-                                <div class="p-3 bg-orange-50 rounded-xl border border-orange-100 text-center"><span class="block font-bold text-orange-600 text-[12px] mb-1 uppercase tracking-wider">ACTIVE</span><span class="text-[10px] text-slate-500 leading-tight">เชิงรุก บุกเบิก<br>(ตัวอย่างเช่น การพูด)</span></div>
-                                <div class="p-3 bg-blue-50 rounded-xl border border-blue-100 text-center"><span class="block font-bold text-blue-600 text-[12px] mb-1 uppercase tracking-wider">PASSIVE</span><span class="text-[10px] text-slate-500 leading-tight">ตั้งรับ สนับสนุน<br>(ตัวอย่างเช่น การฟัง)</span></div>
+                                <div class="p-3 bg-orange-50 rounded-xl border border-orange-100 text-center"><span class="block font-bold text-orange-600 text-[11px] mb-1 uppercase tracking-wider">ACTIVE</span><span class="text-[10px] text-slate-500 leading-tight">เชิงรุก บุกเบิก<br>(ตัวอย่างเช่น การพูด)</span></div>
+                                <div class="p-3 bg-blue-50 rounded-xl border border-blue-100 text-center"><span class="block font-bold text-blue-600 text-[10px] mb-1 uppercase tracking-wider">PASSIVE</span><span class="text-[10px] text-slate-500 leading-tight">ตั้งรับ สนับสนุน<br>(ตัวอย่างเช่น การฟัง)</span></div>
                             </div>
                         </div>
                     </div>
@@ -371,8 +372,8 @@
                         <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
                             <p class="text-[12px] text-slate-600 mb-4">แทนสภาพแวดล้อมในการทำงาน โดยแบ่งเป็น 2 ด้าน:</p>
                             <div class="grid grid-cols-2 gap-4">
-                                <div class="p-3 bg-green-50 rounded-xl border border-green-100 text-center"><span class="block font-bold text-green-600 text-[12px] mb-1 uppercase tracking-wider">TASK</span><span class="text-[10px] text-slate-500 leading-tight">เน้นงาน หรือผลงานที่วัดและจับต้องได้</span></div>
-                                <div class="p-3 bg-red-50 rounded-xl border border-red-100 text-center"><span class="block font-bold text-red-600 text-[12px] mb-1 uppercase tracking-wider">PEOPLE</span><span class="text-[10px] text-slate-500 leading-tight">เน้นคน ความสัมพันธ์ หรือความรู้สึก</span></div>
+                                <div class="p-3 bg-green-50 rounded-xl border border-orange-100 text-center"><span class="block font-bold text-green-600 text-[11px] mb-1 uppercase tracking-wider">TASK</span><span class="text-[10px] text-slate-500 leading-tight">เน้นงาน หรือผลงานที่วัดและจับต้องได้</span></div>
+                                <div class="p-3 bg-red-50 rounded-xl border border-red-100 text-center"><span class="block font-bold text-red-600 text-[11px] mb-1 uppercase tracking-wider">PEOPLE</span><span class="text-[10px] text-slate-500 leading-tight">เน้นคน ความสัมพันธ์ หรือความรู้สึก</span></div>
                             </div>
                         </div>
                     </div>
@@ -386,7 +387,7 @@
                         <div class="bg-white p-4 rounded-xl border-l-4 border-[#fdd704] shadow-sm"><h4 class="text-c font-bold text-[14px]">Compliance (C)</h4><p class="text-[12px] text-slate-500 mt-1">PASSIVE + TASK: คือพฤติกรรมตอบสนองแบบเน้นงาน รักษามาตรฐานผลงาน ตรวจสอบความถูกต้อง และเน้นระบบข้อมูล</p></div>
                     </div>
                 </div>
-                <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 italic text-slate-500 text-[12px] leading-relaxed text-center">การศึกษาพฤติกรรมเราจะไม่ตัดสินว่าแบบใดดีหรือแบบใดไม่ดี แต่เราจะพิจารณาว่าจะใช้รูปแบบพฤติกรรมแบบใดให้เกิดประสิทธิภาพในแต่ละสถานการณ์... <span class="font-bold">PEOPLE PUZZLE</span></div>
+                <div class="p-6 bg-slate-50 rounded-2xl border border-slate-100 italic text-slate-500 text-[11px] leading-relaxed text-center">การศึกษาพฤติกรรมเราจะไม่ตัดสินว่าแบบใดดีหรือแบบใดไม่ดี แต่เราจะพิจารณาว่าจะใช้รูปแบบพฤติกรรมแบบใดให้เกิดประสิทธิภาพในแต่ละสถานการณ์... <span class="font-bold">PEOPLE PUZZLE</span></div>
             </div>
         </div>
 
@@ -407,29 +408,29 @@
             <div class="flex justify-end px-4 py-1"><button onclick="toggleMute()" class="p-2 text-slate-400"><i id="muteIconAssess" data-lucide="volume-2" class="w-6 h-6"></i></button></div>
         </div>
         <div id="assessmentContainer" class="flex-1 overflow-y-auto px-6 py-4 space-y-8 pb-32">
-            <div id="assessmentIntro" class="space-y-6 text-center pt-10">
+            <div id="assessmentIntro" class="space-y-6 text-center pt-10 px-2">
                 <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[80%] mx-auto mb-2">
-                <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FCarl%20Jung.jpg?alt=media&token=4f683dc5-0f68-432d-b15c-679db17ee7f7" class="w-28 h-28 rounded-full mx-auto mb-4 object-cover shadow-md">
+                <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FCarl%20Jung.jpg?alt=media&token=4f683dc5-0f68-432d-b15c-679db17ee7f7" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
                 <div class="text-[13px] text-slate-500 text-left space-y-4 bg-slate-50 p-6 rounded-2xl leading-relaxed">
-                    <h2 class="text-[18px] font-bold text-center text-slate-800">DiSC 4 จริตพิชิตใจ</h2>
+                    <h2 class="text-[17px] font-bold text-center text-slate-800">DiSC 4 จริตพิชิตใจ</h2>
                     <p>คาร์ล จุง (Carl Jung) บิดาแห่งจิตวิทยาเชิงลึก ได้กล่าวไว้ว่า "การรู้จักตัวเองคือจุดเริ่มต้นของปัญญาที่แท้จริง" DiSC คือเครื่องมือที่จะช่วยถอดรหัสพฤติกรรมของคุณ เพื่อให้คุณเข้าใจจุดแข็ง และพื้นที่ในการพัฒนาของตัวเองได้อย่างแม่นยำ</p>
-                    <p class="text-orange-600 font-medium">คำแนะนำ: เลือกคำตอบที่ตรงกับตัวตนของคุณมากที่สุดในสถานการณ์การทำงาน โดยไม่ต้องใช้เวลาคิดนานเกินไป</p>
+                    <p class="text-orange-600 font-medium text-center">คำแนะนำ: เลือกคำตอบที่ตรงกับตัวตนของคุณมากที่สุดในสถานการณ์การทำงาน โดยไม่ต้องใช้เวลาคิดนานเกินไป</p>
                 </div>
                 <div class="flex gap-4 pt-4">
                     <button onclick="exitAssessment()" class="btn-standard flex-1 bg-slate-500 text-white h-[54px]"><i data-lucide="x-circle"></i><span class="text-[13px]">กลับหน้าหลัก</span></button>
                     <button onclick="beginActualTest()" class="btn-standard flex-[2] bg-orange-500 text-white h-[54px]"><span class="text-[13px]">เข้าสู่การทดสอบ</span><i data-lucide="play"></i></button>
                 </div>
             </div>
-            <div id="assessmentQuestion" class="hidden space-y-8 mt-[15px]">
+            <div id="assessmentQuestion" class="hidden space-y-8 mt-[15px] px-2">
                 <div class="text-center">
                     <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[70%] mx-auto mb-6">
                     <span class="text-orange-500 font-normal text-[11px] uppercase tracking-widest">Question <span id="qNumber">1</span> of 20</span>
-                    <h3 id="qPrompt" class="text-[16px] font-normal text-slate-700 mt-2 leading-snug"></h3>
+                    <h3 id="qPrompt" class="text-[15px] font-normal text-slate-700 mt-2 leading-snug"></h3>
                 </div>
                 <div id="qChoices" class="space-y-4"></div>
                 <div class="flex justify-between pt-4 gap-4">
-                    <button onclick="prevQuestion()" id="prevBtn" class="btn-standard px-6 bg-gray-100 text-slate-400 text-[13px]">ก่อนหน้า</button>
-                    <button id="nextBtn" disabled onclick="nextQuestion()" class="btn-standard px-10 bg-orange-500 text-white text-[13px]">ถัดไป</button>
+                    <button onclick="prevQuestion()" id="prevBtn" class="btn-standard px-6 bg-gray-100 text-slate-400 text-[12px]">ก่อนหน้า</button>
+                    <button id="nextBtn" disabled onclick="nextQuestion()" class="btn-standard px-10 bg-orange-500 text-white text-[12px]">ถัดไป</button>
                 </div>
             </div>
         </div>
@@ -440,21 +441,25 @@
         <div class="bg-white w-full max-w-[450px] rounded-[12px] shadow-2xl overflow-hidden modal-enter relative" onclick="event.stopPropagation()">
             <div class="bg-[#0056ff] px-8 py-5 flex justify-between items-center text-white"><span class="font-medium">ลงทะเบียน / เข้าสู่ระบบ</span><button onclick="window.closeRegModal()"><i data-lucide="x" class="w-5 h-5"></i></button></div>
             <div class="p-8">
-                <div id="stepEmployeeId" class="space-y-6">
-                    <div class="text-center"><label class="text-[12px] text-slate-500 uppercase">ระบุรหัสพนักงาน 5 หลัก</label><input type="text" id="EmpID" maxlength="5" inputmode="numeric" placeholder="xxxxx" class="emp-id-input w-full px-4 py-3.5 border rounded-xl text-[18px] text-center mt-2"></div>
+                <div id="stepEmployeeId" class="space-y-6 text-center">
+                    <div><label class="text-[12px] text-slate-500 uppercase">ระบุรหัสพนักงาน 5 หลัก</label><input type="text" id="EmpID" maxlength="5" inputmode="numeric" placeholder="xxxxx" class="emp-id-input w-full px-4 py-3.5 border rounded-xl text-[18px] text-center mt-2"></div>
                     <div class="flex gap-3">
-                        <button onclick="window.closeRegModal()" class="btn-standard bg-slate-500 text-white flex-1"><i data-lucide="x-circle"></i><span>ปิดหน้าต่าง</span></button>
+                        <button onclick="window.closeRegModal()" class="btn-standard bg-slate-500 text-white flex-1"><i data-lucide="x-circle"></i><span>ปิด</span></button>
                         <button id="submitIdBtn" disabled class="btn-standard bg-blue-600 text-white flex-1"><span>ถัดไป</span><i data-lucide="chevron-right"></i></button>
                     </div>
                 </div>
                 <div id="stepSetupProfile" class="hidden space-y-4">
-                    <div class="bg-white p-4 rounded-xl space-y-3 border border-slate-200 text-[13px]"><div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-400">ชื่อ:</span><span id="dispName" class="text-blue-700"></span></div><div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-400">กลุ่มงาน:</span><span id="dispGroup" class="text-slate-700"></span></div><div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-400">หน่วยงาน:</span><span id="dispSubGroup" class="text-slate-700"></span></div></div>
-                    <div class="grid grid-cols-2 gap-4"><input type="password" id="setPin" maxlength="6" inputmode="numeric" placeholder="PIN" class="reg-input-field text-center text-lg tracking-[0.2em]"><input type="password" id="confirmPin" maxlength="6" inputmode="numeric" placeholder="Confirm" class="reg-input-field text-center text-lg tracking-[0.2em]"></div>
+                    <div class="bg-white p-4 rounded-xl space-y-3 border border-slate-200 text-[12px]"><div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-400">ชื่อ:</span><span id="dispName" class="text-blue-700"></span></div><div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-400">กลุ่มงาน:</span><span id="dispGroup" class="text-slate-700"></span></div><div class="flex justify-between border-b border-slate-100 pb-1.5"><span class="text-slate-400">หน่วยงาน:</span><span id="dispSubGroup" class="text-slate-700"></span></div></div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <!-- Numeric check added via javascript -->
+                        <input type="password" id="setPin" maxlength="6" inputmode="numeric" placeholder="PIN 6 หลัก" class="reg-input-field text-center text-lg tracking-[0.2em]">
+                        <input type="password" id="confirmPin" maxlength="6" inputmode="numeric" placeholder="ยืนยัน PIN" class="reg-input-field text-center text-lg tracking-[0.2em]">
+                    </div>
                     <button id="confirmRegBtn" disabled class="btn-standard bg-green-600 text-white w-full">เข้าใช้งาน</button>
                 </div>
                 <div id="stepEnterPinKeypad" class="hidden space-y-6">
                     <div class="text-center space-y-4"><p class="text-[15px]">ยืนยัน PIN, <span id="loginUserName" class="text-blue-700 font-bold"></span></p><div class="flex justify-center gap-2"><div class="pin-input-box" id="pin-0"></div><div class="pin-input-box" id="pin-1"></div><div class="pin-input-box" id="pin-2"></div><div class="pin-input-box" id="pin-3"></div><div class="pin-input-box" id="pin-4"></div><div class="pin-input-box" id="pin-5"></div></div></div>
-                    <div class="grid grid-cols-3 gap-3 max-w-[320px] mx-auto"><button class="keypad-btn" onclick="pressKey('1')">1</button><button class="keypad-btn" onclick="pressKey('2')">2</button><button class="keypad-btn" onclick="pressKey('3')">3</button><button class="keypad-btn" onclick="pressKey('4')">4</button><button class="keypad-btn" onclick="pressKey('5')">5</button><button class="keypad-btn" onclick="pressKey('6')">6</button><button class="keypad-btn" onclick="pressKey('7')">7</button><button class="keypad-btn" onclick="pressKey('8')">8</button><button class="keypad-btn" onclick="pressKey('9')">9</button><button class="keypad-btn" onclick="pressKey('del')"><i data-lucide="delete"></i></button><button class="keypad-btn" onclick="pressKey('0')">0</button><button class="keypad-btn text-red-500" onclick="pressKey('clear')">C</button></div>
+                    <div class="grid grid-cols-3 gap-3 max-w-[320px] mx-auto"><button class="keypad-btn" onclick="pressKey('1')">1</button><button class="keypad-btn" onclick="pressKey('2')">2</button><button class="keypad-btn" onclick="pressKey('3')">3</button><button class="keypad-btn" onclick="pressKey('4')">4</button><button class="keypad-btn" onclick="pressKey('5')">5</button><button class="keypad-btn" onclick="pressKey('6')">6</button><button class="keypad-btn" onclick="pressKey('7')">7</button><button class="keypad-btn" onclick="pressKey('8')">8</button><button class="keypad-btn" onclick="pressKey('9')">9</button><button class="keypad-btn" onclick="pressKey('del')"><i data-lucide="delete" class="w-4 h-4"></i></button><button class="keypad-btn" onclick="pressKey('0')">0</button><button class="keypad-btn text-red-500" onclick="pressKey('clear')">C</button></div>
                     <div class="flex gap-3 mt-4"><button onclick="window.closeRegModal()" class="btn-standard bg-slate-500 text-white flex-1"><i data-lucide="x-circle"></i><span>ยกเลิก</span></button><button id="savePinLoginBtn" class="btn-standard bg-blue-600 text-white flex-1"><i data-lucide="log-in"></i><span>เข้าสู่ระบบ</span></button></div>
                 </div>
             </div>
@@ -465,7 +470,7 @@
     <div id="friendInsightModal" class="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md hidden">
         <div class="bg-white w-full max-w-[450px] max-h-[85vh] rounded-[20px] overflow-hidden flex flex-col shadow-2xl modal-enter">
             <div id="friendModalHeader" class="p-6 text-white text-center relative"><button onclick="closeFriendInsight()" class="absolute right-4 top-4 p-1"><i data-lucide="x" class="w-5 h-5"></i></button><div id="friendModalImg" class="w-20 h-20 rounded-full border-4 border-white/50 mx-auto mb-3 overflow-hidden bg-white shadow-sm"></div><h3 id="friendModalName" class="text-xl font-bold"></h3><p id="friendModalType" class="text-[14px] opacity-90"></p></div>
-            <div id="friendModalContent" class="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50 text-[13px]"></div>
+            <div id="friendModalContent" class="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50 text-[12px]"></div>
             <div class="p-4 bg-white border-t flex justify-center"><button onclick="closeFriendInsight()" class="btn-standard bg-slate-800 text-white w-full h-[50px]">ปิดหน้าต่าง</button></div>
         </div>
     </div>
@@ -482,11 +487,12 @@
         const COLLECTION_NAME = "DISC_Member";
 
         const discPersonalSummaries = {
-            'D': 'คนสไตล์ D คือผู้ที่ขับเคลื่อนด้วยผลลัพธ์ ความเร็ว และความท้าทาย มีพลังในการตัดสินใจและผลักดันงานให้เดินหน้า จุดเด่นคือความเด็ดขาด กล้ารับความเสี่ยง และแก้ปัญหาได้รวดเร็ว...',
-            'i': 'คนสไตล์ i คือผู้ที่ขับเคลื่อนด้วยผู้คน ความสัมพันธ์ และพลังบวก มีเสน่ห์ทางการสื่อสาร สร้างแรงบันดาลใจ และทำให้ทีมมีบรรยากาศสนุก...',
-            'S': 'คนสไตล์ S คือผู้ที่ขับเคลื่อนด้วยความมั่นคง ความกลมกลืน และความสัมพันธ์ที่ดี เป็นคนใจเย็น รับฟังเก่ง และเชื่อถือได้...',
-            'C': 'คนสไตล์ C คือผู้ที่ขับเคลื่อนด้วยความถูกต้อง มาตรฐาน และข้อมูล ชอบคิดวิเคราะห์และทำงานอย่างละเอียด...'
+            'D': 'คนสไตล์ D (Dominance) คือผู้ที่ขับเคลื่อนด้วยผลลัพธ์ ความเร็ว และความท้าทาย มีพลังในการตัดสินใจและผลักดันงานให้เดินหน้า จุดเด่นคือความเด็ดขาด กล้ารับความเสี่ยง และแก้ปัญหาได้รวดเร็ว แต่ก็อาจดูเร่งรัด ข้ามรายละเอียด หรือกดดันคนอื่นโดยไม่ตั้งใจ การตัดสินใจมักเกิดจากภาพรวมและความมั่นใจส่วนตัว ทำงานได้ดีในสถานการณ์ที่ต้องการความชัดเจนและความเร็ว สิ่งที่ต้องพัฒนาคือการฟัง เปิดรับความคิดเห็น และใส่ใจผลกระทบต่อทีม สิ่งที่ต้องระวังคืออารมณ์ ความหุนหัน และการใช้อำนาจมากเกินไปจนทำให้คนรอบตัวรู้สึกถูกกดทับ',
+            'i': 'คนสไตล์ i (Influence) คือผู้ที่ขับเคลื่อนด้วยผู้คน ความสัมพันธ์ และพลังบวก มีเสน่ห์ทางการสื่อสาร สร้างแรงบันดาลใจ และทำให้ทีมมีบรรยากาศสนุก จุดเด่นคือความเป็นมิตร ความคิดสร้างสรรค์ และความสามารถในการเชื่อมคนเข้าด้วยกัน แต่ก็อาจขาดวินัย ทำงานไม่ต่อเนื่อง หรือสัญญามากเกินไป การตัดสินใจมักอิงความรู้สึกและผลต่อความสัมพันธ์ ทำงานร่วมกับคนอื่นได้ดีในงานที่ต้องการพลังและการมีส่วนร่วม สิ่งที่ต้องพัฒนาคือการจัดลำดับความสำคัญและการติดตามงานให้จบ สิ่งที่ต้องระวังคือการหลีกเลี่ยงงานละเอียดและการใช้ออมรณ์มากเกินไป',
+            'S': 'คนสไตล์ S (Steadiness) คือผู้ที่ขับเคลื่อนด้วยความมั่นคง ความกลมกลืน และความสัมพันธ์ที่ดี เป็นคนใจเย็น รับฟังเก่ง และเชื่อถือได้ จุดเด่นคือความสม่ำเสมอ ความอดทน และความสามารถในการสนับสนุนผู้อื่น แต่ก็อาจลังเล ไม่กล้าปฏิเสธ และไม่ชอบการเปลี่ยนแปลงเร็ว การตัดสินใจมักใช้เวลาเพราะคิดถึงผลกระทบต่อคนอื่น ทำงานได้ดีในงานที่ต้องการความเสถียรและเป็นตัวเชื่อมทีม สิ่งที่ต้องพัฒนาคือความกล้าแสดงออก การตั้งขอบเขต และการรับมือกับความเปลี่ยนแปลง สิ่งที่ต้องระวังคือการเก็บความรู้สึกจนเกิดความเครียดและงานล้นตัว',
+            'C': 'คนสไตล์ C (Conscientiousness) คือผู้ที่ขับเคลื่อนด้วยความถูกต้อง มาตรฐาน และข้อมูล ชอบคิดวิเคราะห์และทำงานอย่างละเอียด จุดเด่นคือความแม่นยำ การวางระบบ และคุณภาพงานที่สูง แต่ก็อาจใช้เวลานาน กลัวความผิดพลาด และดูเย็นชาต่อคนอื่น การตัดสินใจมักต้องการข้อมูลครบถ้วนและเหตุผลที่หนักแน่น ทำงานได้ดีในงานที่ต้องการความละเอียดและความเป็นระบบ สิ่งที่ต้องพัฒนาคือความยืดหยุ่น การสื่อสารให้กระชับ และการยอมรับความไม่สมบูรณ์แบบ สิ่งที่ต้องระวังคือการคิดมากเกินไปและตั้งมาตรฐานสูงจนกดดันตัวเอง'
         };
+
         const discDrives = { 'D': [{ title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การทำงานที่มุ่งไปสู่ผลลัพธ์อย่างชัดเจน (Results)', 'การตัดสินใจและลงมือทำอย่างรวดเร็ว (Action)', 'ความท้าทายกับสิ่งไม่มีประสิทธิภาพหรือไม่ก่อให้เกิดผลลัพธ์ (Challenge)'], color: '#05ae4b' }, { title: 'แรงจูงใจ', items: ['โอกาสได้รับผลตอบแทนก้อนใหญ่', 'การแข่งขัน', 'การได้เป็นผู้นำหรือควบคุมสถานการณ์'], color: '#05ae4b' }, { title: 'แรงกดดัน', items: ['ขาดอำนาจการควบคุม หรือขาดอิสระ', 'เมื่องานไม่มีความคืบหน้าที่ชัดเจน', 'การตัดสินใจที่ระมัดระวังเกินไปหรือใช้เวลานาน'], color: '#05ae4b' }], 'i': [{ title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การรักษาพลังในการทำงาน และความกระตือรือร้น (Enthusiasm)', 'การลงมือทำอย่างรวดเร็วต่อโอกาสใหม่ๆ ที่น่าสนใจ (Action)', 'การให้ความร่วมมือและเข้าสังคมกับผู้อื่น (Collaboration)'], color: '#cb3743' }, { title: 'แรงจูงใจ', items: ['การได้รับการยอมรับหรือได้รับความสนใจต่อหน้าสาธารณะ', 'การทำงานร่วมกันหรือกิจกรรมเข้าสังคม', 'สภาพแวดล้อมที่เต็มไปด้วยพลังและสีสัน'], color: '#cb3743' }, { title: 'แรงกดดัน', items: ['งานที่ช้า น่าเบื่อ หรือซ้ำซาก', 'เมื่อถูกแยกออกจากกลุ่ม / รู้สึกโดดเดี่ยว', 'บรรยากาศการทำงานที่ขาดสีสัน และการมองโลกในแง่ร้าย'], color: '#cb3743' }], 'S': [{ title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การสนับสนุนและความอดทนต่อผู้อื่น (Support)', 'การทำงานร่วมกัน การให้ความร่วมมือและแบ่งปัน (Collaboration)', 'ความน่าเชื่อถือ / ความใจเย็นเพื่อสร้างความรู้สึกมั่นคง (Stability)'], color: '#13a1d3' }, { title: 'แรงจูงใจ', items: ['การได้ช่วยเหลือผู้อื่น', 'การได้รับคำขอบคุณ หรือได้รับการเห็นคุณค่าอย่างจริงใจ', 'วัฒนธรรมการทำงานที่อบอุ่นและเข้าอกเข้าใจ'], color: '#13a1d3' }, { title: 'แรงกดดัน', items: ['ความตึงเครียด การขาดความกลมเกลียว หรือการถูกวิจารณ์', 'ความไม่มั่นคง ความไม่แน่นอน หรือความคาดหวังที่ไม่ชัดเจน', 'การที่ต้องทำงานภายใต้ความกดดัน'], color: '#13a1d3' }], 'C': [{ title: 'สิ่งที่ให้ความสำคัญในการทำงาน', items: ['ให้ความสำคัญกับความถูกต้องและงานที่มีคุณภาพสูง (Accuracy)', 'การวางระบบและทำงานอย่างมีขั้นตอน (Stability)', 'การตั้งคำถามหรือท้าทายแนวคิดที่ไม่สมบูรณ์แบบ (Challenge)'], color: '#fdd704' }, { title: 'แรงจูงใจ', items: ['การแก้ปัญหาที่ท้าทายหรือซับซ้อน', 'การได้วางโครงสร้างหรือระบบการทำงาน', 'โอกาสในการพัฒนาตนเองจนเป็นผู้เชี่ยวชาญ'], color: '#fdd704' }, { title: 'แรงกดดัน', items: ['กฎเกณฑ์หรือมาตรฐานที่ไม่ถูกต้อง / ไม่สม่ำเสมอ', 'การถูกตำหนิ / ความไม่พร้อม / ไร้ความสามารถ', 'ต้องลดมาตรฐานในการทำงาน'], color: '#fdd704' }] };
         const discBenefits = { 'D': { view: 'มีความมั่นใจ, พูดตรง, เด็ดขาด, ชอบเสี่ยง', judge: 'ความสามารถในการทำผลงานให้สำเร็จ', influence: 'ความกล้า, ความเด็ดขาด, การแข่งขัน', limit: 'ขาดการใส่ใจผู้อื่น, ความใจร้อน, อาจดูแข็งและไม่ละเอียดอ่อน', effective: 'มีความอดทน, ความเห็นอกเห็นใจ', dark: 'ความต้องการเอาชนะ ยิ่งนำไปสู่สถานการณ์แบบแพ้-ชนะ', pressure: 'หงุดหงิดง่ายและเรียกร้องมากขึ้น' }, 'i': { view: 'มีเสน่ห์, กระตือรือร้น, ชอบเข้าสังคม, มองโลกในแง่ดี, พูดเก่ง', judge: 'ความเป็นมิตร, ทักษะทางสังคม, ความกระตือรือร้น', influence: 'เสน่อห์, การมองโลกในแง่ดี, พลัง', limit: 'หุนหันพลันแล่น, ขาดการจัดการที่เป็นระบบ, ขาดความต่อเนื่อง', effective: 'มีความเป็นกลางมากขึ้น, การติดตามงานให้จบ', dark: 'การมองโลกในแง่ดีเกินไป, การใช้คำชมเกินความจำเป็น', pressure: 'วุ่นวาย, ขาดระบบ และแสดงออกมากเกินไป' }, 'S': { view: 'มีความอดทน, อารมณ์นิ่ง, การเข้าใจผู้อื่น, วิธีการที่นุ่มนวล, ความอ่อนน้อม', judge: 'ความน่าเชื่อถือ, ความจริงใจ', influence: 'ความเอื้อเฟื้อเผื่อแผ่, การทำงานอย่างสม่ำเสมอ', limit: 'ยอมตามคนอื่นมากเกินไป, หลีกเลี่ยงการเปลี่ยนแปลง, ตัดสินใจช้า', effective: 'มีการแสดงความมั่นใจ, เปิดเผยความรู้สึกที่แท้จริง', dark: 'ความน้อมน้อม การเกรงใจแบบเงใจ การประนีประนอมแบบมากเกินไป', pressure: 'เป็นฝ่ายยอม, หลีกเลี่ยงการเปิดเผยความผิดในสิ่งที่ทำลงไป' }, 'C': { view: 'มีความแม่นยำ, การคิดวิเคราะห์, การสงวนท่าที, รักความเป็นระเบียบ', judge: 'ความเชี่ยวชาญ, กระบวนการทำงานที่เป็นระบบ', influence: 'เหตุผลและตรรกะ, มาตรฐานที่เข้มงวด', limit: 'คิดมากเกินไป, ระวังตัวสูง, แยกตัวจากคนอื่น', effective: 'มีการตระหนักถึงความรู้สึกของผู้อื่น, มองให้ไกลเกินกว่าแค่ข้อมูล', dark: 'การวิเคราะห์มากเกินไป ความระมัดระวังในการแสดงออก', pressure: 'ใช้เหตุผลเพื่อกดดันผู้อื่นมากเกินไปจนกลายเป็นยึดติดกฎเกณฑ์' } };
         const discRelationships = { 'D': { relate: ['ใช้เวลาอย่างคุ้มค่า', 'โฟกัสที่ประเด็นหลัก ไม่พูดออกนอกเรื่อง', 'เตรียมรับมือกับความชัดเจนและตรงไปตรงมา'], solving: ['ต้องตระหนักว่าเขามักเลือกทางเลือกที่ท้าทาย และกล้าตัดสินใจ', 'หลีกเลี่ยงข้อเสนอที่ดูไม่มีความเป็นไปได้', 'มองภาพใหญ่และหลีกเลี่ยงการวิเคราะห์ที่มากเกินไป'], stress: ['พูดคุยให้ชัดเจนและตรงไปตรงมา', 'อย่าเพียงยอมตามเขาไปทั้งหมด เพียงเพราะอยากให้บรรยากาศกลับมาสงบ', 'อย่าเอาความตรงของเขามาคิดว่าเป็นเรื่องส่วนตัว'], workingTip: 'ต้องสื่อสารให้ตรง เน้นจุดสำคัญ รวดเร็ว และโฟกัสผลลัพธ์ เพื่อให้เขารู้สึกว่าการทำงานเดินหน้าได้ทันที' }, 'i': { relate: ['เปิดใจและให้ความร่วมมือ', 'เห็นคุณค่าพลังบวกและความกระตือรือร้นของเขา', 'หาวิธีทำให้เขารู้สึกเป็นที่ยอมรับและมีคนชื่นชม'], solving: ['รักษาทัศนคติเชิงบวก พร้อมพิจารณาปัญหาที่อาจเกิดขึ้น', 'ทำให้ชัดเจนว่าคุณเปิดรับการแก้ปัญหาอย่างสร้างสรรค์', 'เตรียมรับมือกับสิ่งที่ไม่คาดคิด'], stress: ['หลีกเลี่ยงสิ่งที่อาจทำให้ความขัดแย้งรุนแรงขึ้น', 'ให้ความสำคัญกับความรู้สึกของเขา', 'ชี้ให้เห็นว่าความสัมพันธ์ยังคงดีต่อกันแม้มีความเห็นต่าง'], workingTip: 'ควรใช้พลังบวก เปิดโอกาสให้เขาแสดงไอเดีย และตอบสนองอย่างทันท่วงที เพื่อให้เขารู้สึกมีส่วนร่วมและพร้อมทำงาน' }, 'S': { relate: ['แสดงความอบอุ่นและความใส่ใจต่อความรู้สึกของเขา', 'เสนอความคิดเห็นอย่างนุ่มนวล', 'ร่วมมือและทำงานเป็นทีมอย่างจริงใจ'], solving: ['เคารพจังหวะการตัดสินใจที่ระมัดระวังของเขา', 'คำนึงถึงความรู้สึกของผู้อื่นในการตัดสินใจ', 'กำหนดกรอบเวลาให้เหมาะสมและตอบโจทย์กับทุกฝ่าย'], stress: ['แก้ไขปัญหาอย่างตรงจุดแต่ไม่เผชิญหน้าหรือใช้อารมณ์', 'หลีกเลี่ยงการกดดันหรือเพิกเฉยต่อความขัดแย้ง', 'แสดงให้เห็นว่าคุณตั้งใจแก้ไขปัญหาร่วมกันอย่างจริงใจ'], workingTip: 'ควรสื่อสารอย่างนุ่มนวล ให้เวลาในการปรับตัว และสร้างบรรยากาศปลอดภัย เพื่อให้เขาสบายใจ และร่วมงานได้อย่างราบรื่น' }, 'C': { relate: ['พูดคุยด้วยข้อมูล ข้อเท็จจริง และตรรกะ', 'อย่ากดดันให้ตัดสินใจทันที', 'เตรียมรับมือกับความสงสัยและคำถามจากเขา'], solving: ['ให้เวลาเขาในการวิเคราะห์', 'แสดงความชื่นชมในตรรกะและเหตุผลของเขา', 'อย่าให้เขาติดอยู่ในรายละเอียดนานเกินไป'], stress: ['สนับสนุนความคิดของเขาด้วยข้อมูล', 'ให้พื้นที่เขาได้คิดและประมวลสถานการณ์ก่อนเผชิญหน้ากับปัญหา', 'หลีกเลี่ยงการใช้อารมณ์หรือการกดดัน'], workingTip: 'ควรใช้ข้อมูลชัดเจน เหตุผลเป็นระบบ และให้เวลาในการวิเคราะห์ เพื่อให้เขาตัดสินใจได้อย่างมั่นใจและแม่นยำ' } };
@@ -558,9 +564,9 @@
         const renderInsights = (type) => {
             const drives = discDrives[type], benefits = discBenefits[type], relationships = discRelationships[type], style = discStyles[type];
             if (!drives || !benefits || !relationships) return;
-            const dCon = document.getElementById('drivesContent'); if(dCon) { dCon.innerHTML = ''; drives.forEach(s => { const div = document.createElement('div'); div.className = 'space-y-1'; div.innerHTML = `<h4 class="font-bold text-[13px]" style="color:${style.color}">${s.title}</h4><ul class="list-disc list-inside text-[12px] text-slate-500">${s.items.map(i=>`<li>${i}</li>`).join('')}</ul>`; dCon.appendChild(div); }); }
-            const bCon = document.getElementById('benefitsContent'); if(bCon) { bCon.innerHTML = `<div class="space-y-3 text-[12px] text-slate-600"><p><span class="font-bold" style="color:${style.color}">คุณจะถูกมองว่า...:</span> ${benefits.view}</p><p><span class="font-bold" style="color:${style.color}">ตัดสินผู้อื่นจาก...:</span> ${benefits.judge}</p><p><span class="font-bold" style="color:${style.color}">มีอิทธิพลต่อผู้อื่นด้วย...:</span> ${benefits.influence}</p><p><span class="font-bold" style="color:${style.color}">ข้อจำกัด/สิ่งที่เป็นอุปสรรค:</span> ${benefits.limit}</p><p><span class="font-bold text-green-600">จะมีประสิทธิภาพมากขึ้นหาก...:</span> ${benefits.effective}</p><div class="dark-side-box"><h5 class="font-bold text-orange-800 mb-1 flex items-center gap-1"><i data-lucide="alert-triangle" class="w-4 h-4"></i> Dark Side</h5><p><span class="font-semibold">Over-uses:</span> ${benefits.dark}</p><p><span class="font-semibold">Under Pressure:</span> ${benefits.pressure}</p></div></div>`; }
-            const rCon = document.getElementById('relationshipsContent'); if(rCon) { const listItems = (items) => items.map(it => `<li>${it}</li>`).join(''); rCon.innerHTML = `<div class="space-y-4"><div><h4 class="font-bold text-[13px]" style="color:${style.color}">เมื่อพยายามสร้างความสัมพันธ์</h4><ul class="list-disc list-inside text-[11px] text-slate-500">${listItems(relationships.relate)}</ul></div><div><h4 class="font-bold text-[13px]" style="color:${style.color}">เมื่อมีปัญหาที่ต้องแก้</h4><ul class="list-disc list-inside text-[11px] text-slate-500">${listItems(relationships.solving)}</ul></div><div><h4 class="font-bold text-[13px]" style="color:${style.color}">เมื่อสถานการณ์ตึงเครียด</h4><ul class="list-disc list-inside text-[11px] text-slate-500">${listItems(relationships.stress)}</ul></div><div class="working-tip-box text-[11px] text-green-700 italic bg-green-50 border-green-100"><h5 class="font-bold mb-1 flex items-center gap-1 text-[12px]"><i data-lucide="check-circle" class="w-4 h-4"></i> วิธีทำงานให้ได้ผลกับคนสไตล์ ${discTypeNames[type]}</h5>"${relationships.workingTip}"</div></div>`; }
+            const dCon = document.getElementById('drivesContent'); if(dCon) { dCon.innerHTML = ''; drives.forEach(s => { const div = document.createElement('div'); div.className = 'space-y-1'; div.innerHTML = `<h4 class="font-bold text-[13px]" style="color:${style.color}">${s.title}</h4><ul class="list-disc list-inside text-[13px] text-slate-500">${s.items.map(i=>`<li>${i}</li>`).join('')}</ul>`; dCon.appendChild(div); }); }
+            const bCon = document.getElementById('benefitsContent'); if(bCon) { bCon.innerHTML = `<div class="space-y-3 text-[13px] text-slate-600"><p><span class="font-bold" style="color:${style.color}">คุณจะถูกมองว่า...:</span> ${benefits.view}</p><p><span class="font-bold" style="color:${style.color}">ตัดสินผู้อื่นจาก...:</span> ${benefits.judge}</p><p><span class="font-bold" style="color:${style.color}">มีอิทธิพลต่อผู้อื่นด้วย...:</span> ${benefits.influence}</p><p><span class="font-bold" style="color:${style.color}">ข้อจำกัด/สิ่งที่เป็นอุปสรรค:</span> ${benefits.limit}</p><p><span class="font-bold text-green-600">จะมีประสิทธิภาพมากขึ้นหาก...:</span> ${benefits.effective}</p><div class="dark-side-box"><h5 class="font-bold text-orange-800 mb-1 flex items-center gap-1"><i data-lucide="alert-triangle" class="w-4 h-4"></i> Dark Side</h5><p><span class="font-semibold">Over-uses:</span> ${benefits.dark}</p><p><span class="font-semibold">Under Pressure:</span> ${benefits.pressure}</p></div></div>`; }
+            const rCon = document.getElementById('relationshipsContent'); if(rCon) { const listItems = (items) => items.map(it => `<li>${it}</li>`).join(''); rCon.innerHTML = `<div class="space-y-4"><div><h4 class="font-bold text-[13px]" style="color:${style.color}">เมื่อพยายามสร้างความสัมพันธ์</h4><ul class="list-disc list-inside text-[12px] text-slate-500">${listItems(relationships.relate)}</ul></div><div><h4 class="font-bold text-[13px]" style="color:${style.color}">เมื่อมีปัญหาที่ต้องแก้</h4><ul class="list-disc list-inside text-[12px] text-slate-500">${listItems(relationships.solving)}</ul></div><div><h4 class="font-bold text-[13px]" style="color:${style.color}">เมื่อสถานการณ์ตึงเครียด</h4><ul class="list-disc list-inside text-[12px] text-slate-500">${listItems(relationships.stress)}</ul></div><div class="working-tip-box text-[12px] text-green-700 italic bg-green-50 border-green-100"><h5 class="font-bold mb-1 flex items-center gap-1 text-[12px]"><i data-lucide="check-circle" class="w-4 h-4"></i> วิธีทำงานให้ได้ผลกับคนสไตล์ ${discTypeNames[type]}</h5>"${relationships.workingTip}"</div></div>`; }
             lucide.createIcons();
         };
 
@@ -589,10 +595,10 @@
             setInst(inst);
         };
 
-        const renderFriendsTable = () => { const tb = document.getElementById('friendsTableBody'); if(!tb) return; tb.innerHTML = ''; const start = (currentPage - 1) * itemsPerPage; const items = filteredFriends.slice(start, start + itemsPerPage); if (!items.length) { tb.innerHTML = '<tr><td colspan="3" class="text-center py-12 text-slate-400">ไม่พบข้อมูลเพื่อนพนักงาน</td></tr>'; } else { items.forEach(f => { const tr = document.createElement('tr'); const discType = f.DISC || ''; const typeColor = discType ? discStyles[discType].color : '#94a3b8'; tr.innerHTML = `<td class="font-medium text-slate-700">${f.FullName}</td><td class="text-center">${discType ? `<div class="disc-circle" style="background-color: ${typeColor}">${discType}</div>` : '<span class="text-slate-300">-</span>'}</td><td class="text-center">${discType ? `<button onclick="showFriendInsight('${f.FullName}', '${f.DISC}')" class="text-[11px] bg-orange-100 text-orange-600 px-3 py-1.5 rounded-lg font-bold hover:bg-orange-200 transition-colors">วิธีร่วมงาน</button>` : ''}</td>`; tb.appendChild(tr); }); } const tot = Math.ceil(filteredFriends.length/itemsPerPage) || 1; const pi = document.getElementById('pageInfo'); if(pi) pi.textContent = `Page ${currentPage} of ${tot} (${filteredFriends.length} รายการ)`; const pb = document.getElementById('prevFriendPage'); if(pb) pb.disabled = currentPage === 1; const nb = document.getElementById('nextFriendPage'); if(nb) nb.disabled = currentPage === tot; };
-        const renderTeamTable = () => { const tb = document.getElementById('teamTableBody'); if(!tb) return; tb.innerHTML = ''; const start = (teamCurrentPage - 1) * itemsPerPage; const items = filteredTeam.slice(start, start + itemsPerPage); if (!items.length) { tb.innerHTML = '<tr><td colspan="3" class="text-center py-12 text-slate-400">ไม่พบสมาชิกในหน่วยงานนี้</td></tr>'; } else { items.forEach(f => { const tr = document.createElement('tr'); const discType = f.DISC || ''; const typeColor = discType ? discStyles[discType].color : '#94a3b8'; tr.innerHTML = `<td class="font-medium text-slate-700">${f.FullName}</td><td class="text-center">${discType ? `<div class="disc-circle" style="background-color: ${typeColor}">${discType}</div>` : '<span class="text-slate-300">-</span>'}</td><td class="text-center">${discType ? `<button onclick="showFriendInsight('${f.FullName}', '${f.DISC}')" class="text-[11px] bg-orange-100 text-orange-600 px-3 py-1.5 rounded-lg font-bold hover:bg-orange-200 transition-colors">วิธีร่วมงาน</button>` : ''}</td>`; tb.appendChild(tr); }); } const tot = Math.ceil(filteredTeam.length/itemsPerPage) || 1; const pi = document.getElementById('teamPageInfo'); if (pi) pi.textContent = `Page ${teamCurrentPage} of ${tot} (${filteredTeam.length} รายการ)`; const pb = document.getElementById('prevTeamPage'); if (pb) pb.disabled = teamCurrentPage === 1; const nb = document.getElementById('nextTeamPage'); if (nb) nb.disabled = teamCurrentPage === tot; };
+        const renderFriendsTable = () => { const tb = document.getElementById('friendsTableBody'); if(!tb) return; tb.innerHTML = ''; const start = (currentPage - 1) * itemsPerPage; const items = filteredFriends.slice(start, start + itemsPerPage); if (!items.length) { tb.innerHTML = '<tr><td colspan="3" class="text-center py-12 text-slate-400">ไม่พบข้อมูลเพื่อนพนักงาน</td></tr>'; } else { items.forEach(f => { const tr = document.createElement('tr'); const discType = f.DISC || ''; const typeColor = discType ? discStyles[discType].color : '#94a3b8'; tr.innerHTML = `<td class="font-medium text-slate-700 text-[12px]">${f.FullName}</td><td class="text-center">${discType ? `<div class="disc-circle" style="background-color: ${typeColor}">${discType}</div>` : '<span class="text-slate-300">-</span>'}</td><td class="text-center">${discType ? `<button onclick="showFriendInsight('${f.FullName}', '${f.DISC}')" class="text-[11px] bg-orange-100 text-orange-600 px-3 py-1.5 rounded-lg font-bold hover:bg-orange-200 transition-colors">วิธีร่วมงาน</button>` : ''}</td>`; tb.appendChild(tr); }); } const tot = Math.ceil(filteredFriends.length/itemsPerPage) || 1; const pi = document.getElementById('pageInfo'); if(pi) pi.textContent = `Page ${currentPage} of ${tot} (${filteredFriends.length} รายการ)`; const pb = document.getElementById('prevFriendPage'); if(pb) pb.disabled = currentPage === 1; const nb = document.getElementById('nextFriendPage'); if(nb) nb.disabled = currentPage === tot; };
+        const renderTeamTable = () => { const tb = document.getElementById('teamTableBody'); if(!tb) return; tb.innerHTML = ''; const start = (teamCurrentPage - 1) * itemsPerPage; const items = filteredTeam.slice(start, start + itemsPerPage); if (!items.length) { tb.innerHTML = '<tr><td colspan="3" class="text-center py-12 text-slate-400">ไม่พบสมาชิกในหน่วยงานนี้</td></tr>'; } else { items.forEach(f => { const tr = document.createElement('tr'); const discType = f.DISC || ''; const typeColor = discType ? discStyles[discType].color : '#94a3b8'; tr.innerHTML = `<td class="font-medium text-slate-700 text-[12px]">${f.FullName}</td><td class="text-center">${discType ? `<div class="disc-circle" style="background-color: ${typeColor}">${discType}</div>` : '<span class="text-slate-300">-</span>'}</td><td class="text-center">${discType ? `<button onclick="showFriendInsight('${f.FullName}', '${f.DISC}')" class="text-[11px] bg-orange-100 text-orange-600 px-3 py-1.5 rounded-lg font-bold hover:bg-orange-200 transition-colors">วิธีร่วมงาน</button>` : ''}</td>`; tb.appendChild(tr); }); } const tot = Math.ceil(filteredTeam.length/itemsPerPage) || 1; const pi = document.getElementById('teamPageInfo'); if (pi) pi.textContent = `Page ${teamCurrentPage} of ${tot} (${filteredTeam.length} รายการ)`; const pb = document.getElementById('prevTeamPage'); if (pb) pb.disabled = teamCurrentPage === 1; const nb = document.getElementById('nextTeamPage'); if (nb) nb.disabled = teamCurrentPage === tot; };
 
-        window.showFriendInsight = (name, type) => { window.speechSynthesis.cancel(); const modal = document.getElementById('friendInsightModal'); const st = discStyles[type] || { color: '#64748b' }; const relations = discRelationships[type]; const header = document.getElementById('friendModalHeader'); if(header) header.style.backgroundColor = st.color; const imgBox = document.getElementById('friendModalImg'); if(imgBox) imgBox.innerHTML = `<img src="${discTypeImages[type]}" class="w-full h-full object-cover">`; const nameBox = document.getElementById('friendModalName'); if(nameBox) nameBox.textContent = name; const typeBox = document.getElementById('friendModalType'); if(typeBox) typeBox.textContent = discTypeNames[type] || type; const listItems = (items) => items ? items.map(it => `<li>${it}</li>`).join('') : ''; const content = document.getElementById('friendModalContent'); if(content) { content.innerHTML = `<div class="bg-white p-4 rounded-xl text-[13px] text-slate-600 italic border border-slate-100 shadow-sm leading-relaxed">"${discPersonalSummaries[type]}"</div><div class="space-y-4"><h4 class="font-bold text-[13px]" style="color:${st.color}">วิธีร่วมงานให้ได้ผล</h4><div class="bg-white p-4 rounded-xl border-l-4 border-slate-200"><p class="font-bold text-[12px] mb-1">การสร้างความสัมพันธ์</p><ul class="list-disc list-inside text-[12px] text-slate-500">${listItems(relations?.relate)}</ul></div><div class="working-tip-box text-[12px] text-green-700 italic border-green-100 bg-green-50">"${relations?.workingTip || '-'}"</div></div>`; } if(modal) modal.classList.remove('hidden'); lucide.createIcons(); speak(`นี่คือวิธีร่วมงานกับ ${name} สไตล์ ${discTypeNames[type] || type} โดยสรุปคือ ${discPersonalSummaries[type]}`); };
+        window.showFriendInsight = (name, type) => { window.speechSynthesis.cancel(); const modal = document.getElementById('friendInsightModal'); const st = discStyles[type] || { color: '#64748b' }; const relations = discRelationships[type]; const header = document.getElementById('friendModalHeader'); if(header) header.style.backgroundColor = st.color; const imgBox = document.getElementById('friendModalImg'); if(imgBox) imgBox.innerHTML = `<img src="${discTypeImages[type]}" class="w-full h-full object-cover">`; const nameBox = document.getElementById('friendModalName'); if(nameBox) nameBox.textContent = name; const typeBox = document.getElementById('friendModalType'); if(typeBox) typeBox.textContent = discTypeNames[type] || type; const listItems = (items) => items ? items.map(it => `<li>${it}</li>`).join('') : ''; const content = document.getElementById('friendModalContent'); if(content) { content.innerHTML = `<div class="bg-white p-4 rounded-xl text-[13px] text-slate-600 italic border border-slate-100 shadow-sm leading-relaxed text-center">"${discPersonalSummaries[type]}"</div><div class="space-y-4 text-left"><h4 class="font-bold text-[14px]" style="color:${st.color}">วิธีร่วมงานให้ได้ผล</h4><div class="bg-white p-4 rounded-xl border-l-4 border-slate-200"><p class="font-bold text-[13px] mb-1">การสร้างความสัมพันธ์</p><ul class="list-disc list-inside text-[13px] text-slate-500">${listItems(relations?.relate)}</ul></div><div class="working-tip-box text-[13px] text-green-700 italic border-green-100 bg-green-50">"${relations?.workingTip || '-'}"</div></div>`; } if(modal) modal.classList.remove('hidden'); lucide.createIcons(); speak(`นี่คือวิธีร่วมงานกับ ${name} สไตล์ ${discTypeNames[type] || type} โดยสรุปคือ ${discPersonalSummaries[type]}`); };
         window.closeFriendInsight = () => { const modal = document.getElementById('friendInsightModal'); if(modal) modal.classList.add('hidden'); window.speechSynthesis.cancel(); };
 
         const handleIdSubmission = async () => {
@@ -615,7 +621,8 @@
             currentMember = u; document.getElementById('landingPage').classList.add('hidden'); document.getElementById('mainDiscPage').classList.remove('hidden'); if(document.getElementById('assessmentPage')) document.getElementById('assessmentPage').classList.add('hidden');
             document.getElementById('welcomeUser').textContent = u.FullName || 'พนักงาน'; document.getElementById('userSub').textContent = `${u.Group || '-'} | ${u.SubGroup || '-'}`; document.getElementById('profileName').textContent = u.FullName || '-'; document.getElementById('profileDetail').textContent = `${u.Group || '-'} | ${u.SubGroup || '-'}`;
             const ok = !!u.DISC; document.getElementById('dynamicActionText').textContent = ok ? 'ดู DiSC ของทีม' : 'เริ่มทำแบบทดสอบ'; document.getElementById('dynamicActionBtn').onclick = () => ok ? switchTab('team') : window.startAssessmentFlow();
-            document.getElementById('noDiscResult').classList.toggle('hidden', ok); document.getElementById('hasDiscResult').classList.toggle('hidden', !ok);
+            const noRes = document.getElementById('noDiscResult'); if(noRes) noRes.classList.toggle('hidden', ok);
+            const hasRes = document.getElementById('hasDiscResult'); if(hasRes) hasRes.classList.toggle('hidden', !ok);
             window.closeRegModal(); switchTab('home');
         };
 
@@ -677,8 +684,10 @@
                 try {
                     const memberRef = doc(db, COLLECTION_NAME, currentMember.docId);
                     await updateDoc(memberRef, { DISC: null, DISC2: null, updatedAt: serverTimestamp() });
-                    const snapRes = await getDocs(query(collection(db, 'DISC_Results'), where("EmpID", "==", currentMember.EmpID)));
-                    await Promise.all(snapRes.docs.map(d => deleteDoc(doc(db, 'DISC_Results', d.id))));
+                    const snapRes = await getDocs(collection(db, 'DISC_Results'));
+                    const delPromises = [];
+                    snapRes.forEach(d => { if(d.data().EmpID === currentMember.EmpID) delPromises.push(deleteDoc(doc(db, 'DISC_Results', d.id))); });
+                    await Promise.all(delPromises);
                     currentMember.DISC = null; currentMember.DISC2 = null; 
                     showMessage("รีเซ็ตข้อมูลสำเร็จ", "success"); showMainPage(currentMember); 
                 } catch (e) { showMessage("เกิดข้อผิดพลาดในการรีเซ็ต", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
@@ -689,7 +698,6 @@
             if(!u) await signInAnonymously(auth); 
             document.getElementById('globalLoader').classList.add('hidden'); 
             document.getElementById('landingPage').classList.remove('hidden'); 
-            // Enable login button when ready
             const btn = document.getElementById('openModalBtn');
             if(btn) {
                 btn.disabled = false;
@@ -703,8 +711,31 @@
             await fetchIP();
             document.getElementById('openModalBtn').onclick = () => { unlockVoice(); document.getElementById('regModalBackdrop').classList.remove('hidden'); };
             document.getElementById('submitIdBtn').onclick = handleIdSubmission;
-            document.getElementById('EmpID').oninput = (e) => { document.getElementById('submitIdBtn').disabled = e.target.value.length !== 5; };
-            document.getElementById('savePinLoginBtn').onclick = () => { if(String(inputPinValue) === String(currentMember.pin)) showMainPage(currentMember); else { showMessage("PIN ไม่ถูกต้อง", "error"); inputPinValue = ""; } };
+            document.getElementById('EmpID').oninput = (e) => { 
+                e.target.value = e.target.value.replace(/[^0-9]/g, ''); // Ensure numeric only
+                document.getElementById('submitIdBtn').disabled = e.target.value.length !== 5; 
+            };
+            document.getElementById('savePinLoginBtn').onclick = () => { if(String(inputPinValue) === String(currentMember.pin)) showMainPage(currentMember); else { showMessage("PIN ไม่ถูกต้อง", "error"); inputPinValue = ""; for(let i=0; i<6; i++) { const b = document.getElementById(`pin-${i}`); if(b) b.textContent = ""; } } };
+            
+            const pSet = document.getElementById('setPin');
+            const pConf = document.getElementById('confirmPin');
+            const cReg = document.getElementById('confirmRegBtn');
+            const validate = (e) => { 
+                if(e) e.target.value = e.target.value.replace(/[^0-9]/g, ''); // Numeric PIN check
+                if(cReg && pSet && pConf) cReg.disabled = !(pSet.value.length === 6 && pSet.value === pConf.value); 
+            };
+            if(pSet) pSet.oninput = validate;
+            if(pConf) pConf.oninput = validate;
+            if(cReg) cReg.onclick = async () => {
+                document.getElementById('globalLoader').classList.remove('hidden');
+                try {
+                    await updateDoc(doc(db, COLLECTION_NAME, currentMember.docId), { pin: pSet.value, IPAddress: userIP, ActivatedAt: serverTimestamp() });
+                    currentMember.pin = pSet.value;
+                    showMessage("ลงทะเบียนสำเร็จ", "success");
+                    showMainPage(currentMember);
+                } catch (e) { showMessage("ลงทะเบียนล้มเหลว", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
+            };
+
             document.getElementById('prevFriendPage').onclick = () => { if(currentPage>1) { currentPage--; renderFriendsTable(); } };
             document.getElementById('nextFriendPage').onclick = () => { if(currentPage < Math.ceil(filteredFriends.length/itemsPerPage)) { currentPage++; renderFriendsTable(); } };
             document.getElementById('prevTeamPage').onclick = () => { if(teamCurrentPage>1) { teamCurrentPage--; renderTeamTable(); } };
