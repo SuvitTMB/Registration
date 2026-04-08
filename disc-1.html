@@ -179,7 +179,7 @@
             </button>
             <p class="text-[11px] text-gray-400 text-center leading-relaxed">กรุณาลงทะเบียนเพื่อบันทึกข้อมูล</p>
         </div>
-        <div class="mt-auto mb-8 text-center text-gray-300 text-[10px] tracking-[0.1em] font-normal"><span class="disc-brand">DiSC</span> Personality Navigator</div>
+        <div class="mt-auto mb-8 text-center text-gray-300 text-[10px] font-normal">DiSC Personality Navigator</div>
     </div>
 
     <!-- Main Page -->
@@ -467,16 +467,18 @@
             <div class="flex justify-end px-4 py-1"><button onclick="window.toggleMute()" class="p-2 text-slate-400"><i id="muteIconAssess" data-lucide="volume-2" class="w-6 h-6"></i></button></div>
         </div>
         <div id="assessmentContainer" class="flex-1 overflow-y-auto px-5 py-4 space-y-6 pb-40 relative text-center">
-            <div id="assessmentIntro" class="space-y-6 text-center pt-10 px-2 flex flex-col items-center">
+            <div id="assessmentIntro" class="space-y-6 text-center px-2 flex flex-col items-center">
                 <div class="w-full flex justify-center py-2" style="margin-top: -20px; padding-top: 30px;">
                     <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[70%] h-auto block mx-auto" alt="DiSC Logo">
                 </div>
                 <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FCarl%20Jung.jpg?alt=media&token=4f683dc5-0f68-432d-b15c-679db17ee7f7" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md" alt="Carl Jung">
                 <div class="text-[13px] text-slate-500 text-left space-y-4 bg-slate-50 p-6 rounded-2xl leading-relaxed text-center">
                     <h2 class="text-[18px] font-bold text-center text-slate-800">DiSC 4 จริตพิชิตใจ</h2>
-                    <p class="text-center">คาร์ล จุง ได้กล่าวไว้ว่า "การรู้จักตัวเองคือจุดเริ่มต้นของปัญญาที่แท้จริง" DiSC คือเครื่องมือช่วยถอดรหัสพฤติกรรมเพื่อให้คุณเข้าใจจุดแข็งของตัวเองได้อย่างแม่นยำ</p>
-                    <p class="text-orange-600 font-medium text-center">หากคุณพร้อมที่จะทำแบบทดสอบ ให้คลิก "เข้าสู่การทดสอบ" โดยจะมีคำถาม 20 ข้อให้ตอบครับ</p>
+                    <p class="text-left"><b>คาร์ล จุง (Carl Jung)</b> ทฤษฎีทางบุคคลิกภาพของจุงได้รับการยกย่องว่าครอบคลุมปรากฏการณ์ของมนุษยชาติอย่างทั่วถึง ได้กล่าวไว้ว่า "การรู้จักตัวเองคือจุดเริ่มต้นของปัญญาที่แท้จริง" DiSC คือเครื่องมือช่วยถอดรหัสพฤติกรรมเพื่อให้คุณเข้าใจจุดแข็งของตัวเองได้อย่างแม่นยำ เรามาดูกันดีกว่าว่าการสื่อสารของคุณเป็นแบบไหนใน 4 แบบ เป็น D, I, S หรือ C</p>
+                    <p class="text-orange-600 font-medium text-center">หากคุณพร้อมที่จะทำแบบทดสอบ ให้คลิก <br>"เข้าสู่การทดสอบ" โดยจะมีคำถาม 20 ข้อให้ตอบครับ</p>
                 </div>
+                <p class="text-[11px] text-gray-400 text-left"><u>วิธีการเลือกตัวเลือก</u><br>ให้ทำการเลือก<font color="green"><b>ตัวเลือก ↑ มากสุด</b></font> 1 ตัวเลือก และ<br><font color="red"><b>ตัวเลือก ↓ น้อยสุด</b></font> 1 ตัวเลือก และกดหน้าถัดไป</p>
+
                 <div class="flex gap-4 pt-4 px-2 w-full">
                     <button onclick="window.exitAssessment()" class="btn-standard flex-1 bg-slate-500 text-white h-[50px]"><i data-lucide="x-circle" class="w-4 h-4"></i><span class="text-[12px]">กลับหน้าหลัก</span></button>
                     <button onclick="window.beginActualTest()" class="btn-standard flex-[2] bg-orange-500 text-white h-[50px]"><span class="text-[12px]">เข้าสู่การทดสอบ</span><i data-lucide="play" class="w-4 h-4"></i></button>
@@ -484,20 +486,20 @@
             </div>
             <div id="assessmentQuestion" class="hidden space-y-8 mt-[15px] px-2 text-center">
                 <div class="text-center">
-                    <div class="w-full flex justify-center py-2" style="margin-top: -20px; padding-top: 30px;">
+                    <div class="w-full flex justify-center py-2" style="margin-top: -50px;">
                         <img src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fdisc-fulllogo.jpg?alt=media&token=f4ef1dd7-e29e-4d26-bc30-31815a46ef8d" class="w-[60%] h-auto block mx-auto" alt="DiSC Logo">
                     </div>
-                    <span class="text-orange-500 font-normal text-[15px] uppercase tracking-widest text-center block mb-2">คำถามข้อที่ <span id="qNumberDisplay">1</span> จาก 20</span>
+                    <span class="text-orange-500 font-normal text-[13px] uppercase tracking-widest text-center block mb-2">คำถามข้อที่ <span id="qNumberDisplay">1</span> จาก 20</span>
                     <h3 id="qPromptText" class="text-[17px] font-bold text-slate-700 mt-2 leading-snug text-center"></h3>
                 </div>
                 <div id="qChoicesContainer" class="space-y-4 text-center"></div>
             </div>
             
             <div id="assessmentInstructions" class="hidden absolute bottom-[90px] left-0 right-0 px-6 text-center">
-                <p class="text-[11px] text-gray-400 text-center">ให้ทำการเลือกตัวเลือก ↑ มากสุด 1 ตัวเลือก และ เลือก ↓ น้อยสุด 1 ตัวเลือก และกดหน้าถัดไป</p>
+                <p class="text-[11px] text-gray-400 text-center">ให้ทำการเลือก<font color="green"><b>ตัวเลือก ↑ มากสุด</b></font> 1 ตัวเลือก และ<br><font color="red"><b>ตัวเลือก ↓ น้อยสุด</b></font> 1 ตัวเลือก และกดหน้าถัดไป</p>
             </div>
             
-            <div id="assessmentNav" class="hidden absolute bottom-[130px] left-0 right-0 flex justify-between px-8 gap-4 text-center">
+            <div id="assessmentNav" class="hidden absolute bottom-[60px] left-0 right-0 flex justify-between px-8 gap-4 text-center">
                 <button onclick="window.prevQuestion()" id="prevBtn" class="btn-standard px-5 bg-gray-100 text-slate-400 text-[12px]">ก่อนหน้า</button>
                 <button id="nextBtn" disabled onclick="window.nextQuestion()" class="btn-standard px-10 bg-orange-500 text-white text-[12px]">ถัดไป</button>
             </div>
@@ -505,7 +507,487 @@
     </div>
 
     <script type="module">
-const _0x2a86bb=_0x4e7a;(function(_0x492bbf,_0x651ce9){const _0x1757a3=_0x4e7a,_0x8036d1=_0x492bbf();while(!![]){try{const _0x46d287=-parseInt(_0x1757a3(0x139))/0x1+parseInt(_0x1757a3(0x199))/0x2+-parseInt(_0x1757a3(0x9a))/0x3*(-parseInt(_0x1757a3(0xfa))/0x4)+parseInt(_0x1757a3(0x163))/0x5*(parseInt(_0x1757a3(0x1d5))/0x6)+parseInt(_0x1757a3(0x1a9))/0x7+parseInt(_0x1757a3(0x12b))/0x8*(parseInt(_0x1757a3(0x1ca))/0x9)+parseInt(_0x1757a3(0x174))/0xa*(-parseInt(_0x1757a3(0x1e5))/0xb);if(_0x46d287===_0x651ce9)break;else _0x8036d1['push'](_0x8036d1['shift']());}catch(_0x1c8659){_0x8036d1['push'](_0x8036d1['shift']());}}}(_0x4f8f,0x530ff));function _0x4f8f(){const _0x1c632c=['rate','#05ae4b','สงบ\x20เป็นกันเอง\x20และมั่นคง','rgba(253,\x20215,\x204,\x200.05)','muteIcon','type','</p></div><p\x20class=\x22text-red-600\x20font-bold\x20uppercase\x22>ข้อจำกัด\x20/\x20สิ่งที่เป็นอุปสรรค:<br><span\x20class=\x22font-normal\x20text-slate-600\x22>','innerText','replace','prevQuestion','ความน่าเชื่อถือ','กล้าตัดสินใจ','querySelectorAll','<div><h4\x20style=\x22color:','ท้าทายด้วยผลลัพธ์ที่ยิ่งใหญ่','bg-red-700\x20text-white','#13a1d3','<div\x20class=\x22space-y-4\x20text-left\x22><p><span\x20class=\x22font-bold\x20text-slate-800\x22>1.\x20มุมมอง:</span><br>','\x22>↑\x20มากสุด</button><button\x20onclick=\x22window.pick(','ความเร็ว\x20(Action)','assessmentAnswers','teamRadarChartInstance','แม่นยำ,\x20วิเคราะห์,\x20รักระเบียบ','teamSubGroupDisplay','ในงานปาร์ตี้ของบริษัท\x20คุณมักจะเป็นคน...','คนสไตล์\x20i\x20คือผู้ที่ขับเคลื่อนด้วยผู้คน\x20ความสัมพันธ์\x20และพลังบวก\x20มีเสน่ห์ทางการสื่อสาร\x20สร้างแรงบันดาลใจ\x20และทำให้ทีมมีบรรยากาศสนุก\x20จุดเด่นคือความเป็นมิตร\x20ความคิดสร้างสรรค์\x20และความสามารถในการเชื่อมคนเข้าด้วยกัน\x20แต่ก็อาจขาดวินัย\x20ทำงานไม่ต่อเนื่อง\x20หรือสัญญามากเกินไป\x20การตัดสินใจมักอิงความรู้สึกและผลต่อความสัมพันธ์\x20ทำงานร่วมกับคนอื่นได้ดีในงานที่ต้องการพลังและการมีส่วนร่วม\x20สิ่งที่ต้องพัฒนาคือการจัดลำดับความสำคัญและการติดตามงานให้จบ\x20สิ่งที่ต้องระวังคือการหลีกเลี่ยงงานละเอียดและการใช้อารมณ์มากเกินไป','ความเชี่ยวชาญและความแม่นยำ','view','volume-x','success','className','ถูกตำหนิไร้ความสามารถ','target','วางแผนขั้นตอนอย่างค่อยเป็นค่อยไป','bg-green-500','1035862EAUALw','สิ่งที่ทำให้คุณรู้สึกเบื่อที่สุดคือ...','การถูกวิจารณ์ว่าทำงานผิดพลาด','ความเป็นมิตรและเสน่อห์ส่วนตัว','assessmentIntro','งานไม่คืบหน้า','\x22><span\x20class=\x22text-[13.5px]\x20flex-1\x20text-left\x20font-medium\x20','discDrives','speak','</p><p><span\x20class=\x22font-bold\x20text-slate-800\x22>2.\x20ตัดสินผู้อื่นจาก:</span><br>','ยอมแพ้','คุณจะเห็นภาพรวมของทั้งทีมว่ามีสไตล์การทำงานแบบไหนครับ','AIzaSyAciknEYhZU7AwOdfYytC1t_AnW2Ee11us','ความมั่นคง\x20(Stability)','friendPaginationInfo','bg-green-600\x20text-white\x20border-green-600','4447534IvbDhF','primaryImgTop','max','bg-red-500\x20text-white\x20border-red-500','ผู้นำที่กำหนดทิศทาง','เก็บไว้ข้างในและเงียบเฉย','ยินดีต้อนรับครับ\x20ดี\x20ไอ\x20เอส\x20ซี\x20คือเครื่องมือที่ช่วยให้เราเข้าใจจุดแข็งและวิธีการทำงานของตนเองและผู้อื่นได้ดียิ่งขึ้น\x20ผมขอแนะนำให้คุณลองศึกษาข้อมูลเพิ่มเติมในเมนู\x20รู้จัก\x20ดี\x20ไอ\x20เอส\x20ซี\x20นะครับ\x20','showFriendInsight','จุดเดี่ยวของคุณที่ทีมยอมรับคือ...','profilePersonalSummary','สั้น\x20กระชับ\x20และตรงประเด็น','ขอความร่วมมือจากเพื่อนร่วมทีม','discTypeImages','</td><td\x20class=\x22text-center\x20py-2\x20border-r\x20border-slate-100\x22>','<div\x20class=\x22space-y-4\x20text-left\x22><div><h4\x20class=\x22font-bold\x20text-slate-800\x20mb-1\x20text-left\x22>1.\x20เมื่อพยายามสร้างความสัมพันธ์:</h4><ul\x20class=\x22list-disc\x20list-inside\x20text-slate-600\x22>','getElementById','มีความอดทน,\x20เห็นอกเห็นใจ','ตัดสินใจช้า','ความอดทนและเป็นที่พักพิงให้ทีม','วิเคราะห์มากไป','dynamicHomeActionBtn','กิจกรรมสังคม','user','judge','</td>','openModalBtn','hasDiscResult','ไม่ระบุ','คิดมาก,\x20ระวังตัว','src','\x20น้อยที่สุด','การเปลี่ยนแปลงที่กะทันหัน','ใช้สัญชาตญาณและความรวดเร็ว','560745XBslVV','สำหรับคุณซึ่งยังไม่ได้ทำแบบประเมิน\x20ผมขอแนะนำให้คุณเข้าทำแบบทดสอบ\x20ซึ่งมีเพียง\x2020\x20คำถามเท่านั้นครับ\x20คลิกที่ปุ่มเริ่มทำแบบทดสอบได้เลย','friendInsightModal','createElement','about','รวบรวมข้อมูลและวิเคราะห์ความเป็นไปได้','การเป็นที่รักและมีเครือข่ายกว้างขวาง','color','</p><p\x20class=\x22text-slate-600\x22><strong>ประสิทธิภาพ:</strong>\x20','ใจเย็นและน่าเชื่อถือ','คนสไตล์\x20D\x20คือผู้ที่ขับเคลื่อนด้วยผลลัพธ์\x20ความเร็ว\x20และความท้าทาย\x20มีพลังในการตัดสินใจและผลักดันงานให้เดินหน้า\x20จุดเด่นคือความเด็ดขาด\x20กล้ารับความเสี่ยง\x20และแก้ปัญหาได้รวดเร็ว\x20แต่ก็อาจดูเร่งรัด\x20ข้ามรายละเอียด\x20หรือกดดันคนอื่นโดยไม่ตั้งใจ\x20การตัดสินใจมักเกิดจากภาพรวมและความมั่นใจส่วนตัว\x20ทำงานได้ดีในสถานการณ์ที่ต้องการความชัดเจนและความเร็ว\x20สิ่งที่ต้องพัฒนาคือการฟัง\x20เปิดรับความคิดเห็น\x20และใส่ใจผลกระทบต่อทีม\x20สิ่งที่ต้องระวังคืออารมณ์\x20ความหุนหัน\x20และการใช้อำนาจมากเกินไปจนทำให้คนรอบตัวรู้สึกถูกกดทับ','2058EishSJ','toggleMute','พบข้อมูลสำเร็จ','มีความอดทน,\x20นิ่ง,\x20เข้าอกเข้าใจ','ความเชี่ยวชาญ','<img\x20src=\x22','regModalBackdrop','DISC_Member','forEach','จำนวนพนักงาน','\x22><h4\x20class=\x22font-bold\x20mb-1\x20uppercase\x20text-left\x22>Working\x20Tip:</h4>\x22','welcomeUser','ละเอียดรอบคอบและเป็นระบบ','toggle','https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-i.jpg?alt=media&token=1abeb825-20c0-4002-9486-55eab2c223dc','friendModalContent','946XelFtz','FullName','เกิดข้อผิดพลาดในการบันทึก','</p></div><div\x20class=\x22working-tip-box\x20text-left\x22\x20style=\x22background-color:','ชมถึงความทุ่มเทและการช่วยเหลือทีม','bg-red-800\x20text-white\x20border-red-900\x20shadow-inner','friendModalImg','<button\x20onclick=\x22window.showFriendInsight(\x27','currentQIndex','handleIdSubmission','และตอนนี้คุณได้ทำแบบประเมินเรียบร้อยแล้ว\x20ผมขอแนะนำให้คุณเข้าไปดูรายละเอียดในเมนู\x20ดี\x20ไอ\x20เอส\x20ซี\x20ของคุณ\x20เพื่อดูแนวทางการทำงานร่วมกับผู้อื่นครับ','relationshipsContent','textContent','สนับสนุนข้อมูล','friendsRadarChart','discResultImg','คุณชอบสภาพแวดล้อมการทำงานแบบไหน...','สังเกตการณ์รอบๆ\x20และคุยเรื่องทั่วไป','ดูผลการประเมิน','\x20สไตล์หลักคือ\x20','unlockVoice','</ul></div><div\x20class=\x22working-tip-box\x20text-left\x22\x20style=\x22background-color:','\x20คน)','ใช้ข้อมูลชัดเจน\x20เหตุผลเป็นระบบ\x20และให้เวลาวิเคราะห์','แยกตัวออกมาและใช้เหตุผลทบทวน','handleCheckOut','hidden','\x20|\x20','dark','การเผชิญหน้ากับความขัดแย้ง','ความสามารถในการจูงใจคน','ประนีประนอมเพื่อรักษาความสัมพันธ์','muteIconAssess','ใส่ใจความรู้สึก','drivesContent','ถูกแยกออกจากกลุ่ม','DISC','\x27,\x20\x27','<div\x20class=\x22flex\x20items-center\x20h-full\x20text-slate-300\x20justify-center\x20font-bold\x20text-lg\x22>-</div>','จดรายละเอียดและตั้งคำถามเชิงลึก','ขาดการใส่ใจผู้อื่น','push','ประนีประนอมเกินไป','กล้าตัดสินใจและเน้นผลลัพธ์','ฝ่ายสนับสนุนที่คอยช่วยเหลือ','animate-spin','การถูกเพิกเฉยหรือไม่ได้รับการยอมรับ','globalLoader','trim','prompt','ปรึกษาทีมเพื่อให้ทุกคนสบายใจ',',\x27least\x27)\x22\x20class=\x22font-normal\x20text-[11px]\x20px-3\x20py-1.5\x20rounded-lg\x20transition-all\x20','เริ่มทำแบบทดสอบ','rgba(5,\x20174,\x2075,\x200.05)','getContext','ใช้อารมณ์ขันหรือการพูดคุยเพื่อคลายเครียด','\x20จาก\x20','fixed\x20top-10\x20left-1/2\x20-translate-x-1/2\x20z-[9999]\x20px-6\x20py-3\x20rounded-xl\x20text-white\x20shadow-xl\x20','toString','</li>','backgroundColor','</ul></div>','assessmentNav','พูดตรงๆ\x20เพื่อแก้ปัญหาให้จบ','มั่นใจ,\x20เด็ดขาด,\x20ชอบเสี่ยง','teamRadarChart','การทำงานที่ขาดโครงสร้างที่ชัดเจน','ร่าเริงและเข้ากับคนง่าย','remove','สไตล์การสื่อสารของคุณคือ...','https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-D.jpg?alt=media&token=c8ab4104-1ffc-4420-b2b8-8381dd422f43','rgba(19,\x20161,\x20211,\x200.05)','limit','reload','พุ่งชนและหาทางข้ามไปให้ได้','ไม่กดดันเวลา','หาทางออกที่สร้างสรรค์และสนุก','allFriends','switchTab','ขาดอำนาจควบคุม','startAssessmentFlow','th-TH','ความไม่แน่นอน','error','<td\x20class=\x22px-3\x20font-medium\x20text-slate-700\x20text-left\x22>','lang','pressure','การเป็นผู้นำ','เมื่อเกิดความขัดแย้งในทีม\x20คุณมักจะ...','ฝ่ายตรวจสอบที่ดูความถูกต้อง','most','assessmentProgress','3okWehg','isMuted','pick','คอยสังเกตและสนับสนุนความเห็นผู้อื่น','มั่นใจ,\x20เปิดเผย','ความกระตือรือร้น\x20(Enthusiasm)','ยินดีต้อนรับสู่การประเมิน\x20ดีไอเอสซี\x20ครับ','fill','faifah-ttb.firebaseapp.com','</h4><ul\x20class=\x22list-disc\x20list-inside\x20text-slate-600\x20text-left\x22>','classList','join','<option\x20value=\x22\x22>เลือกทีมทั้งหมด</option>','speechSynthesis','submitIdBtn','choices','เวลาประชุม\x20คุณมักจะ...','</div>','innerHTML','เป็นกลาง,\x20ติดตามงาน','การทำงานกับทีมของคุณ\x20คุณจะเห็นภาพรวมสไตล์การทำงานของแต่ละคนในทีมครับ','currentPage','เมื่อต้องทำงานชิ้นใหม่\x20คุณมักจะเริ่มจาก...','การร่วมมือ\x20(Collaboration)','sortCol','#64748b','least','คุยเรื่องงานหรือเรื่องเป้าหมาย','clipboard-list','createIcons','localeCompare','ให้ความมั่นใจและความสม่ำเสมอ','#e2e8f0','ควรใช้พลังบวก\x20ให้เขามีส่วนร่วมและแสดงไอเดีย','แสดงออกอย่างชัดเจนและรุนแรง','qPromptText','นักซัพพอร์ต\x20(Supporter)','คำจำกัดความสั้นๆ\x20ของคุณคือ...','Group','bg-gray-200\x20text-gray-400\x20opacity-[0.6]\x20border-none','การได้รับการยอมรับ','</span></p><div\x20class=\x22dark-side-box\x20text-left\x22><h5\x20class=\x22font-bold\x20text-orange-900\x20mb-1\x22>!\x20Dark\x20Side:</h5><p><strong>Over-uses:</strong>\x20','\x27)\x22\x20class=\x22text-[10px]\x20bg-orange-100\x20text-orange-600\x20px-2\x20py-1.5\x20rounded-lg\x20font-bold\x22>การร่วมงาน</button>','desc','สุภาพ\x20นุ่มนวล\x20และเน้นการรับฟัง','from','เมื่อต้องตัดสินใจเรื่องสำคัญ\x20คุณมักจะ...','loginIcon','nextQuestion','ใช้เวลาคุ้มค่า','value','คนสไตล์\x20C\x20คือผู้ที่ขับเคลื่อนด้วยความถูกต้อง\x20มาตรฐาน\x20และข้อมูล\x20ชอบคิดวิเคราะห์และทำงานอย่างละเอียด\x20จุดเด่นคือความแม่นยำ\x20การวางระบบ\x20และคุณภาพงานที่สูง\x20แต่ก็อาจใช้เวลานาน\x20กลัวความผิดพลาด\x20และดูเย็นชาต่อคนอื่น\x20การตัดสินใจมักต้องการข้อมูลครบถ้วนและเหตุผลที่หนักแน่น\x20ทำงานได้ดีในงานที่ต้องการความละเอียดและความเป็นระบบ\x20สิ่งที่ต้องพัฒนาคือความยืดหยุ่น\x20การสื่อสารให้กระชับ\x20และการยอมรับความไม่สมบูรณ์แบบ\x20สิ่งที่ต้องระวังคือการคิดมากเกินไปและตั้งมาตรฐานสูงจนกดดันตัวเอง','ถัดไป','docId','discStyles','<tr><td\x20colspan=\x224\x22\x20class=\x22py-10\x20text-center\x20text-slate-400\x22>ไม่พบข้อมูล</td></tr>','กระตือรือร้นและใช้ภาษาท่าทาง','ชมถึงความแม่นยำและความเป็นมืออาชีพ','เมื่อได้รับคำชม\x20คุณจะรู้สึกดีที่สุดเมื่อ...','3.\x20แรงกดดัน','bg-red-500','sortDir','text','การแก้ปัญหาซับซ้อน','1:842980876200:web:f33bfad2ccbf263075079d','discBenefits','\x22</div></div>','messageBox','style','นี่คือหน้า\x20รู้จัก\x20ดี\x20ไอ\x20เอส\x20ซี\x20ครับ\x20หัวข้อแรก\x20คือ\x20ดี\x20ไอ\x20เอส\x20ซี\x20คืออะไร\x20ซึ่งบอกถึงโมเดลพฤติกรรมพื้นฐาน\x20หัวข้อต่อมาคือหลักการสำคัญที่บอกว่าทุกสไตล์มีคุณค่าเท่ากัน\x20และ\x20พีเพิล\x20รีด\x20ดิ้ง\x20เป็นวิธีการพิจารณาทำงานร่วมกับบุคคลอื่นครับ\x20','มองแง่ดีเกินไป','bg-green-700\x20text-white','\x22>↓\x20น้อยสุด</button></div></div>','.tab-content','ความจริงใจ','สิ่งที่ทำให้คุณรู้สึกกดดันที่สุดคือ...','discResultBanner','นั่งคุยกับเพื่อนสนิทเงียบๆ','\x20มากที่สุด','<div\x20class=\x22disc-circle\x22\x20style=\x22background-color:','สื่อสารให้ตรง\x20ประเด็น\x20รวดเร็ว\x20และโฟกัสผลลัพธ์','ชมที่ผลงานและความสามารถ','ชมต่อหน้าสาธารณะหรือเพื่อนร่วมงาน','ให้เวลาวิเคราะห์','friendGroupFilter','assessmentPage','slice','add','Influence','มีระเบียบ\x20มีขั้นตอน\x20และชัดเจน','banner','friendModalHeader','faifah-ttb','profileNameDisplay','https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-i.jpg?alt=media&token=5e0bf3d4-212b-4565-8c4b-42a578f5a936','การแข่งขัน','1750216cUDXUn','friendsTableBody','<div\x20class=\x22bg-white\x20p-4\x20rounded-xl\x20text-left\x20mb-4\x20italic\x20text-slate-600\x20leading-relaxed\x22>\x22','\x22><h4\x20class=\x22font-bold\x20mb-1\x20uppercase\x22>Working\x20Tip:</h4>\x22','มีความมั่นใจและเด็ดขาด','exitAssessment','title','location','SubGroup','discPersonalSummaries','workingTip','closeRegModal','filteredFriends','teamTableBody','length','radarChartInstance','สร้างแรงบันาลใจด้วยวิสัยทัศน์','วุ่นวาย','rgba(249,\x20115,\x2022,\x200.2)','เปิดใจร่วมมือ','อธิบายด้วยตรรกะที่ปฏิเสธไม่ได้','มีกิจกรรมและได้พบปะผู้คน','ความตึงเครียด','landingPage','active','\x22</div><div\x20class=\x22space-y-4\x20text-left\x22><div\x20class=\x22p-3\x20bg-white\x20rounded-lg\x20border\x20border-slate-100\x22><h4\x20class=\x22font-bold\x20text-orange-600\x20mb-1\x20uppercase\x22>Drives\x20&\x20Motives:</h4><ul\x20class=\x22list-disc\x20list-inside\x20text-slate-500\x22>','bg-white','DISC2','บันทึกผลสำเร็จ','Error\x20loading\x20data:','onclick','primarySecondaryBox','เน้นความถูกต้องและรายละเอียด','DiSC\x20ของคุณ','นักสร้างความสุข\x20(Entertainer)','assessmentInstructions','openRegModal','1.\x20สิ่งที่ให้ความสำคัญในการทำงาน','การสนับสนุน\x20(Support)','การช่วยเหลือผู้อื่น','2.\x20แรงจูงใจ','\x20ครับ','dynamicHomeActionIcon','friendModalImg2','text-white','ชวนคุยสร้างบรรยากาศสนุกสนาน','วิเคราะห์สาเหตุของปัญหาอย่างละเอียด','mainDiscPage','ในสถานการณ์การทำงาน\x20ปกติคุณมักจะ...','8CQPMNV','โอกาสได้รับผลตอบแทนก้อนใหญ่','\x22\x20class=\x22w-full\x20h-full\x20object-cover\x22>','relate',',\x27most\x27)\x22\x20class=\x22font-normal\x20text-[11px]\x20px-3\x20py-1.5\x20rounded-lg\x20transition-all\x20','หาเพื่อนร่วมงานและพูดคุยไอเดีย','การสร้างทีมที่สามัคคีและมั่นคง','map','itemsPerPage','ลงมือทำทันทีเพื่อให้เห็นผล','currentMember','sort','showMessage','842980876200','10363ntKRaW','คุณมักจะจูงใจผู้อื่นด้วยการ...','การวางระบบงาน','</span><div\x20class=\x22flex\x20gap-2\x22><button\x20onclick=\x22window.pick(','destroy','radar','มีเสน่ห์,\x20ร่าเริง,\x20มองโลกแง่ดี','เคารพจังหวะ','setAttribute','isAudioUnlocked','oninput','ผลลัพธ์\x20(Results)','<li>','มาตรฐานที่ไม่ถูกต้อง','รักษาทัศนคติบวก','ความต้องการเอาชนะ','รับฟังและช่วยเหลือคนรอบข้าง','asc','filteredTeam','https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-S.jpg?alt=media&token=2c1f4acd-ea1c-46c2-a902-edc443354a87','rgba(203,\x2055,\x2067,\x200.05)','Dominance','#cb3743','ความภักดีและความจริงใจ','</p><p\x20class=\x22mt-1\x22><strong>Under\x20Pressure:</strong>\x20','data','#f97316','cancel','secondaryImgTop','discRelationships','data-lucide','การทำอะไรที่ซ้ำซากและช้า','discQuestionsData','\x20(ทั้งหมด\x20','assessmentQuestion','ใช้ข้อมูลสถิติมาวิเคราะห์ประกอบ','qNumberDisplay','ความสำเร็จและชัยชนะ','ความเป็นมิตร','disabled','aboutTabAssessmentCta','team','7360UjqWrS','เมื่อเจออุปสรรค\x20คุณจะ...','friends','entries',';\x20border-left:4px\x20solid\x20','สื่อสารนุ่มนวล\x20สร้างบรรยากาศที่ปลอดภัยและจริงใจ','https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-C.jpg?alt=media&token=9c096580-03ac-45d5-8cde-ae8b936ef3b4','Conscientiousness','คนอื่นมักจะมองว่าคุณเป็นคน...','กดดันผู้อื่น','filter','ทักษะหลักของคุณคือ\x20','EmpID','light','values','เวลาคุณโกรธ\x20คุณมักจะ...','เน้นประเด็นหลัก','210170QhitxZ','discTypeNames'];_0x4f8f=function(){return _0x1c632c;};return _0x4f8f();}import{initializeApp}from'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';import{getAuth,signInAnonymously,onAuthStateChanged,signOut}from'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';import{getFirestore,collection,doc,updateDoc,addDoc,getDocs,serverTimestamp}from'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';const firebaseConfig={'apiKey':_0x2a86bb(0x1a5),'authDomain':_0x2a86bb(0xa2),'projectId':_0x2a86bb(0xf6),'storageBucket':'faifah-ttb.appspot.com','messagingSenderId':_0x2a86bb(0x138),'appId':_0x2a86bb(0xda)},app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),COLLECTION_NAME=_0x2a86bb(0x1dc);window['discStyles']={'D':{'color':_0x2a86bb(0x177),'light':_0x2a86bb(0x21a),'banner':'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-D.jpg?alt=media&token=aa34506c-e29e-4d26-bc30-31815a46ef8d'},'i':{'color':_0x2a86bb(0x14f),'light':_0x2a86bb(0x14d),'banner':_0x2a86bb(0xf8)},'S':{'color':_0x2a86bb(0x186),'light':_0x2a86bb(0x22c),'banner':'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-S.jpg?alt=media&token=a41f7202-e29e-4d26-bc30-31815a46ef87'},'C':{'color':'#fdd704','light':_0x2a86bb(0x179),'banner':_0x2a86bb(0x169)}},window[_0x2a86bb(0x1b5)]={'D':_0x2a86bb(0x22b),'i':_0x2a86bb(0x1e3),'S':_0x2a86bb(0x14c),'C':'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-C.jpg?alt=media&token=f7d7088c-7ed9-4258-8da0-6c784123b0c2'},window[_0x2a86bb(0x175)]={'D':_0x2a86bb(0x14e),'i':_0x2a86bb(0xf2),'S':'Steadiness','C':_0x2a86bb(0x16a)},window[_0x2a86bb(0x103)]={'D':_0x2a86bb(0x1d4),'i':_0x2a86bb(0x18f),'S':'คนสไตล์\x20S\x20คือผู้ที่ขับเคลื่อนด้วยความมั่นคง\x20ความกลมกลืน\x20และความสัมพันธ์ที่ดี\x20เป็นคนใจเย็น\x20รับฟังเก่ง\x20และเชื่อถือได้\x20จุดเด่นคือความสม่ำเสมอ\x20ความอดทน\x20และความสามารถในการสนับสนุนผู้อื่น\x20แต่ก็อาจลังเล\x20ไม่กล้าปฏิเสธ\x20และไม่ชอบการเปลี่ยนแปลงเร็ว\x20การตัดสินใจมักใช้เวลาเพราะคิดถึงผลกระทบต่อคนอื่น\x20ทำงานร่วมกับทุกคนได้ดีและเป็นตัวเชื่อมทีม\x20สิ่งที่ต้องพัฒนาคือความกล้าแสดงออก\x20การตั้งขอบเขต\x20และการรับมือกับความเปลี่ยนแปลง\x20สิ่งที่ต้องระวังคือการเก็บความรู้สึกจนเกิดความเครียดและงานล้นตัว','C':_0x2a86bb(0xcd)},window[_0x2a86bb(0x1a0)]={'D':[{'title':_0x2a86bb(0x11f),'items':[_0x2a86bb(0x144),_0x2a86bb(0x189),'ความท้าทาย\x20(Challenge)']},{'title':_0x2a86bb(0x122),'items':[_0x2a86bb(0x12c),_0x2a86bb(0xf9),_0x2a86bb(0x95)]},{'title':_0x2a86bb(0xd5),'items':[_0x2a86bb(0x8d),_0x2a86bb(0x19e),_0x2a86bb(0x1ba)]}],'i':[{'title':'1.\x20สิ่งที่ให้ความสำคัญในการทำงาน','items':[_0x2a86bb(0x9f),_0x2a86bb(0x189),_0x2a86bb(0xb1)]},{'title':_0x2a86bb(0x122),'items':[_0x2a86bb(0xc2),_0x2a86bb(0x1be)]},{'title':_0x2a86bb(0xd5),'items':['งานซ้ำซาก',_0x2a86bb(0x208)]}],'S':[{'title':_0x2a86bb(0x11f),'items':[_0x2a86bb(0x120),_0x2a86bb(0xb1),'ความมั่นคง\x20(Stability)']},{'title':_0x2a86bb(0x122),'items':[_0x2a86bb(0x121),_0x2a86bb(0xe4)]},{'title':_0x2a86bb(0xd5),'items':[_0x2a86bb(0x110),_0x2a86bb(0x90)]}],'C':[{'title':_0x2a86bb(0x11f),'items':['ความถูกต้อง\x20(Accuracy)',_0x2a86bb(0x1a6),'ความท้าทาย\x20(Challenge)']},{'title':_0x2a86bb(0x122),'items':[_0x2a86bb(0xd9),_0x2a86bb(0x13b)]},{'title':'3.\x20แรงกดดัน','items':[_0x2a86bb(0x146),_0x2a86bb(0x195)]}]},window[_0x2a86bb(0xdb)]={'D':{'view':_0x2a86bb(0x225),'judge':'ความสำเร็จของงาน','effective':_0x2a86bb(0x1b9),'limit':_0x2a86bb(0x20d),'dark':_0x2a86bb(0x148),'pressure':'หงุดหงิดง่าย'},'i':{'view':_0x2a86bb(0x13f),'judge':_0x2a86bb(0x15f),'effective':_0x2a86bb(0xad),'limit':'หุนหันพลันแล่น','dark':_0x2a86bb(0xe0),'pressure':_0x2a86bb(0x10b)},'S':{'view':_0x2a86bb(0x1d8),'judge':_0x2a86bb(0x180),'effective':_0x2a86bb(0x9e),'limit':'ยอมคนอื่นมากไป','dark':_0x2a86bb(0x20f),'pressure':_0x2a86bb(0x1a3)},'C':{'view':_0x2a86bb(0x18c),'judge':_0x2a86bb(0x1d9),'effective':'ใส่ใจคนอื่น','limit':_0x2a86bb(0x1c5),'dark':_0x2a86bb(0x1bc),'pressure':_0x2a86bb(0x16c)}},window['discRelationships']={'D':{'relate':[_0x2a86bb(0xcb),_0x2a86bb(0x173)],'solving':[_0x2a86bb(0x181)],'stress':['คุยให้ชัดเจน'],'workingTip':_0x2a86bb(0xea)},'i':{'relate':[_0x2a86bb(0x10d),'เห็นคุณค่าพลังบวก'],'solving':[_0x2a86bb(0x147)],'stress':[_0x2a86bb(0x206)],'workingTip':_0x2a86bb(0xbb)},'S':{'relate':['แสดงความอบอุ่น','เสนออย่างนุ่มนวล'],'solving':[_0x2a86bb(0x140)],'stress':['ร่วมมือกันจริงใจ'],'workingTip':_0x2a86bb(0x168)},'C':{'relate':['ใช้ข้อมูลตรรกะ',_0x2a86bb(0x89)],'solving':[_0x2a86bb(0xed)],'stress':[_0x2a86bb(0x1f2)],'workingTip':_0x2a86bb(0x1fc)}},window[_0x2a86bb(0x159)]=[{'prompt':_0x2a86bb(0x12a),'choices':[{'text':_0x2a86bb(0x210),'type':'D'},{'text':_0x2a86bb(0x127),'type':'i'},{'text':_0x2a86bb(0x149),'type':'S'},{'text':_0x2a86bb(0x11a),'type':'C'}]},{'prompt':_0x2a86bb(0xb0),'choices':[{'text':_0x2a86bb(0x134),'type':'D'},{'text':_0x2a86bb(0x130),'type':'i'},{'text':_0x2a86bb(0x197),'type':'S'},{'text':_0x2a86bb(0x1cf),'type':'C'}]},{'prompt':_0x2a86bb(0x16b),'choices':[{'text':_0x2a86bb(0xfe),'type':'D'},{'text':_0x2a86bb(0x228),'type':'i'},{'text':_0x2a86bb(0x1d3),'type':'S'},{'text':_0x2a86bb(0x1e1),'type':'C'}]},{'prompt':_0x2a86bb(0x96),'choices':[{'text':_0x2a86bb(0x224),'type':'D'},{'text':_0x2a86bb(0x21c),'type':'i'},{'text':_0x2a86bb(0x204),'type':'S'},{'text':'ใช้เหตุผลและข้อมูลพิสูจน์ข้อเท็จจริง','type':'C'}]},{'prompt':_0x2a86bb(0xe5),'choices':[{'text':'การสูญเสียอำนาจการควบคุม','type':'D'},{'text':_0x2a86bb(0x213),'type':'i'},{'text':_0x2a86bb(0x1c8),'type':'S'},{'text':_0x2a86bb(0x19b),'type':'C'}]},{'prompt':_0x2a86bb(0xaa),'choices':[{'text':'นำเสนอประเด็นหลักอย่างรวดเร็ว','type':'D'},{'text':'ชวนคนอื่นมีส่วนร่วมและสร้างพลังบวก','type':'i'},{'text':_0x2a86bb(0x9d),'type':'S'},{'text':_0x2a86bb(0x20c),'type':'C'}]},{'prompt':'เป้าหมายการทำงานของคุณคือ...','choices':[{'text':'การเป็นที่หนึ่งหรือบรรลุยอดที่ตั้งไว้','type':'D'},{'text':_0x2a86bb(0x1d0),'type':'i'},{'text':_0x2a86bb(0x131),'type':'S'},{'text':'การสร้างผลงานที่มีคุณภาพสมบูรณ์แบบ','type':'C'}]},{'prompt':_0x2a86bb(0x22a),'choices':[{'text':_0x2a86bb(0x1b3),'type':'D'},{'text':_0x2a86bb(0xd2),'type':'i'},{'text':_0x2a86bb(0xc6),'type':'S'},{'text':'มีหลักการ\x20มีที่มาที่ไป\x20และชัดเจน','type':'C'}]},{'prompt':_0x2a86bb(0xd4),'choices':[{'text':_0x2a86bb(0xeb),'type':'D'},{'text':_0x2a86bb(0xec),'type':'i'},{'text':_0x2a86bb(0x1e9),'type':'S'},{'text':_0x2a86bb(0xd3),'type':'C'}]},{'prompt':_0x2a86bb(0x1f5),'choices':[{'text':'ท้าทายและเปลี่ยนแปลงรวดเร็ว','type':'D'},{'text':_0x2a86bb(0x10f),'type':'i'},{'text':_0x2a86bb(0x178),'type':'S'},{'text':_0x2a86bb(0xf3),'type':'C'}]},{'prompt':_0x2a86bb(0xc8),'choices':[{'text':_0x2a86bb(0x1c9),'type':'D'},{'text':'ดูความรู้สึกและความเห็นของส่วนรวม','type':'i'},{'text':_0x2a86bb(0x217),'type':'S'},{'text':_0x2a86bb(0x15c),'type':'C'}]},{'prompt':_0x2a86bb(0x1b1),'choices':[{'text':'ความเด็ดเดี่ยวในสภาวะวิกฤต','type':'D'},{'text':_0x2a86bb(0x203),'type':'i'},{'text':_0x2a86bb(0x1bb),'type':'S'},{'text':'ความละเอียดถี่ถ้วนไม่ตกหล่น','type':'C'}]},{'prompt':_0x2a86bb(0x172),'choices':[{'text':_0x2a86bb(0xbc),'type':'D'},{'text':'ประชดประชันหรือบ่นให้คนอื่นฟัง','type':'i'},{'text':_0x2a86bb(0x1ae),'type':'S'},{'text':_0x2a86bb(0x1fd),'type':'C'}]},{'prompt':_0x2a86bb(0x13a),'choices':[{'text':_0x2a86bb(0x184),'type':'D'},{'text':_0x2a86bb(0x10a),'type':'i'},{'text':_0x2a86bb(0xb9),'type':'S'},{'text':_0x2a86bb(0x10e),'type':'C'}]},{'prompt':_0x2a86bb(0x18e),'choices':[{'text':_0x2a86bb(0xb5),'type':'D'},{'text':'เป็นจุดสนใจหรือสร้างความสนุก','type':'i'},{'text':_0x2a86bb(0xe7),'type':'S'},{'text':_0x2a86bb(0x1f6),'type':'C'}]},{'prompt':'เวลาทำงานเป็นทีม\x20คุณชอบบทบาท...','choices':[{'text':_0x2a86bb(0x1ad),'type':'D'},{'text':'ฝ่ายประชาสัมพันธ์ที่ประสานงาน','type':'i'},{'text':_0x2a86bb(0x211),'type':'S'},{'text':_0x2a86bb(0x97),'type':'C'}]},{'prompt':_0x2a86bb(0x164),'choices':[{'text':_0x2a86bb(0x88),'type':'D'},{'text':_0x2a86bb(0x8a),'type':'i'},{'text':_0x2a86bb(0x1b4),'type':'S'},{'text':_0x2a86bb(0x128),'type':'C'}]},{'prompt':_0x2a86bb(0x19a),'choices':[{'text':_0x2a86bb(0x158),'type':'D'},{'text':'การต้องนั่งทำงานคนเดียวนานๆ','type':'i'},{'text':_0x2a86bb(0x202),'type':'S'},{'text':_0x2a86bb(0x227),'type':'C'}]},{'prompt':'คุณต้องการได้รับการยอมรับในเรื่อง...','choices':[{'text':_0x2a86bb(0x15e),'type':'D'},{'text':_0x2a86bb(0x19c),'type':'i'},{'text':_0x2a86bb(0x150),'type':'S'},{'text':_0x2a86bb(0x190),'type':'C'}]},{'prompt':_0x2a86bb(0xbf),'choices':[{'text':'นักสู้\x20(Fighter)','type':'D'},{'text':_0x2a86bb(0x11c),'type':'i'},{'text':_0x2a86bb(0xbe),'type':'S'},{'text':'นักวิเคราะห์\x20(Analyst)','type':'C'}]}],window[_0x2a86bb(0x135)]=null,window[_0x2a86bb(0x8b)]=[],window[_0x2a86bb(0x106)]=[],window['filteredTeam']=[],window['itemsPerPage']=0x1e,window[_0x2a86bb(0xaf)]=0x1,window[_0x2a86bb(0xb2)]='',window[_0x2a86bb(0xd7)]=_0x2a86bb(0x14a),window[_0x2a86bb(0x9b)]=![],window[_0x2a86bb(0x142)]=![],window['radarChartInstance']=null,window[_0x2a86bb(0x18b)]=null,window[_0x2a86bb(0x1ed)]=0x0,window[_0x2a86bb(0x18a)]=[],window[_0x2a86bb(0x1f9)]=()=>{const _0x17c166=_0x2a86bb;if(window[_0x17c166(0x142)])return;const _0x18aeb4=new SpeechSynthesisUtterance('');window[_0x17c166(0xa7)]['speak'](_0x18aeb4),window['isAudioUnlocked']=!![];},window['showMessage']=(_0x19deb3,_0x4b29a4=_0x2a86bb(0x193))=>{const _0x53c449=_0x2a86bb,_0x30fc20=document['getElementById'](_0x53c449(0xdd));if(!_0x30fc20)return;_0x30fc20[_0x53c449(0x1f1)]=_0x19deb3,_0x30fc20[_0x53c449(0x194)]=_0x53c449(0x21e)+(_0x4b29a4==='success'?_0x53c449(0x198):_0x53c449(0xd6)),_0x30fc20[_0x53c449(0xa4)][_0x53c449(0x229)]('hidden'),setTimeout(()=>_0x30fc20[_0x53c449(0xa4)][_0x53c449(0xf1)](_0x53c449(0x1ff)),0xbb8);},window[_0x2a86bb(0x1d6)]=()=>{const _0x217095=_0x2a86bb;window[_0x217095(0x9b)]=!window[_0x217095(0x9b)];const _0x5462d3=window[_0x217095(0x9b)]?_0x217095(0x192):'volume-2';[_0x217095(0x17a),_0x217095(0x205)]['forEach'](_0x4bf892=>{const _0x5bcfa3=_0x217095,_0x41fd95=document[_0x5bcfa3(0x1b8)](_0x4bf892);if(_0x41fd95)_0x41fd95['setAttribute']('data-lucide',_0x5462d3);}),lucide[_0x217095(0xb7)]();if(window['isMuted'])window[_0x217095(0xa7)][_0x217095(0x154)]();};function speak(_0x170770){const _0x2782b7=_0x2a86bb;if(window[_0x2782b7(0x9b)])return;window[_0x2782b7(0xa7)][_0x2782b7(0x154)]();const _0x27f29b=new SpeechSynthesisUtterance(_0x170770);_0x27f29b[_0x2782b7(0x93)]=_0x2782b7(0x8f),_0x27f29b[_0x2782b7(0x176)]=1.05,window[_0x2782b7(0xa7)][_0x2782b7(0x1a1)](_0x27f29b);}function _0x4e7a(_0x44a3dd,_0xb90bbe){_0x44a3dd=_0x44a3dd-0x86;const _0x4f8f87=_0x4f8f();let _0x4e7aa7=_0x4f8f87[_0x44a3dd];return _0x4e7aa7;}window[_0x2a86bb(0x8c)]=_0x59a5bc=>{const _0xd9b743=_0x2a86bb;window[_0xd9b743(0xa7)][_0xd9b743(0x154)](),window[_0xd9b743(0x1f9)](),document[_0xd9b743(0x182)](_0xd9b743(0xe3))['forEach'](_0xbab974=>_0xbab974['classList']['add'](_0xd9b743(0x1ff)));const _0x145b34=document[_0xd9b743(0x1b8)]('tab-'+_0x59a5bc);if(_0x145b34)_0x145b34[_0xd9b743(0xa4)][_0xd9b743(0x229)](_0xd9b743(0x1ff));document[_0xd9b743(0x182)]('.bottom-nav-item')[_0xd9b743(0x1dd)](_0x3aa9c5=>{const _0x391e5b=_0xd9b743;_0x3aa9c5[_0x391e5b(0xa4)][_0x391e5b(0x229)](_0x391e5b(0x112)),_0x3aa9c5['style'][_0x391e5b(0x1d1)]=_0x391e5b(0xb3);});const _0x3885cd=document[_0xd9b743(0x1b8)]('nav-'+_0x59a5bc);_0x3885cd&&(_0x3885cd[_0xd9b743(0xa4)][_0xd9b743(0xf1)](_0xd9b743(0x112)),_0x3885cd[_0xd9b743(0xde)][_0xd9b743(0x1d1)]=_0xd9b743(0x153));const _0x162dbc=document[_0xd9b743(0x1b8)](_0xd9b743(0xe6));if(_0x162dbc)_0x162dbc['classList']['add']('hidden');_0x59a5bc==='home'&&(updateHomeButtonState(),setTimeout(()=>speakHomeWelcome(),0x5dc));_0x59a5bc==='team'&&(loadSharedData(),speak(_0xd9b743(0xae)));_0x59a5bc===_0xd9b743(0x165)&&(window['currentPage']=0x1,loadSharedData(),speak(_0xd9b743(0x1a4)));if(_0x59a5bc===_0xd9b743(0x1ce)){const _0x39f500=document[_0xd9b743(0x1b8)](_0xd9b743(0x161));if(_0x39f500)_0x39f500[_0xd9b743(0xa4)][_0xd9b743(0x1e2)](_0xd9b743(0x1ff),!!window['currentMember']?.[_0xd9b743(0x209)]);speakDetailedAbout();}if(_0x59a5bc==='user'){const _0x32afb9=!!window['currentMember']?.[_0xd9b743(0x209)],_0x176981=document[_0xd9b743(0x1b8)](_0xd9b743(0x119));if(_0x176981)_0x176981['classList']['toggle'](_0xd9b743(0x1ff),!_0x32afb9);document['getElementById'](_0xd9b743(0x1c3))[_0xd9b743(0xa4)][_0xd9b743(0x1e2)](_0xd9b743(0x1ff),!_0x32afb9),document[_0xd9b743(0x1b8)]('noDiscResult')[_0xd9b743(0xa4)][_0xd9b743(0x1e2)](_0xd9b743(0x1ff),_0x32afb9);window[_0xd9b743(0x135)]&&(document['getElementById'](_0xd9b743(0xf7))['textContent']=window[_0xd9b743(0x135)][_0xd9b743(0x1e6)],document['getElementById']('profileDetailDisplay')[_0xd9b743(0x1f1)]=(window['currentMember'][_0xd9b743(0xc0)]||'-')+_0xd9b743(0x200)+(window['currentMember'][_0xd9b743(0x102)]||'-'));if(_0x32afb9){const _0xbd4241=window[_0xd9b743(0xd0)][window['currentMember'][_0xd9b743(0x209)]];_0xbd4241&&_0x162dbc&&(_0x162dbc[_0xd9b743(0xde)][_0xd9b743(0x221)]=_0xbd4241[_0xd9b743(0x1d1)],document[_0xd9b743(0x1b8)](_0xd9b743(0x1f4))[_0xd9b743(0x1c6)]=_0xbd4241[_0xd9b743(0xf4)],_0x162dbc[_0xd9b743(0xa4)][_0xd9b743(0x229)](_0xd9b743(0x1ff))),renderUserSummary(window['currentMember']['DISC'],window['currentMember'][_0xd9b743(0x115)]),renderInsights(window[_0xd9b743(0x135)][_0xd9b743(0x209)]),speak(_0xd9b743(0x16e)+window[_0xd9b743(0x175)][window['currentMember'][_0xd9b743(0x209)]]+_0xd9b743(0x123));}}lucide[_0xd9b743(0xb7)]();};function speakHomeWelcome(){const _0x10e2e7=_0x2a86bb,_0x54a0d9=!!window['currentMember']?.[_0x10e2e7(0x209)];let _0x124a49=_0x10e2e7(0x1af);!_0x54a0d9?_0x124a49+=_0x10e2e7(0x1cb):_0x124a49+=_0x10e2e7(0x1ef),speak(_0x124a49);}function speakDetailedAbout(){const _0x475aa2=_0x2a86bb,_0x20e4a4=!!window[_0x475aa2(0x135)]?.[_0x475aa2(0x209)];let _0x5a8e8f=_0x475aa2(0xdf);!_0x20e4a4&&(_0x5a8e8f+='หากคุณต้องการรู้จักตัวเองมากขึ้น\x20กรุณาคลิกปุ่ม\x20เริ่มทำแบบทดสอบ\x20ที่อยู่ด้านล่างหน้านี้ด้วยนะครับ'),speak(_0x5a8e8f);}const updateHomeButtonState=()=>{const _0x694e85=_0x2a86bb,_0x35f95=!!window['currentMember']?.[_0x694e85(0x209)],_0x569138=document[_0x694e85(0x1b8)]('dynamicHomeActionText'),_0x50667a=document['getElementById'](_0x694e85(0x124)),_0x4ff5c9=document[_0x694e85(0x1b8)](_0x694e85(0x1bd));_0x569138&&_0x50667a&&_0x4ff5c9&&(_0x35f95?(_0x569138[_0x694e85(0x1f1)]=_0x694e85(0x11b),_0x50667a[_0x694e85(0x141)]('data-lucide',_0x694e85(0x1bf)),_0x4ff5c9[_0x694e85(0x118)]=()=>window[_0x694e85(0x8c)](_0x694e85(0x1bf))):(_0x569138['textContent']=_0x694e85(0x219),_0x50667a[_0x694e85(0x141)](_0x694e85(0x157),_0x694e85(0xb6)),_0x4ff5c9[_0x694e85(0x118)]=()=>window[_0x694e85(0x8e)]()),lucide['createIcons']());},renderUserSummary=(_0x223a9f,_0x670242)=>{const _0x44fc05=_0x2a86bb,_0x51b807=document[_0x44fc05(0x1b8)](_0x44fc05(0x1b2));if(_0x51b807)_0x51b807[_0x44fc05(0x17d)]=window['discPersonalSummaries'][_0x223a9f];const _0x27f970=document['getElementById'](_0x44fc05(0x1aa));if(_0x27f970)_0x27f970[_0x44fc05(0xac)]=_0x44fc05(0x1da)+window[_0x44fc05(0x1b5)][_0x223a9f]+_0x44fc05(0x12d);const _0x5f16cf=document[_0x44fc05(0x1b8)](_0x44fc05(0x155));if(_0x5f16cf)_0x5f16cf[_0x44fc05(0xac)]=_0x670242?'<img\x20src=\x22'+window[_0x44fc05(0x1b5)][_0x670242]+_0x44fc05(0x12d):_0x44fc05(0x20b);},renderInsights=_0x35f56e=>{const _0x379f94=_0x2a86bb,_0x5d4d4e=window[_0x379f94(0x1a0)][_0x35f56e],_0x13160f=window[_0x379f94(0xd0)][_0x35f56e],_0xd8734b=window[_0x379f94(0xdb)][_0x35f56e],_0x19144b=window[_0x379f94(0x156)][_0x35f56e],_0x57a845=document[_0x379f94(0x1b8)](_0x379f94(0x207));if(_0x57a845)_0x57a845['innerHTML']=_0x5d4d4e[_0x379f94(0x132)](_0x5ade76=>_0x379f94(0x183)+_0x13160f[_0x379f94(0x1d1)]+'\x22\x20class=\x22font-bold\x20text-left\x22>'+_0x5ade76[_0x379f94(0x100)]+_0x379f94(0xa3)+_0x5ade76['items']['map'](_0x369d28=>_0x379f94(0x145)+_0x369d28+_0x379f94(0x220))[_0x379f94(0xa5)]('')+_0x379f94(0x222))[_0x379f94(0xa5)]('');const _0x3e188d=document['getElementById']('benefitsContent');if(_0x3e188d)_0x3e188d[_0x379f94(0xac)]=_0x379f94(0x187)+_0xd8734b[_0x379f94(0x191)]+_0x379f94(0x1a2)+_0xd8734b[_0x379f94(0x1c0)]+'</p><p\x20class=\x22text-green-700\x20font-bold\x20uppercase\x22>3.\x20จะมีประสิทธิภาพมากขึ้นหาก:<br><span\x20class=\x22font-normal\x20text-slate-600\x22>'+_0xd8734b['effective']+_0x379f94(0xc3)+_0xd8734b[_0x379f94(0x201)]+_0x379f94(0x151)+_0xd8734b[_0x379f94(0x94)]+_0x379f94(0x17c)+_0xd8734b[_0x379f94(0x86)]+'</span></p></div>';const _0x3108e3=document[_0x379f94(0x1b8)](_0x379f94(0x1f0));if(_0x3108e3)_0x3108e3[_0x379f94(0xac)]=_0x379f94(0x1b7)+_0x19144b[_0x379f94(0x12e)][_0x379f94(0x132)](_0x2e7edb=>_0x379f94(0x145)+_0x2e7edb+'</li>')['join']('')+_0x379f94(0x1fa)+_0x13160f[_0x379f94(0x170)]+_0x379f94(0x167)+_0x13160f['color']+_0x379f94(0x1df)+_0x19144b[_0x379f94(0x104)]+_0x379f94(0xdc);},loadSharedData=async()=>{const _0x4626fa=_0x2a86bb;document[_0x4626fa(0x1b8)](_0x4626fa(0x214))[_0x4626fa(0xa4)][_0x4626fa(0x229)](_0x4626fa(0x1ff));try{const _0x45111a=await getDocs(collection(db,COLLECTION_NAME));window['allFriends']=[];const _0x6f893f=new Set();_0x45111a[_0x4626fa(0x1dd)](_0x3c7993=>{const _0x4c36c6=_0x4626fa,_0x4ec6ad=_0x3c7993[_0x4c36c6(0x152)]();if(_0x4ec6ad['FullName']){window[_0x4c36c6(0x8b)][_0x4c36c6(0x20e)]({'docId':_0x3c7993['id'],..._0x4ec6ad});if(_0x4ec6ad['Group'])_0x6f893f[_0x4c36c6(0xf1)](_0x4ec6ad['Group']);}});const _0x174dfe=document[_0x4626fa(0x1b8)](_0x4626fa(0xee));if(_0x174dfe){const _0x12853f=_0x174dfe[_0x4626fa(0xcc)];_0x174dfe[_0x4626fa(0xac)]=_0x4626fa(0xa6)+Array[_0x4626fa(0xc7)](_0x6f893f)['sort']()[_0x4626fa(0x132)](_0x319f32=>'<option\x20value=\x22'+_0x319f32+'\x22>'+_0x319f32+'</option>')[_0x4626fa(0xa5)](''),_0x174dfe[_0x4626fa(0xcc)]=_0x12853f;}applyFilters();}catch(_0x4f9c18){console['error'](_0x4626fa(0x117),_0x4f9c18);}finally{document[_0x4626fa(0x1b8)]('globalLoader')[_0x4626fa(0xa4)][_0x4626fa(0xf1)](_0x4626fa(0x1ff));}},applyFilters=()=>{const _0x18b17c=_0x2a86bb,_0x530ac5=document[_0x18b17c(0x1b8)]('friendGroupFilter')?.[_0x18b17c(0xcc)]||'';window['filteredFriends']=window['allFriends'][_0x18b17c(0x16d)](_0x635c18=>!_0x530ac5||_0x635c18[_0x18b17c(0xc0)]===_0x530ac5),window[_0x18b17c(0xaf)]=0x1,renderTable(_0x18b17c(0xfb),window[_0x18b17c(0x106)],0x1),updateRadarChart(_0x18b17c(0x1f3),window[_0x18b17c(0x106)],_0x18aada=>window[_0x18b17c(0x109)]=_0x18aada);const _0x1eb7d2=window['currentMember']?.[_0x18b17c(0x102)]||'';document[_0x18b17c(0x1b8)](_0x18b17c(0x18d))[_0x18b17c(0x1f1)]=_0x1eb7d2||_0x18b17c(0x1c4),window[_0x18b17c(0x14b)]=window[_0x18b17c(0x8b)]['filter'](_0x12f113=>_0x12f113[_0x18b17c(0x102)]===_0x1eb7d2&&_0x12f113[_0x18b17c(0x1e6)]),renderTable(_0x18b17c(0x107),window[_0x18b17c(0x14b)],0x1),updateRadarChart(_0x18b17c(0x226),window[_0x18b17c(0x14b)],_0x3209ff=>window[_0x18b17c(0x18b)]=_0x3209ff),lucide[_0x18b17c(0xb7)]();};window['changePage']=_0x2d41e7=>{const _0x329aa6=_0x2a86bb,_0x22f7bb=Math['ceil'](window[_0x329aa6(0x106)]['length']/window[_0x329aa6(0x133)]),_0xf5d4f7=window['currentPage']+_0x2d41e7;_0xf5d4f7>=0x1&&_0xf5d4f7<=_0x22f7bb&&(window[_0x329aa6(0xaf)]=_0xf5d4f7,renderTable('friendsTableBody',window['filteredFriends'],window['currentPage']),lucide[_0x329aa6(0xb7)]());};const renderTable=(_0x4b8f73,_0x3d4ac8,_0x181f25)=>{const _0x78d18e=_0x2a86bb,_0x563a20=document[_0x78d18e(0x1b8)](_0x4b8f73);if(!_0x563a20)return;_0x563a20['innerHTML']='';if(!_0x3d4ac8||_0x3d4ac8[_0x78d18e(0x108)]===0x0){_0x563a20[_0x78d18e(0xac)]=_0x78d18e(0xd1);return;}let _0x5a2349=_0x3d4ac8;if(_0x4b8f73===_0x78d18e(0xfb)){const _0x45687d=Math['ceil'](_0x3d4ac8[_0x78d18e(0x108)]/window[_0x78d18e(0x133)]),_0x249e0c=(_0x181f25-0x1)*window[_0x78d18e(0x133)];_0x5a2349=_0x3d4ac8[_0x78d18e(0xf0)](_0x249e0c,_0x249e0c+window[_0x78d18e(0x133)]);const _0x392364=document[_0x78d18e(0x1b8)](_0x78d18e(0x1a7));if(_0x392364)_0x392364[_0x78d18e(0x1f1)]='หน้า\x20'+_0x181f25+_0x78d18e(0x21d)+(_0x45687d||0x1)+_0x78d18e(0x15a)+_0x3d4ac8[_0x78d18e(0x108)]+_0x78d18e(0x1fb);const _0x3234c5=document[_0x78d18e(0x1b8)]('prevFriendPageBtn'),_0x5bed5b=document[_0x78d18e(0x1b8)]('nextFriendPageBtn');if(_0x3234c5)_0x3234c5[_0x78d18e(0x160)]=_0x181f25<=0x1;if(_0x5bed5b)_0x5bed5b[_0x78d18e(0x160)]=_0x181f25>=_0x45687d;}_0x5a2349[_0x78d18e(0x1dd)](_0x38d991=>{const _0x493dfe=_0x78d18e,_0x36e8d6=document[_0x493dfe(0x1cd)]('tr'),_0x3cca65=_0x38d991[_0x493dfe(0x209)]||'',_0x13cd9f=_0x38d991[_0x493dfe(0x115)]||'',_0x33f02e=_0x3cca65?window[_0x493dfe(0xd0)][_0x3cca65][_0x493dfe(0x1d1)]:_0x493dfe(0xba),_0x4b2193=_0x13cd9f?window[_0x493dfe(0xd0)][_0x13cd9f][_0x493dfe(0x1d1)]:_0x493dfe(0xba),_0x452366=_0x3cca65?_0x493dfe(0x1ec)+_0x38d991[_0x493dfe(0x1e6)]+'\x27,\x20\x27'+_0x38d991[_0x493dfe(0x209)]+_0x493dfe(0x20a)+_0x38d991[_0x493dfe(0x115)]+_0x493dfe(0xc4):'';_0x36e8d6[_0x493dfe(0xac)]=_0x493dfe(0x92)+_0x38d991[_0x493dfe(0x1e6)]+_0x493dfe(0x1b6)+(_0x3cca65?_0x493dfe(0xe9)+_0x33f02e+'\x22>'+_0x3cca65+'</div>':'-')+'</td><td\x20class=\x22text-center\x20py-2\x20border-r\x20border-slate-100\x22>'+(_0x13cd9f?_0x493dfe(0xe9)+_0x4b2193+'\x22>'+_0x13cd9f+_0x493dfe(0xab):'-')+'</td><td\x20class=\x22text-center\x22>'+_0x452366+_0x493dfe(0x1c1),_0x563a20['appendChild'](_0x36e8d6);});};window['handleSort']=(_0x31cd11,_0x5e1a7d)=>{const _0x36f2fb=_0x2a86bb,_0x107abc=_0x5e1a7d===_0x36f2fb(0x162)?window['filteredTeam']:window[_0x36f2fb(0x8b)],_0x1ade19=_0x5e1a7d==='team'?_0x36f2fb(0x107):_0x36f2fb(0xfb);if(window[_0x36f2fb(0xb2)]===_0x31cd11)window['sortDir']=window[_0x36f2fb(0xd7)]===_0x36f2fb(0x14a)?_0x36f2fb(0xc5):_0x36f2fb(0x14a);else window['sortCol']=_0x31cd11,window['sortDir']='asc';_0x107abc[_0x36f2fb(0x136)]((_0x391409,_0x43c310)=>{const _0x576c9e=_0x36f2fb,_0x4cb27c=(_0x391409[_0x31cd11]||'')['toString'](),_0xd6823=(_0x43c310[_0x31cd11]||'')[_0x576c9e(0x21f)]();return window[_0x576c9e(0xd7)]===_0x576c9e(0x14a)?_0x4cb27c['localeCompare'](_0xd6823,'th'):_0xd6823[_0x576c9e(0xb8)](_0x4cb27c,'th');}),window['currentPage']=0x1,renderTable(_0x1ade19,_0x107abc,0x1),lucide[_0x36f2fb(0xb7)]();};const updateRadarChart=(_0x4922b3,_0x1cd7c2,_0x4fac2c)=>{const _0x4684ac=_0x2a86bb,_0x405d49=document[_0x4684ac(0x1b8)](_0x4922b3);if(!_0x405d49)return;const _0x482324={'D':0x0,'i':0x0,'S':0x0,'C':0x0};_0x1cd7c2[_0x4684ac(0x1dd)](_0x4cec84=>{const _0x40092d=_0x4684ac;if(_0x4cec84[_0x40092d(0x209)]&&_0x482324[_0x4cec84[_0x40092d(0x209)]]!==undefined)_0x482324[_0x4cec84['DISC']]++;});const _0x1692a6=_0x405d49[_0x4684ac(0x21b)]('2d'),_0x43d0ff=_0x4922b3==='friendsRadarChart'?window[_0x4684ac(0x109)]:window[_0x4684ac(0x18b)];if(_0x43d0ff)_0x43d0ff[_0x4684ac(0x13d)]();const _0x4134c0=new Chart(_0x1692a6,{'type':_0x4684ac(0x13e),'data':{'labels':['D','i','S','C'],'datasets':[{'label':_0x4684ac(0x1de),'data':[_0x482324['D'],_0x482324['i'],_0x482324['S'],_0x482324['C']],'backgroundColor':_0x4684ac(0x10c),'borderColor':_0x4684ac(0x153),'pointBackgroundColor':'#f97316','borderWidth':0x2}]},'options':{'scales':{'r':{'beginAtZero':!![],'ticks':{'display':![],'stepSize':0x1},'suggestedMax':Math[_0x4684ac(0x1ab)](...Object[_0x4684ac(0x171)](_0x482324))+0x1}},'plugins':{'legend':{'display':![]}},'responsive':!![],'maintainAspectRatio':!![]}});_0x4fac2c(_0x4134c0);};window[_0x2a86bb(0x1b0)]=(_0x25a6c1,_0xe20fd8,_0x1efa61)=>{const _0x1096bc=_0x2a86bb;window[_0x1096bc(0xa7)][_0x1096bc(0x154)]();const _0x53edfe=document['getElementById'](_0x1096bc(0x1cc));if(!_0x53edfe)return;const _0x1d15db=window[_0x1096bc(0xd0)][_0xe20fd8]||{'color':'#64748b'},_0x2255c8=window[_0x1096bc(0x1a0)][_0xe20fd8]||[],_0x352a27=window['discRelationships'][_0xe20fd8]||{},_0x557ac9=window[_0x1096bc(0xdb)][_0xe20fd8]||{};document[_0x1096bc(0x1b8)](_0x1096bc(0xf5))[_0x1096bc(0xde)]['backgroundColor']=_0x1d15db[_0x1096bc(0x1d1)],document[_0x1096bc(0x1b8)](_0x1096bc(0x1eb))[_0x1096bc(0xac)]=_0x1096bc(0x1da)+window[_0x1096bc(0x1b5)][_0xe20fd8]+_0x1096bc(0x12d),document['getElementById'](_0x1096bc(0x125))[_0x1096bc(0xac)]=_0x1efa61?_0x1096bc(0x1da)+window[_0x1096bc(0x1b5)][_0x1efa61]+'\x22\x20class=\x22w-full\x20h-full\x20object-cover\x22>':_0x1096bc(0x20b),document[_0x1096bc(0x1b8)]('friendModalName')[_0x1096bc(0x1f1)]=_0x25a6c1,document['getElementById']('friendModalType')[_0x1096bc(0x1f1)]=window[_0x1096bc(0x175)][_0xe20fd8]+'\x20'+(_0x1efa61?'/\x20'+window['discTypeNames'][_0x1efa61]:''),document[_0x1096bc(0x1b8)](_0x1096bc(0x1e4))[_0x1096bc(0xac)]=_0x1096bc(0xfc)+window[_0x1096bc(0x103)][_0xe20fd8]+_0x1096bc(0x113)+_0x2255c8[0x0]?.['items'][_0x1096bc(0x132)](_0x2b9c88=>_0x1096bc(0x145)+_0x2b9c88+_0x1096bc(0x220))['join']('')+'</ul></div><div\x20class=\x22p-3\x20bg-white\x20rounded-lg\x20border\x20border-slate-100\x22><h4\x20class=\x22font-bold\x20text-blue-600\x20mb-1\x20uppercase\x22>สไตล์และการร่วมงาน:</h4><p\x20class=\x22text-slate-600\x22><strong>จุดเด่น:</strong>\x20'+_0x557ac9[_0x1096bc(0x191)]+_0x1096bc(0x1d2)+_0x557ac9['effective']+_0x1096bc(0x1e8)+_0x1d15db['light']+_0x1096bc(0x167)+_0x1d15db['color']+_0x1096bc(0xfd)+_0x352a27['workingTip']+'\x22</div></div>',_0x53edfe['classList'][_0x1096bc(0x229)](_0x1096bc(0x1ff)),lucide[_0x1096bc(0xb7)](),speak('นี่คือการร่วมงานกับ\x20'+_0x25a6c1+_0x1096bc(0x1f8)+window['discTypeNames'][_0xe20fd8]+_0x1096bc(0x123));},window['closeFriendInsight']=()=>{const _0x540650=_0x2a86bb;document[_0x540650(0x1b8)](_0x540650(0x1cc))[_0x540650(0xa4)][_0x540650(0xf1)]('hidden'),window['speechSynthesis'][_0x540650(0x154)]();},window[_0x2a86bb(0x1ee)]=async()=>{const _0x1a8b3d=_0x2a86bb,_0x2558fa=document[_0x1a8b3d(0x1b8)](_0x1a8b3d(0x16f))['value'][_0x1a8b3d(0x215)]();if(_0x2558fa[_0x1a8b3d(0x108)]!==0x5)return;const _0x5a2f86=document[_0x1a8b3d(0x1b8)](_0x1a8b3d(0xa8));if(_0x5a2f86)_0x5a2f86['disabled']=!![];try{const _0x34f33d=await getDocs(collection(db,COLLECTION_NAME));let _0x26acab=null;_0x34f33d[_0x1a8b3d(0x1dd)](_0x31c6ab=>{const _0x2a2794=_0x1a8b3d,_0x3f1f3e=_0x31c6ab[_0x2a2794(0x152)]();if(String(_0x3f1f3e['EmpID'])[_0x2a2794(0x215)]()===_0x2558fa)_0x26acab={'docId':_0x31c6ab['id'],..._0x3f1f3e};});if(!_0x26acab){window[_0x1a8b3d(0x137)]('รหัสพนักงานไม่ถูกต้อง','error');if(_0x5a2f86)_0x5a2f86[_0x1a8b3d(0x160)]=![];return;}window[_0x1a8b3d(0x135)]=_0x26acab,window[_0x1a8b3d(0x105)](),document[_0x1a8b3d(0x1b8)](_0x1a8b3d(0x1e0))['textContent']=_0x26acab[_0x1a8b3d(0x1e6)],document['getElementById']('userSub')[_0x1a8b3d(0x1f1)]=(_0x26acab[_0x1a8b3d(0xc0)]||'-')+'\x20|\x20'+(_0x26acab[_0x1a8b3d(0x102)]||'-'),window[_0x1a8b3d(0x137)](_0x1a8b3d(0x1d7),_0x1a8b3d(0x193)),showMainPage(_0x26acab);}catch(_0x569b93){window[_0x1a8b3d(0x137)]('เกิดข้อผิดพลาดในการเชื่อมต่อ','error');}finally{if(_0x5a2f86)_0x5a2f86[_0x1a8b3d(0x160)]=![];lucide['createIcons']();}},window[_0x2a86bb(0x1fe)]=async()=>{const _0x19aebb=_0x2a86bb;try{await signOut(auth),window[_0x19aebb(0x101)]['reload']();}catch(_0x44e3f6){window[_0x19aebb(0x101)][_0x19aebb(0x87)]();}};const showMainPage=_0x20ef8a=>{const _0x3ae19d=_0x2a86bb,_0x4b9dd4=document['getElementById'](_0x3ae19d(0x111)),_0x24eb7d=document[_0x3ae19d(0x1b8)](_0x3ae19d(0x129)),_0x14accf=document['getElementById'](_0x3ae19d(0xef));if(_0x4b9dd4)_0x4b9dd4[_0x3ae19d(0xa4)][_0x3ae19d(0xf1)](_0x3ae19d(0x1ff));if(_0x14accf)_0x14accf[_0x3ae19d(0xa4)]['add'](_0x3ae19d(0x1ff));if(_0x24eb7d)_0x24eb7d[_0x3ae19d(0xa4)]['remove'](_0x3ae19d(0x1ff));window['switchTab']('home');};window[_0x2a86bb(0x11e)]=()=>{const _0x4cd3e3=_0x2a86bb,_0x15cf96=document[_0x4cd3e3(0x1b8)](_0x4cd3e3(0x1db));if(_0x15cf96)_0x15cf96[_0x4cd3e3(0xa4)]['remove']('hidden');},window[_0x2a86bb(0x105)]=()=>{const _0x5e6b4f=_0x2a86bb,_0x508d26=document['getElementById'](_0x5e6b4f(0x1db));if(_0x508d26)_0x508d26[_0x5e6b4f(0xa4)][_0x5e6b4f(0xf1)](_0x5e6b4f(0x1ff));},onAuthStateChanged(auth,async _0x399730=>{const _0xd69148=_0x2a86bb;if(!_0x399730)await signInAnonymously(auth);const _0x3fb9ae=document[_0xd69148(0x1b8)](_0xd69148(0x214)),_0x4796af=document[_0xd69148(0x1b8)](_0xd69148(0x111));if(_0x3fb9ae)_0x3fb9ae['classList'][_0xd69148(0xf1)](_0xd69148(0x1ff));if(_0x4796af)_0x4796af[_0xd69148(0xa4)][_0xd69148(0x229)](_0xd69148(0x1ff));const _0x22f523=document['getElementById'](_0xd69148(0x1c2));if(_0x22f523){_0x22f523[_0xd69148(0x160)]=![];const _0x1d2d09=document[_0xd69148(0x1b8)](_0xd69148(0xc9));_0x1d2d09&&(_0x1d2d09[_0xd69148(0x141)](_0xd69148(0x157),'user-plus'),_0x1d2d09['classList'][_0xd69148(0x229)](_0xd69148(0x212))),lucide[_0xd69148(0xb7)]();}}),window[_0x2a86bb(0x8e)]=()=>{const _0x1bc317=_0x2a86bb;window['speechSynthesis'][_0x1bc317(0x154)](),window[_0x1bc317(0x1f9)]();const _0x4d1fba=document[_0x1bc317(0x1b8)](_0x1bc317(0x129)),_0x1a3aa=document['getElementById'](_0x1bc317(0xef)),_0x1bf4a5=document[_0x1bc317(0x1b8)]('assessmentIntro');if(_0x4d1fba)_0x4d1fba[_0x1bc317(0xa4)][_0x1bc317(0xf1)](_0x1bc317(0x1ff));if(_0x1a3aa)_0x1a3aa['classList']['remove']('hidden');if(_0x1bf4a5)_0x1bf4a5[_0x1bc317(0xa4)][_0x1bc317(0x229)](_0x1bc317(0x1ff));const _0x35bd82=document[_0x1bc317(0x1b8)](_0x1bc317(0x15b));if(_0x35bd82)_0x35bd82[_0x1bc317(0xa4)]['add'](_0x1bc317(0x1ff));speak(_0x1bc317(0xa0)),lucide['createIcons']();},window[_0x2a86bb(0xff)]=()=>showMainPage(window[_0x2a86bb(0x135)]),window['beginActualTest']=()=>{const _0x5f3278=_0x2a86bb;window[_0x5f3278(0x1f9)](),window[_0x5f3278(0x1ed)]=0x0,window[_0x5f3278(0x18a)]=new Array(0x14)[_0x5f3278(0xa1)](null)['map'](()=>({'most':null,'least':null}));const _0x3227e4=document[_0x5f3278(0x1b8)](_0x5f3278(0x19d)),_0x3fd0fa=document['getElementById'](_0x5f3278(0x15b)),_0x3540c6=document[_0x5f3278(0x1b8)](_0x5f3278(0x223)),_0x4b1715=document[_0x5f3278(0x1b8)](_0x5f3278(0x11d));if(_0x3227e4)_0x3227e4[_0x5f3278(0xa4)][_0x5f3278(0xf1)](_0x5f3278(0x1ff));if(_0x3fd0fa)_0x3fd0fa['classList'][_0x5f3278(0x229)](_0x5f3278(0x1ff));if(_0x3540c6)_0x3540c6['classList'][_0x5f3278(0x229)]('hidden');if(_0x4b1715)_0x4b1715[_0x5f3278(0xa4)][_0x5f3278(0x229)](_0x5f3278(0x1ff));renderQuestion(!![]);};const renderQuestion=(_0x25d2f7=![])=>{const _0x527716=_0x2a86bb,_0x197e24=window['discQuestionsData'][window[_0x527716(0x1ed)]],_0x176ddb=window['assessmentAnswers'][window['currentQIndex']],_0x2d8f1c=document['getElementById'](_0x527716(0x15d));if(_0x2d8f1c)_0x2d8f1c['textContent']=window[_0x527716(0x1ed)]+0x1;const _0x294e08=document['getElementById'](_0x527716(0xbd));if(_0x294e08)_0x294e08[_0x527716(0x1f1)]='Q:\x20'+_0x197e24[_0x527716(0x216)];if(_0x25d2f7)speak('คำถามข้อที่\x20'+(window[_0x527716(0x1ed)]+0x1)+'\x20'+_0x197e24['prompt']);const _0x3c9844=document['getElementById']('qChoicesContainer');_0x3c9844&&(_0x3c9844[_0x527716(0xac)]=_0x197e24['choices']['map']((_0x41d93d,_0x1706ff)=>{const _0x398504=_0x527716,_0x3f37a4=_0x176ddb[_0x398504(0x98)]===_0x41d93d[_0x398504(0x17b)],_0x22a656=_0x176ddb[_0x398504(0xb4)]===_0x41d93d[_0x398504(0x17b)],_0x333ee6=_0x176ddb[_0x398504(0x98)]!==null,_0xb26874=_0x176ddb[_0x398504(0xb4)]!==null;let _0x2396d5=_0x398504(0x114);if(_0x3f37a4)_0x2396d5=_0x398504(0x1a8);else{if(_0x22a656)_0x2396d5=_0x398504(0x1ac);}let _0x1205f7=_0x3f37a4?'bg-green-800\x20text-white\x20border-green-900\x20shadow-inner':_0x333ee6?_0x398504(0xc1):_0x398504(0xe1),_0x3b4396=_0x22a656?_0x398504(0x1ea):_0xb26874?_0x398504(0xc1):_0x398504(0x185);return'<div\x20class=\x22choice-card\x20p-3\x20rounded-xl\x20flex\x20justify-between\x20items-center\x20border-slate-100\x20shadow-sm\x20'+_0x2396d5+_0x398504(0x19f)+(_0x3f37a4||_0x22a656?_0x398504(0x126):'text-slate-700')+'\x22>'+_0x41d93d[_0x398504(0xd8)]+_0x398504(0x13c)+_0x1706ff+_0x398504(0x12f)+_0x1205f7+_0x398504(0x188)+_0x1706ff+_0x398504(0x218)+_0x3b4396+_0x398504(0xe2);})[_0x527716(0xa5)](''));const _0x1b56c3=document[_0x527716(0x1b8)]('prevBtn');if(_0x1b56c3)_0x1b56c3[_0x527716(0x160)]=window[_0x527716(0x1ed)]===0x0;const _0x55d8b5=document[_0x527716(0x1b8)]('nextBtn');_0x55d8b5&&(_0x55d8b5[_0x527716(0x160)]=!(_0x176ddb[_0x527716(0x98)]&&_0x176ddb[_0x527716(0xb4)]),_0x55d8b5[_0x527716(0xac)]=window[_0x527716(0x1ed)]===0x13?_0x527716(0x1f7):_0x527716(0xce));const _0x164106=(window['currentQIndex']+0x1)/0x14*0x64,_0x50f1a5=document[_0x527716(0x1b8)](_0x527716(0x99));if(_0x50f1a5)_0x50f1a5[_0x527716(0xde)]['width']=_0x164106+'%';};window[_0x2a86bb(0x9c)]=(_0xea68c6,_0x225c06)=>{const _0x174657=_0x2a86bb,_0x5e6beb=window[_0x174657(0x159)][window[_0x174657(0x1ed)]],_0x126d11=_0x5e6beb[_0x174657(0xa9)][_0xea68c6][_0x174657(0x17b)],_0x5ab8ec=window[_0x174657(0x18a)][window[_0x174657(0x1ed)]];if(_0x225c06===_0x174657(0x98)){_0x5ab8ec[_0x174657(0x98)]=_0x126d11;if(_0x5ab8ec[_0x174657(0xb4)]===_0x126d11)_0x5ab8ec['least']=null;speak(_0x5e6beb[_0x174657(0xa9)][_0xea68c6][_0x174657(0xd8)]+_0x174657(0xe8));}else{_0x5ab8ec[_0x174657(0xb4)]=_0x126d11;if(_0x5ab8ec[_0x174657(0x98)]===_0x126d11)_0x5ab8ec['most']=null;speak(_0x5e6beb[_0x174657(0xa9)][_0xea68c6][_0x174657(0xd8)]+_0x174657(0x1c7));}renderQuestion();},window[_0x2a86bb(0xca)]=()=>{const _0x1505e6=_0x2a86bb;if(window[_0x1505e6(0x1ed)]<0x13)window[_0x1505e6(0x1ed)]++,renderQuestion(!![]);else calc();},window[_0x2a86bb(0x17f)]=()=>{const _0x3d7257=_0x2a86bb;window[_0x3d7257(0x1ed)]>0x0&&(window[_0x3d7257(0x1ed)]--,renderQuestion(!![]));};const calc=async()=>{const _0x4da332=_0x2a86bb;document[_0x4da332(0x1b8)](_0x4da332(0x214))[_0x4da332(0xa4)]['remove'](_0x4da332(0x1ff));const _0x82ee29={'D':0x0,'i':0x0,'S':0x0,'C':0x0};window[_0x4da332(0x18a)][_0x4da332(0x1dd)](_0x4a7c18=>{const _0x5d5cb5=_0x4da332;if(_0x4a7c18[_0x5d5cb5(0x98)])_0x82ee29[_0x4a7c18[_0x5d5cb5(0x98)]]++;if(_0x4a7c18[_0x5d5cb5(0xb4)])_0x82ee29[_0x4a7c18[_0x5d5cb5(0xb4)]]--;});const _0x40c92b=Object[_0x4da332(0x166)](_0x82ee29)[_0x4da332(0x136)]((_0x58fa75,_0x5f16b7)=>_0x5f16b7[0x1]-_0x58fa75[0x1]),_0x415ebe=_0x40c92b[0x0][0x0],_0x5022ca=_0x40c92b[0x1][0x0];try{await updateDoc(doc(db,COLLECTION_NAME,window['currentMember'][_0x4da332(0xcf)]),{'DISC':_0x415ebe,'DISC2':_0x5022ca,'updatedAt':serverTimestamp()}),await addDoc(collection(db,'DISC_Results'),{'EmpID':window[_0x4da332(0x135)][_0x4da332(0x16f)],'FullName':window[_0x4da332(0x135)][_0x4da332(0x1e6)],'DISC':_0x415ebe,'DISC2':_0x5022ca,'timestamp':serverTimestamp()}),window[_0x4da332(0x135)][_0x4da332(0x209)]=_0x415ebe,window['currentMember'][_0x4da332(0x115)]=_0x5022ca,window[_0x4da332(0x137)](_0x4da332(0x116),_0x4da332(0x193)),showMainPage(window[_0x4da332(0x135)]),window[_0x4da332(0x8c)](_0x4da332(0x1bf));}catch(_0x29b0da){window[_0x4da332(0x137)](_0x4da332(0x1e7),_0x4da332(0x91));}finally{document[_0x4da332(0x1b8)](_0x4da332(0x214))[_0x4da332(0xa4)][_0x4da332(0xf1)](_0x4da332(0x1ff));}},initApp=async()=>{const _0xc67109=_0x2a86bb,_0xae46f9=document[_0xc67109(0x1b8)](_0xc67109(0xa8));if(_0xae46f9)_0xae46f9[_0xc67109(0x118)]=window[_0xc67109(0x1ee)];const _0xd1b3a1=document[_0xc67109(0x1b8)](_0xc67109(0x16f));if(_0xd1b3a1)_0xd1b3a1[_0xc67109(0x143)]=_0x353d90=>{const _0x39db6b=_0xc67109;_0x353d90[_0x39db6b(0x196)]['value']=_0x353d90[_0x39db6b(0x196)][_0x39db6b(0xcc)][_0x39db6b(0x17e)](/[^0-9]/g,'');if(_0xae46f9)_0xae46f9[_0x39db6b(0x160)]=_0x353d90[_0x39db6b(0x196)][_0x39db6b(0xcc)][_0x39db6b(0x108)]!==0x5;};const _0x168e17=document[_0xc67109(0x1b8)](_0xc67109(0xee));if(_0x168e17)_0x168e17['onchange']=applyFilters;lucide[_0xc67109(0xb7)]();};initApp();
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, updateDoc, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Reverted to original static Firebase config
+        const firebaseConfig = { apiKey: "AIzaSyAciknEYhZU7AwOdfYytC1t_AnW2Ee11us", authDomain: "faifah-ttb.firebaseapp.com", projectId: "faifah-ttb", storageBucket: "faifah-ttb.appspot.com", messagingSenderId: "842980876200", appId: "1:842980876200:web:f33bfad2ccbf263075079d" };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const COLLECTION_NAME = "DISC_Member";
+
+        // --- GLOBAL DATA OBJECTS ---
+        window.discStyles = { 
+            'D': { color: '#05ae4b', light: 'rgba(5, 174, 75, 0.05)', banner: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-D.jpg?alt=media&token=aa34506c-e29e-4d26-bc30-31815a46ef8d' },
+            'i': { color: '#cb3743', light: 'rgba(203, 55, 67, 0.05)', banner: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-i.jpg?alt=media&token=5e0bf3d4-212b-4565-8c4b-42a578f5a936' },
+            'S': { color: '#13a1d3', light: 'rgba(19, 161, 211, 0.05)', banner: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-S.jpg?alt=media&token=a41f7202-e29e-4d26-bc30-31815a46ef87' },
+            'C': { color: '#fdd704', light: 'rgba(253, 215, 4, 0.05)', banner: 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2Fbackground-C.jpg?alt=media&token=9c096580-03ac-45d5-8cde-ae8b936ef3b4' }
+        };
+
+        window.discTypeImages = { 
+            'D': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-D.jpg?alt=media&token=c8ab4104-1ffc-4420-b2b8-8381dd422f43', 
+            'i': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-i.jpg?alt=media&token=1abeb825-20c0-4002-9486-55eab2c223dc', 
+            'S': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-S.jpg?alt=media&token=2c1f4acd-ea1c-46c2-a902-edc443354a87', 
+            'C': 'https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/disc%2FDiSC-C.jpg?alt=media&token=f7d7088c-7ed9-4258-8da0-6c784123b0c2' 
+        };
+
+        window.discTypeNames = { 'D': 'Dominance', 'i': 'Influence', 'S': 'Steadiness', 'C': 'Conscientiousness' };
+
+        window.discPersonalSummaries = {
+            'D': 'คนสไตล์ D คือผู้ที่ขับเคลื่อนด้วยผลลัพธ์ ความเร็ว และความท้าทาย มีพลังในการตัดสินใจและผลักดันงานให้เดินหน้า จุดเด่นคือความเด็ดขาด กล้ารับความเสี่ยง และแก้ปัญหาได้รวดเร็ว แต่ก็อาจดูเร่งรัด ข้ามรายละเอียด หรือกดดันคนอื่นโดยไม่ตั้งใจ การตัดสินใจมักเกิดจากภาพรวมและความมั่นใจส่วนตัว ทำงานได้ดีในสถานการณ์ที่ต้องการความชัดเจนและความเร็ว สิ่งที่ต้องพัฒนาคือการฟัง เปิดรับความคิดเห็น และใส่ใจผลกระทบต่อทีม สิ่งที่ต้องระวังคืออารมณ์ ความหุนหัน และการใช้อำนาจมากเกินไปจนทำให้คนรอบตัวรู้สึกถูกกดทับ',
+            'i': 'คนสไตล์ i คือผู้ที่ขับเคลื่อนด้วยผู้คน ความสัมพันธ์ และพลังบวก มีเสน่ห์ทางการสื่อสาร สร้างแรงบันดาลใจ และทำให้ทีมมีบรรยากาศสนุก จุดเด่นคือความเป็นมิตร ความคิดสร้างสรรค์ และความสามารถในการเชื่อมคนเข้าด้วยกัน แต่ก็อาจขาดวินัย ทำงานไม่ต่อเนื่อง หรือสัญญามากเกินไป การตัดสินใจมักอิงความรู้สึกและผลต่อความสัมพันธ์ ทำงานร่วมกับคนอื่นได้ดีในงานที่ต้องการพลังและการมีส่วนร่วม สิ่งที่ต้องพัฒนาคือการจัดลำดับความสำคัญและการติดตามงานให้จบ สิ่งที่ต้องระวังคือการหลีกเลี่ยงงานละเอียดและการใช้อารมณ์มากเกินไป',
+            'S': 'คนสไตล์ S คือผู้ที่ขับเคลื่อนด้วยความมั่นคง ความกลมกลืน และความสัมพันธ์ที่ดี เป็นคนใจเย็น รับฟังเก่ง และเชื่อถือได้ จุดเด่นคือความสม่ำเสมอ ความอดทน และความสามารถในการสนับสนุนผู้อื่น แต่ก็อาจลังเล ไม่กล้าปฏิเสธ และไม่ชอบการเปลี่ยนแปลงเร็ว การตัดสินใจมักใช้เวลาเพราะคิดถึงผลกระทบต่อคนอื่น ทำงานร่วมกับทุกคนได้ดีและเป็นตัวเชื่อมทีม สิ่งที่ต้องพัฒนาคือความกล้าแสดงออก การตั้งขอบเขต และการรับมือกับความเปลี่ยนแปลง สิ่งที่ต้องระวังคือการเก็บความรู้สึกจนเกิดความเครียดและงานล้นตัว',
+            'C': 'คนสไตล์ C คือผู้ที่ขับเคลื่อนด้วยความถูกต้อง มาตรฐาน และข้อมูล ชอบคิดวิเคราะห์และทำงานอย่างละเอียด จุดเด่นคือความแม่นยำ การวางระบบ และคุณภาพงานที่สูง แต่ก็อาจใช้เวลานาน กลัวความผิดพลาด และดูเย็นชาต่อคนอื่น การตัดสินใจมักต้องการข้อมูลครบถ้วนและเหตุผลที่หนักแน่น ทำงานได้ดีในงานที่ต้องการความละเอียดและความเป็นระบบ สิ่งที่ต้องพัฒนาคือความยืดหยุ่น การสื่อสารให้กระชับ และการยอมรับความไม่สมบูรณ์แบบ สิ่งที่ต้องระวังคือการคิดมากเกินไปและตั้งมาตรฐานสูงจนกดดันตัวเอง'
+        };
+
+        window.discDrives = {
+            'D': [ { title: '1. สิ่งที่ให้ความสำคัญในการทำงาน', items: ['ผลลัพธ์ (Results)', 'ความเร็ว (Action)', 'ความท้าทาย (Challenge)'] }, { title: '2. แรงจูงใจ', items: ['โอกาสได้รับผลตอบแทนก้อนใหญ่', 'การแข่งขัน', 'การเป็นผู้นำ'] }, { title: '3. แรงกดดัน', items: ['ขาดอำนาจควบคุม', 'งานไม่คืบหน้า', 'ตัดสินใจช้า'] } ],
+            'i': [ { title: '1. สิ่งที่ให้ความสำคัญในการทำงาน', items: ['ความกระตือรือร้น (Enthusiasm)', 'ความเร็ว (Action)', 'การร่วมมือ (Collaboration)'] }, { title: '2. แรงจูงใจ', items: ['การได้รับการยอมรับ', 'กิจกรรมสังคม'] }, { title: '3. แรงกดดัน', items: ['งานซ้ำซาก', 'ถูกแยกออกจากกลุ่ม'] } ],
+            'S': [ { title: '1. สิ่งที่ให้ความสำคัญในการทำงาน', items: ['การสนับสนุน (Support)', 'การร่วมมือ (Collaboration)', 'ความมั่นคง (Stability)'] }, { title: '2. แรงจูงใจ', items: ['การช่วยเหลือผู้อื่น', 'ความจริงใจ'] }, { title: '3. แรงกดดัน', items: ['ความตึงเครียด', 'ความไม่แน่นอน'] } ],
+            'C': [ { title: '1. สิ่งที่ให้ความสำคัญในการทำงาน', items: ['ความถูกต้อง (Accuracy)', 'ความมั่นคง (Stability)', 'ความท้าทาย (Challenge)'] }, { title: '2. แรงจูงใจ', items: ['การแก้ปัญหาซับซ้อน', 'การวางระบบงาน'] }, { title: '3. แรงกดดัน', items: ['มาตรฐานที่ไม่ถูกต้อง', 'ถูกตำหนิไร้ความสามารถ'] } ]
+        };
+
+        window.discBenefits = {
+            'D': { view: 'มั่นใจ, เด็ดขาด, ชอบเสี่ยง', judge: 'ความสำเร็จของงาน', effective: 'มีความอดทน, เห็นอกเห็นใจ', limit: 'ขาดการใส่ใจผู้อื่น', dark: 'ความต้องการเอาชนะ', pressure: 'หงุดหงิดง่าย' },
+            'i': { view: 'มีเสน่ห์, ร่าเริง, มองโลกแง่ดี', judge: 'ความเป็นมิตร', effective: 'เป็นกลาง, ติดตามงาน', limit: 'หุนหันพลันแล่น', dark: 'มองแง่ดีเกินไป', pressure: 'วุ่นวาย' },
+            'S': { view: 'มีความอดทน, นิ่ง, เข้าอกเข้าใจ', judge: 'ความน่าเชื่อถือ', effective: 'มั่นใจ, เปิดเผย', limit: 'ยอมคนอื่นมากไป', dark: 'ประนีประนอมเกินไป', pressure: 'ยอมแพ้' },
+            'C': { view: 'แม่นยำ, วิเคราะห์, รักระเบียบ', judge: 'ความเชี่ยวชาญ', effective: 'ใส่ใจคนอื่น', limit: 'คิดมาก, ระวังตัว', dark: 'วิเคราะห์มากไป', pressure: 'กดดันผู้อื่น' }
+        };
+
+        window.discRelationships = {
+            'D': { relate: ['ใช้เวลาคุ้มค่า', 'เน้นประเด็นหลัก'], solving: ['กล้าตัดสินใจ'], stress: ['คุยให้ชัดเจน'], workingTip: 'สื่อสารให้ตรง ประเด็น รวดเร็ว และโฟกัสผลลัพธ์' },
+            'i': { relate: ['เปิดใจร่วมมือ', 'เห็นคุณค่าพลังบวก'], solving: ['รักษาทัศนคติบวก'], stress: ['ใส่ใจความรู้สึก'], workingTip: 'ควรใช้พลังบวก ให้เขามีส่วนร่วมและแสดงไอเดีย' },
+            'S': { relate: ['แสดงความอบอุ่น', 'เสนออย่างนุ่มนวล'], solving: ['เคารพจังหวะ'], stress: ['ร่วมมือกันจริงใจ'], workingTip: 'สื่อสารนุ่มนวล สร้างบรรยากาศที่ปลอดภัยและจริงใจ' },
+            'C': { relate: ['ใช้ข้อมูลตรรกะ', 'ไม่กดดันเวลา'], solving: ['ให้เวลาวิเคราะห์'], stress: ['สนับสนุนข้อมูล'], workingTip: 'ใช้ข้อมูลชัดเจน เหตุผลเป็นระบบ และให้เวลาวิเคราะห์' }
+        };
+
+        window.discQuestionsData = [ { prompt: "ในสถานการณ์การทำงาน ปกติคุณมักจะ...", choices: [{ text: "กล้าตัดสินใจและเน้นผลลัพธ์", type: 'D' }, { text: "ชวนคุยสร้างบรรยากาศสนุกสนาน", type: 'i' }, { text: "รับฟังและช่วยเหลือคนรอบข้าง", type: 'S' }, { text: "เน้นความถูกต้องและรายละเอียด", type: 'C' }] }, { prompt: "เมื่อต้องทำงานชิ้นใหม่ คุณมักจะเริ่มจาก...", choices: [{ text: "ลงมือทำทันทีเพื่อให้เห็นผล", type: 'D' }, { text: "หาเพื่อนร่วมงานและพูดคุยไอเดีย", type: 'i' }, { text: "วางแผนขั้นตอนอย่างค่อยเป็นค่อยไป", type: 'S' }, { text: "รวบรวมข้อมูลและวิเคราะห์ความเป็นไปได้", type: 'C' }] }, { prompt: "คนอื่นมักจะมองว่าคุณเป็นคน...", choices: [{ text: "มีความมั่นใจและเด็ดขาด", type: 'D' }, { text: "ร่าเริงและเข้ากับคนง่าย", type: 'i' }, { text: "ใจเย็นและน่าเชื่อถือ", type: 'S' }, { text: "ละเอียดรอบคอบและเป็นระบบ", type: 'C' }] }, { prompt: "เมื่อเกิดความขัดแย้งในทีม คุณมักจะ...", choices: [{ text: "พูดตรงๆ เพื่อแก้ปัญหาให้จบ", type: 'D' }, { text: "ใช้อารมณ์ขันหรือการพูดคุยเพื่อคลายเครียด", type: 'i' }, { text: "ประนีประนอมเพื่อรักษาความสัมพันธ์", type: 'S' }, { text: "ใช้เหตุผลและข้อมูลพิสูจน์ข้อเท็จจริง", type: 'C' }] }, { prompt: "สิ่งที่ทำให้คุณรู้สึกกดดันที่สุดคือ...", choices: [{ text: "การสูญเสียอำนาจการควบคุม", type: 'D' }, { text: "การถูกเพิกเฉยหรือไม่ได้รับการยอมรับ", type: 'i' }, { text: "การเปลี่ยนแปลงที่กะทันหัน", type: 'S' }, { text: "การถูกวิจารณ์ว่าทำงานผิดพลาด", type: 'C' }] }, { prompt: "เวลาประชุม คุณมักจะ...", choices: [{ text: "นำเสนอประเด็นหลักอย่างรวดเร็ว", type: 'D' }, { text: "ชวนคนอื่นมีส่วนร่วมและสร้างพลังบวก", type: 'i' }, { text: "คอยสังเกตและสนับสนุนความเห็นผู้อื่น", type: 'S' }, { text: "จดรายละเอียดและตั้งคำถามเชิงลึก", type: 'C' }] }, { prompt: "เป้าหมายการทำงานของคุณคือ...", choices: [{ text: "การเป็นที่หนึ่งหรือบรรลุยอดที่ตั้งไว้", type: 'D' }, { text: "การเป็นที่รักและมีเครือข่ายกว้างขวาง", type: 'i' }, { text: "การสร้างทีมที่สามัคคีและมั่นคง", type: 'S' }, { text: "การสร้างผลงานที่มีคุณภาพสมบูรณ์แบบ", type: 'C' }] }, { prompt: "สไตล์การสื่อสารของคุณคือ...", choices: [{ text: "สั้น กระชับ และตรงประเด็น", type: 'D' }, { text: "กระตือรือร้นและใช้ภาษาท่าทาง", type: 'i' }, { text: "สุภาพ นุ่มนวล และเน้นการรับฟัง", type: 'S' }, { text: "มีหลักการ มีที่มาที่ไป และชัดเจน", type: 'C' }] }, { prompt: "เมื่อได้รับคำชม คุณจะรู้สึกดีที่สุดเมื่อ...", choices: [{ text: "ชมที่ผลงานและความสามารถ", type: 'D' }, { text: "ชมต่อหน้าสาธารณะหรือเพื่อนร่วมงาน", type: 'i' }, { text: "ชมถึงความทุ่มเทและการช่วยเหลือทีม", type: 'S' }, { text: "ชมถึงความแม่นยำและความเป็นมืออาชีพ", type: 'C' }] }, { prompt: "คุณชอบสภาพแวดล้อมการทำงานแบบไหน...", choices: [{ text: "ท้าทายและเปลี่ยนแปลงรวดเร็ว", type: 'D' }, { text: "มีกิจกรรมและได้พบปะผู้คน", type: 'i' }, { text: "สงบ เป็นกันเอง และมั่นคง", type: 'S' }, { text: "มีระเบียบ มีขั้นตอน และชัดเจน", type: 'C' }] }, { prompt: "เมื่อต้องตัดสินใจเรื่องสำคัญ คุณมักจะ...", choices: [{ text: "ใช้สัญชาตญาณและความรวดเร็ว", type: 'D' }, { text: "ดูความรู้สึกและความเห็นของส่วนรวม", type: 'i' }, { text: "ปรึกษาทีมเพื่อให้ทุกคนสบายใจ", type: 'S' }, { text: "ใช้ข้อมูลสถิติมาวิเคราะห์ประกอบ", type: 'C' }] }, { prompt: "จุดเดี่ยวของคุณที่ทีมยอมรับคือ...", choices: [{ text: "ความเด็ดเดี่ยวในสภาวะวิกฤต", type: 'D' }, { text: "ความสามารถในการจูงใจคน", type: 'i' }, { text: "ความอดทนและเป็นที่พักพิงให้ทีม", type: 'S' }, { text: "ความละเอียดถี่ถ้วนไม่ตกหล่น", type: 'C' }] }, { prompt: "เวลาคุณโกรธ คุณมักจะ...", choices: [{ text: "แสดงออกอย่างชัดเจนและรุนแรง", type: 'D' }, { text: "ประชดประชันหรือบ่นให้คนอื่นฟัง", type: 'i' }, { text: "เก็บไว้ข้างในและเงียบเฉย", type: 'S' }, { text: "แยกตัวออกมาและใช้เหตุผลทบทวน", type: 'C' }] }, { prompt: "คุณมักจะจูงใจผู้อื่นด้วยการ...", choices: [{ text: "ท้าทายด้วยผลลัพธ์ที่ยิ่งใหญ่", type: 'D' }, { text: "สร้างแรงบันดาลใจด้วยวิสัยทัศน์", type: 'i' }, { text: "ให้ความมั่นใจและความสม่ำเสมอ", type: 'S' }, { text: "อธิบายด้วยตรรกะที่ปฏิเสธไม่ได้", type: 'C' }] }, { prompt: "ในงานปาร์ตี้ของบริษัท คุณมักจะเป็นคน...", choices: [{ text: "คุยเรื่องงานหรือเรื่องเป้าหมาย", type: 'D' }, { text: "เป็นจุดสนใจหรือสร้างความสนุก", type: 'i' }, { text: "นั่งคุยกับเพื่อนสนิทเงียบๆ", type: 'S' }, { text: "สังเกตการณ์รอบๆ และคุยเรื่องทั่วไป", type: 'C' }] }, { prompt: "เวลาทำงานเป็นทีม คุณชอบบทบาท...", choices: [{ text: "ผู้นำที่กำหนดทิศทาง", type: 'D' }, { text: "ฝ่ายประชาสัมพันธ์ที่ประสานงาน", type: 'i' }, { text: "ฝ่ายสนับสนุนที่คอยช่วยเหลือ", type: 'S' }, { text: "ฝ่ายตรวจสอบที่ดูความถูกต้อง", type: 'C' }] }, { prompt: "เมื่อเจออุปสรรค คุณจะ...", choices: [{ text: "พุ่งชนและหาทางข้ามไปให้ได้", type: 'D' }, { text: "หาทางออกที่สร้างสรรค์และสนุก", type: 'i' }, { text: "ขอความร่วมมือจากเพื่อนร่วมทีม", type: 'S' }, { text: "วิเคราะห์สาเหตุของปัญหาอย่างละเอียด", type: 'C' }] }, { prompt: "สิ่งที่ทำให้คุณรู้สึกเบื่อที่สุดคือ...", choices: [{ text: "การทำอะไรที่ซ้ำซากและช้า", type: 'D' }, { text: "การต้องนั่งทำงานคนเดียวนานๆ", type: 'i' }, { text: "การเผชิญหน้ากับความขัดแย้ง", type: 'S' }, { text: "การทำงานที่ขาดโครงสร้างที่ชัดเจน", type: 'C' }] }, { prompt: "คุณต้องการได้รับการยอมรับในเรื่อง...", choices: [{ text: "ความสำเร็จและชัยชนะ", type: 'D' }, { text: "ความเป็นมิตรและเสน่ห์ส่วนตัว", type: 'i' }, { text: "ความภักดีและความจริงใจ", type: 'S' }, { text: "ความเชี่ยวชาญและความแม่นยำ", type: 'C' }] }, { prompt: "คำจำกัดความสั้นๆ ของคุณคือ...", choices: [{ text: "นักสู้ (Fighter)", type: 'D' }, { text: "นักสร้างความสุข (Entertainer)", type: 'i' }, { text: "นักซัพพอร์ต (Supporter)", type: 'S' }, { text: "นักวิเคราะห์ (Analyst)", type: 'C' }] } ];
+
+        // -- STATE --
+        window.currentMember = null;
+        window.allFriends = [];
+        window.filteredFriends = [];
+        window.filteredTeam = [];
+        window.itemsPerPage = 30; 
+        window.currentPage = 1;
+        window.sortCol = '';
+        window.sortDir = 'asc';
+        window.isMuted = false;
+        window.isAudioUnlocked = false;
+        window.radarChartInstance = null;
+        window.teamRadarChartInstance = null;
+        window.currentQIndex = 0;
+        window.assessmentAnswers = [];
+
+        // -- CORE UTILITIES --
+        window.unlockVoice = () => { 
+            if (window.isAudioUnlocked) return; 
+            const u = new SpeechSynthesisUtterance("");
+            window.speechSynthesis.speak(u); 
+            window.isAudioUnlocked = true; 
+        };
+
+        window.showMessage = (t, ty = 'success') => { 
+            const m = document.getElementById('messageBox'); if(!m) return; 
+            m.textContent = t; m.className = `fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl text-white shadow-xl ${ty==='success'?'bg-green-500':'bg-red-500'}`; 
+            m.classList.remove('hidden'); setTimeout(()=>m.classList.add('hidden'), 3000); 
+        };
+
+        window.toggleMute = () => {
+            window.isMuted = !window.isMuted;
+            const ic = window.isMuted ? 'volume-x' : 'volume-2';
+            ['muteIcon', 'muteIconAssess'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.setAttribute('data-lucide', ic);
+            });
+            lucide.createIcons();
+            if (window.isMuted) window.speechSynthesis.cancel();
+        };
+
+        function speak(text) { if (window.isMuted) return; window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = 'th-TH'; u.rate = 1.05; window.speechSynthesis.speak(u); }
+
+        window.switchTab = (n) => {
+            window.speechSynthesis.cancel(); 
+            window.unlockVoice(); 
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
+            const target = document.getElementById(`tab-${n}`); if(target) target.classList.remove('hidden');
+            document.querySelectorAll('.bottom-nav-item').forEach(b => { b.classList.remove('active'); b.style.color = '#64748b'; });
+            const navBtn = document.getElementById(`nav-${n}`); if(navBtn) { navBtn.classList.add('active'); navBtn.style.color = '#f97316'; }
+            
+            const banner = document.getElementById('discResultBanner');
+            if(banner) banner.classList.add('hidden');
+
+            if (n === 'home') { updateHomeButtonState(); setTimeout(() => speakHomeWelcome(), 1500); }
+            if (n === 'team') { loadSharedData(); speak("การทำงานกับทีมของคุณ คุณจะเห็นภาพรวมสไตล์การทำงานของแต่ละคนในทีมครับ"); }
+            if (n === 'friends') { window.currentPage = 1; loadSharedData(); speak("คุณจะเห็นภาพรวมของทั้งทีมว่ามีสไตล์การทำงานแบบไหนครับ"); }
+            if (n === 'about') {
+                const cta = document.getElementById('aboutTabAssessmentCta');
+                if(cta) cta.classList.toggle('hidden', !!window.currentMember?.DISC);
+                speakDetailedAbout();
+            }
+            if (n === 'user') {
+                const ok = !!window.currentMember?.DISC;
+                const pBox = document.getElementById('primarySecondaryBox');
+                if(pBox) pBox.classList.toggle('hidden', !ok);
+                document.getElementById('hasDiscResult').classList.toggle('hidden', !ok);
+                document.getElementById('noDiscResult').classList.toggle('hidden', ok);
+                if (window.currentMember) {
+                    document.getElementById('profileNameDisplay').textContent = window.currentMember.FullName;
+                    document.getElementById('profileDetailDisplay').textContent = `${window.currentMember.Group || '-'} | ${window.currentMember.SubGroup || '-'}`;
+                }
+                if (ok) {
+                    const st = window.discStyles[window.currentMember.DISC];
+                    if (st && banner) { banner.style.backgroundColor = st.color; document.getElementById('discResultImg').src = st.banner; banner.classList.remove('hidden'); }
+                    renderUserSummary(window.currentMember.DISC, window.currentMember.DISC2); renderInsights(window.currentMember.DISC);
+                    speak(`ทักษะหลักของคุณคือ ${window.discTypeNames[window.currentMember.DISC]} ครับ`);
+                }
+            }
+            lucide.createIcons();
+        };
+
+        function speakHomeWelcome() {
+            const hasDone = !!window.currentMember?.DISC;
+            let script = "ยินดีต้อนรับครับ ดี ไอ เอส ซี คือเครื่องมือที่ช่วยให้เราเข้าใจจุดแข็งและวิธีการทำงานของตนเองและผู้อื่นได้ดียิ่งขึ้น ผมขอแนะนำให้คุณลองศึกษาข้อมูลเพิ่มเติมในเมนู รู้จัก ดี ไอ เอส ซี นะครับ ";
+            if (!hasDone) { script += "สำหรับคุณซึ่งยังไม่ได้ทำแบบประเมิน ผมขอแนะนำให้คุณเข้าทำแบบทดสอบ ซึ่งมีเพียง 20 คำถามเท่านั้นครับ คลิกที่ปุ่มเริ่มทำแบบทดสอบได้เลย"; }
+            else { script += "และตอนนี้คุณได้ทำแบบประเมินเรียบร้อยแล้ว ผมขอแนะนำให้คุณเข้าไปดูรายละเอียดในเมนู ดี ไอ เอส ซี ของคุณ เพื่อดูแนวทางการทำงานร่วมกับผู้อื่นครับ"; }
+            speak(script);
+        }
+
+        function speakDetailedAbout() {
+            const hasDone = !!window.currentMember?.DISC;
+            let script = "นี่คือหน้า รู้จัก ดี ไอ เอส ซี ครับ หัวข้อแรก คือ ดี ไอ เอส ซี คืออะไร ซึ่งบอกถึงโมเดลพฤติกรรมพื้นฐาน หัวข้อต่อมาคือหลักการสำคัญที่บอกว่าทุกสไตล์มีคุณค่าเท่ากัน และ พีเพิล รีด ดิ้ง เป็นวิธีการพิจารณาทำงานร่วมกับบุคคลอื่นครับ ";
+            if (!hasDone) { script += "หากคุณต้องการรู้จักตัวเองมากขึ้น กรุณาคลิกปุ่ม เริ่มทำแบบทดสอบ ที่อยู่ด้านล่างหน้านี้ด้วยนะครับ"; }
+            speak(script);
+        }
+
+        const updateHomeButtonState = () => {
+            const ok = !!window.currentMember?.DISC;
+            const btnText = document.getElementById('dynamicHomeActionText');
+            const btnIcon = document.getElementById('dynamicHomeActionIcon');
+            const btn = document.getElementById('dynamicHomeActionBtn');
+            if (btnText && btnIcon && btn) {
+                if (ok) { btnText.textContent = 'DiSC ของคุณ'; btnIcon.setAttribute('data-lucide', 'user'); btn.onclick = () => window.switchTab('user'); }
+                else { btnText.textContent = 'เริ่มทำแบบทดสอบ'; btnIcon.setAttribute('data-lucide', 'clipboard-list'); btn.onclick = () => window.startAssessmentFlow(); }
+                lucide.createIcons();
+            }
+        };
+
+        const renderUserSummary = (p, s) => { 
+            const sumBox = document.getElementById('profilePersonalSummary'); if(sumBox) sumBox.innerText = window.discPersonalSummaries[p];
+            const pBox = document.getElementById('primaryImgTop'); if(pBox) pBox.innerHTML = `<img src="${window.discTypeImages[p]}" class="w-full h-full object-cover">`;
+            const sBox = document.getElementById('secondaryImgTop'); if(sBox) sBox.innerHTML = s ? `<img src="${window.discTypeImages[s]}" class="w-full h-full object-cover">` : '<div class="flex items-center h-full text-slate-300 justify-center font-bold text-lg">-</div>';
+        };
+
+        const renderInsights = (t) => {
+            const drives = window.discDrives[t], st = window.discStyles[t], ben = window.discBenefits[t], rel = window.discRelationships[t];
+            const dc = document.getElementById('drivesContent'); if(dc) dc.innerHTML = drives.map(s => `<div><h4 style="color:${st.color}" class="font-bold text-left">${s.title}</h4><ul class="list-disc list-inside text-slate-600 text-left">${s.items.map(i=>`<li>${i}</li>`).join('')}</ul></div>`).join('');
+            const bc = document.getElementById('benefitsContent'); if(bc) bc.innerHTML = `<div class="space-y-4 text-left"><p><span class="font-bold text-slate-800">1. มุมมอง:</span><br>${ben.view}</p><p><span class="font-bold text-slate-800">2. ตัดสินผู้อื่นจาก:</span><br>${ben.judge}</p><p class="text-green-700 font-bold uppercase">3. จะมีประสิทธิภาพมากขึ้นหาก:<br><span class="font-normal text-slate-600">${ben.effective}</span></p><div class="dark-side-box text-left"><h5 class="font-bold text-orange-900 mb-1">! Dark Side:</h5><p><strong>Over-uses:</strong> ${ben.dark}</p><p class="mt-1"><strong>Under Pressure:</strong> ${ben.pressure}</p></div><p class="text-red-600 font-bold uppercase">ข้อจำกัด / สิ่งที่เป็นอุปสรรค:<br><span class="font-normal text-slate-600">${ben.limit}</span></p></div>`;
+            const rc = document.getElementById('relationshipsContent'); if(rc) rc.innerHTML = `<div class="space-y-4 text-left"><div><h4 class="font-bold text-slate-800 mb-1 text-left">1. เมื่อพยายามสร้างความสัมพันธ์:</h4><ul class="list-disc list-inside text-slate-600">${rel.relate.map(r=>`<li>${r}</li>`).join('')}</ul></div><div class="working-tip-box text-left" style="background-color:${st.light}; border-left:4px solid ${st.color}"><h4 class="font-bold mb-1 uppercase text-left">Working Tip:</h4>"${rel.workingTip}"</div></div>`;
+        };
+
+        const loadSharedData = async () => {
+            document.getElementById('globalLoader').classList.remove('hidden');
+            try {
+                // Reverted to original collection path
+                const snap = await getDocs(collection(db, COLLECTION_NAME));
+                window.allFriends = []; const grps = new Set();
+                snap.forEach(d => { 
+                    const dt = d.data(); 
+                    if(dt.FullName) { 
+                        window.allFriends.push({ docId: d.id, ...dt }); 
+                        if(dt.Group) grps.add(dt.Group); 
+                    } 
+                });
+                const sel = document.getElementById('friendGroupFilter'); 
+                if(sel) { 
+                    const currentVal = sel.value;
+                    sel.innerHTML = '<option value="">เลือกทีมทั้งหมด</option>' + Array.from(grps).sort().map(g => `<option value="${g}">${g}</option>`).join(''); 
+                    sel.value = currentVal;
+                }
+                applyFilters();
+            } catch (e) { 
+                console.error("Error loading data:", e); 
+            } finally { 
+                document.getElementById('globalLoader').classList.add('hidden'); 
+            }
+        };
+
+        const applyFilters = () => {
+            const fVal = document.getElementById('friendGroupFilter')?.value || "";
+            window.filteredFriends = window.allFriends.filter(x => !fVal || x.Group === fVal);
+            window.currentPage = 1;
+            
+            renderTable('friendsTableBody', window.filteredFriends, 1);
+            updateRadarChart('friendsRadarChart', window.filteredFriends, (i) => window.radarChartInstance = i);
+            
+            const sVal = window.currentMember?.SubGroup || "";
+            document.getElementById('teamSubGroupDisplay').textContent = sVal || "ไม่ระบุ";
+            
+            window.filteredTeam = window.allFriends.filter(x => x.SubGroup === sVal && x.FullName);
+            renderTable('teamTableBody', window.filteredTeam, 1);
+            updateRadarChart('teamRadarChart', window.filteredTeam, (i) => window.teamRadarChartInstance = i);
+            
+            lucide.createIcons();
+        };
+
+        window.changePage = (dir) => {
+            const totalPages = Math.ceil(window.filteredFriends.length / window.itemsPerPage);
+            const nextP = window.currentPage + dir;
+            if (nextP >= 1 && nextP <= totalPages) { window.currentPage = nextP; renderTable('friendsTableBody', window.filteredFriends, window.currentPage); lucide.createIcons(); }
+        };
+
+        const renderTable = (tid, data, page) => {
+            const tb = document.getElementById(tid); if(!tb) return;
+            tb.innerHTML = '';
+            
+            if (!data || data.length === 0) {
+                tb.innerHTML = '<tr><td colspan="4" class="py-10 text-center text-slate-400">ไม่พบข้อมูล</td></tr>';
+                return;
+            }
+
+            let displayData = data;
+            if (tid === 'friendsTableBody') {
+                const totalPages = Math.ceil(data.length / window.itemsPerPage);
+                const start = (page - 1) * window.itemsPerPage;
+                displayData = data.slice(start, start + window.itemsPerPage);
+                const info = document.getElementById('friendPaginationInfo');
+                if(info) info.textContent = `หน้า ${page} จาก ${totalPages || 1} (ทั้งหมด ${data.length} คน)`;
+                const prevBtn = document.getElementById('prevFriendPageBtn');
+                const nextBtn = document.getElementById('nextFriendPageBtn');
+                if(prevBtn) prevBtn.disabled = page <= 1;
+                if(nextBtn) nextBtn.disabled = page >= totalPages;
+            }
+            
+            displayData.forEach(f => {
+                const tr = document.createElement('tr');
+                const d1 = f.DISC || ''; const d2 = f.DISC2 || '';
+                const c1 = d1 ? window.discStyles[d1].color : '#e2e8f0'; const c2 = d2 ? window.discStyles[d2].color : '#e2e8f0';
+                const actionBtn = d1 ? `<button onclick="window.showFriendInsight('${f.FullName}', '${f.DISC}', '${f.DISC2}')" class="text-[10px] bg-orange-100 text-orange-600 px-2 py-1.5 rounded-lg font-bold">การร่วมงาน</button>` : '';
+                tr.innerHTML = `<td class="px-3 font-medium text-slate-700 text-left">${f.FullName}</td><td class="text-center py-2 border-r border-slate-100">${d1 ? `<div class="disc-circle" style="background-color:${c1}">${d1}</div>` : '-'}</td><td class="text-center py-2 border-r border-slate-100">${d2 ? `<div class="disc-circle" style="background-color:${c2}">${d2}</div>` : '-'}</td><td class="text-center">${actionBtn}</td>`;
+                tb.appendChild(tr);
+            });
+        };
+
+        window.handleSort = (col, mode) => {
+            const data = mode === 'team' ? window.filteredTeam : window.allFriends;
+            const tbody = mode === 'team' ? 'teamTableBody' : 'friendsTableBody';
+            if (window.sortCol === col) window.sortDir = window.sortDir === 'asc' ? 'desc' : 'asc';
+            else { window.sortCol = col; window.sortDir = 'asc'; }
+            data.sort((a, b) => { 
+                const v1 = (a[col] || "").toString(); 
+                const v2 = (b[col] || "").toString(); 
+                return window.sortDir === 'asc' ? v1.localeCompare(v2, 'th') : v2.localeCompare(v1, 'th'); 
+            });
+            window.currentPage = 1;
+            renderTable(tbody, data, 1);
+            lucide.createIcons();
+        };
+
+        const updateRadarChart = (canvasId, data, setInstance) => {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+
+            const counts = { D: 0, i: 0, S: 0, C: 0 };
+            data.forEach(p => { if (p.DISC && counts[p.DISC] !== undefined) counts[p.DISC]++; });
+            
+            const ctx = canvas.getContext('2d');
+            const currentInstance = (canvasId === 'friendsRadarChart') ? window.radarChartInstance : window.teamRadarChartInstance;
+            if (currentInstance) currentInstance.destroy();
+
+            const newInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['D', 'i', 'S', 'C'],
+                    datasets: [{
+                        label: 'จำนวนพนักงาน',
+                        data: [counts.D, counts.i, counts.S, counts.C],
+                        backgroundColor: 'rgba(249, 115, 22, 0.2)',
+                        borderColor: '#f97316',
+                        pointBackgroundColor: '#f97316',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    scales: { 
+                        r: { 
+                            beginAtZero: true, 
+                            ticks: { display: false, stepSize: 1 },
+                            suggestedMax: Math.max(...Object.values(counts)) + 1
+                        } 
+                    },
+                    plugins: { legend: { display: false } },
+                    responsive: true,
+                    maintainAspectRatio: true
+                }
+            });
+            setInstance(newInstance);
+        };
+
+        window.showFriendInsight = (name, d1, d2) => {
+            window.speechSynthesis.cancel();
+            const m = document.getElementById('friendInsightModal'); if(!m) return;
+            const st = window.discStyles[d1] || { color: '#64748b' }; 
+            const drives = window.discDrives[d1] || []; const rel = window.discRelationships[d1] || {};
+            const ben = window.discBenefits[d1] || {};
+            document.getElementById('friendModalHeader').style.backgroundColor = st.color;
+            document.getElementById('friendModalImg').innerHTML = `<img src="${window.discTypeImages[d1]}" class="w-full h-full object-cover">`;
+            document.getElementById('friendModalImg2').innerHTML = d2 ? `<img src="${window.discTypeImages[d2]}" class="w-full h-full object-cover">` : '<div class="flex items-center h-full text-slate-300 justify-center font-bold text-lg">-</div>';
+            document.getElementById('friendModalName').textContent = name;
+            document.getElementById('friendModalType').textContent = `${window.discTypeNames[d1]} ${d2 ? '/ '+window.discTypeNames[d2] : ''}`;
+            document.getElementById('friendModalContent').innerHTML = `<div class="bg-white p-4 rounded-xl text-left mb-4 italic text-slate-600 leading-relaxed">"${window.discPersonalSummaries[d1]}"</div><div class="space-y-4 text-left"><div class="p-3 bg-white rounded-lg border border-slate-100"><h4 class="font-bold text-orange-600 mb-1 uppercase">Drives & Motives:</h4><ul class="list-disc list-inside text-slate-500">${drives[0]?.items.map(i=>`<li>${i}</li>`).join('')}</ul></div><div class="p-3 bg-white rounded-lg border border-slate-100"><h4 class="font-bold text-blue-600 mb-1 uppercase">สไตล์และการร่วมงาน:</h4><p class="text-slate-600"><strong>จุดเด่น:</strong> ${ben.view}</p><p class="text-slate-600"><strong>ประสิทธิภาพ:</strong> ${ben.effective}</p></div><div class="working-tip-box text-left" style="background-color:${st.light}; border-left:4px solid ${st.color}"><h4 class="font-bold mb-1 uppercase">Working Tip:</h4>"${rel.workingTip}"</div></div>`;
+            m.classList.remove('hidden'); lucide.createIcons();
+            speak(`นี่คือการร่วมงานกับ ${name} สไตล์หลักคือ ${window.discTypeNames[d1]} ครับ`);
+        };
+
+        window.closeFriendInsight = () => { document.getElementById('friendInsightModal').classList.add('hidden'); window.speechSynthesis.cancel(); };
+
+        window.handleIdSubmission = async () => {
+            const v = document.getElementById('EmpID').value.trim(); if (v.length !== 5) return;
+            const btn = document.getElementById('submitIdBtn'); if (btn) btn.disabled = true;
+            try {
+                // Reverted to original collection path
+                const snap = await getDocs(collection(db, COLLECTION_NAME));
+                let f = null; 
+                snap.forEach(d => { 
+                    const data = d.data();
+                    if(String(data.EmpID).trim() === v) f = { docId: d.id, ...data }; 
+                });
+                
+                if (!f) { 
+                    window.showMessage("รหัสพนักงานไม่ถูกต้อง", "error"); 
+                    if (btn) btn.disabled = false; 
+                    return; 
+                }
+                
+                window.currentMember = f; 
+                window.closeRegModal();
+                document.getElementById('welcomeUser').textContent = f.FullName;
+                document.getElementById('userSub').textContent = `${f.Group || '-'} | ${f.SubGroup || '-'}`;
+                window.showMessage("พบข้อมูลสำเร็จ", "success"); 
+                showMainPage(f);
+            } catch (err) { 
+                window.showMessage("เกิดข้อผิดพลาดในการเชื่อมต่อ", "error"); 
+            } finally { 
+                if(btn) btn.disabled = false; 
+                lucide.createIcons(); 
+            }
+        };
+
+        window.handleCheckOut = async () => { window.location.reload(); };
+
+        const showMainPage = (u) => { 
+            const landing = document.getElementById('landingPage'); const mainPage = document.getElementById('mainDiscPage'); const assessment = document.getElementById('assessmentPage');
+            if(landing) landing.classList.add('hidden'); if(assessment) assessment.classList.add('hidden'); if(mainPage) mainPage.classList.remove('hidden'); window.switchTab('home'); 
+        };
+        
+        window.openRegModal = () => { const modal = document.getElementById('regModalBackdrop'); if (modal) modal.classList.remove('hidden'); };
+        window.closeRegModal = () => { const r = document.getElementById('regModalBackdrop'); if(r) r.classList.add('hidden'); };
+
+        onAuthStateChanged(auth, async (u) => { 
+            if(!u) await signInAnonymously(auth); 
+            const loader = document.getElementById('globalLoader'); const landing = document.getElementById('landingPage');
+            if(loader) loader.classList.add('hidden'); if(landing) landing.classList.remove('hidden'); 
+            const btn = document.getElementById('openModalBtn');
+            if(btn) { btn.disabled = false; const i = document.getElementById('loginIcon'); if(i) { i.setAttribute('data-lucide', 'user-plus'); i.classList.remove('animate-spin'); } lucide.createIcons(); }
+        });
+        
+        window.startAssessmentFlow = () => {
+            window.speechSynthesis.cancel(); 
+            window.unlockVoice();
+            const mainPage = document.getElementById('mainDiscPage'); const assessPage = document.getElementById('assessmentPage'); const assessIntro = document.getElementById('assessmentIntro');
+            if(mainPage) mainPage.classList.add('hidden'); if(assessPage) assessPage.classList.remove('hidden'); if(assessIntro) assessIntro.classList.remove('hidden'); 
+            const qBox = document.getElementById('assessmentQuestion'); if(qBox) qBox.classList.add('hidden');
+            speak("ยินดีต้อนรับสู่การประเมิน ดีไอเอสซี ครับ");
+            lucide.createIcons();
+        };
+
+        window.exitAssessment = () => showMainPage(window.currentMember);
+
+        window.beginActualTest = () => {
+            window.unlockVoice();
+            window.currentQIndex = 0; 
+            window.assessmentAnswers = new Array(20).fill(null).map(() => ({most: null, least: null}));
+            const intro = document.getElementById('assessmentIntro'); const qBox = document.getElementById('assessmentQuestion'); const nBox = document.getElementById('assessmentNav'); const iBox = document.getElementById('assessmentInstructions');
+            if(intro) intro.classList.add('hidden'); if(qBox) qBox.classList.remove('hidden'); if(nBox) nBox.classList.remove('hidden'); if(iBox) iBox.classList.remove('hidden');
+            renderQuestion(true);
+        };
+
+        const renderQuestion = (sh = false) => {
+            const q = window.discQuestionsData[window.currentQIndex], ans = window.assessmentAnswers[window.currentQIndex];
+            const qn = document.getElementById('qNumberDisplay'); if(qn) qn.textContent = window.currentQIndex + 1;
+            const qp = document.getElementById('qPromptText'); if(qp) qp.textContent = `Q: ${q.prompt}`;
+            if (sh) speak(`คำถามข้อที่ ${window.currentQIndex + 1} ${q.prompt}`);
+            const con = document.getElementById('qChoicesContainer'); if(con) {
+                con.innerHTML = q.choices.map((c, i) => {
+                    const isM = ans.most === c.type; const isL = ans.least === c.type;
+                    const isAnyM = ans.most !== null; const isAnyL = ans.least !== null;
+                    let cardBg = "bg-white"; if (isM) cardBg = "bg-green-600 text-white border-green-600"; else if (isL) cardBg = "bg-red-500 text-white border-red-500";
+                    let mBtnStyle = isM ? "bg-green-800 text-white border-green-900 shadow-inner" : (isAnyM ? "bg-green-100 text-green-300 opacity-[0.15] border-none" : "bg-green-700 text-white");
+                    let lBtnStyle = isL ? "bg-red-800 text-white border-red-900 shadow-inner" : (isAnyL ? "bg-red-100 text-red-300 opacity-[0.15] border-none" : "bg-red-700 text-white");
+                    return `<div class="choice-card p-3 rounded-xl flex justify-between items-center border-slate-100 shadow-sm ${cardBg}"><span class="text-[13.5px] flex-1 text-left font-medium ${isM||isL?'text-white':'text-slate-700'}">${c.text}</span><div class="flex gap-2"><button onclick="window.pick(${i},'most')" class="font-normal text-[11px] px-3 py-1.5 rounded-lg transition-all ${mBtnStyle}">↑ มากสุด</button><button onclick="window.pick(${i},'least')" class="font-normal text-[11px] px-3 py-1.5 rounded-lg transition-all ${lBtnStyle}">↓ น้อยสุด</button></div></div>`;
+                }).join('');
+            }
+            const pBtn = document.getElementById('prevBtn'); if(pBtn) pBtn.disabled = window.currentQIndex === 0;
+            const nBtn = document.getElementById('nextBtn'); if(nBtn) { nBtn.disabled = !(ans.most && ans.least); nBtn.innerHTML = window.currentQIndex === 19 ? 'ดูผลการประเมิน' : 'ถัดไป'; }
+            
+            const progress = ((window.currentQIndex + 1) / 20) * 100;
+            const pBar = document.getElementById('assessmentProgress'); if (pBar) pBar.style.width = `${progress}%`;
+        };
+
+        window.pick = (idx, mode) => {
+            const q = window.discQuestionsData[window.currentQIndex]; const type = q.choices[idx].type; const ans = window.assessmentAnswers[window.currentQIndex];
+            if (mode === 'most') { ans.most = type; speak(`${q.choices[idx].text} มากที่สุด`); } else { ans.least = type; speak(`${q.choices[idx].text} น้อยที่สุด`); }
+            renderQuestion();
+        };
+
+        window.nextQuestion = () => { if (window.currentQIndex < 19) { window.currentQIndex++; renderQuestion(true); } else calc(); };
+        window.prevQuestion = () => { if (window.currentQIndex > 0) { window.currentQIndex--; renderQuestion(true); } };
+
+        const calc = async () => {
+            document.getElementById('globalLoader').classList.remove('hidden');
+            const sc = { D: 0, i: 0, S: 0, C: 0 }; 
+            window.assessmentAnswers.forEach(a => { 
+                if (a.most) sc[a.most]++; 
+                if (a.least) sc[a.least]--; 
+            });
+            const srt = Object.entries(sc).sort((a,b) => b[1] - a[1]); 
+            const p = srt[0][0], s = srt[1][0];
+            
+            try {
+                // Reverted to original collection path
+                await updateDoc(doc(db, COLLECTION_NAME, window.currentMember.docId), { DISC: p, DISC2: s, updatedAt: serverTimestamp() });
+                await addDoc(collection(db, 'DISC_Results'), { EmpID: window.currentMember.EmpID, FullName: window.currentMember.FullName, DISC: p, DISC2: s, timestamp: serverTimestamp() });
+                
+                window.currentMember.DISC = p; 
+                window.currentMember.DISC2 = s; 
+                window.showMessage("บันทึกผลสำเร็จ", "success"); 
+                showMainPage(window.currentMember); 
+                window.switchTab('user'); 
+            } catch (e) { 
+                window.showMessage("เกิดข้อผิดพลาดในการบันทึก", "error"); 
+            } finally { 
+                document.getElementById('globalLoader').classList.add('hidden'); 
+            }
+        };
+
+        const initApp = async () => {
+            const subBtn = document.getElementById('submitIdBtn'); 
+            if (subBtn) subBtn.onclick = window.handleIdSubmission;
+            
+            const empInput = document.getElementById('EmpID'); 
+            if (empInput) empInput.oninput = (e) => { 
+                e.target.value = e.target.value.replace(/[^0-9]/g, ''); 
+                if (subBtn) subBtn.disabled = e.target.value.length !== 5; 
+            };
+            
+            const filter = document.getElementById('friendGroupFilter'); 
+            if (filter) filter.onchange = applyFilters;
+            
+            lucide.createIcons();
+        };
+        initApp();
     </script>
 </body>
 </html>
