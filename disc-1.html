@@ -924,8 +924,8 @@
                     const isM = ans.most === c.type; const isL = ans.least === c.type;
                     const isAnyM = ans.most !== null; const isAnyL = ans.least !== null;
                     let cardBg = "bg-white"; if (isM) cardBg = "bg-green-600 text-white border-green-600"; else if (isL) cardBg = "bg-red-500 text-white border-red-500";
-                    let mBtnStyle = isM ? "bg-green-800 text-white border-green-900 shadow-inner" : (isAnyM ? "bg-green-100 text-green-300 opacity-[0.15] border-none" : "bg-green-700 text-white");
-                    let lBtnStyle = isL ? "bg-red-800 text-white border-red-900 shadow-inner" : (isAnyL ? "bg-red-100 text-red-300 opacity-[0.15] border-none" : "bg-red-700 text-white");
+                    let mBtnStyle = isM ? "bg-green-800 text-white border-green-900 shadow-inner" : (isAnyM ? "bg-green-100 text-green-300 border-none" : "bg-green-700 text-white");
+                    let lBtnStyle = isL ? "bg-red-800 text-white border-red-900 shadow-inner" : (isAnyL ? "bg-red-100 text-red-300 border-none" : "bg-red-700 text-white");
                     return `<div class="choice-card p-3 rounded-xl flex justify-between items-center border-slate-100 shadow-sm ${cardBg}"><span class="text-[13.5px] flex-1 text-left font-medium ${isM||isL?'text-white':'text-slate-700'}">${c.text}</span><div class="flex gap-2"><button onclick="window.pick(${i},'most')" class="font-normal text-[11px] px-3 py-1.5 rounded-lg transition-all ${mBtnStyle}">↑ มากสุด</button><button onclick="window.pick(${i},'least')" class="font-normal text-[11px] px-3 py-1.5 rounded-lg transition-all ${lBtnStyle}">↓ น้อยสุด</button></div></div>`;
                 }).join('');
             }
