@@ -15,9 +15,6 @@
     <!-- Lucide Icons CDN -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Chart.js CDN for Radar Chart -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <style>
         body { font-family: 'Kanit', sans-serif; }
         .modal-enter { animation: fadeIn 0.2s ease-out, zoomIn 0.2s ease-out; }
@@ -27,7 +24,7 @@
         .hidden { display: none !important; }
         
         button { cursor: pointer; transition: all 0.2s; }
-        button:disabled { cursor: not-allowed; opacity: 1; } 
+        button:disabled { cursor: not-allowed; opacity: 0.6; } 
 
         .name-input {
             background-color: #ffffff !important;
@@ -49,9 +46,6 @@
             z-index: 9999;
             padding: 10px 20px;
             border-radius: 12px;
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.3s ease;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         
@@ -71,14 +65,11 @@
             padding-left: 10px;
             padding-right: 10px;
             font-size: 14px;
-            font-weight: normal;
             border-radius: 12px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            width: auto;
-            min-width: fit-content;
         }
 
         .bottom-nav-item {
@@ -87,171 +78,104 @@
             text-align: center; padding: 4px 2px; cursor: pointer;
         }
         .bottom-nav-item.active { color: #8b5cf6 !important; }
-        .bottom-nav-item.active i { stroke: #8b5cf6 !important; }
 
         .choice-card { transition: all 0.3s ease; border-width: 1px; border-style: solid; border-color: #cbd5e1; }
         .progress-bar-fill { transition: width 0.4s ease-out; }
-        .tab-content { width: 100%; }
-        .color-bar-container { height: 13px; width: 100%; display: flex; }
         
-        .color-analysts { background-color: #9333ea; }
-        .color-diplomats { background-color: #22c55e; }
-        .color-sentinels { background-color: #3b82f6; }
-        .color-explorers { background-color: #eab308; }
-        
-        .insight-card {
-            background-color: white; border-radius: 16px; padding: 18px; text-align: left;
-            margin-top: 1.2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #f1f5f9;
-        }
-        .insight-title {
-            font-size: 1rem; font-weight: 700; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 8px; color: #1e293b;
-        }
-
-        .custom-table { width: 100%; border-collapse: separate; border-spacing: 0; }
-        .custom-table th { 
-            background: rgba(0, 0, 0, 0.08); 
-            height: 68px;
-            padding: 0px 4px 10px 4px; 
-            font-size: 10.5px; 
-            font-weight: 400; 
-            color: #1e293b; 
-            text-transform: uppercase; 
-            text-align: center; 
-            border-bottom: 2px solid #e2e8f0; 
-            border-right: 1px solid rgba(255,255,255,0.2);
-            cursor: pointer;
-            vertical-align: middle;
-        }
-        .custom-table td { 
-            padding: 10px 8px; 
-            font-size: 12px; 
-            color: #334155; 
-            border-bottom: 1px solid #f1f5f9; 
-            vertical-align: middle; 
-            line-height: 1.4;
-        }
-
-        .mbti-circle {
-            width: 44px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
-            margin: 0 auto; color: white; font-weight: 800; font-size: 11px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        }
-
-        .mbti-spacing {
-            letter-spacing: 0.165em;
-        }
-
         .dimension-btn {
-            background: white;
             border-width: 1px;
             border-style: solid;
             border-radius: 12px;
-            padding: 12px 8px;
+            padding-left: 8px;
+            padding-right: 8px;
+            padding-top: 5px;
+            padding-bottom: 3px;
             font-weight: 600;
             transition: all 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            min-height: 80px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 90px; height: 90px;
         }
-        .dimension-btn:not(:disabled):hover {
-            filter: brightness(0.98);
-            transform: translateY(-1px);
-        }
-        
-        .completed-purple { background-color: #9333ea !important; color: white !important; border-color: #7e22ce !important; }
-        .completed-yellow { background-color: #ca8a04 !important; color: white !important; border-color: #a16207 !important; }
-        .completed-green { background-color: #16a34a !important; color: white !important; border-color: #15803d !important; }
-        .completed-blue { background-color: #2563eb !important; color: white !important; border-color: #1d4ed8 !important; }
-
+        .dimension-btn:not(:disabled):hover { filter: brightness(0.95); transform: translateY(-1px); }
         .dimension-btn .dim-label {
-            font-size: 18px;
-            font-weight: 800;
+            font-size: 20px; font-weight: 400; margin-bottom: 8px; 
+            display: flex; align-items: center; justify-content: center; gap: 6px;
         }
-        .dimension-btn .dim-desc {
-            font-size: 10px;
-            font-weight: 400;
-            opacity: 0.8;
+        .dimension-btn .dim-desc { font-size: 10px; font-weight: 400; opacity: 0.8; line-height: 1.2; }
+        .dimension-btn .dim-score { font-size: 11px; font-weight: bold; margin-top: 4px; }
+
+        .icon-correct {
+            display: flex; align-items: center; justify-content: center;
+            width: 18px; height: 18px; border-radius: 9999px;
+            background-color: white; color: #16a34a; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        .dimension-btn .dim-score {
-            font-size: 11px;
-            font-weight: bold;
-            margin-top: 2px;
+        .icon-incorrect {
+            display: flex; align-items: center; justify-content: center;
+            width: 18px; height: 18px; border-radius: 9999px;
+            background-color: white; color: #ef4444; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        .choice-0.selected { background-color: #ef4444 !important; color: white !important; border-color: #ef4444 !important; } 
-        .choice-1.selected { background-color: #eab308 !important; color: white !important; border-color: #eab308 !important; } 
-        .choice-2.selected { background-color: #22c55e !important; color: white !important; border-color: #22c55e !important; } 
+        .mbti-grid-table { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 20px 0; }
+        .mbti-grid-cell {
+            aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border-radius: 8px; color: white; font-weight: 800; font-size: 13px; transition: all 0.3s;
+            position: relative; text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .mbti-grid-cell.active { border: 3px solid white; transform: scale(1.05); z-index: 10; box-shadow: 0 0 15px rgba(0,0,0,0.2); }
+        .mbti-grid-cell.active::after {
+            content: 'YOU'; position: absolute; bottom: 4px; font-size: 8px; font-weight: 900;
+            background: white; color: #1e293b; padding: 0 4px; border-radius: 4px;
+        }
+
+        .completed-purple { background-color: #9333ea !important; color: white !important; border-color: #7e22ce !important; }
+        .completed-green { background-color: #22c55e !important; color: white !important; border-color: #16a34a !important; }
+        .completed-blue { background-color: #3b82f6 !important; color: white !important; border-color: #1e40af !important; }
+        .completed-yellow { background-color: #eab308 !important; color: white !important; border-color: #ca8a04 !important; }
+
+        @keyframes pulse-once {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        .animate-pulse-once { animation: pulse-once 0.5s ease-out; }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center m-0 p-0 text-gray-800 text-center">
 
     <div id="globalLoader">
-        <div id="loaderIcon" class="w-10 h-10 border-4 border-slate-100 border-t-purple-600 rounded-full animate-spin mb-6"></div>
+        <div class="w-10 h-10 border-4 border-slate-100 border-t-purple-600 rounded-full animate-spin mb-6"></div>
         <p class="text-sm text-slate-400">กำลังเชื่อมต่อระบบ MBTI...</p>
     </div>
 
     <div id="messageBox" class="hidden"></div>
 
     <div id="topColorBar" class="fixed top-0 left-0 right-0 h-[13px] flex z-[60]">
-        <div class="flex-1 color-analysts"></div><div class="flex-1 color-diplomats"></div><div class="flex-1 color-sentinels"></div><div class="flex-1 color-explorers"></div>
+        <div class="flex-1 bg-[#9333ea]"></div><div class="flex-1 bg-[#22c55e]"></div><div class="flex-1 bg-[#3b82f6]"></div><div class="flex-1 bg-[#eab308]"></div>
     </div>
 
     <!-- Landing Page -->
     <div id="landingPage" class="w-full max-w-[500px] flex flex-col items-center bg-white min-h-screen pt-[13px] pb-[13px] hidden">
         <div class="w-full mt-[50px] px-6 select-none mx-auto text-center">
-            <h1 class="text-2xl font-normal text-purple-600 mb-1">รู้จักฉัน รู้จักเธอ เข้าใจกัน</h1>
-            <p class="text-[14px] font-normal text-blue-600 mb-4 mbti-spacing">Myers-Briggs Type Indicator</p>
+            <h1 class="text-2xl font-normal text-purple-600 mb-1 text-center">รู้จักฉัน รู้จักเธอ เข้าใจกัน</h1>
+            <p class="text-[14px] font-normal text-blue-600 mb-4 mbti-spacing uppercase text-center">Myers-Briggs Type Indicator</p>
             
             <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100 text-[12px] text-slate-600 leading-relaxed text-left mb-6 shadow-sm">
-                เคยสงสัยไหมว่าทำไมเราถึงคิด ทำ หรือรู้สึกแตกต่างจากคนอื่น? สิ่งที่สามารถไขข้อสงสัยเรื่องเหล่านี้ได้ ก็คือ <b>MBTI หรือ แบบทดสอบบุคลิกภาพ Myers-Briggs Type Indicator</b> นั่นเอง! ซึ่งเป็นหนึ่งในเครื่องมือที่ได้รับความนิยมอย่างมาก ในการทำความเข้าใจความแตกต่าง ของบุคลิกภาพของแต่ละคน ถ้าคุณเคยได้ยินคำนี้ผ่านหูมาบ้าง หรือกำลังสงสัยว่า MBTI คืออะไร? และ MBTI มีไทป์อะไรบ้าง? วันนี้เราจะพาคุณไปทำความรู้จักกับโลกของ MBTI แบบเข้าใจง่าย
+                เคยสงสัยไหมว่าทำไมเราถึงคิด ทำ หรือรู้สึกแตกต่างจากคนอื่น? สิ่งที่สามารถไขข้อสงสัยเรื่องเหล่านี้ได้ ก็คือ <b>MBTI หรือ แบบทดสอบบุคลิกภาพ Myers-Briggs Type Indicator</b> นั่นเอง! ซึ่งเป็นหนึ่งในเครื่องมือที่ได้รับความนิยมอย่างมาก ในการทำความเข้าใจความแตกต่าง ของบุคลิกภาพของแต่ละคน หากคุณกำลังสงสัยว่าคุณมีบุคลิกภาพแบบใด วันนี้เราจะพาคุณไปทำความรู้จักกับโลกของ MBTI
             </div>
 
-            <div class="w-full text-center mb-4">
-                <p class="text-slate-500 text-[13px]">ค้นพบบุคลิกภาพ 16 แบบในตัวคุณ</p>
-            </div>
-
-            <div class="grid grid-cols-4 gap-3 mb-8">
-                <div class="flex flex-col items-center">
-                    <div class="w-full h-20 bg-purple-400/10 border border-purple-600/25 rounded-lg flex items-center justify-center">
-                        <span class="text-4xl font-bold text-purple-900/30">?</span>
-                    </div>
-                    <span class="mt-2 text-[14px] font-bold text-purple-700/50 uppercase">E or I</span>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="w-full h-20 bg-green-400/10 border border-green-600/25 rounded-lg flex items-center justify-center">
-                        <span class="text-4xl font-bold text-green-900/30">?</span>
-                    </div>
-                    <span class="mt-2 text-[14px] font-bold text-green-700/50 uppercase">S or N</span>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="w-full h-20 bg-blue-400/10 border border-blue-600/25 rounded-lg flex items-center justify-center">
-                        <span class="text-4xl font-bold text-blue-900/30">?</span>
-                    </div>
-                    <span class="mt-2 text-[14px] font-bold text-blue-700/50 uppercase">T or F</span>
-                </div>
-                <div class="flex flex-col items-center">
-                    <div class="w-full h-20 bg-yellow-400/10 border border-yellow-600/25 rounded-lg flex items-center justify-center">
-                        <span class="text-4xl font-bold text-yellow-900/30">?</span>
-                    </div>
-                    <span class="mt-2 text-[14px] font-bold text-yellow-700/50 uppercase">J or P</span>
-                </div>
+            <div class="grid grid-cols-4 gap-3 mb-8 text-center">
+                <div class="flex flex-col items-center"><div class="w-full h-20 bg-purple-400/10 border border-purple-600/25 rounded-lg flex items-center justify-center text-4xl font-bold text-purple-900/30">?</div><span class="mt-2 text-[14px] font-bold text-purple-700/50 uppercase">E or I</span></div>
+                <div class="flex flex-col items-center"><div class="w-full h-20 bg-green-400/10 border border-green-600/25 rounded-lg flex items-center justify-center text-4xl font-bold text-green-900/30">?</div><span class="mt-2 text-[14px] font-bold text-green-700/50 uppercase">S or N</span></div>
+                <div class="flex flex-col items-center"><div class="w-full h-20 bg-blue-400/10 border border-blue-600/25 rounded-lg flex items-center justify-center text-4xl font-bold text-blue-900/30">?</div><span class="mt-2 text-[14px] font-bold text-blue-700/50 uppercase">T or F</span></div>
+                <div class="flex flex-col items-center"><div class="w-full h-20 bg-yellow-400/10 border border-yellow-600/25 rounded-lg flex items-center justify-center text-4xl font-bold text-yellow-900/30">?</div><span class="mt-2 text-[14px] font-bold text-yellow-700/50 uppercase">J or P</span></div>
             </div>
         </div>
 
         <div class="w-full px-8 py-4 flex flex-col items-center space-y-4 text-center">
-            <div id="activeRoundNotice" class="hidden">
-                <p class="text-[12px] font-normal text-gray-400 leading-tight">แบบทดสอบนี้สำหรับ:<br>
-                <span id="mbtiTeamName" class="text-[14px] font-normal text-slate-700">-</span></p>
+            <div id="activeRoundNotice" class="hidden text-center">
+                <p class="text-[12px] font-normal text-gray-400 leading-tight">แบบทดสอบสำหรับ:<br><span id="mbtiTeamName" class="text-[14px] font-normal text-slate-700">-</span></p>
             </div>
-            <div id="closedRoundNotice" class="hidden">
-                <p class="text-[13px] text-red-500 font-normal mb-2">ระบบยังไม่เปิดให้ทำแบบทดสอบ</p>
-            </div>
-            
-            <button id="openModalBtn" onclick="window.openRegModal()" disabled class="btn-standard w-[60%] bg-purple-600 hover:bg-purple-700 text-white shadow-md active:scale-[0.97]">
-                <i data-lucide="clipboard-check" id="loginIcon" class="w-5 h-5"></i><span id="loginText">เริ่มทำแบบทดสอบ</span>
+            <button id="openModalBtn" onclick="window.openRegModal()" disabled class="btn-standard w-[200px] bg-purple-600 hover:bg-purple-700 text-white shadow-md active:scale-[0.97] transition-all disabled:bg-slate-400">
+                <i data-lucide="clipboard-check" class="w-5 h-5"></i><span id="loginText">กำลังตรวจสอบระบบ...</span>
             </button>
         </div>
         <div class="mt-auto mb-8 text-center text-gray-300 text-[10px] font-normal uppercase tracking-widest">MBTI Personality Navigator</div>
@@ -259,24 +183,18 @@
 
     <!-- Main Page -->
     <div id="mainDiscPage" class="w-full max-w-[500px] flex flex-col bg-white min-h-screen relative hidden text-center">
-        <!-- Header with 68px height -->
+        <!-- Header -->
         <div class="w-full px-6 flex justify-between items-center bg-purple-600 text-white shadow-md z-[20] h-[68px]">
-            <div class="flex items-center h-full">
-                <div class="flex flex-col justify-center text-left">
-                    <!-- Name row -->
+            <div class="flex items-center h-full text-left">
+                <div class="flex flex-col justify-center">
                     <h1 id="welcomeUser" class="text-[15px] font-normal tracking-tight leading-none mb-1 text-white">ผู้ใช้งาน</h1>
-                    <!-- Company row -->
                     <p id="userSub" class="text-[10px] opacity-80 font-normal leading-none text-white"></p>
                 </div>
             </div>
             <div class="flex items-center gap-1">
-                <button onclick="window.toggleMute()" class="p-1.5 text-white hover:bg-white/10 transition-all">
-                    <i id="muteIcon" data-lucide="volume-2" class="w-5 h-5"></i>
-                </button>
+                <button onclick="window.toggleMute()" class="p-1.5 text-white hover:bg-white/10 transition-all"><i id="muteIcon" data-lucide="volume-2" class="w-5 h-5"></i></button>
                 <div class="h-5 w-[1px] bg-white/30 mx-1"></div>
-                <button id="logoutBtn" onclick="window.handleCheckOut()" class="p-1.5 text-white hover:bg-white/10 transition-all">
-                    <i data-lucide="log-out" class="w-5 h-5"></i>
-                </button>
+                <button id="logoutBtn" onclick="window.handleCheckOut()" class="p-1.5 text-white hover:bg-white/10 transition-all"><i data-lucide="log-out" class="w-5 h-5"></i></button>
             </div>
         </div>
 
@@ -284,56 +202,61 @@
             MBTI RESULT: <span id="mbtiTypeCode" class="ml-2"></span>
         </div>
         
-        <div id="homeContentArea" class="flex-1 overflow-y-auto pb-24 pt-4 px-6 space-y-4 text-center bg-white transition-colors duration-300">
+        <!-- Home Content Area -->
+        <div id="homeContentArea" class="flex-1 overflow-y-auto pb-24 pt-4 px-6 space-y-4 text-center bg-[#fdfaff] transition-colors duration-300">
             <div id="tab-home" class="tab-content space-y-6 text-center">
-                <!-- Home Heading Updated: Color purple and added blue subtitle like landing page -->
-                <div class="w-full flex flex-col justify-center py-4">
+                <div class="w-full flex flex-col items-center py-4">
                     <h2 class="text-[24px] font-normal text-purple-600">รู้จักฉัน รู้จักเธอ เข้าใจกัน</h2>
-                    <p class="text-[14px] font-normal text-blue-600 mbti-spacing uppercase">Myers-Briggs Type Indicator</p>
+                    <p class="text-[14px] font-normal text-blue-600 uppercase" style="letter-spacing: 0.12em;">Myers-Briggs Type Indicator</p>
                 </div>
-                
+
+                <div class="bg-purple-50 p-6 rounded-2xl border border-purple-100 shadow-sm text-left">
+                    <h3 class="text-[16px] font-bold text-slate-800 mb-2 text-center">ความถนัด (Preference)</h3>
+                    <p id="homeDiscDesc" class="text-[13px] text-slate-500 leading-relaxed text-left">
+                        ความถนัด คือ นิสัยติดตัวที่กำหนดรูปแบบการคิด การกระทำ ของเรามาตั้งแต่เกิด แม้คนเราจะเปลี่ยนแปลงมาตลอดชีวิต แต่ความถนัดของตัวเรานี้จะไม่เปลี่ยน และเพื่อที่จะให้ได้คำตอบที่แม่นยำ ขอให้ตอบด้วยความรู้สึกแรกของคุณ โดยไม่ต้องคิดมาก สิ่งสำคัญคือ จงตอบจากสิ่งที่เป็นตัวคุณจริงๆ หากพร้อมแล้ว คลิกเลือกที่กล่องความถนัดได้เลย
+                    </p>
+                </div>
+
                 <div id="homeAssessmentSection" class="space-y-4">
-                    <div id="homeDimensionActions" class="space-y-6">
-                        <p class="text-[13px] text-slate-500 font-medium border-b pb-2">เริ่มต้นค้นหาตัวตนของคุณ</p>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="space-y-2">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block text-left px-1">E vs I</span>
-                                <div class="grid grid-cols-2 gap-2" id="pair-1">
-                                    <button onclick="window.showDimensionInfo('E')" id="btn-E" class="dimension-btn border-purple-200 text-purple-600"><span class="dim-label">E</span><span class="dim-desc">Extravert</span></button>
-                                    <button onclick="window.showDimensionInfo('I')" id="btn-I" class="dimension-btn border-purple-200 text-purple-600"><span class="dim-label">I</span><span class="dim-desc">Introvert</span></button>
-                                </div>
+                    <p class="text-[13px] text-slate-500 font-normal border-b border-purple-100 pb-2 text-center">แบบทดสอบความถนัดแต่ละคู่ที่ตรงข้ามกัน</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2 text-left">
+                            <span class="text-[10px] font-normal text-slate-400 uppercase tracking-widest block px-1">ความถนัดด้านพลัง (E และ I)</span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="window.showDimensionInfo('E')" id="btn-E" class="dimension-btn bg-purple-400/10 border-purple-600/25 text-purple-600"><span class="dim-label" id="label-E">E</span><span class="dim-desc">Extraverting</span></button>
+                                <button onclick="window.showDimensionInfo('I')" id="btn-I" class="dimension-btn bg-purple-400/10 border-purple-600/25 text-purple-600"><span class="dim-label" id="label-I">I</span><span class="dim-desc">Introverting</span></button>
                             </div>
-                            <div class="space-y-2">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block text-left px-1">S vs N</span>
-                                <div class="grid grid-cols-2 gap-2" id="pair-2">
-                                    <button onclick="window.showDimensionInfo('S')" id="btn-S" class="dimension-btn border-yellow-200 text-yellow-600"><span class="dim-label">S</span><span class="dim-desc">Sensing</span></button>
-                                    <button onclick="window.showDimensionInfo('N')" id="btn-N" class="dimension-btn border-yellow-200 text-yellow-600"><span class="dim-label">N</span><span class="dim-desc">Intuition</span></button>
-                                </div>
+                        </div>
+                        <div class="space-y-2 text-left">
+                            <span class="text-[10px] font-normal text-slate-400 uppercase tracking-widest block px-1">ความถนัดด้านการรวบรวมข้อมูล (S และ N)</span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="window.showDimensionInfo('S')" id="btn-S" class="dimension-btn bg-green-400/10 border-green-600/25 text-green-600"><span class="dim-label" id="label-S">S</span><span class="dim-desc">Sensing</span></button>
+                                <button onclick="window.showDimensionInfo('N')" id="btn-N" class="dimension-btn bg-green-400/10 border-green-600/25 text-green-600"><span class="dim-label" id="label-N">N</span><span class="dim-desc">Intuiting</span></button>
                             </div>
-                            <div class="space-y-2">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block text-left px-1">T vs F</span>
-                                <div class="grid grid-cols-2 gap-2" id="pair-3">
-                                    <button onclick="window.showDimensionInfo('T')" id="btn-T" class="dimension-btn border-green-200 text-green-600"><span class="dim-label">T</span><span class="dim-desc">Thinking</span></button>
-                                    <button onclick="window.showDimensionInfo('F')" id="btn-F" class="dimension-btn border-green-200 text-green-600"><span class="dim-label">F</span><span class="dim-desc">Feeling</span></button>
-                                </div>
+                        </div>
+                        <div class="space-y-2 text-left">
+                            <span class="text-[10px] font-normal text-slate-400 uppercase tracking-widest block px-1">ความถนัดด้านการตัดสินใจ (T และ F)</span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="window.showDimensionInfo('T')" id="btn-T" class="dimension-btn bg-blue-400/10 border-blue-600/25 text-blue-600"><span class="dim-label" id="label-T">T</span><span class="dim-desc">Thinking</span></button>
+                                <button onclick="window.showDimensionInfo('F')" id="btn-F" class="dimension-btn bg-blue-400/10 border-blue-600/25 text-blue-600"><span class="dim-label" id="label-F">F</span><span class="dim-desc">Feeling</span></button>
                             </div>
-                            <div class="space-y-2">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block text-left px-1">J vs P</span>
-                                <div class="grid grid-cols-2 gap-2" id="pair-4">
-                                    <button onclick="window.showDimensionInfo('J')" id="btn-J" class="dimension-btn border-blue-200 text-blue-600"><span class="dim-label">J</span><span class="dim-desc">Judging</span></button>
-                                    <button onclick="window.showDimensionInfo('P')" id="btn-P" class="dimension-btn border-blue-200 text-blue-600"><span class="dim-label">P</span><span class="dim-desc">Perceiving</span></button>
-                                </div>
+                        </div>
+                        <div class="space-y-2 text-left">
+                            <span class="text-[10px] font-normal text-slate-400 uppercase tracking-widest block px-1">ความถนัดด้านไลฟ์สไตล์ (J และ P)</span>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button onclick="window.showDimensionInfo('J')" id="btn-J" class="dimension-btn bg-yellow-400/10 border-yellow-600/25 text-yellow-600"><span class="dim-label" id="label-J">J</span><span class="dim-desc">Judging</span></button>
+                                <button onclick="window.showDimensionInfo('P')" id="btn-P" class="dimension-btn bg-yellow-400/10 border-yellow-600/25 text-yellow-600"><span class="dim-label" id="label-P">P</span><span class="dim-desc">Perceiving</span></button>
                             </div>
+                        </div>
+                    </div>
+                    <div class="mt-[20px] flex justify-center">
+                        <div class="bg-red-50 border border-red-200/80 text-red-600 px-6 py-3 rounded-xl text-[12px] font-normal shadow-sm" style="border-color: rgba(239, 68, 68, 0.4);">
+                            ให้ทำการเลือกความถนัดที่ต้องการทดสอบ
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm text-left">
-                    <h3 class="text-[16px] font-bold text-slate-800 mb-2 text-center">ความสำคัญของ MBTI</h3>
-                    <p id="homeDiscDesc" class="text-[13px] text-slate-500 leading-relaxed text-left">
-                        <b>MBTI</b> เป็นเครื่องมือวัดบุคลิกภาพที่ช่วยให้เราเข้าใจวิธีที่เราโต้ตอบกับโลก วิธีการรับข้อมูล และวิธีการตัดสินใจ แบ่งคนออกเป็น 16 ประเภทที่แตกต่างกัน เพื่อช่วยให้การสื่อสารและการทำงานเป็นทีมดียิ่งขึ้น
-                    </p>
-                </div>
+                <div class="h-20"></div> <!-- Spacer -->
             </div>
 
             <!-- TAB: Your MBTI -->
@@ -343,7 +266,8 @@
                         <h2 class="text-4xl font-black text-purple-600" id="mbtiResultTitle">-</h2>
                         <p class="text-sm font-bold text-slate-400 uppercase tracking-widest" id="mbtiCategoryName">-</p>
                     </div>
-                    <div id="userProfileHeader" class="text-center space-y-1 my-4 pt-2 border-t border-slate-50">
+                    <div class="mbti-grid-table px-2" id="mbti4x4Grid"></div>
+                    <div id="userProfileHeader" class="text-center space-y-1 my-4 pt-4 border-t border-slate-50">
                         <h3 class="text-[18px] font-bold text-slate-800" id="profileNameDisplay">-</h3>
                         <p class="text-[12.5px] text-slate-500 font-medium" id="profileDetailDisplay">-</p>
                     </div>
@@ -353,55 +277,15 @@
                     <p class="text-[13px] text-purple-700">คุณยังทำแบบทดสอบไม่ครบทุกมิติ</p>
                     <button onclick="window.switchTab('home')" class="mt-4 btn-standard bg-purple-600 text-white px-8 h-[54px]"><i data-lucide="arrow-left"></i><span>กลับไปทำต่อ</span></button>
                 </div>
-                <div id="hasDiscResult" class="hidden pb-10 text-left">
-                    <div id="whatDrivesYouSection" class="insight-card">
-                        <h2 class="insight-title"><i data-lucide="zap" class="text-yellow-500 w-4 h-4"></i> จุดแข็งสำคัญ</h2>
-                        <div id="drivesContent" class="space-y-4 text-[12.5px]"></div>
-                    </div>
-                    <div id="benefitsChallengesSection" class="insight-card">
-                        <h2 class="insight-title"><i data-lucide="alert-circle" class="text-red-500 w-4 h-4"></i> ข้อควรระวัง</h2>
-                        <div id="benefitsContent" class="space-y-4 text-[12.5px]"></div>
-                    </div>
-                    <div id="relationshipsSection" class="insight-card">
-                        <h2 class="insight-title"><i data-lucide="heart" class="text-red-500 w-4 h-4"></i> การทำงานร่วมกับผู้อื่น</h2>
-                        <div id="relationshipsContent" class="space-y-4 text-[12.5px]"></div>
-                    </div>
-                </div>
             </div>
 
             <!-- TAB: Friends -->
             <div id="tab-friends" class="tab-content hidden space-y-4 text-left pb-10 text-center">
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm text-center">
-                    <h3 class="text-[14px] font-bold text-slate-800 mb-2">ทำความรู้จักเพื่อนร่วมทีม</h3>
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 mb-4 text-left">
-                        <select id="friendGroupFilter" class="bg-white text-[12px] p-2 border rounded-lg w-full"><option value="">เลือกทีมทั้งหมด</option></select>
-                    </div>
-                </div>
-                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm mt-2">
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm mt-2 text-center">
                     <table class="custom-table w-full">
-                        <thead>
-                            <tr>
-                                <th class="text-left px-3" onclick="window.handleSort('MBTI_Name', 'friends')">ชื่อ-นามสกุล</th>
-                                <th class="text-center" onclick="window.handleSort('MBTI_Type', 'friends')">MBTI Type</th>
-                                <th class="text-center">Action</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th class="text-left px-3">ชื่อ-นามสกุล</th><th class="text-center">MBTI Type</th></tr></thead>
                         <tbody id="friendsTableBody"></tbody>
                     </table>
-                </div>
-            </div>
-            
-            <div id="tab-about" class="tab-content hidden space-y-6 text-left pb-10 px-4 text-center text-center">
-                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm text-center">
-                    <h3 class="text-[17px] font-bold text-purple-800 mb-2">MBTI คืออะไร?</h3>
-                    <p class="text-[13px] text-slate-600 leading-relaxed text-left text-center">
-                        MBTI แบ่งมิติของบุคลิกภาพออกเป็น 4 คู่ตรงข้าม:<br><br>
-                        <b>1. E vs I (Extraversion vs Introversion):</b> พลังงานมาจากภายนอกหรือภายใน<br>
-                        <b>2. S vs N (Sensing vs Intuition):</b> รับข้อมูลจากความเป็นจริงหรือสัญชาตญาณ<br>
-                        <b>3. T vs F (Thinking vs Feeling):</b> ตัดสินใจด้วยเหตุผลหรือความรู้สึก<br>
-                        <b>4. J vs P (Judging vs Perceiving):</b> การดำเนินชีวิตอย่างเป็นระบบหรือยืดหยุ่น<br><br>
-                        ซึ่งจะนำมาประกอบกันเป็น 16 ประเภทที่แตกต่างกัน
-                    </p>
                 </div>
             </div>
         </div>
@@ -417,18 +301,31 @@
     <!-- Dimension Info Modal -->
     <div id="dimInfoModal" class="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md hidden" onclick="window.closeDimInfo()">
         <div class="bg-white w-full max-w-[400px] rounded-[20px] overflow-hidden flex flex-col shadow-2xl modal-enter" onclick="event.stopPropagation()">
-            <div id="dimModalHeader" class="p-[20px] text-white text-center relative">
+            <div id="dimModalHeader" class="p-[20px] text-white text-center relative bg-purple-600">
                 <button onclick="window.closeDimInfo()" class="absolute right-4 top-4 text-white/80 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
-                <h3 id="dimModalTitle" class="text-[20px] font-normal mb-0.5 tracking-tight leading-snug"></h3>
-                <p id="dimModalSubtitle" class="text-[14px] opacity-90 font-normal leading-tight mt-1"></p>
+                <h3 id="dimModalTitle" class="text-[17px] font-normal tracking-tight text-white text-center"></h3>
             </div>
             <div class="p-8 space-y-6 text-center">
-                <div id="dimModalContentSlot" class="text-[14px] text-slate-600 text-left bg-slate-50 rounded-xl border border-slate-100 max-h-[350px] overflow-y-auto">
-                </div>
+                <div id="dimModalContentSlot" class="text-[14px] text-slate-600 text-left bg-slate-50 rounded-xl border border-slate-100 max-h-[350px] overflow-y-auto p-4"></div>
                 <div class="flex flex-row justify-between items-center w-full pt-4 border-t border-slate-100 gap-4">
                     <button onclick="window.closeDimInfo()" class="btn-standard bg-[#e5e5e5] text-slate-500 font-medium px-6 hover:bg-slate-300">ปิดหน้าต่าง</button>
-                    <button id="dimModalStartBtn" class="btn-standard text-white px-6 font-normal shadow-md">คลิกเพื่อเริ่มทดสอบ</button>
+                    <div id="dimModalActionArea" class="flex-1 text-right"></div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Completion Notice Modal -->
+    <div id="completionNoticeModal" class="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm hidden" onclick="window.closeCompletionNotice()">
+        <div class="bg-white w-full max-w-[400px] rounded-[20px] overflow-hidden flex flex-col shadow-2xl modal-enter" onclick="event.stopPropagation()">
+            <div class="bg-purple-600 p-[20px] text-white text-center"><h3 class="text-[16px] font-normal tracking-tight text-center">แจ้งเตือนคุณยังไม่ทำชุดทดสอบความถนัด</h3></div>
+            <div class="p-8 space-y-4 text-center">
+                <div class="bg-purple-50 p-4 rounded-xl border border-purple-100 text-left">
+                    <p class="text-[14px] text-purple-700 font-medium mb-3">ชุดทดสอบที่คุณยังไม่ได้ดำเนินการ:</p>
+                    <div id="missingSectionsList" class="grid grid-cols-2 gap-2 text-center"></div>
+                </div>
+                <p class="text-[14px] text-slate-600 leading-relaxed text-center">โปรดคลิกที่กล่องแบบทดสอบที่ยังไม่ได้ดำเนินการ<br>เพื่อทำแบบทดสอบให้ครบถ้วน</p>
+                <button onclick="window.closeCompletionNotice()" class="btn-standard bg-purple-600 text-white w-full h-[50px] font-normal mt-2 shadow-md">ตกลง</button>
             </div>
         </div>
     </div>
@@ -436,159 +333,80 @@
     <!-- Registration Modal -->
     <div id="regModalBackdrop" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden" onclick="window.closeRegModal()">
         <div class="bg-white w-full max-w-[400px] rounded-[12px] shadow-2xl overflow-hidden modal-enter relative" onclick="event.stopPropagation()">
-            <div class="bg-purple-600 px-6 py-4 flex justify-between items-center text-white">
-                <span class="font-medium text-[15px]">ลงทะเบียนเพื่อทำแบบทดสอบ</span>
-                <button onclick="window.closeRegModal()"><i data-lucide="x" class="w-5 h-5"></i></button>
-            </div>
+            <div class="bg-purple-600 px-6 py-4 flex justify-between items-center text-white"><span class="font-medium text-[15px]">ลงทะเบียนเพื่อทำแบบทดสอบ</span><button onclick="window.closeRegModal()"><i data-lucide="x" class="w-5 h-5"></i></button></div>
             <div class="p-8 space-y-6 text-center bg-white">
-                <div>
-                    <label class="text-[12px] text-slate-500 uppercase tracking-wide">กรุณากรอกชื่อและนามสกุลของคุณ</label>
-                    <input type="text" id="MBTI_Name_Input" placeholder="ชื่อ-นามสกุล" class="name-input w-full px-4 py-3 border rounded-xl text-[16px] text-center mt-2 mx-auto">
-                </div>
-                <div class="flex gap-3">
-                    <button onclick="window.closeRegModal()" class="btn-standard bg-slate-500 text-white flex-1"><span>ปิด</span></button>
-                    <button id="submitNameBtn" disabled class="btn-standard bg-purple-600 text-white flex-1"><span>ตกลง</span></button>
-                </div>
+                <div><label class="text-[12px] text-slate-500 uppercase">กรุณากรอกชื่อและนามสกุลของคุณ</label><input type="text" id="MBTI_Name_Input" placeholder="ชื่อ-นามสกุล" class="name-input w-full px-4 py-3 border rounded-xl text-[16px] text-center mt-2"></div>
+                <div class="flex gap-3"><button onclick="window.closeRegModal()" class="btn-standard bg-slate-500 text-white flex-1">ปิด</button><button id="submitNameBtn" disabled class="btn-standard bg-purple-600 text-white flex-1">ตกลง</button></div>
             </div>
         </div>
     </div>
 
     <!-- Assessment Page -->
     <div id="assessmentPage" class="w-full max-w-[500px] flex flex-col bg-white min-h-screen relative hidden text-center">
-        <div class="sticky top-0 z-[70] w-full bg-white border-b border-slate-50">
+        <div class="sticky top-0 z-[70] w-full bg-white border-b border-slate-50 text-center">
             <div class="w-full h-1.5 bg-slate-100"><div id="assessmentProgress" class="h-full bg-purple-600 progress-bar-fill w-0"></div></div>
             <div class="flex justify-end px-4 py-0.5"><button onclick="window.toggleMute()" class="p-1 text-slate-400"><i id="muteIconAssess" data-lucide="volume-2" class="w-5 h-5"></i></button></div>
         </div>
-        <div id="assessmentContainer" class="flex-1 overflow-y-auto px-5 py-2 space-y-4 pb-40 relative text-center">
+        <div id="assessmentContainer" class="flex-1 overflow-y-auto px-5 py-2 space-y-4 pb-10 relative text-center">
             <div id="assessmentQuestion" class="space-y-6 mt-[5px] px-2 text-center">
                 <div class="text-center">
-                    <span class="font-normal text-[20px] uppercase tracking-normal block mb-1" id="mbtiSectionLabel"></span>
+                    <span class="font-normal text-[20px] uppercase block mb-1 text-center" id="mbtiSectionLabel"></span>
                     <span class="text-slate-400 text-[11px] block mb-2 mt-[22px]">ข้อที่ <span id="qNumberDisplay">1</span> จาก 10</span>
-                    <h3 id="qPromptText" class="text-[17px] font-bold text-slate-700 mt-1 leading-snug"></h3>
+                    <h3 id="qPromptText" class="text-[17px] font-bold text-slate-700 leading-snug text-center"></h3>
                 </div>
                 <div id="qChoicesContainer" class="space-y-4">
-                    <button onclick="window.pick(0)" class="choice-card choice-0 w-full p-4 bg-white rounded-xl text-left transition-all flex items-center justify-between">
-                        <span class="text-[14px] font-medium">น้อยสุด</span>
-                    </button>
-                    <button onclick="window.pick(1)" class="choice-card choice-1 w-full p-4 bg-white rounded-xl text-left transition-all flex items-center justify-between">
-                        <span class="text-[14px] font-medium">ปานกลาง</span>
-                    </button>
-                    <button onclick="window.pick(2)" class="choice-card choice-2 w-full p-4 bg-white rounded-xl text-left transition-all flex items-center justify-between">
-                        <span class="text-[14px] font-medium">มากสุด</span>
-                    </button>
+                    <button onclick="window.pick(0)" class="choice-card w-full p-4 bg-white rounded-xl text-left flex items-center justify-between"><span class="text-[14px] font-medium">ไม่เหมือน</span></button>
+                    <button onclick="window.pick(1)" class="choice-card w-full p-4 bg-white rounded-xl text-left flex items-center justify-between"><span class="text-[14px] font-medium">ค่อนข้างเหมือน</span></button>
+                    <button onclick="window.pick(2)" class="choice-card w-full p-4 bg-white rounded-xl text-left flex items-center justify-between"><span class="text-[14px] font-medium">เหมือนมาก</span></button>
                 </div>
             </div>
-            <div id="assessmentNav" class="hidden absolute bottom-[80px] left-0 right-0 flex justify-between px-8 gap-4">
-                <button onclick="window.prevQuestion()" id="prevBtn" class="btn-standard px-5 bg-gray-100 text-slate-400">ก่อนหน้า</button>
-                <button id="nextBtn" disabled onclick="window.nextQuestion()" class="btn-standard px-10 bg-purple-600 text-white font-normal">ถัดไป</button>
-            </div>
+        </div>
+        <!-- FIXED NAVIGATION AT BOTTOM -->
+        <div id="assessmentNav" class="w-full flex justify-between px-8 py-6 bg-white border-t border-slate-50 gap-4">
+            <button onclick="window.prevQuestion()" id="prevBtn" class="btn-standard px-5 bg-gray-100 text-slate-400">ก่อนหน้า</button>
+            <button id="nextBtn" disabled onclick="window.nextQuestion()" class="btn-standard px-10 bg-purple-600 text-white font-normal">ถัดไป</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, updateDoc, addDoc, getDocs, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Static configuration (DO NOT MODIFY)
+        // Configuration
         const firebaseConfig = { apiKey: "AIzaSyAciknEYhZU7AwOdfYytC1t_AnW2Ee11us", authDomain: "faifah-ttb.firebaseapp.com", projectId: "faifah-ttb", storageBucket: "faifah-ttb.appspot.com", messagingSenderId: "842980876200", appId: "1:842980876200:web:f33bfad2ccbf263075079d" };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        
         const MEMBER_COLLECTION = "MBTI_Member";
         const ROUND_COLLECTION = "MBTI_Round";
 
-        // Global State
         window.currentMember = null;
         window.activeRound = null;
         window.isMuted = false;
         window.currentSection = null;
         window.currentQIndex = 0; 
         window.scoresHistory = []; 
-        window.selectedScore = null;
+        window.hasShownWelcomeNotice = false;
 
-        // Simplified Labels and Descriptions
-        window.mbtiDimBaseLabels = {
-            E: "E (Extraversion)", I: "I (Introversion)", S: "S (Sensing)", N: "N (Intuition)",
-            T: "T (Thinking)", F: "F (Feeling)", J: "J (Judging)", P: "P (Perceiving)"
-        };
-        window.mbtiDimShortDesc = {
-            E: "ชอบเข้าสังคม ได้พลังงานจากภายนอก",
-            I: "ชอบอยู่คนเดียว ได้พลังงานจากภายใน",
-            S: "มองโลกตามความเป็นจริง ชอบรายละเอียด",
-            N: "มองเห็นความเป็นไปได้ ชอบภาพรวม",
-            T: "ตัดสินใจด้วยเหตุผลและตรรกะ",
-            F: "ตัดสินใจโดยคำนึงถึงความรู้สึกและคุณค่า",
-            J: "ชอบการวางแผนและมีระเบียบ",
-            P: "ชอบความยืดหยุ่นและเปิดกว้าง"
+        // Content & Mapping
+        window.mbtiDimBaseLabels = { E: "Extraverting", I: "Introverting", S: "Sensing", N: "intuiting", T: "Thinking", F: "Feeling", J: "Judging", P: "Perceiving" };
+        window.mbtiDimShortDesc = { 
+            E: "จะรู้สึกมีพลังขึ้นมาเมื่อได้อยู่กับโลกภายนอกตัวเอง", I: "จะรู้สึกมีพลังขึ้นมาเมื่ออยู่กับโลกภายในตัวเอง",
+            S: "จะสนใจข้อมูลจากสัมผัสทั้งห้า", N: "จะสนใจข้อมูลจากสัมผัสที่หก",
+            T: "ตัดสินใจโดยใช้ตรรกะ เหตุผล", F: "ตัดสินใจโดยค่านิยมส่วนตัว",
+            J: "มักมีระเบียบแบบแผนในการใช้ชีวิต", P: "มักยืดหยุ่นปรับเปลี่ยนตามสถานการณ์"
         };
 
         window.mbtiDetailedContent = {
-            E: `<strong>แก่นของ E คือ “พลังจากภายนอก”</strong><br><br>
-                <ul class="list-disc ml-4 space-y-2 text-left">
-                    <li>ชอบสภาพแวดล้อมที่มีการเคลื่อนไหว พูดคุย หรือมีปฏิสัมพันธ์</li>
-                    <li>คิดออกมาดัง ๆ การพูดช่วยให้เรียบเรียงความคิด</li>
-                    <li>ตัดสินใจเร็วเพราะข้อมูลมาจากสิ่งที่เห็นตรงหน้า</li>
-                    <li>มักถูกมองว่าเข้าถึงง่าย เปิดเผย และเป็นธรรมชาติ</li>
-                    <li>เวลาล้า → ต้องการคนหรือกิจกรรมเพื่อเติมพลัง</li>
-                </ul>`,
-            I: `<strong>แก่นของ I คือ “พลังจากภายใน”</strong><br><br>
-                <ul class="list-disc ml-4 space-y-2 text-left">
-                    <li>ชอบพื้นที่สงบเพื่อคิด วิเคราะห์ และประมวลผล</li>
-                    <li>คิดก่อนพูด และเลือกคำพูดอย่างระมัดระวัง</li>
-                    <li>ไม่ได้เกลียดคน แต่ต้องใช้พลังมากกว่าในการเข้าสังคม</li>
-                    <li>มักลึกซึ้ง รอบคอบ และสังเกตเก่ง</li>
-                    <li>เวลาล้า → ต้องการอยู่คนเดียวเพื่อชาร์จพลัง</li>
-                </ul>`,
-            S: `<strong>แก่นของ S คือ “ข้อมูลจริงในปัจจุบัน”</strong><br><br>
-                <ul class="list-disc ml-4 space-y-2 text-left">
-                    <li>โฟกัสสิ่งที่จับต้องได้: ข้อเท็จจริง รายละเอียด ขั้นตอน</li>
-                    <li>ชอบความชัดเจน ไม่ชอบความกำกวม</li>
-                    <li>เรียนรู้จากประสบการณ์ตรงและสิ่งที่พิสูจน์ได้</li>
-                    <li>มักเก่งงานที่ต้องใช้ความละเอียด ความแม่นยำ</li>
-                    <li>มองโลกแบบ “ตอนนี้เป็นอย่างไร”</li>
-                </ul>`,
-            N: `<strong>แก่นของ N คือ “ความเป็นไปได้และภาพรวม”</strong><br><br>
-                <ul class="list-disc ml-4 space-y-2 text-left">
-                    <li>มองหาความหมาย ไอเดีย และรูปแบบที่ซ่อนอยู่</li>
-                    <li>ชอบคิดล่วงหน้า มองอนาคตมากกว่าปัจจุบัน</li>
-                    <li>ไม่ติดรายละเอียดเล็ก ๆ แต่สนใจคอนเซปต์ใหญ่</li>
-                    <li>มักสร้างสรรค์ คิดนอกกรอบ และเชื่อมโยงสิ่งต่าง ๆ ได้ไว</li>
-                    <li>มองโลกแบบ “มันจะไปทางไหนได้อีก”</li>
-                </ul>`,
-            T: `<strong>แก่นของ T คือ “เหตุผลและตรรกะ”</strong><br><br>
-                <ul class="list-disc ml-4 space-y-2 text-left">
-                    <li>ตัดสินใจจากหลักการ ความถูกต้อง และข้อมูล</li>
-                    <li>แยกเรื่องส่วนตัวออกจากงานได้ดี</li>
-                    <li>มองปัญหาแบบวิเคราะห์ ไม่ใช่อารมณ์</li>
-                    <li>มักตรงไปตรงมา ชัดเจน และเน้นประสิทธิภาพ</li>
-                    <li>ให้ความสำคัญกับ “อะไรคือสิ่งที่ถูกต้องที่สุด”</li>
-                </ul>`,
-            F: `<strong>แก่นของ F คือ “คุณค่าและความสัมพันธ์”</strong><br><br>
-                <ul class="list-disc ml-4 space-y-2 text-left">
-                    <li>ตัดสินใจโดยคำนึงถึงผลกระทบต่อคนอื่น</li>
-                    <li>เข้าใจอารมณ์ผู้อื่นได้ดี และให้ความสำคัญกับความกลมกลืน</li>
-                    <li>มักเป็นผู้ประสานงานที่ดี เพราะมองเห็นความรู้สึกของทุกฝ่าย</li>
-                    <li>ไม่ได้ไร้เหตุผล แต่ใช้ “คุณค่าภายใน” เป็นเกณฑ์</li>
-                    <li>ให้ความสำคัญกับ “อะไรคือสิ่งที่ดีที่สุดสำหรับคน”</li>
-                </ul>`,
-            J: `<strong>แก่นของ J คือ “โครงสร้างและความชัดเจน”</strong><br><br>
-                <ul class="list-disc ml-4 space-y-2 text-left">
-                    <li>ชอบวางแผนล่วงหน้า รู้ว่าอะไรจะเกิดขึ้น</li>
-                    <li>ตัดสินใจเร็วและชอบความแน่นอน</li>
-                    <li>ทำงานเป็นระบบ ชอบปิดงานให้เสร็จ</li>
-                    <li>มักดูเป็นระเบียบ มีเป้าหมายชัดเจน</li>
-                    <li>รู้สึกสบายใจเมื่อทุกอย่างอยู่ในกรอบที่ควบคุมได้</li>
-                </ul>`,
-            P: `<strong>แก่นของ P คือ “ความยืดหยุ่นและการเปิดรับ”</strong><br><br>
-                <ul class="list-disc ml-4 space-y-2 text-left">
-                    <li>ชอบปล่อยให้สิ่งต่าง ๆ ไหลไปตามธรรมชาติ</li>
-                    <li>ปรับตัวเก่ง คิดไอเดียใหม่ได้ตลอด</li>
-                    <li>ชอบสำรวจทางเลือกก่อนตัดสินใจ</li>
-                    <li>มักดูสบาย ๆ ไม่รีบร้อน</li>
-                    <li>รู้สึกสบายใจเมื่อมีอิสระและไม่ถูกบังคับด้วยแผนตายตัว</li>
-                </ul>`
+            E: `<strong>ภาพรวม:</strong><br>E คือคนที่พลังงานไหลออกสู่โลกภายนอก ยิ่งได้เจอคน ยิ่งได้ลงมือทำ ยิ่งมีไฟ<br><br><strong>ลักษณะเด่น:</strong><ul class="list-disc ml-4 space-y-1 text-left"><li>สนใจสิ่งที่เกิดขึ้นรอบตัวมากกว่าสิ่งที่อยู่ในใจ</li><li>ชอบพูดคุย โต้ตอบ และเชื่อมต่อกับผู้คน</li><li>ชอบทำกิจกรรม ลงมือก่อนคิด</li><li>ชอบอยู่กับคนหมู่มาก บรรยากาศคึกคัก</li><li>ตัดสินใจเร็ว มักไม่คิดลึกมาก</li><li>ชอบสิ่งใหม่ ๆ การเปลี่ยนแปลง และความท้าทาย</li><li>เน้น “การกระทำ” มากกว่า “ความคิด”</li><li>ปรับตัวกับสถานการณ์เฉพาะหน้าได้ดี</li><li>ทำงานเป็นทีมได้ดี และมักสร้างแรงบันดาลใจให้คนอื่น</li></ul>`,
+            I: `<strong>ภาพรวม:</strong><br>I คือคนที่พลังงานไหลเข้าด้านใน ยิ่งได้อยู่เงียบ ๆ คิดลึก ๆ ยิ่งรู้สึกเต็ม<br><br><strong>ลักษณะเด่น:</strong><ul class="list-disc ml-4 space-y-1 text-left"><li>สนใจสิ่งที่เกิดขึ้นในใจ ความคิด ความรู้สึก</li><li>ชอบคิดก่อนพูด พิจารณาอย่างรอบคอบ</li><li>ชอบอยู่คนเดียว หรืออยู่กับกลุ่มเล็ก ๆ</li><li>คิดลึกซึ้ง มองประเด็นอย่างละเอียด</li><li>ตัดสินใจช้า เพราะต้องไตร่ตรอง</li><li>ชอบสิ่งเดิม ๆ ไม่ชอบการเปลี่ยนแปลงมาก</li><li>เน้น “ความคิด” มากกว่า “การกระทำ”</li><li>ต้องการเวลาเงียบเพื่อชาร์จพลัง</li><li>ทำงานได้ดีเมื่อมีพื้นที่ส่วนตัวและความเป็นอิสระ</li></ul>`,
+            S: `<strong>ภาพรวม:</strong><br>S (Sensing) จะสนใจข้อมูลจากสัมผัสทั้งห้า และให้ความสำคัญกับสิ่งที่เห็นและเป็นอยู่<br><br><strong>ลักษณะเด่น:</strong><ul class="list-disc ml-4 space-y-1 text-left"><li>รับรู้สิ่งต่าง ๆ แบบรูปธรรม</li><li>โฟกัสปัจจุบันมากกว่าอนาคต</li><li>ชอบสิ่งที่จับต้องได้ เห็นได้จริง</li><li>สนใจรายละเอียด</li><li>เชื่อประสบการณ์ตรงมากกว่านามธรรม</li><li>ทำงานเป็นขั้นตอน มีระบบ</li><li>ชอบความแน่นอน คาดการณ์ได้</li><li>ไม่ชอบการเปลี่ยนแปลงเร็ว</li></ul>`,
+            N: `<strong>ภาพรวม:</strong><br>N (intuiting) จะสนใจข้อมูลจากสัมผัสที่หก สังหรณ์หรือสิ่งที่ผุดขึ้นในใจ และให้ความสำคัญกับสิ่งที่เป็นไปได้<br><br><strong>ลักษณะเด่น:</strong><ul class="list-disc ml-4 space-y-1 text-left"><li>รับรู้สิ่งต่าง ๆ แบบนามธรรม</li><li>มองภาพรวมมากกว่ารายละเอียด</li><li>ชอบคิดเชิงแนวคิด จินตนาการ</li><li>สนใจอนาคตมากกว่าปัจจุบัน</li><li>ชอบสิ่งใหม่ ๆ การเปลี่ยนแปลง</li><li>มีความคิดสร้างสรรค์</li><li>มองเห็นความเป็นไปได้ที่คนอื่นไม่เห็น</li></ul>`,
+            T: `<strong>ภาพรวม:</strong><br>T (Thinking) ตัดสินใจโดยใช้ตรรกะ เหตุผล ไม่ใช้ความรู้สึกส่วนตัวเป็นเกณฑ์<br><br><strong>ลักษณะเด่น:</strong><ul class="list-disc ml-4 space-y-1 text-left"><li>ตัดสินใจโดยใช้เหตุผล</li><li>มองหาความจริง ความถูกต้อง</li><li>มักมองข้ามความรู้สึกของผู้อื่น</li><li>เน้นตรรกะและความเป็นกลาง</li><li>ให้ความสำคัญกับ “ถูก–ผิด” มากกว่า “รู้สึกอย่างไร”</li></ul>`,
+            F: `<strong>ภาพรวม:</strong><br>F (Feeling) ตัดสินใจโดยค่านิยมส่วนตัวเป็นเกณฑ์<br><br><strong>ลักษณะเด่น:</strong><ul class="list-disc ml-4 space-y-1 text-left"><li>ตัดสินใจโดยใช้ความรู้สึก</li><li>มองหาความสัมพันธ์ ความกลมกลืน</li><li>มักมองข้ามความจริงเชิงเหตุผล</li><li>เน้นความรู้สึกของคนรอบข้าง</li><li>ให้ความสำคัญกับ “ความรู้สึก–ความสัมพันธ์” มากกว่า “ตรรกะ"</li></ul>`,
+            J: `<strong>ภาพรวม:</strong><br>J (Judging) มักมีระเบียบแบบแผนในการใช้ชีวิต<br><br><strong>ลักษณะเด่น:</strong><ul class="list-disc ml-4 space-y-1 text-left"><li>ชอบวางแผนล่วงหน้า</li><li>อยากให้สิ่งต่าง ๆ เป็นไปตามแผน</li><li>ชอบการตัดสินใจที่แน่นอน</li><li>ชอบความเป็นระเบียบ</li><li>ทำงานเสร็จก่อนแล้วค่อยพักผ่อน</li></ul>`,
+            P: `<strong>ภาพรวม:</strong><br>P (Perceiving) มักยืดหยุ่นปรับเปลี่ยนตามสถานการณ์ ไม่วางแผนล่วงหน้ามากนัก<br><br><strong>ลักษณะเด่น:</strong><ul class="list-disc ml-4 space-y-1 text-left"><li>อยากมีชีวิตที่ยืดหยุ่นมากกว่า</li><li>ชอบการเปลี่ยนแปลงและสิ่งใหม่ ๆ</li><li>ชอบการตัดสินใจแบบยืดหยุ่น</li><li>ไม่ชอบความเป็นระเบียบมากนัก</li><li>มักจะพักผ่อนก่อนแล้วค่อยทำงาน</li></ul>`
         };
 
         window.mbtiQuestions = {
@@ -597,349 +415,287 @@
             S: ["อยู่กับความเป็นจริง เน้นเรื่องที่ทำได้จริงหรือจับต้องได้", "สนใจตัวเลข ข้อมูลและข้อเท็จจริงมากกว่าทฤษฎี", "ชอบงานที่สามารถนำไปประยุกต์และมีผลลัพธ์ที่จับต้องได้", "ชอบ ฟัง พูด อ่าน เขียนและตีความตามตัวหนังสือตรงๆ", "สังเกตสิ่งต่างๆ ที่อยู่รอบตัวได้ดี และมักจดจำรายละเอียดได้", "ชอบงานที่ทำด้วยมือ เช่น สร้างหรือประกอบสิ่งต่างๆ จนเป็นรูปร่างขึ้นมาหรือเย็บปักถักร้อย", "ชอบใช้ความสามารถที่มีอยู่แล้วมาใช้และพยายามพัฒนาให้ดียิ่งขึ้น", "มีความสุขอยู่กับสิ่งที่อยู่ตรงหน้าได้ พึงพอใจกับสภาพที่เป็นอยู่", "ใช้ประสบการณ์ส่วนตัวในการดูว่า อะไรจริงหรือไม่จริง", "มุ่งเน้นสิ่งที่เห็นอยู่ตรงหน้ามากกว่าที่จะนึกคิดถึงอนาคตที่ไกลเกิน"],
             N: ["จดจ่อกับสิ่งที่อยู่ตรงหน้าไม่ค่อยจะได้ เพราะในหัวมีไอเดียต่างๆ ผุดขึ้นมาพร้อมกัน", "มักใช้อุปมาอุปไมยเวลาพูดถึงหรืออธิบายอะไรบางอย่าง", "ใช้สังหรณ์ จินตนาการและแรงบันดาลใจ เป็นที่มาให้ได้ข้อมูลจำนวนมาก", "ชอบคิดถึงสิ่งใหม่ๆ ที่เป็นไปได้ โฟกัสกับสิ่งที่อาจจะเป็นหรือเกิดขึ้นได้", "สนใจเรื่องที่จะเกิดขึ้นในอนาคต ชอบทำอะไรที่แปลกใหม่แบบที่ไม่มีใครลองทำมาก่อน", "พยายามมองให้เห็นภาพรวมหรือแบบแผนที่อยู่เบื้องหลังของสิ่งต่างๆ ไม่ชอบติดอยู่กับรายละเอียด", "สนใจและคอยมองหาความหมายและความเชื่อมโยงของสิ่งต่างๆ", "มองหาความนัยที่ซ่อนอยู่ ชอบจินตนาการและค้นหาว่า ใครมีอะไรที่ยังไม่ได้พูดออกมาตรงๆ บ้าง", "ไม่ค่อยสนใจสิ่งที่เกิดขึ้นรอบๆ ตัว อาจไม่รู้เลยว่ามีอะไรเกิดขึ้นตรงหน้าบ้าง", "ชอบเรื่องนามธรรมและทฤษฎี บางครั้งรู้สึกว่า เรื่องราวต่างๆ ในชีวิตประจำวันช่างน่าเบื่อหน่าย"],
             T: ["เน้นการใช้ตรรกะเหตุผลที่ชัดเจนในการคิดและตัดสินใจ", "ชอบถกเถียงและยกเหตุผลมาสนับสนุนมุมมองส่วนตัว", "มีคนหาว่าฉันไม่ใส่ใจต่อความรู้สึกและความต้องการของผู้อื่น", "บางครั้งถูกมองว่าคิดมากเกินไป ไม่ค่อยเป็นกันเอง", "อาจพูดจาขวานผ่าซากเกินไปในบางครั้ง", "มักใส่ใจในสิ่งที่คนอื่นคิดมากกว่าความรู้สึกของเขา", "ไม่ชอบแสดงอารมณ์ออกมาให้ใครเห็น", "ปกติมักตัดสินใจโดยยึดถือความยุติธรรมและตรรกะเหตุผลมากกว่าความรู้สึกส่วนตัว", "ให้ความสำคัญกับการพูดความจริง แม้อาจทำให้คนอื่นเสียความรู้สึกก็ตาม", "ไม่หวั่นไหวกับการวิพากษ์วิจารณ์หรือแก้ไขสิ่งที่คนอื่นพูดผิด"],
-            F: ["ให้ความสำคัญกับความเข้าอกเข้าใจและเห็นใจผู้อื่นมากกว่า", "ชอบพูดเรื่องอารมณ์ความรู้สึกและความสัมพันธ์ส่วนตัว", "เวลาจะตัดสินใจ จะคำนวณผลกระทบที่มีต่อคนอื่นอย่างมาก", "ให้ความสำคัญกับการพูดโดยไม่ทำให้ใครเจ็บช้ำน้ำใจไม่น้อยกว่าพูดความจริง", "การเป็นที่ยอมรับและชอบพอเป็นสิ่งที่สำคัญมากสำหรับฉัน", "มองหาสิ่งดีๆ ในตัวคนอื่นหรือสิ่งต่างๆ", "คนอื่นมักมาหา เวลาต้องการความอบอุ่นและคนดูแลใส่ใจ", "ไม่ค่อยกล้าบอกถึงสิ่งที่ตัวเองอยากได้หรือต้องการ", "เวลาไม่เห็นด้วยกับใครก็ยากที่จะบอกกับเขา", "ไม่ชอบมากๆ เมื่อถูกตำหนิ จนคนอื่นมองว่าเป็นคนอ่อนไหวเกินไป"],
+            F: ["ให้ความสำคัญกับความเข้าอกเข้าใจและเห็นใจผู้อื่นมากกว่า", "ชอบพูดเรื่องอารมณ์ความรู้สึกและความสัมพันธ์ส่วนตัว", "เวลาจะตัดสินใจ จะคำวณผลกระทบที่มีต่อคนอื่นอย่างมาก", "ให้ความสำคัญกับการพูดโดยไม่ทำให้ใครเจ็บช้ำน้ำใจไม่น้อยกว่าพูดความจริง", "การเป็นที่ยอมรับและชอบพอเป็นสิ่งที่สำคัญมากสำหรับฉัน", "มองหาสิ่งดีๆ ในตัวคนอื่นหรือสิ่งต่างๆ", "คนอื่นมักมาหา เวลาต้องการความอบอุ่นและคนดูแลใส่ใจ", "ไม่ค่อยกล้าบอกถึงสิ่งที่ตัวเองอยากได้หรือต้องการ", "เวลาไม่เห็นด้วยกับใครก็ยากที่จะบอกกับเขา", "ไม่ชอบมากๆ เมื่อถูกตำหนิ จนคนอื่นมองว่าเป็นคนอ่อนไหวเกินไป"],
             J: ["ชอบเตรียมแผนล่วงหน้าและยึดตามแผน", "ทำงานเสร็จตามกำหนดเวลาและมีระเบียบ", "ชอบบทสรุปและผลลัพธ์ที่ชัดเจน", "จัดตารางเวลาและชีวิตอย่างเป็นระบบ", "ตัดสินใจเรื่องต่างๆ ได้เด็ดขาด", "ชอบทำงานให้เสร็จก่อนที่จะพักผ่อน", "รู้สึกกังวลเมื่อแผนงานไม่เรียบร้อย", "ชอบกฎเกณฑ์และขั้นตอนการทำงาน", "ให้ความสำคัญกับระเบียบวินัย", "ต้องการความแน่นอนและความสงบเรียบร้อย"],
             P: ["ชอบความยืดหยุ่นและปรับตัวตามสถานการณ์", "รอจนถึงวินาทีสุดท้ายก่อนจะตัดสินใจ", "เปิดรับข้อมูลและทางเลือกใหม่ๆ เสมอ", "สนุกกับการแก้ปัญหาเฉพาะหน้า", "ไม่ชอบถูกจำกัดด้วยตารางเวลาที่ตึงเกินไป", "ทำงานได้ดีในภาวะกดดันหรือใกล้ส่งงาน", "มองหาความสนุกสนานและประสบการณ์ใหม่", "พร้อมเปลี่ยนทิศทางถ้ามีโอกาสดีกว่า", "ไม่เร่งรีบเพื่อให้ได้ข้อสรุป", "ชอบใช้ชีวิตแบบไปตามกระแส"]
         };
 
-        window.dimInfoData = {
-            E: { color: "#9333ea" }, I: { color: "#9333ea" },
-            S: { color: "#ca8a04" }, N: { color: "#ca8a04" },
-            T: { color: "#16a34a" }, F: { color: "#16a34a" },
-            J: { color: "#2563eb" }, P: { color: "#2563eb" }
+        window.dimInfoData = { E: { color: "#9333ea", group: 'Analysts' }, I: { color: "#9333ea", group: 'Analysts' }, S: { color: "#3b82f6", group: 'Sentinels' }, N: { color: "#22c55e", group: 'Diplomats' }, T: { color: "#9333ea", group: 'Analysts' }, F: { color: "#22c55e", group: 'Diplomats' }, J: { color: "#3b82f6", group: 'Sentinels' }, P: { color: "#eab308", group: 'Explorers' } };
+        window.mbtiGrid = [['ISTJ', 'ISFJ', 'INFJ', 'INTJ'],['ISTP', 'ISFP', 'INFP', 'INTP'],['ESTP', 'ESFP', 'ENFP', 'ENTP'],['ESTJ', 'ESFJ', 'ENFJ', 'ENTJ']];
+        window.mbtiDataMap = {
+            'ISTJ': { g: 'Sentinels', c: '#3b82f6' }, 'ISFJ': { g: 'Sentinels', c: '#3b82f6' }, 'INFJ': { g: 'Diplomats', c: '#22c55e' }, 'INTJ': { g: 'Analysts', c: '#9333ea' },
+            'ISTP': { g: 'Explorers', c: '#eab308' }, 'ISFP': { g: 'Explorers', c: '#eab308' }, 'INFP': { g: 'Diplomats', c: '#22c55e' }, 'INTP': { g: 'Analysts', c: '#9333ea' },
+            'ESTP': { g: 'Explorers', c: '#eab308' }, 'ESFP': { g: 'Explorers', c: '#eab308' }, 'ENFP': { g: 'Diplomats', c: '#22c55e' }, 'ENTP': { g: 'Analysts', c: '#9333ea' },
+            'ESTJ': { g: 'Sentinels', c: '#3b82f6' }, 'ESFJ': { g: 'Sentinels', c: '#3b82f6' }, 'ENFJ': { g: 'Diplomats', c: '#22c55e' }, 'ENTJ': { g: 'Analysts', c: '#9333ea' }
         };
 
-        window.mbtiData = {
-            'INTJ': { cat: 'Analysts', name: 'Architect', summary: 'นักคิดผู้มีความทะเยอทะยานและช่างจินตนาการ เป็นคนมีระเบียบและรักความเป็นส่วนตัว มักมีแผนสำรองไว้เสมอ' },
-            'INTP': { cat: 'Analysts', name: 'Logician', summary: 'นักประดิษฐ์ผู้มีความคิดสร้างสรรค์ มีความกระหายในความรู้อย่างไม่มีที่สิ้นสุด ชอบวิเคราะห์โครงสร้างของสิ่งต่างๆ' },
-            'ENTJ': { cat: 'Analysts', name: 'Commander', summary: 'ผู้นำที่กล้าหาญ ช่างจินตนาการ และมีความมุ่งมั่น มักจะหาทางออกให้ทุกปัญหาได้เสมอ' },
-            'ENTP': { cat: 'Analysts', name: 'Debater', summary: 'นักคิดที่เฉลียวฉลาดและขี้สงสัย ไม่สามารถต้านทานความท้าทายทางปัญญาได้ ชอบถกเถียงเพื่อหาความจริง' },
-            'INFJ': { cat: 'Diplomats', name: 'Advocate', summary: 'คนเงียบๆ แต่อุดมไปด้วยอุดมการณ์ มีเป้าหมายชัดเจนที่จะช่วยเหลือโลกและผู้อื่น' },
-            'INFP': { cat: 'Diplomats', name: 'Mediator', summary: 'นักกวีที่มีจิตใจดี มีความกระตือรือร้นที่จะช่วยเหลือผู้อื่น และรักษาค่านิยมของตนเองอย่างเคร่งครัด' },
-            'ENFJ': { cat: 'Diplomats', name: 'Protagonist', summary: 'ผู้นำที่มีเสน่ห์และสร้างแรงบันดาลใจ สามารถจับใจผู้ฟังและจูงใจผู้อื่นให้ทำตามเป้าหมายร่วมกันได้' },
-            'ENFP': { cat: 'Diplomats', name: 'Campaigner', summary: 'ผู้ที่มีจิตวิญญาณแห่งความอิสระ มีความกระตือรือร้น มีความคิดสร้างสรรค์ และเข้าสังคมเก่ง' },
-            'ISTJ': { cat: 'Sentินels', name: 'Logistician', summary: 'บุคคลที่มีความละเอียดรอบคอบ มีความรับผิดชอบ และยึดมั่นในข้อเท็จจริง' },
-            'ISFJ': { cat: 'Sentินels', name: 'Defender', summary: 'ผู้ที่ปกป้องดูแลผู้อื่นอย่างอุทิศตน มักมีความอบอุ่นและเตรียมพร้อมที่จะดูแลคนใกล้ชิดเสมอ' },
-            'ESTJ': { cat: 'Sentินels', name: 'Executive', summary: 'ผู้บริหารที่ดีเยี่ยม มีความสามารถในการจัดการสิ่งต่างๆ และผู้คนได้อย่างดีเยี่ยม' },
-            'ESFJ': { cat: 'Sentินels', name: 'Consul', summary: 'ผู้ที่คอยช่วยเหลือและใส่ใจผู้อื่น มีความรับผิดชอบและเข้าสังคมได้ดี มักเป็นที่รักในชุมชน' },
-            'ISTP': { cat: 'Explorers', name: 'Virtuoso', summary: 'นักทดลองที่กล้าหาญและปฏิบัติจริง มีทักษะในการใช้เครื่องมือและชอบเรียนรู้วิธีการทำงานของสิ่งต่างๆ' },
-            'ISFP': { cat: 'Explorers', name: 'Adventurer', summary: 'ศิลปินที่มีความยืดหยุ่น มีเสน่ห์ และพร้อมที่จะสำวรจสิ่งใหม่ๆ อยู่เสมอ' },
-            'ESTP': { cat: 'Explorers', name: 'Entrepreneur', summary: 'คนที่ฉลาด กระตือรือร้น และมีความสุขกับการใช้ชีวิตที่โลดโผนและมีความเสี่ยง' },
-            'ESFP': { cat: 'Explorers', name: 'Entertainer', summary: 'ผู้ที่มีความกระตือรือร้น มีเสน่ห์ และรักการสร้างความสนุกสนานให้กับคนรอบข้าง' }
-        };
-
-        const speak = (t) => { if(!window.isMuted) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang='th-TH'; window.speechSynthesis.speak(u); }};
+        const speak = (t) => { if(!window.isMuted) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t.replace(/<[^>]*>/g, '')); u.lang='th-TH'; window.speechSynthesis.speak(u); }};
         window.toggleMute = () => { window.isMuted = !window.isMuted; const ic = window.isMuted ? 'volume-x' : 'volume-2'; document.querySelectorAll('[id^=muteIcon]').forEach(el => { el.setAttribute('data-lucide', ic); lucide.createIcons(); }); };
-        window.showMessage = (t, ty='success') => { const m = document.getElementById('messageBox'); m.textContent = t; m.className = `fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl text-white shadow-xl ${ty==='success'?'bg-green-500':'bg-red-500'}`; m.classList.remove('hidden'); setTimeout(()=>m.classList.add('hidden'), 2500); };
-        window.openRegModal = () => { if (!window.activeRound) { window.showMessage("ขออภัย ขณะนี้ยังไม่เปิดรอบการทำแบบทดสอบ", "error"); return; } document.getElementById('regModalBackdrop').classList.remove('hidden'); };
-        window.closeRegModal = () => document.getElementById('regModalBackdrop').classList.add('hidden');
+        window.showMessage = (t, ty='success') => { const m = document.getElementById('messageBox'); if(!m) return; m.textContent = t; m.className = `fixed top-10 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl text-white shadow-xl ${ty==='success'?'bg-green-500':'bg-red-500'}`; m.classList.remove('hidden'); setTimeout(()=>m.classList.add('hidden'), 2500); };
+        window.openRegModal = () => document.getElementById('regModalBackdrop')?.classList.remove('hidden');
+        window.closeRegModal = () => document.getElementById('regModalBackdrop')?.classList.add('hidden');
+        window.closeCompletionNotice = () => document.getElementById('completionNoticeModal')?.classList.add('hidden');
+        window.closeDimInfo = () => document.getElementById('dimInfoModal')?.classList.add('hidden');
+
+        window.triggerCompletionNotice = (isReturning = false) => {
+            if (!window.currentMember) return;
+            const fields = { E: 'Type1_E', I: 'Type1_I', S: 'Type2_S', N: 'Type2_N', T: 'Type3_T', F: 'Type3_F', J: 'Type4_J', P: 'Type4_P' };
+            const missing = Object.keys(fields).filter(k => !window.currentMember[fields[k]]);
+            if (missing.length > 0 && (!window.hasShownWelcomeNotice || isReturning)) {
+                const listEl = document.getElementById('missingSectionsList');
+                if (listEl) {
+                    listEl.innerHTML = missing.map(m => {
+                        const lightBg = (m === 'E' || m === 'I') ? 'bg-purple-400/10 border-purple-600/25 text-purple-600' : (m === 'S' || m === 'N') ? 'bg-green-400/10 border-green-600/25 text-green-600' : (m === 'T' || m === 'F') ? 'bg-blue-400/10 border-blue-600/25 text-blue-600' : 'bg-yellow-400/10 border-yellow-600/25 text-yellow-600';
+                        return `<div class="flex flex-col items-center justify-center p-3 rounded-xl border ${lightBg} text-center"><div class="text-[14px] font-bold">ความถนัด : ${m}</div><div class="text-[11px] font-normal opacity-80">${window.mbtiDimBaseLabels[m]}</div></div>`;
+                    }).join('');
+                    document.getElementById('completionNoticeModal')?.classList.remove('hidden');
+                    window.hasShownWelcomeNotice = true;
+                }
+            }
+        };
 
         window.handleNameSubmission = async () => {
-            if (!auth.currentUser) return;
-            const name = document.getElementById('MBTI_Name_Input').value.trim();
-            if(!name || name.length < 2) { window.showMessage("กรุณากรอกชื่อและนามสกุลที่ถูกต้อง", "error"); return; }
-            if (!window.activeRound) return;
-            const btn = document.getElementById('submitNameBtn'); btn.disabled = true; document.getElementById('globalLoader').classList.remove('hidden');
+            const input = document.getElementById('MBTI_Name_Input');
+            if(!input) return;
+            const name = input.value.trim();
+            if(!name || name.length < 2) return;
+            document.getElementById('globalLoader').classList.remove('hidden');
             try {
                 const snap = await getDocs(collection(db, MEMBER_COLLECTION));
                 let found = null;
-                snap.forEach(d => { const data = d.data(); if (data.MBTI_id === window.activeRound.id && data.MBTI_Name === name) found = { docId: d.id, ...data }; });
-                if (found) { window.currentMember = found; } else {
-                    const newMember = {
-                        MBTI_id: window.activeRound.id, MBTI_Name: name, MBTI_Type: "",
-                        Type1_E: null, Type1_I: null, Type2_N: null, Type2_S: null,
-                        Type3_F: null, Type3_T: null, Type4_J: null, Type4_P: null,
-                        createdAt: serverTimestamp(), Group: window.activeRound.MBTI_Team || "ทั่วไป"
-                    };
+                snap.forEach(d => { if (d.data().MBTI_id === window.activeRound.id && d.data().MBTI_Name === name) found = { docId: d.id, ...d.data() }; });
+                if (found) window.currentMember = found;
+                else {
+                    const newMember = { MBTI_id: window.activeRound.id, MBTI_Name: name, MBTI_Type: "", Type1_E: 0, Type1_I: 0, Type2_N: 0, Type2_S: 0, Type3_F: 0, Type3_T: 0, Type4_J: 0, Type4_P: 0, createdAt: serverTimestamp(), Group: window.activeRound.MBTI_Team || "ทั่วไป" };
                     const docRef = await addDoc(collection(db, MEMBER_COLLECTION), newMember);
                     window.currentMember = { docId: docRef.id, ...newMember };
                 }
                 window.closeRegModal(); showMainPage();
-            } catch (error) { window.showMessage("เกิดข้อผิดพลาดในการเชื่อมต่อ", "error"); } finally { btn.disabled = false; document.getElementById('globalLoader').classList.add('hidden'); }
+            } catch (error) { window.showMessage("เกิดข้อผิดพลาด", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
         };
 
-        const showMainPage = () => {
-            document.getElementById('landingPage').classList.add('hidden');
-            document.getElementById('assessmentPage').classList.add('hidden');
-            document.getElementById('mainDiscPage').classList.remove('hidden');
-            document.getElementById('topColorBar').classList.add('hidden');
-            
-            // Populate user header data
-            document.getElementById('welcomeUser').textContent = window.currentMember.MBTI_Name;
-            document.getElementById('userSub').textContent = window.currentMember.Group || '-'; // Show Company/Group Name in bottom row
-            
-            window.switchTab('home');
+        const showMainPage = (isAssessmentReturn = false) => {
+            document.getElementById('landingPage')?.classList.add('hidden');
+            document.getElementById('assessmentPage')?.classList.add('hidden'); // Ensure assessment page is hidden
+            document.getElementById('mainDiscPage')?.classList.remove('hidden');
+            document.getElementById('topColorBar')?.classList.add('hidden'); 
+            const welcome = document.getElementById('welcomeUser');
+            const sub = document.getElementById('userSub');
+            if(welcome) welcome.textContent = window.currentMember.MBTI_Name;
+            if(sub) sub.textContent = window.currentMember.Group;
+            window.switchTab('home', isAssessmentReturn);
         };
 
         const updateDimensionButtons = () => {
-            const types = ['E', 'I', 'S', 'N', 'T', 'F', 'J', 'P'];
-            const fieldMap = { E: 'Type1_E', I: 'Type1_I', S: 'Type2_S', N: 'Type2_N', T: 'Type3_T', F: 'Type3_F', J: 'Type4_J', P: 'Type4_P' };
-            const completedClasses = { E: 'completed-purple', I: 'completed-purple', S: 'completed-yellow', N: 'completed-yellow', T: 'completed-green', F: 'completed-green', J: 'completed-blue', P: 'completed-blue' };
+            if(!window.currentMember) return;
+            const fields = { E: 'Type1_E', I: 'Type1_I', S: 'Type2_S', N: 'Type2_N', T: 'Type3_T', F: 'Type3_F', J: 'Type4_J', P: 'Type4_P' };
+            const classes = { E: 'completed-purple', I: 'completed-purple', S: 'completed-green', N: 'completed-green', T: 'completed-blue', F: 'completed-blue', J: 'completed-yellow', P: 'completed-yellow' };
+            const pairs = [['E', 'I'], ['S', 'N'], ['T', 'F'], ['J', 'P']];
             
-            types.forEach(t => {
+            Object.keys(fields).forEach(t => {
                 const btn = document.getElementById(`btn-${t}`);
-                if (!btn) return;
-                const val = window.currentMember[fieldMap[t]];
+                if(!btn) return;
+                const val = window.currentMember[fields[t]];
                 btn.className = btn.className.replace(/completed-\w+/g, '');
-                if (val !== null && val !== undefined && val !== 0) {
-                    btn.disabled = true;
-                    btn.classList.add(completedClasses[t]);
+                btn.disabled = false;
+                const labelEl = document.getElementById(`label-${t}`);
+                if(labelEl) labelEl.innerHTML = t; 
+                if (val) {
+                    btn.classList.add(classes[t]);
                     if (!btn.querySelector('.dim-score')) {
-                        const scoreEl = document.createElement('span');
-                        scoreEl.className = 'dim-score';
-                        scoreEl.textContent = `คะแนน: ${val}`;
-                        btn.appendChild(scoreEl);
+                        const s = document.createElement('span'); s.className = 'dim-score'; s.textContent = `คะแนน: ${val}`; btn.appendChild(s);
                     }
                 } else {
-                    btn.disabled = false;
-                    const existingScore = btn.querySelector('.dim-score');
-                    if (existingScore) existingScore.remove();
+                    const existing = btn.querySelector('.dim-score'); if (existing) existing.remove();
                 }
             });
-        };
 
-        window.showDimensionInfo = (section) => {
-            const info = window.dimInfoData[section];
-            if (!info) return;
-            const modal = document.getElementById('dimInfoModal');
-            const header = document.getElementById('dimModalHeader');
-            const title = document.getElementById('dimModalTitle');
-            const subtitle = document.getElementById('dimModalSubtitle');
-            const contentSlot = document.getElementById('dimModalContentSlot');
-            const startBtn = document.getElementById('dimModalStartBtn');
-            
-            if (header) header.style.backgroundColor = info.color;
-            if (title) title.textContent = window.mbtiDimBaseLabels[section];
-            if (subtitle) {
-                subtitle.textContent = window.mbtiDimShortDesc[section];
-            }
-            if (contentSlot) {
-                contentSlot.innerHTML = window.mbtiDetailedContent[section];
-            }
-            
-            if (startBtn) {
-                startBtn.style.backgroundColor = info.color;
-                startBtn.onclick = () => {
-                    window.closeDimInfo();
-                    window.startAssessmentFlow(section);
-                };
-            }
-            
-            if (modal) modal.classList.remove('hidden');
+            pairs.forEach(([a, b]) => {
+                const vA = window.currentMember[fields[a]], vB = window.currentMember[fields[b]];
+                if (vA && vB) {
+                    const lA = document.getElementById(`label-${a}`), lB = document.getElementById(`label-${b}`);
+                    if(!lA || !lB) return;
+                    if (vA > vB) { lA.innerHTML = `${a} <span class="icon-correct"><i data-lucide="check" class="w-3.5 h-3.5"></i></span>`; lB.innerHTML = `${b} <span class="icon-incorrect"><i data-lucide="x" class="w-3.5 h-3.5"></i></span>`; }
+                    else if (vB > vA) { lB.innerHTML = `${b} <span class="icon-correct"><i data-lucide="check" class="w-3.5 h-3.5"></i></span>`; lA.innerHTML = `${a} <span class="icon-incorrect"><i data-lucide="x" class="w-3.5 h-3.5"></i></span>`; }
+                }
+            });
             lucide.createIcons();
         };
 
-        window.closeDimInfo = () => document.getElementById('dimInfoModal').classList.add('hidden');
+        window.showDimensionInfo = (section) => {
+            if(!window.currentMember) return;
+            const field = { E: 'Type1_E', I: 'Type1_I', S: 'Type2_S', N: 'Type2_N', T: 'Type3_T', F: 'Type3_F', J: 'Type4_J', P: 'Type4_P' }[section];
+            const score = window.currentMember[field];
+            const info = window.dimInfoData[section];
+            const modal = document.getElementById('dimInfoModal');
+            if(!modal) return;
+            const header = document.getElementById('dimModalHeader');
+            if(header) header.style.backgroundColor = info.color;
+            const title = document.getElementById('dimModalTitle');
+            if(title) title.textContent = "บุคลิกแบบ " + window.mbtiDimBaseLabels[section];
+            const content = document.getElementById('dimModalContentSlot');
+            if(content) content.innerHTML = window.mbtiDetailedContent[section];
+            const actionArea = document.getElementById('dimModalActionArea');
+            if (actionArea) {
+                if (score) actionArea.innerHTML = `<span class="text-purple-700 font-bold text-[14px]">คะแนนที่ได้ ${score} คะแนน</span>`;
+                else {
+                    actionArea.innerHTML = `<button id="startBtn" class="btn-standard text-white px-6 shadow-md" style="background-color:${info.color}">เริ่มทำแบบทดสอบ</button>`;
+                    const realBtn = document.getElementById('startBtn');
+                    if(realBtn) realBtn.onclick = () => { window.closeDimInfo(); window.startAssessmentFlow(section); };
+                }
+            }
+            modal.classList.remove('hidden'); lucide.createIcons();
+        };
 
         window.startAssessmentFlow = (section) => {
-            window.currentSection = section;
-            window.currentQIndex = 0;
-            window.scoresHistory = new Array(10).fill(null); 
-            window.selectedScore = null;
-            document.getElementById('mainDiscPage').classList.add('hidden');
-            document.getElementById('assessmentPage').classList.remove('hidden');
-            
+            window.currentSection = section; window.currentQIndex = 0; window.scoresHistory = new Array(10).fill(null);
+            document.getElementById('mainDiscPage')?.classList.add('hidden');
+            document.getElementById('assessmentPage')?.classList.remove('hidden');
+            document.getElementById('topColorBar')?.classList.add('hidden'); 
             const info = window.dimInfoData[section];
-            const sectionLabel = document.getElementById('mbtiSectionLabel');
-            const nextBtn = document.getElementById('nextBtn');
-            
-            if (sectionLabel) {
-                sectionLabel.style.color = info.color;
-                sectionLabel.innerHTML = `${window.mbtiDimBaseLabels[section]}<br><span class="text-[14px] font-normal opacity-70">${window.mbtiDimShortDesc[section]}</span>`;
+            const label = document.getElementById('mbtiSectionLabel');
+            if(label) {
+                label.style.color = info.color;
+                label.innerHTML = `บุคลิกแบบ ${window.mbtiDimBaseLabels[section]}<br><span class="text-[14px] font-normal opacity-70">${window.mbtiDimShortDesc[section]}</span>`;
             }
-            if (nextBtn) nextBtn.style.backgroundColor = info.color;
-            
-            document.getElementById('assessmentNav').classList.remove('hidden');
+            const next = document.getElementById('nextBtn');
+            if(next) next.style.backgroundColor = info.color;
             renderQuestion();
         };
 
         const renderQuestion = () => {
-            const qList = window.mbtiQuestions[window.currentSection];
-            const qText = qList[window.currentQIndex];
-            document.getElementById('qNumberDisplay').textContent = window.currentQIndex + 1;
-            document.getElementById('qPromptText').textContent = qText;
-            document.getElementById('assessmentProgress').style.width = `${((window.currentQIndex + 1) / 10) * 100}%`;
+            if(!window.mbtiQuestions[window.currentSection]) return;
+            const q = window.mbtiQuestions[window.currentSection][window.currentQIndex];
+            const num = document.getElementById('qNumberDisplay');
+            const prompt = document.getElementById('qPromptText');
+            const progress = document.getElementById('assessmentProgress');
+            if(num) num.textContent = window.currentQIndex + 1;
+            if(prompt) prompt.textContent = q;
+            if(progress) progress.style.width = `${((window.currentQIndex + 1) / 10) * 100}%`;
             
-            document.querySelectorAll('.choice-card').forEach(btn => btn.classList.remove('selected'));
-            
-            const savedScore = window.scoresHistory[window.currentQIndex];
-            if (savedScore !== null && savedScore !== undefined) {
-                window.selectedScore = savedScore;
-                document.querySelectorAll('.choice-card').forEach((btn, idx) => {
-                    if (idx === savedScore) btn.classList.add('selected');
-                });
-                document.getElementById('nextBtn').disabled = false;
-            } else {
-                window.selectedScore = null;
-                document.getElementById('nextBtn').disabled = true;
-            }
-
-            document.getElementById('nextBtn').textContent = window.currentQIndex === 9 ? 'บันทึกผลการทดสอบ' : 'ถัดไป';
-            document.getElementById('prevBtn').disabled = window.currentQIndex === 0;
-
-            lucide.createIcons();
-            speak(qText);
-        };
-
-        window.pick = (score) => {
-            window.selectedScore = score;
             document.querySelectorAll('.choice-card').forEach((btn, idx) => {
-                btn.classList.toggle('selected', idx === score);
+                btn.classList.remove('selected', 'bg-red-400', 'bg-yellow-400', 'bg-green-400', 'text-white');
+                if (window.scoresHistory[window.currentQIndex] === idx) {
+                    btn.classList.add('selected', idx === 0 ? 'bg-red-400' : idx === 1 ? 'bg-yellow-400' : 'bg-green-400', 'text-white');
+                }
             });
-            document.getElementById('nextBtn').disabled = false;
-        };
 
-        window.nextQuestion = () => {
-            window.scoresHistory[window.currentQIndex] = window.selectedScore;
-            if (window.currentQIndex < 9) { 
-                window.currentQIndex++; 
-                renderQuestion(); 
-            } 
-            else { 
-                saveSectionResult(); 
+            const next = document.getElementById('nextBtn');
+            const prev = document.getElementById('prevBtn');
+            if(next) {
+                const currentScore = window.scoresHistory[window.currentQIndex];
+                next.disabled = currentScore === null;
+                next.style.opacity = currentScore === null ? "0.5" : "1";
+                next.textContent = window.currentQIndex === 9 ? 'บันทึก' : 'ถัดไป';
             }
+            if(prev) { prev.disabled = window.currentQIndex === 0; }
+            speak(q);
         };
 
-        window.prevQuestion = () => { 
-            if (window.currentQIndex > 0) { 
-                window.currentQIndex--; 
-                renderQuestion(); 
-            }
-        };
+        window.pick = (s) => { window.scoresHistory[window.currentQIndex] = s; renderQuestion(); };
+        window.nextQuestion = () => { if (window.currentQIndex < 9) { window.currentQIndex++; renderQuestion(); } else { saveResult(); }};
+        window.prevQuestion = () => { if (window.currentQIndex > 0) { window.currentQIndex--; renderQuestion(); }};
 
-        const saveSectionResult = async () => {
+        const saveResult = async () => {
             document.getElementById('globalLoader').classList.remove('hidden');
-            const finalSectionScore = window.scoresHistory.reduce((a, b) => (a || 0) + (b || 0), 0);
-            const fieldMap = { E: 'Type1_E', I: 'Type1_I', S: 'Type2_S', N: 'Type2_N', T: 'Type3_T', F: 'Type3_F', J: 'Type4_J', P: 'Type4_P' };
-            const fieldName = fieldMap[window.currentSection];
-            
+            const total = window.scoresHistory.reduce((a, b) => a + (b === null ? 0 : b), 0);
+            const field = { E: 'Type1_E', I: 'Type1_I', S: 'Type2_S', N: 'Type2_N', T: 'Type3_T', F: 'Type3_F', J: 'Type4_J', P: 'Type4_P' }[window.currentSection];
+            window.currentMember[field] = total;
             try {
                 const docRef = doc(db, MEMBER_COLLECTION, window.currentMember.docId);
-                const updateData = { [fieldName]: finalSectionScore, updatedAt: serverTimestamp() };
-                window.currentMember[fieldName] = finalSectionScore;
-                
-                // Requirement Logic Check: Only calculate MBTI_Type if all dimensions are NOT 0
-                const requiredFields = ['Type1_E', 'Type1_I', 'Type2_N', 'Type2_S', 'Type3_F', 'Type3_T', 'Type4_J', 'Type4_P'];
-                const isReady = requiredFields.every(f => {
-                    const val = window.currentMember[f];
-                    return val !== null && val !== undefined && val !== 0;
-                });
-
-                if (isReady) {
+                const updates = { [field]: total, updatedAt: serverTimestamp() };
+                const required = [['Type1_E', 'Type1_I'], ['Type2_N', 'Type2_S'], ['Type3_F', 'Type3_T'], ['Type4_J', 'Type4_P']];
+                const allDone = required.every(pair => pair.every(f => window.currentMember[f]));
+                if (allDone) {
                     const m1 = window.currentMember.Type1_E >= window.currentMember.Type1_I ? 'E' : 'I';
                     const m2 = window.currentMember.Type2_S >= window.currentMember.Type2_N ? 'S' : 'N';
                     const m3 = window.currentMember.Type3_T >= window.currentMember.Type3_F ? 'T' : 'F';
                     const m4 = window.currentMember.Type4_J >= window.currentMember.Type4_P ? 'J' : 'P';
-                    const finalType = (m1 + m2 + m3 + m4).toUpperCase();
-                    updateData.MBTI_Type = finalType;
-                    window.currentMember.MBTI_Type = finalType;
+                    updates.MBTI_Type = m1 + m2 + m3 + m4; window.currentMember.MBTI_Type = updates.MBTI_Type;
                 }
-
-                await updateDoc(docRef, updateData);
-                window.showMessage("บันทึกหมวดเสร็จสิ้น", "success");
-                showMainPage();
-            } catch (e) {
-                console.error("Save Error:", e);
-                window.showMessage("เกิดข้อผิดพลาดในการบันทึก", "error");
-            } finally {
-                document.getElementById('globalLoader').classList.add('hidden');
-            }
+                await updateDoc(docRef, updates);
+                window.showMessage("บันทึกเรียบร้อย"); showMainPage(true);
+            } catch (e) { window.showMessage("เกิดข้อผิดพลาด", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
         };
 
-        window.switchTab = (n) => {
+        window.switchTab = (n, ret = false) => {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
-            document.getElementById(`tab-${n}`).classList.remove('hidden');
+            const targetTab = document.getElementById(`tab-${n}`);
+            if (targetTab) targetTab.classList.remove('hidden');
             document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('active'));
-            document.getElementById(`nav-${n}`).classList.add('active');
-            document.getElementById('topColorBar').classList.add('hidden');
-            const banner = document.getElementById('discResultBanner');
-            banner.classList.add('hidden');
-            if(n === 'home') updateDimensionButtons();
-            if(n === 'user') {
-                if (window.currentMember?.MBTI_Type) {
-                    const type = window.currentMember.MBTI_Type;
-                    const info = window.mbtiData[type] || { cat: 'MBTI', name: 'Result', summary: 'ข้อมูลเพิ่มเติมกำลังจัดเตรียม...' };
-                    banner.classList.remove('hidden');
-                    document.getElementById('mbtiTypeCode').textContent = type;
-                    document.getElementById('hasDiscResult').classList.remove('hidden');
-                    document.getElementById('noDiscResult').classList.add('hidden');
-                    document.getElementById('primarySecondaryBox').classList.remove('hidden');
-                    document.getElementById('mbtiResultTitle').textContent = type;
-                    document.getElementById('mbtiCategoryName').textContent = info.cat + " - " + info.name;
-                    document.getElementById('profilePersonalSummary').textContent = info.summary;
-                    document.getElementById('profileNameDisplay').textContent = window.currentMember.MBTI_Name;
-                    document.getElementById('profileDetailDisplay').textContent = window.currentMember.Group;
-                    document.getElementById('drivesContent').innerHTML = `<ul class="list-disc ml-4 text-left"><li>คุณมีความโดดเด่นในด้าน ${info.name}</li><li>คะแนนรายมิติ: <br>E:${window.currentMember.Type1_E} I:${window.currentMember.Type1_I} | S:${window.currentMember.Type2_S} N:${window.currentMember.Type2_N} <br>T:${window.currentMember.Type3_T} F:${window.currentMember.Type3_F} | J:${window.currentMember.Type4_J} P:${window.currentMember.Type4_P}</li></ul>`;
-                } else {
-                    document.getElementById('hasDiscResult').classList.add('hidden');
-                    document.getElementById('noDiscResult').classList.remove('hidden');
-                }
-            }
-            if(n === 'friends') loadFriends();
+            const targetNav = document.getElementById(`nav-${n}`);
+            if (targetNav) targetNav.classList.add('active');
+            if(n === 'home') { updateDimensionButtons(); window.triggerCompletionNotice(ret); }
+            if(n === 'user') renderUserTab();
             lucide.createIcons();
         };
 
-        const loadFriends = async () => {
-            if (!auth.currentUser) return;
-            const snap = await getDocs(collection(db, MEMBER_COLLECTION));
-            const tb = document.getElementById('friendsTableBody'); tb.innerHTML = '';
-            snap.forEach(d => {
-                const f = d.data(); if(!f.MBTI_Type) return;
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td class="px-3 text-left font-medium">${f.MBTI_Name}</td><td class="text-center"><div class="mbti-circle bg-purple-600">${f.MBTI_Type}</div></td><td class="text-center"><button class="text-purple-600 text-[10px] font-bold">PROFILE</button></td>`;
-                tb.appendChild(tr);
-            });
-        };
-
-        window.handleCheckOut = () => window.location.reload();
-
-        let roundUnsubscribe = null;
-        const listenToRoundStatus = () => {
-            if (roundUnsubscribe) roundUnsubscribe();
-            roundUnsubscribe = onSnapshot(collection(db, ROUND_COLLECTION), (snap) => {
-                let activeRoundDoc = null;
-                snap.forEach(d => {
-                    const data = d.data();
-                    if (data.MBTI_Status === "true" || data.MBTI_Status === true) activeRoundDoc = { id: d.id, ...data };
+        const renderUserTab = () => {
+            const type = window.currentMember?.MBTI_Type;
+            if (!type) { document.getElementById('primarySecondaryBox')?.classList.add('hidden'); document.getElementById('noDiscResult')?.classList.remove('hidden'); return; }
+            document.getElementById('primarySecondaryBox')?.classList.remove('hidden'); document.getElementById('noDiscResult')?.classList.add('hidden');
+            const title = document.getElementById('mbtiResultTitle');
+            if(title) title.textContent = type;
+            const info = window.mbtiDataMap[type] || { g: 'Analysts', c: '#9333ea' };
+            const category = document.getElementById('mbtiCategoryName');
+            if(category) category.textContent = info.g;
+            const nameEl = document.getElementById('profileNameDisplay');
+            if(nameEl) nameEl.textContent = window.currentMember.MBTI_Name;
+            const subEl = document.getElementById('profileDetailDisplay');
+            if(subEl) subEl.textContent = window.currentMember.Group;
+            const sumEl = document.getElementById('profilePersonalSummary');
+            if(sumEl) sumEl.textContent = "บุคลิกภาพ " + type + " มีความโดดเด่นในกลุ่ม " + info.g;
+            const grid = document.getElementById('mbti4x4Grid'); 
+            if(grid) {
+                grid.innerHTML = '';
+                window.mbtiGrid.forEach(row => {
+                    row.forEach(cell => {
+                        const div = document.createElement('div');
+                        div.className = `mbti-grid-cell ${cell === type ? 'active' : ''}`;
+                        div.style.backgroundColor = window.mbtiDataMap[cell].c;
+                        div.innerHTML = `<span>${cell}</span>`;
+                        grid.appendChild(div);
+                    });
                 });
-                const btn = document.getElementById('openModalBtn');
-                const notice = document.getElementById('activeRoundNotice');
-                const closedNotice = document.getElementById('closedRoundNotice');
-                const teamNameSpan = document.getElementById('mbtiTeamName');
-                if (activeRoundDoc) {
-                    window.activeRound = activeRoundDoc;
-                    btn.disabled = false; notice.classList.remove('hidden'); closedNotice.classList.add('hidden');
-                    teamNameSpan.textContent = activeRoundDoc.MBTI_Team || "ทั่วไป";
-                } else {
-                    window.activeRound = null;
-                    btn.disabled = true; notice.classList.add('hidden'); closedNotice.classList.remove('hidden');
-                }
-            });
+            }
         };
 
-        const initAuth = async () => {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token);
-                else await signInAnonymously(auth);
-            } catch (error) { await signInAnonymously(auth); }
+        window.handleCheckOut = async () => { try { await signOut(auth); window.location.replace(window.location.origin + window.location.pathname); } catch (e) { window.location.reload(); } };
+
+        const setupEventListeners = () => {
+            const nameInput = document.getElementById('MBTI_Name_Input');
+            const submitBtn = document.getElementById('submitNameBtn');
+            if (nameInput && submitBtn) {
+                nameInput.oninput = (e) => { submitBtn.disabled = e.target.value.trim().length < 2; };
+                submitBtn.onclick = window.handleNameSubmission;
+            }
         };
 
         onAuthStateChanged(auth, (u) => {
             if (u) {
-                listenToRoundStatus(); 
-                document.getElementById('globalLoader').classList.add('hidden');
-                document.getElementById('landingPage').classList.remove('hidden');
-                document.getElementById('topColorBar').classList.remove('hidden');
+                onSnapshot(collection(db, ROUND_COLLECTION), (snap) => {
+                    snap.forEach(d => { if (d.data().MBTI_Status === "true" || d.data().MBTI_Status === true) { 
+                        window.activeRound = { id: d.id, ...d.data() }; 
+                        const openBtn = document.getElementById('openModalBtn');
+                        const logText = document.getElementById('loginText');
+                        const teamEl = document.getElementById('mbtiTeamName');
+                        const noticeEl = document.getElementById('activeRoundNotice');
+                        if(openBtn) openBtn.disabled = false;
+                        if(logText) logText.textContent = "เริ่มทำแบบทดสอบ"; 
+                        if(teamEl) teamEl.textContent = d.data().MBTI_Team || "ทั่วไป"; 
+                        if(noticeEl) noticeEl.classList.remove('hidden'); 
+                    }});
+                });
+                document.getElementById('globalLoader')?.classList.add('hidden'); 
+                document.getElementById('landingPage')?.classList.remove('hidden'); 
+                document.getElementById('topColorBar')?.classList.remove('hidden'); 
+                setupEventListeners();
                 lucide.createIcons();
             }
         });
 
+        const initAuth = async () => { try { await signInAnonymously(auth); } catch (e) {} };
         initAuth();
-
-        document.getElementById('MBTI_Name_Input').oninput = (e) => {
-            document.getElementById('submitNameBtn').disabled = e.target.value.trim().length < 2;
-        };
-        document.getElementById('submitNameBtn').onclick = window.handleNameSubmission;
     </script>
 </body>
 </html>
