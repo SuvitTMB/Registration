@@ -82,14 +82,12 @@
         .choice-card { transition: all 0.3s ease; border-width: 1px; border-style: solid; border-color: #cbd5e1; }
         .progress-bar-fill { transition: width 0.4s ease-out; }
         
+        /* Dimension Buttons: Completed Colors restored to dark version */
         .dimension-btn {
             border-width: 1px;
             border-style: solid;
             border-radius: 12px;
-            padding-left: 8px;
-            padding-right: 8px;
-            padding-top: 5px;
-            padding-bottom: 3px;
+            padding: 5px 8px 3px 8px;
             font-weight: 600;
             transition: all 0.2s;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -123,7 +121,7 @@
         .mbti-grid-table { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 20px 0; }
         .mbti-grid-cell {
             aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border-radius: 8px; color: white; font-weight: 800; font-size: 13px; transition: all 0.3s;
+            border-radius: 8px; color: white; font-weight: 800; font-size: 11px; transition: all 0.3s;
             position: relative; text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
         .mbti-grid-cell.active { border: 3px solid white; transform: scale(1.05); z-index: 10; box-shadow: 0 0 15px rgba(0,0,0,0.2); }
@@ -132,32 +130,32 @@
             background: white; color: #1e293b; padding: 0 4px; border-radius: 4px;
         }
 
-        /* Partial Boxes styling - Lighter background */
+        /* Result Boxes styling - Updated Height: 80px */
+        .result-dimension-box {
+            width: 100%; height: 80px; border-radius: 12px; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; border-width: 1px; border-style: solid; transition: all 0.3s ease;
+        }
+        .result-dim-label { font-size: 18px; font-weight: 400; }
+        .result-dim-desc { font-size: 8px; font-weight: 400; opacity: 0.8; text-align: center; line-height: 1; }
+
         .partial-mbti-box {
             width: 100%; aspect-ratio: 1/1; border-radius: 12px; display: flex; align-items: center;
-            justify-content: center; font-size: 28px; font-weight: 800; border: 2px dashed #e2e8f0;
+            justify-content: center; font-size: 24px; font-weight: 800; border: 2px dashed #e2e8f0;
             background: #ffffff; color: #cbd5e1; transition: all 0.3s ease;
         }
-        .partial-mbti-box.filled { color: inherit; border-style: solid; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .partial-mbti-box.filled { color: white; border-style: solid; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
 
+        /* Color definitions for dimension buttons (Original dark version) */
         .completed-purple { background-color: #9333ea !important; color: white !important; border-color: #7e22ce !important; }
-        .completed-green { background-color: #22c55e !important; color: white !important; border-color: #16a34a !important; }
+        .completed-green { background-color: #16a34a !important; color: white !important; border-color: #15803d !important; }
         .completed-blue { background-color: #3b82f6 !important; color: white !important; border-color: #2563eb !important; }
         .completed-yellow { background-color: #eab308 !important; color: white !important; border-color: #ca8a04 !important; }
 
-        @keyframes pulse-once {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
-        .animate-pulse-once { animation: pulse-once 0.5s ease-out; }
+        /* Assessment Nav Height proportion (20%) */
+        #assessmentNav { height: 20vh; min-height: 100px; background: white; border-top: 1px solid #f1f5f9; }
 
-        #assessmentNav {
-            height: 20vh;
-            min-height: 100px;
-            background: white;
-            border-top: 1px solid #f1f5f9;
-        }
+        .info-card { background: white; border-radius: 20px; padding: 24px; border: 1px solid #f1f5f9; box-shadow: 0 2px 8px rgba(0,0,0,0.02); text-align: left; }
+        .info-title { font-size: 18px; font-weight: 700; color: #4338ca; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center m-0 p-0 text-gray-800 text-center">
@@ -220,11 +218,11 @@
         </div>
 
         <div id="discResultBanner" class="hidden w-full h-[60px] border-b-2 border-slate-100 flex items-center justify-center z-[15] bg-purple-500 text-white font-bold text-xl tracking-widest text-center">
-            MBTI RESULT: <span id="mbtiTypeCode" class="ml-2 text-center"></span>
+            MBTI RESULT: <span id="mbtiTypeCode" class="ml-2"></span>
         </div>
         
         <!-- Home Content Area -->
-        <div id="homeContentArea" class="flex-1 overflow-y-auto pb-24 pt-4 px-6 space-y-4 text-center bg-[#fdfaff] transition-colors duration-300">
+        <div id="homeContentArea" class="flex-1 overflow-y-auto pb-24 pt-4 px-6 space-y-4 text-center bg-[#fdfaff] transition-colors duration-300 text-center">
             <div id="tab-home" class="tab-content space-y-6 text-center">
                 <div class="w-full flex flex-col items-center py-4">
                     <h2 class="text-[24px] font-normal text-purple-600 text-center">รู้จักฉัน รู้จักเธอ เข้าใจกัน</h2>
@@ -243,91 +241,129 @@
                         <p class="text-[13px] text-slate-500 font-normal border-b border-purple-100 pb-2 text-center">แบบทดสอบแต่ละคู่ที่ตรงข้ามกัน</p>
                         <div class="grid grid-cols-2 gap-4">
                             <div class="space-y-2 text-left">
-                                <span class="text-[10px] font-normal text-slate-400 uppercase tracking-widest block px-1">ด้านพลัง (E และ I)</span>
-                                <div class="grid grid-cols-2 gap-2" id="pair-1">
+                                <span class="text-[10px] font-normal text-slate-400 uppercase tracking-widest block px-1 text-left">ด้านพลัง (E และ I)</span>
+                                <div class="grid grid-cols-2 gap-2 text-center">
                                     <button onclick="window.showDimensionInfo('E')" id="btn-E" class="dimension-btn bg-purple-400/10 border-purple-600/25 text-purple-600 text-center"><span class="dim-label" id="label-E">E</span><span class="dim-desc">Extraverting</span></button>
                                     <button onclick="window.showDimensionInfo('I')" id="btn-I" class="dimension-btn bg-purple-400/10 border-purple-600/25 text-purple-600 text-center"><span class="dim-label" id="label-I">I</span><span class="dim-desc">Introverting</span></button>
                                 </div>
                             </div>
                             <div class="space-y-2 text-left">
-                                <span class="text-[10px] font-normal text-slate-400 uppercase tracking-widest block px-1">ด้านการรวบรวมข้อมูล (S และ N)</span>
-                                <div class="grid grid-cols-2 gap-2" id="pair-2">
-                                    <button onclick="window.showDimensionInfo('S')" id="btn-S" class="dimension-btn bg-green-400/10 border-green-600/25 text-green-600 text-center"><span class="dim-label" id="label-S">S</span><span class="dim-desc">Sensing</span></button>
-                                    <button onclick="window.showDimensionInfo('N')" id="btn-N" class="dimension-btn bg-green-400/10 border-green-600/25 text-green-600 text-center"><span class="dim-label" id="label-N">N</span><span class="dim-desc">Intuiting</span></button>
+                                <span class="text-[10px] font-normal text-slate-400 uppercase tracking-widest block px-1 text-left text-left">ด้านการรวบรวมข้อมูล (S และ N)</span>
+                                <div class="grid grid-cols-2 gap-2 text-center text-center">
+                                    <button onclick="window.showDimensionInfo('S')" id="btn-S" class="dimension-btn bg-green-400/10 border-green-600/25 text-green-600 text-center text-center"><span class="dim-label" id="label-S">S</span><span class="dim-desc">Sensing</span></button>
+                                    <button onclick="window.showDimensionInfo('N')" id="btn-N" class="dimension-btn bg-green-400/10 border-green-600/25 text-green-600 text-center text-center"><span class="dim-label" id="label-N">N</span><span class="dim-desc">Intuiting</span></button>
                                 </div>
                             </div>
-                            <div class="space-y-2 text-left">
-                                <span class="text-[10px] font-normal text-slate-400 uppercase tracking-widest block px-1">ด้านการตัดสินใจ (T และ F)</span>
-                                <div class="grid grid-cols-2 gap-2" id="pair-3">
-                                    <button onclick="window.showDimensionInfo('T')" id="btn-T" class="dimension-btn bg-blue-400/10 border-blue-600/25 text-blue-600 text-center"><span class="dim-label" id="label-T">T</span><span class="dim-desc">Thinking</span></button>
-                                    <button onclick="window.showDimensionInfo('F')" id="btn-F" class="dimension-btn bg-blue-400/10 border-blue-600/25 text-blue-600 text-center"><span class="dim-label" id="label-F">F</span><span class="dim-desc">Feeling</span></button>
+                            <div class="space-y-2 text-left text-left text-left">
+                                <span class="text-[10px] font-normal text-slate-400 uppercase tracking-widest block px-1 text-left text-left">ด้านการตัดสินใจ (T และ F)</span>
+                                <div class="grid grid-cols-2 gap-2 text-center text-center text-center">
+                                    <button onclick="window.showDimensionInfo('T')" id="btn-T" class="dimension-btn bg-blue-400/10 border-blue-600/25 text-blue-600 text-center text-center text-center"><span class="dim-label" id="label-T">T</span><span class="dim-desc">Thinking</span></button>
+                                    <button onclick="window.showDimensionInfo('F')" id="btn-F" class="dimension-btn bg-blue-400/10 border-blue-600/25 text-blue-600 text-center text-center text-center"><span class="dim-label" id="label-F">F</span><span class="dim-desc">Feeling</span></button>
                                 </div>
                             </div>
-                            <div class="space-y-2 text-left">
-                                <span class="text-[10px] font-normal text-slate-400 uppercase tracking-widest block px-1">ด้านไลฟ์สไตล์ (J และ P)</span>
-                                <div class="grid grid-cols-2 gap-2" id="pair-4">
-                                    <button onclick="window.showDimensionInfo('J')" id="btn-J" class="dimension-btn bg-yellow-400/10 border-yellow-600/25 text-yellow-600 text-center"><span class="dim-label" id="label-J">J</span><span class="dim-desc">Judging</span></button>
-                                    <button onclick="window.showDimensionInfo('P')" id="btn-P" class="dimension-btn bg-yellow-400/10 border-yellow-600/25 text-yellow-600 text-center"><span class="dim-label" id="label-P">P</span><span class="dim-desc">Perceiving</span></button>
+                            <div class="space-y-2 text-left text-left text-left text-left">
+                                <span class="text-[10px] font-normal text-slate-400 uppercase tracking-widest block px-1 text-left text-left">ด้านไลฟ์สไตล์ (J และ P)</span>
+                                <div class="grid grid-cols-2 gap-2 text-center text-center text-center text-center">
+                                    <button onclick="window.showDimensionInfo('J')" id="btn-J" class="dimension-btn bg-yellow-400/10 border-yellow-600/25 text-yellow-600 text-center text-center text-center text-center"><span class="dim-label" id="label-J">J</span><span class="dim-desc">Judging</span></button>
+                                    <button onclick="window.showDimensionInfo('P')" id="btn-P" class="dimension-btn bg-yellow-400/10 border-yellow-600/25 text-yellow-600 text-center text-center text-center text-center"><span class="dim-label" id="label-P">P</span><span class="dim-desc">Perceiving</span></button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Bottom Instruction Row with margin-top 30px -->
-                    <div class="mt-[30px] flex justify-center">
+                    <div class="mt-[30px] flex justify-center text-center">
                         <div class="bg-red-50 border border-red-200/80 text-red-600 px-6 py-3 rounded-xl text-[12px] font-normal shadow-sm text-center" style="border-color: rgba(239, 68, 68, 0.4);">
                             ให้ทำการเลือกความถนัดที่ต้องการทดสอบ
                         </div>
                     </div>
                 </div>
 
-                <div class="h-20"></div> <!-- Spacer -->
+                <div class="h-20 text-center"></div>
             </div>
 
             <!-- TAB: Your MBTI -->
-            <div id="tab-user" class="tab-content hidden space-y-6 text-center">
-                <!-- Partial MBTI View Section (Lighter colors) -->
-                <div id="partialTypeSection" class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm text-center">
-                    <h4 class="text-[14px] font-bold text-slate-700 mb-4 text-center">ความคืบหน้าบุคลิกภาพของคุณ</h4>
-                    <div class="grid grid-cols-4 gap-3 text-center">
-                        <div id="partial-box-1" class="partial-mbti-box"></div>
-                        <div id="partial-box-2" class="partial-mbti-box"></div>
-                        <div id="partial-box-3" class="partial-mbti-box"></div>
-                        <div id="partial-box-4" class="partial-mbti-box"></div>
+            <div id="tab-user" class="tab-content hidden space-y-6 text-center text-center">
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm text-center text-center">
+                    <h4 class="text-[16px] font-normal text-slate-600 mb-6 text-center text-center">ค้นหาไทป์ของคุณ</h4>
+                    <!-- 4 Boxes in ONE row, height 80px -->
+                    <div class="grid grid-cols-4 gap-2 text-center text-center" id="partialTypeGrid">
+                        <div id="partial-box-1" class="result-dimension-box border-slate-200 bg-slate-50 text-center"></div>
+                        <div id="partial-box-2" class="result-dimension-box border-slate-200 bg-slate-50 text-center"></div>
+                        <div id="partial-box-3" class="result-dimension-box border-slate-200 bg-slate-50 text-center"></div>
+                        <div id="partial-box-4" class="result-dimension-box border-slate-200 bg-slate-50 text-center"></div>
+                    </div>
+                    <div id="discoverBtnContainer" class="mt-6 hidden text-center text-center">
+                        <button onclick="window.switchTab('home')" class="btn-standard bg-indigo-600 text-white w-full h-[50px] shadow-md hover:bg-indigo-700 text-center text-center">
+                            <i data-lucide="search" class="w-4 h-4"></i>
+                            <span>ค้นหาความถนัดของคุณ</span>
+                        </button>
                     </div>
                 </div>
 
-                <div id="primarySecondaryBox" class="bg-white/90 p-5 rounded-2xl border border-slate-100 shadow-md relative overflow-hidden text-center hidden">
-                    <div class="text-center space-y-1 mb-4">
-                        <h2 class="text-4xl font-black text-purple-600" id="mbtiResultTitle">-</h2>
-                        <p class="text-sm font-bold text-slate-400 uppercase tracking-widest" id="mbtiCategoryName">-</p>
+                <div id="primarySecondaryBox" class="bg-white/90 p-5 rounded-2xl border border-slate-100 shadow-md relative overflow-hidden text-center text-center">
+                    <div class="text-center space-y-1 mb-4 text-center text-center text-center text-center">
+                        <h2 class="text-4xl font-black text-purple-600 text-center text-center text-center" id="mbtiResultTitle">-</h2>
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-widest text-center text-center text-center" id="mbtiCategoryName">-</p>
                     </div>
-                    <div class="mbti-grid-table px-2" id="mbti4x4Grid"></div>
-                    <div id="userProfileHeader" class="text-center space-y-1 my-4 pt-4 border-t border-slate-50">
-                        <h3 class="text-[18px] font-bold text-slate-800" id="profileNameDisplay">-</h3>
-                        <p class="text-[12.5px] text-slate-500 font-medium" id="profileDetailDisplay">-</p>
+                    <div class="mbti-grid-table px-2 text-center text-center text-center" id="mbti4x4Grid"></div>
+                    <div id="userProfileHeader" class="text-center space-y-1 my-4 pt-4 border-t border-slate-50 text-center text-center">
+                        <h3 class="text-[18px] font-bold text-slate-800 text-center text-center" id="profileNameDisplay">-</h3>
+                        <p class="text-[12.5px] text-slate-500 font-medium text-center text-center text-center" id="profileDetailDisplay">-</p>
                     </div>
-                    <div id="profilePersonalSummary" class="text-[12.5px] text-slate-600 px-3 leading-relaxed pt-3 border-t border-slate-100 mt-3 text-left"></div>
+                    <div id="profilePersonalSummary" class="text-[12.5px] text-slate-600 px-3 leading-relaxed pt-3 border-t border-slate-100 mt-3 text-left text-left text-left text-left"></div>
                 </div>
                 
-                <div id="noDiscResult" class="bg-purple-50 border border-purple-100 p-6 rounded-2xl text-center hidden">
-                    <p class="text-[13px] text-purple-700">คุณยังทำแบบทดสอบไม่ครบทุกมิติ</p>
-                    <button onclick="window.switchTab('home')" class="mt-4 btn-standard bg-purple-600 text-white px-8 h-[54px]"><i data-lucide="arrow-left"></i><span>กลับไปทำต่อ</span></button>
+                <div id="noDiscResult" class="bg-purple-50 border border-purple-100 p-6 rounded-2xl text-center hidden text-center text-center">
+                    <p class="text-[13px] text-purple-700 text-center text-center text-center">คุณยังทำแบบทดสอบไม่ครบทุกมิติ</p>
+                    <button onclick="window.switchTab('home')" class="mt-4 btn-standard bg-purple-600 text-white px-8 h-[54px] text-center text-center text-center text-center"><i data-lucide="arrow-left"></i><span>กลับไปทำต่อ</span></button>
                 </div>
             </div>
 
             <!-- TAB: Friends -->
-            <div id="tab-friends" class="tab-content hidden space-y-4 text-left pb-10 text-center">
-                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm mt-2 text-center">
-                    <table class="custom-table w-full">
-                        <thead><tr><th class="text-left px-3 text-left">ชื่อ-นามสกุล</th><th class="text-center text-center">MBTI Type</th></tr></thead>
+            <div id="tab-friends" class="tab-content hidden space-y-4 text-left pb-10 text-center text-center">
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm mt-2 text-center text-center text-center">
+                    <table class="custom-table w-full text-center text-center">
+                        <thead><tr><th class="text-left px-3 text-left text-left">ชื่อ-นามสกุล</th><th class="text-center text-center text-center text-center">MBTI Type</th></tr></thead>
                         <tbody id="friendsTableBody"></tbody>
                     </table>
                 </div>
             </div>
+
+            <!-- TAB: About -->
+            <div id="tab-about" class="tab-content hidden space-y-6 text-left pb-20 px-4 text-center text-center">
+                <div class="info-card text-left">
+                    <div class="info-title"><i data-lucide="brain-circuit" class="w-5 h-5"></i> MBTI คืออะไร?</div>
+                    <p class="text-[13px] text-slate-600 leading-relaxed">
+                        <b>MBTI (Myers-Briggs Type Indicator)</b> คือแบบทดสอบบุคลิกภาพยอดนิยมระดับโลก พัฒนาโดย Isabel Briggs Myers และ Katharine Cook Briggs อ้างอิงทฤษฎีทางจิตวิทยาของ Carl Jung เพื่อให้เราเข้าใจ "ความถนัด" (Preferences) ตามธรรมชาติของมนุษย์
+                    </p>
+                </div>
+                <div class="info-card text-left">
+                    <div class="info-title"><i data-lucide="help-circle" class="w-5 h-5"></i> ทำไมต้องมี MBTI?</div>
+                    <p class="text-[13px] text-slate-600 leading-relaxed">
+                        ช่วยให้เราเห็นว่าความแตกต่างไม่ใช่ "ความผิด" แต่เป็น "ความถนัด" ที่ต่างกัน การรู้จักตนเองและผู้อื่นช่วยลดความขัดแย้ง พัฒนาการสื่อสาร และช่วยให้เราทำงานร่วมกับผู้อื่นได้อย่างมีความสุขมากขึ้น
+                    </p>
+                </div>
+                <div class="info-card text-left">
+                    <div class="info-title"><i data-lucide="layers" class="w-5 h-5"></i> วิธีการวิเคราะห์ 4 มิติ</div>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="bg-purple-50 p-3 rounded-xl border border-purple-100"><span class="font-bold text-purple-700 text-[13px]">1. พลังงาน: E vs I</span><br><span class="text-[12px] text-slate-600">ชาร์จพลังจากโลกภายนอก (E) หรือโลกภายใน (I)</span></div>
+                        <div class="bg-green-50 p-3 rounded-xl border border-green-100"><span class="font-bold text-green-700 text-[13px]">2. การรับข้อมูล: S vs N</span><br><span class="text-[12px] text-slate-600">เน้นความจริงสัมผัสได้ (S) หรือภาพรวมและความเป็นไปได้ (N)</span></div>
+                        <div class="bg-blue-50 p-3 rounded-xl border border-blue-100"><span class="font-bold text-blue-700 text-[13px]">3. การตัดสินใจ: T vs F</span><br><span class="text-[12px] text-slate-600">ใช้เหตุผลตรรกะ (T) หรือใช้ความรู้สึกและค่านิยม (F)</span></div>
+                        <div class="bg-yellow-50 p-3 rounded-xl border border-yellow-100"><span class="font-bold text-yellow-700 text-[13px]">4. การใช้ชีวิต: J vs P</span><br><span class="text-[12px] text-slate-600">ชอบความเป็นระเบียบแผนการ (J) หรือยืดหยุ่นปรับเปลี่ยนได้ (P)</span></div>
+                    </div>
+                </div>
+                <div class="info-card text-left">
+                    <div class="info-title"><i data-lucide="briefcase" class="w-5 h-5"></i> นำไปใช้ทำอะไรได้บ้าง?</div>
+                    <ul class="list-disc ml-5 text-[12.5px] text-slate-600 space-y-2">
+                        <li><b>พัฒนาตนเอง:</b> เข้าใจจุดแข็งและจุดที่ควรปรับปรุง</li>
+                        <li><b>การสื่อสาร:</b> ปรับวิธีพูดให้เข้ากับสไตล์ผู้ฟัง</li>
+                        <li><b>การทำงานเป็นทีม:</b> แบ่งบทบาทตามความถนัดของสมาชิกในทีม</li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
-        <div class="fixed bottom-0 w-full max-w-[500px] bg-slate-50 border-t border-slate-200 h-20 flex items-center justify-around px-2 z-50 shadow-lg">
+        <div class="fixed bottom-0 w-full max-w-[500px] bg-slate-50 border-t border-slate-200 h-20 flex items-center justify-around px-2 z-50 shadow-lg text-center text-center">
             <button class="bottom-nav-item" id="nav-home" onclick="window.switchTab('home')"><i data-lucide="house" class="w-6 h-6"></i><span>Home</span></button>
             <button class="bottom-nav-item" id="nav-about" onclick="window.switchTab('about')"><i data-lucide="info" class="w-6 h-6"></i><span>MBTI Info</span></button>
             <button class="bottom-nav-item" id="nav-user" onclick="window.switchTab('user')"><i data-lucide="user" class="w-6 h-6"></i><span>Type ของคุณ</span></button>
@@ -338,11 +374,11 @@
     <!-- Dimension Info Modal -->
     <div id="dimInfoModal" class="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md hidden text-center" onclick="window.closeDimInfo()">
         <div class="bg-white w-full max-w-[400px] rounded-[20px] overflow-hidden flex flex-col shadow-2xl modal-enter text-center" onclick="event.stopPropagation()">
-            <div id="dimModalHeader" class="p-[20px] text-white text-center relative bg-purple-600">
-                <button onclick="window.closeDimInfo()" class="absolute right-4 top-4 text-white/80 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div id="dimModalHeader" class="p-[20px] text-white text-center relative bg-purple-600 text-center">
+                <button onclick="window.closeDimInfo()" class="absolute right-4 top-4 text-white/80 hover:text-white text-center"><i data-lucide="x" class="w-5 h-5 text-center"></i></button>
                 <h3 id="dimModalTitle" class="text-[17px] font-normal tracking-tight text-white text-center"></h3>
             </div>
-            <div class="p-8 space-y-6 text-center">
+            <div class="p-8 space-y-6 text-center text-center">
                 <div id="dimModalContentSlot" class="text-[14px] text-slate-600 text-left bg-slate-50 rounded-xl border border-slate-100 max-h-[350px] overflow-y-auto p-4 text-left"></div>
                 <div class="flex flex-row justify-between items-center w-full pt-4 border-t border-slate-100 gap-4 text-center">
                     <button onclick="window.closeDimInfo()" class="btn-standard bg-[#e5e5e5] text-slate-500 font-medium px-6 hover:bg-slate-300 text-center">ปิดหน้าต่าง</button>
@@ -353,60 +389,56 @@
     </div>
 
     <!-- Assessment Page -->
-    <div id="assessmentPage" class="w-full max-w-[500px] flex flex-col bg-white min-h-screen relative hidden text-center">
-        <div class="sticky top-0 z-[70] w-full bg-white border-b border-slate-50 text-center">
-            <div class="w-full h-1.5 bg-slate-100 text-center"><div id="assessmentProgress" class="h-full bg-purple-600 progress-bar-fill w-0 text-center"></div></div>
-            <div class="flex justify-end px-4 py-0.5 text-center"><button onclick="window.toggleMute()" class="p-1 text-slate-400 text-center"><i id="muteIconAssess" data-lucide="volume-2" class="w-5 h-5 text-center"></i></button></div>
+    <div id="assessmentPage" class="w-full max-w-[500px] flex flex-col bg-white min-h-screen relative hidden text-center text-center">
+        <div class="sticky top-0 z-[70] w-full bg-white border-b border-slate-50 text-center text-center text-center">
+            <div class="w-full h-1.5 bg-slate-100 text-center text-center"><div id="assessmentProgress" class="h-full bg-purple-600 progress-bar-fill w-0 text-center text-center"></div></div>
+            <div class="flex justify-end px-4 py-0.5 text-center text-center"><button onclick="window.toggleMute()" class="p-1 text-slate-400 text-center text-center text-center"><i id="muteIconAssess" data-lucide="volume-2" class="w-5 h-5 text-center text-center"></i></button></div>
         </div>
-        <div id="assessmentContainer" class="flex-1 overflow-y-auto px-5 py-2 space-y-4 pb-10 relative text-center">
-            <div id="assessmentQuestion" class="space-y-6 mt-[5px] px-2 text-center">
-                <div class="text-center text-center">
-                    <span class="font-normal text-[20px] uppercase block mb-1 text-center" id="mbtiSectionLabel"></span>
-                    
-                    <!-- Instruction Box for assessment -->
-                    <div class="bg-red-50 border border-red-200 text-red-600 text-[12px] p-2 rounded-lg mt-2 mb-4 text-center">
+        <div id="assessmentContainer" class="flex-1 overflow-y-auto px-5 py-2 space-y-4 pb-10 relative text-center text-center text-center text-center text-center text-center">
+            <div id="assessmentQuestion" class="space-y-6 mt-[5px] px-2 text-center text-center text-center text-center text-center text-center">
+                <div class="text-center text-center text-center text-center text-center">
+                    <span class="font-normal text-[20px] uppercase block mb-1 text-center text-center text-center text-center" id="mbtiSectionLabel"></span>
+                    <div class="bg-red-50 border border-red-200 text-red-600 text-[12px] p-2 rounded-lg mt-2 mb-4 text-center text-center">
                         ให้ทำการเลือกคำตอบ ก่อนกดปุ่มถัดไปด้านล่าง
                     </div>
-
-                    <span class="text-slate-400 text-[11px] block mb-2 mt-[22px] text-center">ข้อที่ <span id="qNumberDisplay">1</span> จาก 10</span>
+                    <span class="text-slate-400 text-[11px] block mb-2 mt-[22px] text-center text-center">ข้อที่ <span id="qNumberDisplay">1</span> จาก 10</span>
                     <h3 id="qPromptText" class="text-[17px] font-bold text-slate-700 leading-snug text-center text-center text-center"></h3>
                 </div>
-                <div id="qChoicesContainer" class="space-y-4 text-center">
-                    <button onclick="window.pick(0, 'ไม่เหมือน')" class="choice-card w-full p-4 bg-white rounded-xl text-left flex items-center justify-between text-left"><span class="text-[14px] font-medium text-left">ไม่เหมือน</span></button>
-                    <button onclick="window.pick(1, 'ค่อนข้างเหมือน')" class="choice-card w-full p-4 bg-white rounded-xl text-left flex items-center justify-between text-left"><span class="text-[14px] font-medium text-left">ค่อนข้างเหมือน</span></button>
-                    <button onclick="window.pick(2, 'เหมือนมาก')" class="choice-card w-full p-4 bg-white rounded-xl text-left flex items-center justify-between text-left"><span class="text-[14px] font-medium text-left">เหมือนมาก</span></button>
+                <div id="qChoicesContainer" class="space-y-4 text-center text-center text-center">
+                    <button onclick="window.pick(0, 'ไม่เหมือน')" class="choice-card w-full p-4 bg-white rounded-xl text-left flex items-center justify-between text-left text-left"><span class="text-[14px] font-medium text-left">ไม่เหมือน</span></button>
+                    <button onclick="window.pick(1, 'ค่อนข้างเหมือน')" class="choice-card w-full p-4 bg-white rounded-xl text-left flex items-center justify-between text-left text-left"><span class="text-[14px] font-medium text-left">ค่อนข้างเหมือน</span></button>
+                    <button onclick="window.pick(2, 'เหมือนมาก')" class="choice-card w-full p-4 bg-white rounded-xl text-left flex items-center justify-between text-left text-left"><span class="text-[14px] font-medium text-left text-left">เหมือนมาก</span></button>
                 </div>
             </div>
         </div>
-        <!-- FIXED NAVIGATION AT BOTTOM -->
-        <div id="assessmentNav" class="w-full flex justify-between px-8 py-6 bg-white border-t border-slate-50 gap-4 items-center text-center text-center">
-            <button onclick="window.prevQuestion()" id="prevBtn" class="btn-standard px-5 bg-gray-100 text-slate-400 text-center">ก่อนหน้า</button>
+        <div id="assessmentNav" class="w-full flex justify-between px-8 py-6 bg-white border-t border-slate-50 gap-4 items-center text-center text-center text-center">
+            <button onclick="window.prevQuestion()" id="prevBtn" class="btn-standard px-5 bg-gray-100 text-slate-400 text-center text-center">ก่อนหน้า</button>
             <button id="nextBtn" disabled onclick="window.nextQuestion()" class="btn-standard px-10 bg-purple-600 text-white font-normal text-center text-center text-center">ถัดไป</button>
         </div>
     </div>
 
     <!-- Registration Modal -->
-    <div id="regModalBackdrop" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden text-center" onclick="window.closeRegModal()">
-        <div class="bg-white w-full max-w-[400px] rounded-[12px] shadow-2xl overflow-hidden modal-enter relative text-center" onclick="event.stopPropagation()">
-            <div class="bg-purple-600 px-6 py-4 flex justify-between items-center text-white text-center"><span class="font-medium text-[15px] text-center">ลงทะเบียนเพื่อทำแบบทดสอบ</span><button onclick="window.closeRegModal()"><i data-lucide="x" class="w-5 h-5 text-center"></i></button></div>
-            <div class="p-8 space-y-6 text-center bg-white text-center">
-                <div class="text-center"><label class="text-[12px] text-slate-500 uppercase text-center">กรุณากรอกชื่อและนามสกุลของคุณ</label><input type="text" id="MBTI_Name_Input" placeholder="ชื่อ-นามสกุล" class="name-input w-full px-4 py-3 border rounded-xl text-[16px] text-center mt-2 text-center"></div>
-                <div class="flex gap-3 text-center"><button onclick="window.closeRegModal()" class="btn-standard bg-slate-500 text-white flex-1 text-center">ปิด</button><button id="submitNameBtn" disabled class="btn-standard bg-purple-600 text-white flex-1 text-center">ตกลง</button></div>
+    <div id="regModalBackdrop" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden text-center text-center" onclick="window.closeRegModal()">
+        <div class="bg-white w-full max-w-[400px] rounded-[12px] shadow-2xl overflow-hidden modal-enter relative text-center text-center" onclick="event.stopPropagation()">
+            <div class="bg-purple-600 px-6 py-4 flex justify-between items-center text-white text-center text-center"><span class="font-medium text-[15px] text-center text-center">ลงทะเบียนเพื่อทำแบบทดสอบ</span><button onclick="window.closeRegModal()"><i data-lucide="x" class="w-5 h-5 text-center text-center text-center text-center"></i></button></div>
+            <div class="p-8 space-y-6 text-center bg-white text-center text-center">
+                <div class="text-center text-center"><label class="text-[12px] text-slate-500 uppercase text-center text-center">กรุณากรอกชื่อและนามสกุลของคุณ</label><input type="text" id="MBTI_Name_Input" placeholder="ชื่อ-นามสกุล" class="name-input w-full px-4 py-3 border rounded-xl text-[16px] text-center mt-2 text-center text-center text-center"></div>
+                <div class="flex gap-3 text-center text-center"><button onclick="window.closeRegModal()" class="btn-standard bg-slate-500 text-white flex-1 text-center text-center">ปิด</button><button id="submitNameBtn" disabled class="btn-standard bg-purple-600 text-white flex-1 text-center text-center text-center">ตกลง</button></div>
             </div>
         </div>
     </div>
 
     <!-- Completion Notice Modal -->
-    <div id="completionNoticeModal" class="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm hidden text-center" onclick="window.closeCompletionNotice()">
-        <div class="bg-white w-full max-w-[400px] rounded-[20px] overflow-hidden flex flex-col shadow-2xl modal-enter text-center" onclick="event.stopPropagation()">
-            <div class="bg-purple-600 p-[20px] text-white text-center text-center"><h3 class="text-[16px] font-normal tracking-tight text-center">แจ้งเตือนคุณยังไม่ทำชุดทดสอบความถนัด</h3></div>
-            <div class="p-8 space-y-4 text-center">
-                <div class="bg-purple-50 p-4 rounded-xl border border-purple-100 text-left text-left text-left">
-                    <p class="text-[14px] text-purple-700 font-medium mb-3 text-left">ชุดทดสอบที่คุณยังไม่ได้ดำเนินการ:</p>
-                    <div id="missingSectionsList" class="grid grid-cols-2 gap-2 text-center"></div>
+    <div id="completionNoticeModal" class="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm hidden text-center text-center" onclick="window.closeCompletionNotice()">
+        <div class="bg-white w-full max-w-[400px] rounded-[20px] overflow-hidden flex flex-col shadow-2xl modal-enter text-center text-center" onclick="event.stopPropagation()">
+            <div class="bg-purple-600 p-[20px] text-white text-center text-center text-center"><h3 class="text-[16px] font-normal tracking-tight text-center text-center text-center text-center">แจ้งเตือนคุณยังไม่ทำชุดทดสอบความถนัด</h3></div>
+            <div class="p-8 space-y-4 text-center text-center text-center text-center text-center text-center text-center">
+                <div class="bg-purple-50 p-4 rounded-xl border border-purple-100 text-left text-left text-left text-left text-left">
+                    <p class="text-[14px] text-purple-700 font-medium mb-3 text-left text-left text-left">ชุดทดสอบที่คุณยังไม่ได้ดำเนินการ:</p>
+                    <div id="missingSectionsList" class="grid grid-cols-2 gap-2 text-center text-center text-center"></div>
                 </div>
-                <p class="text-[14px] text-slate-600 leading-relaxed text-center text-center">โปรดคลิกที่กล่องแบบทดสอบที่ยังไม่ได้ดำเนินการ<br>เพื่อทำแบบทดสอบให้ครบถ้วน</p>
-                <button onclick="window.closeCompletionNotice()" class="btn-standard bg-purple-600 text-white w-full h-[50px] font-normal mt-2 shadow-md text-center">ตกลง</button>
+                <p class="text-[14px] text-slate-600 leading-relaxed text-center text-center text-center">โปรดคลิกที่กล่องแบบทดสอบที่ยังไม่ได้ดำเนินการ<br>เพื่อทำแบบทดสอบให้ครบถ้วน</p>
+                <button onclick="window.closeCompletionNotice()" class="btn-standard bg-purple-600 text-white w-full h-[50px] font-normal mt-2 shadow-md text-center text-center text-center">ตกลง</button>
             </div>
         </div>
     </div>
@@ -424,28 +456,15 @@
         const MEMBER_COLLECTION = "MBTI_Member";
         const ROUND_COLLECTION = "MBTI_Round";
 
-        window.currentMember = null;
-        window.activeRound = null;
-        window.isMuted = false;
-        window.currentSection = null;
-        window.currentQIndex = 0; 
-        window.scoresHistory = []; 
+        window.currentMember = null; window.activeRound = null; window.isMuted = false;
+        window.currentSection = null; window.currentQIndex = 0; window.scoresHistory = [];
         window.hasShownWelcomeNotice = false;
 
         window.mbtiDimBaseLabels = { E: "Extraverting", I: "Introverting", S: "Sensing", N: "intuiting", T: "Thinking", F: "Feeling", J: "Judging", P: "Perceiving" };
-        window.mbtiDimShortDesc = { 
-            E: "จะรู้สึกมีพลังขึ้นมาเมื่อได้อยู่กับโลกภายนอกตัวเอง เช่น ผู้คน ทำกิจกรรมหรืออยู่กับสิ่งต่างๆ", 
-            I: "จะรู้สึกมีพลังขึ้นมาเมื่ออยู่กับโลกภายในตัวเอง เช่น ไอเดีย ความคิด ความรู้สึก", 
-            S: "จะสนใจข้อมูลจากสัมผัสทั้งห้า และให้ความสำคัญกับสิ่งที่เห็นและเป็นอยู่", 
-            N: "จะสนใจข้อมูลจากสัมผัสที่หก สังหรณ์หรือสิ่งที่ผุดขึ้นในใจ และให้ความสำคัญกับสิ่งที่เป็นไปได้", 
-            T: "ตัดสินใจโดยใช้ตรรกะ เหตุผล ไม่ใช้ความรู้สึกส่วนตัวเป็นเกณฑ์", 
-            F: "ตัดสินใจโดยค่านิยมส่วนตัวเป็นเกณฑ์", 
-            J: "มักมีระเบียบแบบแผนในการใช้ชีวิต", 
-            P: "มักยืดหยุ่นปรับเปลี่ยนตามสถานการณ์ ไม่วางแผนล่วงหน้ามากนัก" 
-        };
+        window.mbtiDimShortDesc = { E: "จะรู้สึกมีพลังขึ้นมาเมื่อได้อยู่กับโลกภายนอกตัวเอง", I: "จะรู้สึกมีพลังขึ้นมาเมื่ออยู่กับโลกภายในตัวเอง", S: "จะสนใจข้อมูลจากสัมผัสทั้งห้า", N: "จะสนใจข้อมูลจากสัมผัสที่หก", T: "ตัดสินใจโดยใช้ตรรกะ เหตุผล", F: "ตัดสินใจโดยค่านิยมส่วนตัว", J: "มักมีระเบียบแบบแผนในการใช้ชีวิต", P: "มักยืดหยุ่นปรับเปลี่ยนตามสถานการณ์" };
 
         window.mbtiDetailedContent = {
-            E: `<strong>ภาพรวม:</strong><br>E คือคนที่พลังงานไหลออกสู่โลกภายนอก ยิ่งได้เจอคน ยิ่งได้ลงมือทำ ยิ่งมีไฟ<br><br><strong>ลักษณะเด่น:</strong><ul class="list-disc ml-4 space-y-1 text-left"><li>สนใจสิ่งที่เกิดขึ้นรอบตัวมากกว่าสิ่งที่อยู่ในใจ</li><li>ชอบพูดคุย โต้ตอบ และเชื่อมต่อกับผู้คน</li><li>ชอบทำกิจกรรม ลงมือก่อนคิด</li><li>ชอบอยู่กับคนหมู่มาก บรรยากาศคึกคัก</li><li>ตัดสินใจเร็ว มักไม่คิดลึกมาก</li><li>ชอบสิ่งใหม่ ๆ การเปลี่ยนแปลง และความท้าทาย</li><li>เน้น “การกระทำ” มากกว่า “ความคิด”</li><li>ปรับตัวกับสถานการณ์เฉพาะหน้าได้ดี</li><li>ทำงานเป็นทีมได้ดี และมักสร้างแรงบันดาลใจให้คนอื่น</li></ul>`,
+            E: `<strong>ภาพรวม:</strong><br>E คือคนที่พลังงานไหลออกสู่โลกภายนอก ยิ่งได้เจอคน ยิ่งได้ลงมือทำ ยิ่งมีไฟ<br><br><strong>ลักษณะเด่น:</strong><ul class="list-disc ml-4 space-y-1 text-left"><li>สนใจสิ่งที่เกิดขึ้นรอบตัวมากกว่าสิ่งที่อยู่ในใจ</li><li>ชอบพูดคุย โต้ตอบ และเชื่อมต่อกับผู้คน</li><li>ชอบทำกิจกรรม ลงมือก่อนคิด</li><li>ชอบอยู่กับคนหมู่มาก บรรยากาศคึกคัก</li><li>ตัดสินใจเร็ว มักไม่คิดลึกมาก</li><li>ชอบสิ่งใหม่ ๆ การเปลี่ยนแปลง และความท้าทาย</li><li>เน้น “การกระทำ” มากกว่า “ความคิด”</li><li>ปรับตัวกับสถานการณ์เฉพาะหน้าได้ดี</li><li>ทำงานเป็นทีมได้ดี และมักสร้างแรงบันาลใจให้คนอื่น</li></ul>`,
             I: `<strong>ภาพรวม:</strong><br>I คือคนที่พลังงานไหลเข้าด้านใน ยิ่งได้อยู่เงียบ ๆ คิดลึก ๆ ยิ่งรู้สึกเต็ม<br><br><strong>ลักษณะเด่น:</strong><ul class="list-disc ml-4 space-y-1 text-left"><li>สนใจสิ่งที่เกิดขึ้นในใจ ความคิด ความรู้สึก</li><li>ชอบคิดก่อนพูด พิจารณาอย่างรอบคอบ</li><li>ชอบอยู่คนเดียว หรืออยู่กับกลุ่มเล็ก ๆ</li><li>คิดลึกซึ้ง มองประเด็นอย่างละเอียด</li><li>ตัดสินใจช้า เพราะต้องไตร่ตรอง</li><li>ชอบสิ่งเดิม ๆ ไม่ชอบการเปลี่ยนแปลงมาก</li><li>เน้น “ความคิด” มากกว่า “การกระทำ”</li><li>ต้องการเวลาเงียบเพื่อชาร์จพลัง</li><li>ทำงานได้ดีเมื่อมีพื้นที่ส่วนตัวและความเป็นอิสระ</li></ul>`,
             S: `<strong>ภาพรวม:</strong><br>S (Sensing) จะสนใจข้อมูลจากสัมผัสทั้งห้า และให้ความสำคัญกับสิ่งที่เห็นและเป็นอยู่<br><br><strong>ลักษณะเด่น:</strong><ul class="list-disc ml-4 space-y-1 text-left"><li>รับรู้สิ่งต่าง ๆ แบบรูปธรรม</li><li>โฟกัสปัจจุบันมากกว่าอนาคต</li><li>ชอบสิ่งที่จับต้องได้ เห็นได้จริง</li><li>สนใจรายละเอียด</li><li>เชื่อประสบการณ์ตรงมากกว่านามธรรม</li><li>ทำงานเป็นขั้นตอน มีระบบ</li><li>ชอบความแน่นอน คาดการณ์ได้</li><li>ไม่ชอบการเปลี่ยนแปลงเร็ว</li></ul>`,
             N: `<strong>ภาพรวม:</strong><br>N (intuiting) จะสนใจข้อมูลจากสัมผัสที่หก สังหรณ์หรือสิ่งที่ผุดขึ้นในใจ และให้ความสำคัญกับสิ่งที่เป็นไปได้<br><br><strong>ลักษณะเด่น:</strong><ul class="list-disc ml-4 space-y-1 text-left"><li>รับรู้สิ่งต่าง ๆ แบบนามธรรม</li><li>มองภาพรวมมากกว่ารายละเอียด</li><li>ชอบคิดเชิงแนวคิด จินตนาการ</li><li>สนใจอนาคตมากกว่าปัจจุบัน</li><li>ชอบสิ่งใหม่ ๆ การเปลี่ยนแปลง</li><li>มีความคิดสร้างสรรค์</li><li>มองเห็นความเป็นไปได้ที่คนอื่นไม่เห็น</li></ul>`,
@@ -467,18 +486,18 @@
         };
 
         window.dimInfoData = { 
-            E: { color: "#9333ea" }, I: { color: "#9333ea" }, 
-            S: { color: "#22c55e" }, N: { color: "#22c55e" }, 
-            T: { color: "#3b82f6" }, F: { color: "#3b82f6" }, 
-            J: { color: "#eab308" }, P: { color: "#eab308" } 
+            E: { color: "#9333ea", light: "#f3e8ff" }, I: { color: "#9333ea", light: "#f3e8ff" }, 
+            S: { color: "#16a34a", light: "#f0fdf4" }, N: { color: "#16a34a", light: "#f0fdf4" }, 
+            T: { color: "#3b82f6", light: "#eff6ff" }, F: { color: "#3b82f6", light: "#eff6ff" }, 
+            J: { color: "#ca8a04", light: "#fefce8" }, P: { color: "#ca8a04", light: "#fefce8" } 
         };
-
+        
         window.mbtiGrid = [['ISTJ', 'ISFJ', 'INFJ', 'INTJ'],['ISTP', 'ISFP', 'INFP', 'INTP'],['ESTP', 'ESFP', 'ENFP', 'ENTP'],['ESTJ', 'ESFJ', 'ENFJ', 'ENTJ']];
         window.mbtiDataMap = {
-            'ISTJ': { g: 'Sentinels', c: '#3b82f6' }, 'ISFJ': { g: 'Sentinels', c: '#3b82f6' }, 'INFJ': { g: 'Diplomats', c: '#22c55e' }, 'INTJ': { g: 'Analysts', c: '#9333ea' },
-            'ISTP': { g: 'Explorers', c: '#eab308' }, 'ISFP': { g: 'Explorers', c: '#eab308' }, 'INFP': { g: 'Diplomats', c: '#22c55e' }, 'INTP': { g: 'Analysts', c: '#9333ea' },
-            'ESTP': { g: 'Explorers', c: '#eab308' }, 'ESFP': { g: 'Explorers', c: '#eab308' }, 'ENFP': { g: 'Diplomats', c: '#22c55e' }, 'ENTP': { g: 'Analysts', c: '#9333ea' },
-            'ESTJ': { g: 'Sentinels', c: '#3b82f6' }, 'ESFJ': { g: 'Sentinels', c: '#3b82f6' }, 'ENFJ': { g: 'Diplomats', c: '#22c55e' }, 'ENTJ': { g: 'Analysts', c: '#9333ea' }
+            'ISTJ': { g: 'Sentinels', c: '#3b82f6' }, 'ISFJ': { g: 'Sentinels', c: '#3b82f6' }, 'INFJ': { g: 'Diplomats', c: '#16a34a' }, 'INTJ': { g: 'Analysts', c: '#9333ea' },
+            'ISTP': { g: 'Explorers', c: '#ca8a04' }, 'ISFP': { g: 'Explorers', c: '#ca8a04' }, 'INFP': { g: 'Diplomats', c: '#16a34a' }, 'INTP': { g: 'Analysts', c: '#9333ea' },
+            'ESTP': { g: 'Explorers', c: '#ca8a04' }, 'ESFP': { g: 'Explorers', c: '#ca8a04' }, 'ENFP': { g: 'Diplomats', c: '#16a34a' }, 'ENTP': { g: 'Analysts', c: '#9333ea' },
+            'ESTJ': { g: 'Sentinels', c: '#3b82f6' }, 'ESFJ': { g: 'Sentinels', c: '#3b82f6' }, 'ENFJ': { g: 'Diplomats', c: '#16a34a' }, 'ENTJ': { g: 'Analysts', c: '#9333ea' }
         };
 
         const speak = (t) => { if(!window.isMuted) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t.replace(/<[^>]*>/g, '')); u.lang='th-TH'; window.speechSynthesis.speak(u); }};
@@ -499,15 +518,11 @@
                 const snap = await getDocs(collection(db, MEMBER_COLLECTION));
                 let found = null;
                 snap.forEach(d => { if (d.data().MBTI_id === window.activeRound.id && d.data().MBTI_Name === name) found = { docId: d.id, ...d.data() }; });
-                
-                if (found) {
-                    window.currentMember = found;
-                } else {
-                    const newMember = { MBTI_id: window.activeRound.id, MBTI_Name: name, MBTI_Type: "", Type1_E: 0, Type1_I: 0, Type2_N: 0, Type2_S: 0, Type3_F: 0, Type3_T: 0, Type4_J: 0, Type4_P: 0, createdAt: serverTimestamp(), Group: window.activeRound.MBTI_Team || "ทั่วไป" };
+                if (found) window.currentMember = found;
+                else {
+                    const newMember = { MBTI_id: window.activeRound.id, MBTI_Name: name, MBTI_Type: "", Type1_E: 0, Type1_I: 0, Type2_N: 0, Type2_S: 0, Type3_F: 0, Type3_T: 0, Type4_J: 0, Type4_P: 0, createdAt: serverTimestamp() };
                     const docRef = await addDoc(collection(db, MEMBER_COLLECTION), newMember);
                     window.currentMember = { docId: docRef.id, ...newMember };
-                    
-                    // Increment count in DB
                     const roundRef = doc(db, ROUND_COLLECTION, window.activeRound.id);
                     await updateDoc(roundRef, { MBTI_Count: increment(1) });
                 }
@@ -523,7 +538,6 @@
             const welcome = document.getElementById('welcomeUser');
             const sub = document.getElementById('userSub');
             if(welcome) welcome.textContent = window.currentMember.MBTI_Name;
-            // Use Round Team
             if(sub) sub.textContent = window.activeRound?.MBTI_Team || "ทั่วไป";
             window.switchTab('home', isAssessmentReturn);
         };
@@ -542,10 +556,12 @@
                 btn.disabled = false;
                 const labelEl = document.getElementById(`label-${t}`);
                 if(labelEl) labelEl.innerHTML = t; 
-                if (val) {
+                if (typeof val === 'number' && val !== 0) {
                     btn.classList.add(classes[t]);
                     if (!btn.querySelector('.dim-score')) {
                         const s = document.createElement('span'); s.className = 'dim-score'; s.textContent = `คะแนน: ${val}`; btn.appendChild(s);
+                    } else {
+                        btn.querySelector('.dim-score').textContent = `คะแนน: ${val}`;
                     }
                 } else {
                     const existing = btn.querySelector('.dim-score'); if (existing) existing.remove();
@@ -553,12 +569,12 @@
             });
 
             pairs.forEach(([a, b]) => {
-                const vA = window.currentMember[fields[a]], vB = window.currentMember[fields[b]];
-                if (vA && vB) {
+                const valA = window.currentMember[fields[a]], valB = window.currentMember[fields[b]];
+                if (valA && valB) {
                     const lA = document.getElementById(`label-${a}`), lB = document.getElementById(`label-${b}`);
                     if(!lA || !lB) return;
-                    if (vA > vB) { lA.innerHTML = `${a} <span class="icon-correct"><i data-lucide="check" class="w-3.5 h-3.5"></i></span>`; lB.innerHTML = `${b} <span class="icon-incorrect"><i data-lucide="x" class="w-3.5 h-3.5"></i></span>`; }
-                    else if (vB > vA) { lB.innerHTML = `${b} <span class="icon-correct"><i data-lucide="check" class="w-3.5 h-3.5"></i></span>`; lA.innerHTML = `${a} <span class="icon-incorrect"><i data-lucide="x" class="w-3.5 h-3.5"></i></span>`; }
+                    if (valA > valB) { lA.innerHTML = `${a} <span class="icon-correct"><i data-lucide="check" class="w-3.5 h-3.5"></i></span>`; lB.innerHTML = `${b} <span class="icon-incorrect"><i data-lucide="x" class="w-3.5 h-3.5"></i></span>`; }
+                    else if (valB > valA) { lB.innerHTML = `${b} <span class="icon-correct"><i data-lucide="check" class="w-3.5 h-3.5"></i></span>`; lA.innerHTML = `${a} <span class="icon-incorrect"><i data-lucide="x" class="w-3.5 h-3.5"></i></span>`; }
                 }
             });
             lucide.createIcons();
@@ -566,21 +582,18 @@
 
         window.showDimensionInfo = (section) => {
             if(!window.currentMember) return;
-            const field = { E: 'Type1_E', I: 'Type1_I', S: 'Type2_S', N: 'Type2_N', T: 'Type3_T', F: 'Type3_F', J: 'Type4_J', P: 'Type4_P' }[section];
+            const fieldMap = { E: 'Type1_E', I: 'Type1_I', S: 'Type2_S', N: 'Type2_N', T: 'Type3_T', F: 'Type3_F', J: 'Type4_J', P: 'Type4_P' };
+            const field = fieldMap[section];
             const score = window.currentMember[field];
             const info = window.dimInfoData[section];
             const modal = document.getElementById('dimInfoModal');
             if(!modal) return;
-            
             const header = document.getElementById('dimModalHeader');
-            if(header) header.style.backgroundColor = info.color; // Set Header Color to Group Color
-            
+            if(header) header.style.backgroundColor = info.color;
             const title = document.getElementById('dimModalTitle');
             if(title) title.textContent = "บุคลิกแบบ " + window.mbtiDimBaseLabels[section];
-            
             const contentSlot = document.getElementById('dimModalContentSlot');
             if(contentSlot) contentSlot.innerHTML = window.mbtiDetailedContent[section];
-            
             const actionArea = document.getElementById('dimModalActionArea');
             if (actionArea) {
                 if (score) actionArea.innerHTML = `<span class="text-purple-700 font-bold text-[14px]">คะแนนที่ได้ ${score} คะแนน</span>`;
@@ -591,17 +604,13 @@
                 }
             }
             modal.classList.remove('hidden'); lucide.createIcons();
-
-            // TTS Logic
-            const rawText = document.getElementById('dimModalContentSlot')?.innerText || "";
-            speak("บุคลิกแบบ " + window.mbtiDimBaseLabels[section] + ". " + rawText + ". คลิกเพื่อเริ่มการทดสอบค่ะ");
+            speak("บุคลิกแบบ " + window.mbtiDimBaseLabels[section] + ". " + (contentSlot?.innerText || "") + ". คลิกเพื่อเริ่มการทดสอบค่ะ");
         };
 
         window.startAssessmentFlow = (section) => {
             window.currentSection = section; window.currentQIndex = 0; window.scoresHistory = new Array(10).fill(null);
             document.getElementById('mainDiscPage')?.classList.add('hidden');
             document.getElementById('assessmentPage')?.classList.remove('hidden');
-            document.getElementById('topColorBar')?.classList.add('hidden'); 
             const info = window.dimInfoData[section];
             const label = document.getElementById('mbtiSectionLabel');
             if(label) {
@@ -646,7 +655,7 @@
         window.pick = (s, choiceText) => { 
             window.scoresHistory[window.currentQIndex] = s; 
             renderQuestion(); 
-            speak(choiceText + ". กดปุ่มข้อถัดไป");
+            speak(choiceText + ". กดปุ่มข้อถัดไป"); 
         };
 
         window.nextQuestion = () => { if (window.currentQIndex < 9) { window.currentQIndex++; renderQuestion(); } else { saveResult(); }};
@@ -655,12 +664,13 @@
         const saveResult = async () => {
             document.getElementById('globalLoader').classList.remove('hidden');
             const total = window.scoresHistory.reduce((a, b) => a + (b === null ? 0 : b), 0);
-            const field = { E: 'Type1_E', I: 'Type1_I', S: 'Type2_S', N: 'Type2_N', T: 'Type3_T', F: 'Type3_F', J: 'Type4_J', P: 'Type4_P' }[window.currentSection];
+            const fieldMap = { E: 'Type1_E', I: 'Type1_I', S: 'Type2_S', N: 'Type2_N', T: 'Type3_T', F: 'Type3_F', J: 'Type4_J', P: 'Type4_P' };
+            const field = fieldMap[window.currentSection];
             window.currentMember[field] = total;
             try {
                 const docRef = doc(db, MEMBER_COLLECTION, window.currentMember.docId);
                 const updates = { [field]: total, updatedAt: serverTimestamp() };
-                const required = [['Type1_E', 'Type1_I'], ['Type2_S', 'Type2_N'], ['Type3_F', 'Type3_T'], ['Type4_J', 'Type4_P']];
+                const required = [['Type1_E', 'Type1_I'], ['Type2_N', 'Type2_S'], ['Type3_F', 'Type3_T'], ['Type4_J', 'Type4_P']];
                 
                 const allDone = required.every(pair => pair.every(f => window.currentMember[f] !== 0 && window.currentMember[f] !== null));
                 if (allDone) {
@@ -671,7 +681,8 @@
                     updates.MBTI_Type = m1 + m2 + m3 + m4; window.currentMember.MBTI_Type = updates.MBTI_Type;
                 }
                 await updateDoc(docRef, updates);
-                window.showMessage("บันทึกเรียบร้อย"); showMainPage(true);
+                window.showMessage("บันทึกเรียบร้อย"); 
+                showMainPage(true);
             } catch (e) { window.showMessage("เกิดข้อผิดพลาด", "error"); } finally { document.getElementById('globalLoader').classList.add('hidden'); }
         };
 
@@ -692,25 +703,49 @@
             if(!m) return;
             const type = m.MBTI_Type;
             const hasResult = type && type.length === 4;
-            
             const grid = document.getElementById('mbti4x4Grid'); 
-            const partialSection = document.getElementById('partialTypeSection');
             const primaryBox = document.getElementById('primarySecondaryBox');
-            const noResultBox = document.getElementById('noDiscResult');
-
-            // NEW Logic: Pairs for partial view
+            
             const pairs = [
-                { f1: 'Type1_E', f2: 'Type1_I', chars: ['E', 'I'], color: '#f3e8ff', textC: '#9333ea' },
-                { f1: 'Type2_N', f2: 'Type2_S', chars: ['N', 'S'], color: '#f0fdf4', textC: '#16a34a' },
-                { f1: 'Type3_F', f2: 'Type3_T', chars: ['F', 'T'], color: '#eff6ff', textC: '#2563eb' },
-                { f1: 'Type4_J', f2: 'Type4_P', chars: ['J', 'P'], color: '#fefce8', textC: '#ca8a04' }
+                { f1: 'Type1_E', f2: 'Type1_I', chars: ['E', 'I'], color: '#9333ea', light: '#f3e8ff' },
+                { f1: 'Type2_S', f2: 'Type2_N', chars: ['S', 'N'], color: '#16a34a', light: '#f0fdf4' },
+                { f1: 'Type3_T', f2: 'Type3_F', chars: ['T', 'F'], color: '#3b82f6', light: '#eff6ff' },
+                { f1: 'Type4_J', f2: 'Type4_P', chars: ['J', 'P'], color: '#ca8a04', light: '#fefce8' }
             ];
 
+            let allPairsDone = true;
+            // Render Result Boxes in ONE row, 80px height
+            pairs.forEach((p, idx) => {
+                const scoreA = m[p.f1] || 0; const scoreB = m[p.f2] || 0;
+                const box = document.getElementById(`partial-box-${idx+1}`);
+                if (box) {
+                    if (scoreA !== 0 && scoreB !== 0) {
+                        const winChar = scoreA >= scoreB ? p.chars[0] : p.chars[1];
+                        const fullName = window.mbtiDimBaseLabels[winChar];
+                        box.innerHTML = `<span class="result-dim-label">${winChar}</span><span class="result-dim-desc">${fullName}</span>`;
+                        box.classList.add('filled');
+                        box.style.backgroundColor = p.light;
+                        box.style.color = p.color;
+                        box.style.borderColor = p.color;
+                    } else {
+                        box.innerHTML = "";
+                        box.classList.remove('filled');
+                        box.style.backgroundColor = "#ffffff";
+                        box.style.color = "#cbd5e1";
+                        box.style.borderColor = "#e2e8f0";
+                        allPairsDone = false;
+                    }
+                }
+            });
+
+            const discoverBtn = document.getElementById('discoverBtnContainer');
+            if (discoverBtn) {
+                if (!hasResult && !allPairsDone) discoverBtn.classList.remove('hidden');
+                else discoverBtn.classList.add('hidden');
+            }
+
             if (hasResult) {
-                partialSection?.classList.add('hidden');
                 primaryBox?.classList.remove('hidden');
-                noResultBox?.classList.add('hidden');
-                
                 const title = document.getElementById('mbtiResultTitle');
                 if(title) title.textContent = type;
                 const info = window.mbtiDataMap[type] || { g: 'Analysts', c: '#9333ea' };
@@ -722,47 +757,16 @@
                 if(subEl) subEl.textContent = window.activeRound?.MBTI_Team || "ทั่วไป";
                 const sumEl = document.getElementById('profilePersonalSummary');
                 if(sumEl) sumEl.textContent = "บุคลิกภาพ " + type + " มีความโดดเด่นในกลุ่ม " + info.g;
-                
                 if(grid) {
                     grid.innerHTML = '';
-                    window.mbtiGrid.forEach(row => {
-                        row.forEach(cell => {
-                            const div = document.createElement('div');
-                            div.className = `mbti-grid-cell ${cell === type ? 'active' : ''}`;
-                            div.style.backgroundColor = window.mbtiDataMap[cell].c;
-                            div.innerHTML = `<span>${cell}</span>`;
-                            grid.appendChild(div);
-                        });
-                    });
+                    window.mbtiGrid.forEach(row => row.forEach(cell => {
+                        const div = document.createElement('div'); div.className = `mbti-grid-cell ${cell === type ? 'active' : ''}`;
+                        div.style.backgroundColor = window.mbtiDataMap[cell].c; div.innerHTML = `<span>${cell}</span>`;
+                        grid.appendChild(div);
+                    }));
                 }
             } else {
-                // Partial Check - Updated Logic
-                partialSection?.classList.remove('hidden');
                 primaryBox?.classList.add('hidden');
-                noResultBox?.classList.remove('hidden');
-                
-                pairs.forEach((p, idx) => {
-                    const scoreA = m[p.f1] || 0;
-                    const scoreB = m[p.f2] || 0;
-                    const box = document.getElementById(`partial-box-${idx+1}`);
-                    if (box) {
-                        // Condition: Only show if BOTH in pair are non-zero
-                        if (scoreA !== 0 && scoreB !== 0) {
-                            const resultChar = scoreA >= scoreB ? p.chars[0] : p.chars[1];
-                            box.textContent = resultChar;
-                            box.classList.add('filled');
-                            box.style.backgroundColor = p.color; // Light background
-                            box.style.color = p.textC; // Darker text for contrast
-                            box.style.borderColor = p.textC;
-                        } else {
-                            box.textContent = ""; // Hide letter if incomplete
-                            box.classList.remove('filled');
-                            box.style.backgroundColor = "#ffffff";
-                            box.style.color = "#cbd5e1";
-                            box.style.borderColor = "#e2e8f0";
-                        }
-                    }
-                });
             }
         };
 
