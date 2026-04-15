@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI System Admin - Management</title>
+    <!-- Fonts: Kanit -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Kanit', sans-serif; background-color: #fafaf9; color: #44403c; }
+        
+        :root {
+            --primary-color: #0056ff;
+            --neutral-mute: #aebad2;
+        }
+
+        .tab-active {
+            background-color: var(--primary-color);
+            color: white !important;
+            box-shadow: 0 4px 12px -2px rgba(0, 86, 255, 0.4);
+        }
+
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+        .modal-bg {
+            background: rgba(28, 25, 23, 0.7);
+            backdrop-filter: blur(4px);
+        }
+
+        .rounded-table-container { border-radius: 15px; overflow: hidden; border: 1px solid #e2e8f0; }
+        
+        th { 
+            font-size: 14px !important; 
+            font-weight: 700; 
+            color: #475569; 
+            text-transform: uppercase; 
+            letter-spacing: 0.05em; 
+            background-color: #e2e8f0; 
+            padding: 0.5rem 0.75rem !important;
+            border: 1px solid #cbd5e1;
+        } 
+        td { 
+            font-size: 0.85rem; 
+            color: #334155; 
+            padding: 4px 0.75rem !important; 
+            height: 30px;
+            white-space: nowrap;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        select, input[type="text"], textarea {
+            background-color: #f0f9ff !important;
+            color: #1e293b !important;
+            border: 1px solid rgba(7, 89, 133, 0.3) !important;
+            border-radius: 0.5rem !important;
+        }
+
+        .type-circle {
+            width: 22px;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 10px;
+            font-weight: 800;
+            color: white;
+            margin: 0 1px;
+        }
+
+        .type-circle-lg {
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 18px;
+            font-weight: 800;
+            color: white;
+            margin: 0 2px;
+        }
+
+        /* Color Mapping for MBTI Letters */
+        .color-E { background-color: #3b82f6; } .color-I { background-color: #6366f1; }
+        .color-S { background-color: #10b981; } .color-N { background-color: #14b8a6; }
+        .color-T { background-color: #ef4444; } .color-F { background-color: #f43f5e; }
+        .color-J { background-color: #f59e0b; } .color-P { background-color: #fb923c; }
+
+        .filter-chip { transition: all 0.2s; cursor: pointer; }
+        .filter-chip.active { background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
+        
+        .sort-header { cursor: pointer; transition: background 0.2s; }
+        .sort-header:hover { background-color: #cbd5e1; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header & Navigation -->
+    <header class="bg-stone-100 border-b border-stone-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-[#0056ff] rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg">M</div>
+                    <div>
+                        <h1 class="font-bold text-stone-800 leading-tight text-lg">MBTI Admin</h1>
+                        <p id="connection-status" class="text-[11px] text-slate-400 uppercase tracking-widest font-bold italic">Checking Connection...</p>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-1" id="main-nav">
+                    <button onclick="navigate('qrcode')" id="nav-qrcode" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all">QR Code</button>
+                    <button onclick="navigate('rounds')" id="nav-rounds" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all">จัดการรอบ</button>
+                    <button onclick="navigate('members')" id="nav-members" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all">ข้อมูลผู้ลงทะเบียน</button>
+                    <div class="w-px h-6 bg-stone-300 mx-2 self-center"></div>
+                    <button onclick="location.reload()" class="px-4 py-2 rounded-lg text-sm font-medium text-slate-500 hover:bg-stone-200 transition-all flex items-center gap-2">
+                        <i data-lucide="refresh-cw" class="w-4 h-4"></i> รีเฟรช
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        
+        <!-- SECTION: QR CODE -->
+        <section id="section-qrcode" class="content-section fade-in space-y-6 hidden">
+            <div class="bg-white p-12 rounded-3xl border border-stone-200 shadow-sm text-center flex flex-col items-center gap-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-stone-800">QR Code สำหรับเข้าทำแบบทดสอบ</h2>
+                    <p class="text-stone-500 mt-2">สแกน QR Code ด้านล่างนี้เพื่อเข้าสู่ระบบทำแบบทดสอบบุคลิกภาพ MBTI</p>
+                </div>
+                
+                <div class="flex items-center justify-center w-[70%]">
+                    <!-- Removed border and shadow from the QR container -->
+                    <img id="mbti-qr-display" src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/MBTI%2FMBTI.png?alt=media&token=dd69e93f-7866-4225-a3d8-7169d857d928" alt="QR Code" class="w-full h-auto max-w-[400px]">
+                </div>
+            </div>
+        </section>
+        
+        <!-- SECTION: ROUNDS -->
+        <section id="section-rounds" class="content-section fade-in space-y-6 hidden">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-stone-800">จัดการรอบกิจกรรม</h2>
+                    <p class="text-stone-500 text-sm">กำหนดรอบการทดสอบบุคลิกภาพและสถานะการเปิดใช้งาน (MBTI_Round)</p>
+                </div>
+                <button onclick="window.openRoundModal()" class="bg-[#0056ff] hover:bg-blue-700 text-white px-6 py-2 rounded-xl text-sm font-bold shadow-lg transition-all flex items-center gap-2">
+                    <i data-lucide="plus" class="w-4 h-4"></i> เพิ่มรอบกิจกรรม
+                </button>
+            </div>
+
+            <div class="bg-white rounded-table-container shadow-sm overflow-hidden border border-stone-200">
+                <table class="w-full text-left" id="table-rounds-main">
+                    <thead>
+                        <tr class="bg-stone-100">
+                            <th class="px-4 py-3 w-16 text-center">ลำดับ</th>
+                            <th class="px-4 py-3 text-center cursor-pointer hover:bg-stone-200 transition-colors" onclick="window.toggleRoundSort()">
+                                <div class="flex items-center justify-center gap-1">
+                                    รอบที่
+                                    <i id="round-sort-icon" data-lucide="arrow-up-down" class="w-3 h-3"></i>
+                                </div>
+                            </th>
+                            <th class="px-4 py-3">ชื่อรอบ / ทีม</th>
+                            <th class="px-4 py-3 text-center">สถานะ</th>
+                            <th class="px-4 py-3 text-center w-32">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-rounds-body" class="divide-y divide-stone-100 text-sm">
+                        <tr><td colspan="5" class="p-12 text-center text-stone-400 italic">กำลังโหลดข้อมูลรอบกิจกรรม...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="rounds-pagination" class="flex flex-col md:flex-row items-center justify-between bg-white px-4 py-3 border border-stone-200 rounded-15 shadow-sm gap-4">
+                <div class="text-[11px] text-stone-500 font-medium" id="rounds-page-info">แสดงรายการที่ 0-0 จาก 0 รายการ</div>
+                <div class="flex items-center gap-2">
+                    <button onclick="window.changeRoundsPage(-1)" id="rounds-prev-btn" class="p-2 border rounded-lg hover:bg-stone-100 disabled:opacity-30 disabled:cursor-not-allowed"><i data-lucide="chevron-left" class="w-4 h-4 text-stone-600"></i></button>
+                    <div id="rounds-pages-container" class="flex gap-1"></div>
+                    <button onclick="window.changeRoundsPage(1)" id="rounds-next-btn" class="p-2 border rounded-lg hover:bg-stone-100 disabled:opacity-30 disabled:cursor-not-allowed"><i data-lucide="chevron-right" class="w-4 h-4 text-stone-600"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: MEMBERS (ข้อมูลผู้ลงทะเบียน) -->
+        <section id="section-members" class="content-section fade-in space-y-6 hidden">
+            <!-- Round Selection -->
+            <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-sm flex flex-col md:flex-row items-center gap-4">
+                <label class="text-[14px] font-medium text-stone-500 uppercase whitespace-nowrap">เลือกรอบกิจกรรม:</label>
+                <select id="round-filter-select" onchange="window.handleRoundFilterChange()" class="w-full md:w-96 px-4 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 text-stone-700 text-[14px]">
+                    <option value="all">กำลังโหลดรอบกิจกรรม...</option>
+                </select>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-3xl border border-stone-200 shadow-sm space-y-2 stats-card">
+                    <p class="text-[14px] font-medium text-stone-400 uppercase">ผู้เข้าร่วมทดสอบทั้งหมด</p>
+                    <h3 id="total-members-count" class="text-[28px] font-medium text-[#0056ff]">0</h3>
+                </div>
+                <div class="bg-white p-6 rounded-3xl border border-stone-200 shadow-sm space-y-2 stats-card">
+                    <p class="text-[14px] font-medium text-stone-400 uppercase">ประเภทที่พบมากที่สุด</p>
+                    <div id="top-member-mbti-container" class="flex items-center gap-1 mt-1">
+                        <h3 id="top-member-mbti-label" class="text-[28px] font-medium text-emerald-500">-</h3>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-3xl border border-stone-200 shadow-sm space-y-2 stats-card">
+                    <p class="text-[14px] font-medium text-stone-400 uppercase">อันดับที่ 2 ที่พบ</p>
+                    <div id="second-member-mbti-container" class="flex items-center gap-1 mt-1">
+                        <h3 id="second-member-mbti-label" class="text-[28px] font-medium text-orange-500">-</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Type Filters -->
+            <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-sm overflow-x-auto">
+                <div class="flex items-center gap-2" id="mbti-type-filters">
+                    <button onclick="window.filterByMbtiType('all')" id="filter-all" class="filter-chip active px-4 py-1.5 rounded-full border border-stone-200 text-[11px] font-bold whitespace-nowrap">ดูทั้งหมด</button>
+                </div>
+            </div>
+
+            <!-- Main Member Table -->
+            <div class="bg-white rounded-table-container shadow-sm border border-stone-200 overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-stone-50 text-[14px]">
+                        <tr>
+                            <th rowspan="2" class="sort-header w-12 text-center" onclick="window.sortMembers('index')">
+                                <div class="flex items-center justify-center gap-1">ลำดับ <i id="sort-icon-index" data-lucide="arrow-up-down" class="w-3 h-3 opacity-40"></i></div>
+                            </th>
+                            <th rowspan="2" class="sort-header" onclick="window.sortMembers('MBTI_Name')">
+                                <div class="flex items-center gap-1">ชื่อ-นามสกุล <i id="sort-icon-MBTI_Name" data-lucide="arrow-up-down" class="w-3 h-3 opacity-40"></i></div>
+                            </th>
+                            <th rowspan="2" class="sort-header text-center" onclick="window.sortMembers('createdAt')">
+                                <div class="flex items-center justify-center gap-1">วันและเวลา <i id="sort-icon-createdAt" data-lucide="arrow-up-down" class="w-3 h-3 opacity-40"></i></div>
+                            </th>
+                            <th colspan="4" class="text-center bg-stone-200">คะแนนดิบ</th>
+                            <th rowspan="2" class="sort-header text-center" onclick="window.sortMembers('MBTI_Type')">
+                                <div class="flex items-center justify-center gap-1">ผลทดสอบ <i id="sort-icon-MBTI_Type" data-lucide="arrow-up-down" class="w-3 h-3 opacity-40"></i></div>
+                            </th>
+                            <th rowspan="2" class="text-center w-20">จัดการ</th>
+                        </tr>
+                        <tr class="bg-stone-100">
+                            <th class="text-center sort-header" onclick="window.sortMembers('Type1_E')">EI</th>
+                            <th class="text-center sort-header" onclick="window.sortMembers('Type2_N')">SN</th>
+                            <th class="text-center sort-header" onclick="window.sortMembers('Type3_F')">TF</th>
+                            <th class="text-center sort-header" onclick="window.sortMembers('Type4_J')">JP</th>
+                        </tr>
+                    </thead>
+                    <tbody id="member-table-body" class="divide-y divide-stone-100">
+                        <tr><td colspan="9" class="p-8 text-center text-stone-400 italic">กำลังโหลดข้อมูลผู้ลงทะเบียน...</td></tr>
+                    </tbody>
+                </table>
+                <div class="p-4 bg-stone-50 border-t flex justify-between items-center">
+                    <span id="member-page-info" class="text-[11px] text-stone-500 font-bold">หน้า 0 / 0</span>
+                    <div class="flex gap-2">
+                        <button onclick="window.changeMemberPage(-1)" class="p-2 border rounded bg-white hover:bg-stone-100"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                        <button onclick="window.changeMemberPage(1)" class="p-2 border rounded bg-white hover:bg-stone-100"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Round (Edit/Add) -->
+    <div id="modal-round" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="modal-bg absolute inset-0" onclick="window.closeRoundModal()"></div>
+        <div class="modal-content-area w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden relative fade-in">
+            <div class="p-8 space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 id="modal-round-title" class="text-xl font-bold text-stone-800">จัดการข้อมูลรอบกิจกรรม</h3>
+                    <button onclick="window.closeRoundModal()" class="text-stone-400 hover:text-stone-600"><i data-lucide="x" class="w-6 h-6"></i></button>
+                </div>
+                
+                <input type="hidden" id="round-id-input">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-[14px] font-bold text-stone-500 uppercase">รอบที่ (MBTI_Round)</label>
+                        <input type="text" id="round-number-input" placeholder="เช่น 1" class="w-full px-4 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-[14px] font-bold text-stone-500 uppercase">สถานะ (MBTI_Status)</label>
+                        <select id="round-status-input" class="w-full px-4 py-2 border rounded-xl outline-none">
+                            <option value="true">เปิดใช้งาน (Active)</option>
+                            <option value="false">ปิดใช้งาน (Inactive)</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2 space-y-1">
+                        <label class="text-[14px] font-bold text-stone-500 uppercase">ชื่อรอบ / ทีม (MBTI_Team)</label>
+                        <input type="text" id="round-team-input" placeholder="เช่น รอบเช้า - ทีม A" class="w-full px-4 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+
+                <div class="flex gap-3 pt-4">
+                    <button onclick="window.closeRoundModal()" class="flex-1 py-3 rounded-xl text-stone-500 font-bold hover:bg-stone-100 transition-all border border-stone-200">ยกเลิก</button>
+                    <button onclick="window.saveRound()" id="btn-save-round" class="flex-1 py-3 bg-[#0056ff] text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition-all">บันทึกข้อมูล</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Delete Member Confirmation (Lightbox) -->
+    <div id="modal-delete" class="fixed inset-0 z-[110] hidden flex items-center justify-center p-4">
+        <div class="modal-bg absolute inset-0" onclick="window.closeDeleteModal()"></div>
+        <div class="modal-content-area w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden relative fade-in p-6 text-center space-y-6">
+            <div class="flex flex-col items-center gap-2">
+               <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-2">
+                   <i data-lucide="alert-triangle" class="w-8 h-8"></i>
+               </div>
+               <h3 class="text-xl font-bold text-stone-800">ยืนยันการลบข้อมูลผู้ใช้งาน</h3>
+               <p class="text-stone-500 text-sm">คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้? ข้อมูลจะถูกลบออกจากระบบอย่างถาวร</p>
+            </div>
+            
+            <div class="flex gap-3">
+                <button onclick="window.closeDeleteModal()" class="flex-1 py-3 rounded-xl text-stone-500 font-bold hover:bg-stone-100 transition-all border border-stone-200">ยกเลิก</button>
+                <button onclick="window.confirmDeleteMember()" class="flex-1 py-3 bg-red-500 text-white font-bold rounded-xl shadow-lg hover:bg-red-600 transition-all">ยืนยันการลบ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Delete Round Confirmation (Lightbox with Verification) -->
+    <div id="modal-round-delete" class="fixed inset-0 z-[110] hidden flex items-center justify-center p-4">
+        <div class="modal-bg absolute inset-0" onclick="window.closeRoundDeleteModal()"></div>
+        <div class="modal-content-area w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden relative fade-in p-8 text-center space-y-6">
+            <div class="flex flex-col items-center gap-2">
+               <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-2">
+                   <i data-lucide="trash-2" class="w-8 h-8"></i>
+               </div>
+               <h3 class="text-xl font-bold text-stone-800">ยืนยันการลบรอบกิจกรรม</h3>
+               <p class="text-red-500 text-sm font-medium">การลบจะมีผลให้ไม่สามารถดูผลการทำแบบประเมินผลของผู้ที่ทำประเมินผลไปแล้ว ระบบจะลบข้อมูลสมาชิกในรอบนี้ออกทั้งหมด</p>
+            </div>
+
+            <div class="space-y-2">
+                <p class="text-[12px] text-stone-400 uppercase font-bold">พิมพ์คำว่า <span class="text-red-600">Delete</span> เพื่อยืนยัน</p>
+                <input type="text" id="round-delete-confirm-input" oninput="window.handleRoundDeleteInput(this.value)" class="w-full px-4 py-3 border border-red-200 rounded-xl outline-none focus:ring-2 focus:ring-red-500 text-center font-bold text-red-600 uppercase tracking-widest" placeholder="...">
+            </div>
+            
+            <div class="flex gap-3">
+                <button onclick="window.closeRoundDeleteModal()" class="flex-1 py-3 rounded-xl text-stone-500 font-bold hover:bg-stone-100 transition-all border border-stone-200">ยกเลิก</button>
+                <button id="btn-confirm-round-delete" onclick="window.confirmDeleteRound()" disabled class="flex-1 py-3 bg-red-600 text-white font-bold rounded-xl shadow-lg hover:bg-red-700 transition-all disabled:opacity-30 disabled:cursor-not-allowed">ยืนยันการลบ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, serverTimestamp, writeBatch, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- Firebase Connection Setup ---
+        const manualFirebaseConfig = {
+            apiKey: "AIzaSyAciknEYhZU7AwOdfYytC1t_AnW2Ee11us",
+            authDomain: "faifah-ttb.firebaseapp.com",
+            projectId: "faifah-ttb",
+            storageBucket: "faifah-ttb.appspot.com",
+            messagingSenderId: "842980876200",
+            appId: "1:842980876200:web:f33bfad2ccbf263075079d"
+        };
+
+        const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : manualFirebaseConfig;
+        const app = initializeApp(config);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const getPath = (colName) => {
+            const sandboxId = typeof __app_id !== 'undefined' ? __app_id : null;
+            if (sandboxId) return `artifacts/${sandboxId}/public/data/${colName}`;
+            return colName;
+        };
+
+        window.appState = {
+            rounds: [],
+            members: [],
+            user: null,
+            syncStarted: false,
+            roundPage: 1,
+            roundLimit: 20,
+            memberPage: 1,
+            memberLimit: 30,
+            roundSortDesc: true,
+            selectedRoundId: 'all', 
+            selectedMbtiType: 'all',
+            isInitialLoad: true,
+            memberSortField: 'createdAt',
+            memberSortOrder: 'desc',
+            pendingDeleteId: null,
+            pendingRoundDeleteId: null
+        };
+
+        // --- NAVIGATION ---
+        window.navigate = (sectionId) => {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
+            const target = document.getElementById(`section-${sectionId}`);
+            if (target) target.classList.remove('hidden');
+            
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('tab-active');
+                b.classList.add('text-slate-500', 'hover:bg-stone-200');
+            });
+            const navBtn = document.getElementById(`nav-${sectionId}`);
+            if (navBtn) navBtn.classList.add('tab-active');
+
+            if (sectionId === 'rounds') window.updateRoundsUI();
+            if (sectionId === 'members') {
+                window.updateRoundDropdown();
+                window.updateMembersUI();
+                window.updateMemberStats();
+            }
+            lucide.createIcons();
+        };
+
+        // --- DATA SYNC ---
+        const startSync = () => {
+            if (!window.appState.user || window.appState.syncStarted) return;
+            window.appState.syncStarted = true;
+            
+            onSnapshot(collection(db, getPath('MBTI_Round')), (snap) => {
+                const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                window.appState.rounds = docs;
+                
+                if (window.appState.isInitialLoad && docs.length > 0) {
+                    const activeRound = docs.find(r => r.MBTI_Status === true);
+                    if (activeRound) {
+                        window.appState.selectedRoundId = activeRound.id;
+                    } else {
+                        const sorted = [...docs].sort((a,b) => (parseInt(b.MBTI_Round) || 0) - (parseInt(a.MBTI_Round) || 0));
+                        window.appState.selectedRoundId = sorted[0].id;
+                    }
+                    window.appState.isInitialLoad = false;
+                }
+                
+                window.updateRoundDropdown();
+                window.updateRoundsUI();
+                window.updateMembersUI();
+                window.updateMemberStats();
+            }, (err) => console.error("Round Sync Error:", err));
+
+            onSnapshot(collection(db, getPath('MBTI_Member')), (snap) => {
+                const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                window.appState.members = docs;
+                window.updateTypeFilters();
+                window.updateMembersUI();
+                window.updateMemberStats();
+            }, (err) => console.error("Member Sync Error:", err));
+        };
+
+        // --- ROUND DROPDOWN ---
+        window.updateRoundDropdown = () => {
+            const select = document.getElementById('round-filter-select');
+            if (!select) return;
+            const sortedRounds = [...window.appState.rounds].sort((a,b) => (parseInt(b.MBTI_Round) || 0) - (parseInt(a.MBTI_Round) || 0));
+            let html = '<option value="all">ดูข้อมูลทุกรอบกิจกรรม (ทั้งหมด)</option>';
+            sortedRounds.forEach(r => {
+                const statusText = r.MBTI_Status === true ? '(Active)' : '(Inactive)';
+                html += `<option value="${r.id}" ${window.appState.selectedRoundId === r.id ? 'selected' : ''}>รอบที่ ${r.MBTI_Round} - ${r.MBTI_Team} ${statusText}</option>`;
+            });
+            select.innerHTML = html;
+        };
+
+        window.handleRoundFilterChange = () => {
+            window.appState.selectedRoundId = document.getElementById('round-filter-select').value;
+            window.appState.memberPage = 1;
+            window.updateTypeFilters();
+            window.updateMembersUI();
+            window.updateMemberStats();
+        };
+
+        // --- SORTING ---
+        window.sortMembers = (field) => {
+            if (window.appState.memberSortField === field) {
+                window.appState.memberSortOrder = window.appState.memberSortOrder === 'asc' ? 'desc' : 'asc';
+            } else {
+                window.appState.memberSortField = field;
+                window.appState.memberSortOrder = 'asc';
+            }
+            window.updateMembersUI();
+        };
+
+        const updateSortIcons = () => {
+            const fields = ['index', 'MBTI_Name', 'createdAt', 'MBTI_Type', 'Type1_E', 'Type2_N', 'Type3_F', 'Type4_J'];
+            fields.forEach(f => {
+                const iconEl = document.getElementById(`sort-icon-${f}`);
+                if (!iconEl) return;
+                if (window.appState.memberSortField === f) {
+                    iconEl.classList.remove('opacity-40');
+                    iconEl.setAttribute('data-lucide', window.appState.memberSortOrder === 'asc' ? 'arrow-up' : 'arrow-down');
+                } else {
+                    iconEl.classList.add('opacity-40');
+                    iconEl.setAttribute('data-lucide', 'arrow-up-down');
+                }
+            });
+            lucide.createIcons();
+        };
+
+        // --- TYPE FILTERS ---
+        window.updateTypeFilters = () => {
+            const container = document.getElementById('mbti-type-filters');
+            if (!container) return;
+            const currentFilteredMembers = window.getFilteredByRoundMembers();
+            const types = [...new Set(currentFilteredMembers.map(m => m.MBTI_Type))].filter(t => t).sort();
+            let chipsHtml = `<button onclick="window.filterByMbtiType('all')" id="filter-all" class="filter-chip ${window.appState.selectedMbtiType === 'all' ? 'active' : ''} px-4 py-1.5 rounded-full border border-stone-200 text-[11px] font-bold whitespace-nowrap">ดูทั้งหมด</button>`;
+            types.forEach(type => {
+                chipsHtml += `<button onclick="window.filterByMbtiType('${type}')" class="filter-chip ${window.appState.selectedMbtiType === type ? 'active' : ''} px-4 py-1.5 rounded-full border border-stone-200 text-[11px] font-bold whitespace-nowrap">${type}</button>`;
+            });
+            container.innerHTML = chipsHtml;
+        };
+
+        window.filterByMbtiType = (type) => {
+            window.appState.selectedMbtiType = type;
+            window.appState.memberPage = 1;
+            window.updateTypeFilters();
+            window.updateMembersUI();
+            window.updateMemberStats();
+        };
+
+        const getMbtiHtml = (type, isLarge = false) => {
+            if (!type) return '-';
+            const className = isLarge ? "type-circle-lg" : "type-circle";
+            return type.split('').map(letter => `<span class="${className} color-${letter}">${letter}</span>`).join('');
+        };
+
+        // --- DATA FILTERING & UI ---
+        window.getFilteredByRoundMembers = () => {
+            return window.appState.members.filter(m => window.appState.selectedRoundId === 'all' || m.MBTI_id === window.appState.selectedRoundId);
+        };
+
+        window.getFilteredMembers = () => {
+            const byRound = window.getFilteredByRoundMembers();
+            return byRound.filter(m => window.appState.selectedMbtiType === 'all' || m.MBTI_Type === window.appState.selectedMbtiType);
+        };
+
+        window.updateMemberStats = () => {
+            const filtered = window.getFilteredMembers();
+            document.getElementById('total-members-count').innerText = filtered.length;
+            const topContainer = document.getElementById('top-member-mbti-container');
+            const secondContainer = document.getElementById('second-member-mbti-container');
+            if (filtered.length > 0) {
+                const counts = {};
+                filtered.forEach(m => { if (m.MBTI_Type) counts[m.MBTI_Type] = (counts[m.MBTI_Type] || 0) + 1; });
+                const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+                topContainer.innerHTML = sorted.length > 0 ? getMbtiHtml(sorted[0][0], true) : '<h3 class="text-[28px] font-medium text-emerald-500">-</h3>';
+                secondContainer.innerHTML = sorted.length > 1 ? getMbtiHtml(sorted[1][0], true) : '<h3 class="text-[28px] font-medium text-orange-500">-</h3>';
+            } else {
+                topContainer.innerHTML = '<h3 class="text-[28px] font-medium text-emerald-500">-</h3>';
+                secondContainer.innerHTML = '<h3 class="text-[28px] font-medium text-orange-500">-</h3>';
+            }
+        };
+
+        window.updateMembersUI = () => {
+            const tbody = document.getElementById('member-table-body');
+            if (!tbody) return;
+            const filtered = window.getFilteredMembers();
+            
+            const sorted = filtered.sort((a, b) => {
+                let valA = a[window.appState.memberSortField];
+                let valB = b[window.appState.memberSortField];
+                if (window.appState.memberSortField === 'createdAt') {
+                    valA = valA?.seconds || 0; valB = valB?.seconds || 0;
+                }
+                if (typeof valA === 'string') valA = valA.toLowerCase();
+                if (typeof valB === 'string') valB = valB.toLowerCase();
+                if (valA < valB) return window.appState.memberSortOrder === 'asc' ? -1 : 1;
+                if (valA > valB) return window.appState.memberSortOrder === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            const total = sorted.length;
+            const pages = Math.ceil(total / window.appState.memberLimit);
+            const start = (window.appState.memberPage - 1) * window.appState.memberLimit;
+            const paged = sorted.slice(start, start + window.appState.memberLimit);
+
+            if (total === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" class="p-12 text-center text-stone-400 italic">ไม่พบข้อมูลผู้ลงทะเบียนในรอบนี้</td></tr>';
+                document.getElementById('member-page-info').innerText = "หน้า 0 / 0";
+                return;
+            }
+
+            tbody.innerHTML = paged.map((m, i) => {
+                const dateStr = m.createdAt ? new Date(m.createdAt.seconds * 1000).toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short' }) : '-';
+                return `
+                    <tr class="hover:bg-stone-50 transition-colors">
+                        <td class="text-center text-stone-400 font-medium">${start + i + 1}</td>
+                        <td class="font-bold text-stone-700">${m.MBTI_Name || 'ไม่ระบุชื่อ'}</td>
+                        <td class="text-center text-stone-500 text-[11px]">${dateStr}</td>
+                        <td class="text-center font-mono text-[10px] text-stone-400 bg-blue-50/30">E:${m.Type1_E || 0}-I:${m.Type1_I || 0}</td>
+                        <td class="text-center font-mono text-[10px] text-stone-400 bg-emerald-50/30">N:${m.Type2_N || 0}-S:${m.Type2_S || 0}</td>
+                        <td class="text-center font-mono text-[10px] text-stone-400 bg-rose-50/30">F:${m.Type3_F || 0}-T:${m.Type3_T || 0}</td>
+                        <td class="text-center font-mono text-[10px] text-stone-400 bg-amber-50/30">J:${m.Type4_J || 0}-P:${m.Type4_P || 0}</td>
+                        <td class="text-center">${getMbtiHtml(m.MBTI_Type)}</td>
+                        <td class="text-center">
+                            <button onclick="window.openDeleteModal('${m.id}')" class="p-1.5 text-stone-300 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('member-page-info').innerText = `หน้า ${window.appState.memberPage} / ${pages}`;
+            updateSortIcons();
+        };
+
+        window.changeMemberPage = (dir) => {
+            const filtered = window.getFilteredMembers();
+            const pages = Math.ceil(filtered.length / window.appState.memberLimit);
+            const next = window.appState.memberPage + dir;
+            if (next >= 1 && next <= pages) {
+                window.appState.memberPage = next;
+                window.updateMembersUI();
+            }
+        };
+
+        // --- DELETE MODAL LOGIC (LIGHTBOX) ---
+        window.openDeleteModal = (id) => {
+            window.appState.pendingDeleteId = id;
+            document.getElementById('modal-delete').classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        window.closeDeleteModal = () => {
+            window.appState.pendingDeleteId = null;
+            document.getElementById('modal-delete').classList.add('hidden');
+        };
+
+        window.confirmDeleteMember = async () => {
+            const id = window.appState.pendingDeleteId;
+            if (!id) return;
+            try {
+                await deleteDoc(doc(db, getPath('MBTI_Member'), id));
+                window.closeDeleteModal();
+            } catch (e) {
+                console.error("Delete Error:", e);
+            }
+        };
+
+        // --- ROUND DELETE MODAL LOGIC (New Lightbox) ---
+        window.openRoundDeleteModal = (id) => {
+            window.appState.pendingRoundDeleteId = id;
+            const modal = document.getElementById('modal-round-delete');
+            const input = document.getElementById('round-delete-confirm-input');
+            const btn = document.getElementById('btn-confirm-round-delete');
+            
+            input.value = "";
+            btn.disabled = true;
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        window.closeRoundDeleteModal = () => {
+            window.appState.pendingRoundDeleteId = null;
+            document.getElementById('modal-round-delete').classList.add('hidden');
+        };
+
+        window.handleRoundDeleteInput = (val) => {
+            const btn = document.getElementById('btn-confirm-round-delete');
+            btn.disabled = val.trim().toLowerCase() !== "delete";
+        };
+
+        window.confirmDeleteRound = async () => {
+            const roundId = window.appState.pendingRoundDeleteId;
+            if (!roundId) return;
+
+            const btn = document.getElementById('btn-confirm-round-delete');
+            btn.disabled = true;
+            btn.innerText = "กำลังลบ...";
+
+            try {
+                const batch = writeBatch(db);
+                
+                // 1. Find all members linked to this roundId via MBTI_id
+                const membersQuery = query(collection(db, getPath('MBTI_Member')), where('MBTI_id', '==', roundId));
+                const memberSnap = await getDocs(membersQuery);
+                
+                memberSnap.forEach((memberDoc) => {
+                    batch.delete(memberDoc.ref);
+                });
+
+                // 2. Delete the round itself
+                batch.delete(doc(db, getPath('MBTI_Round'), roundId));
+
+                await batch.commit();
+                window.closeRoundDeleteModal();
+            } catch (e) {
+                console.error("Cascade Delete Error:", e);
+                alert("เกิดข้อผิดพลาดในการลบข้อมูลทั้งหมด");
+                btn.disabled = false;
+                btn.innerText = "ยืนยันการลบ";
+            }
+        };
+
+        // --- ROUND MANAGEMENT ---
+        window.openRoundModal = (id = null) => {
+            const modal = document.getElementById('modal-round');
+            const idInp = document.getElementById('round-id-input');
+            const numInp = document.getElementById('round-number-input');
+            const teamInp = document.getElementById('round-team-input');
+            const statusInp = document.getElementById('round-status-input');
+            modal.classList.remove('hidden');
+            if (id) {
+                const r = window.appState.rounds.find(x => x.id === id);
+                idInp.value = id; numInp.value = r.MBTI_Round || ""; teamInp.value = r.MBTI_Team || ""; statusInp.value = r.MBTI_Status === true ? "true" : "false";
+            } else {
+                idInp.value = ""; let max = 0;
+                if (window.appState.rounds.length > 0) max = Math.max(...window.appState.rounds.map(r => parseInt(r.MBTI_Round) || 0));
+                numInp.value = max + 1; teamInp.value = ""; statusInp.value = "false";
+            }
+            lucide.createIcons();
+        };
+
+        window.closeRoundModal = () => document.getElementById('modal-round').classList.add('hidden');
+
+        window.saveRound = async () => {
+            if (!window.appState.user) return;
+            const id = document.getElementById('round-id-input').value;
+            const roundNum = document.getElementById('round-number-input').value.trim();
+            const teamName = document.getElementById('round-team-input').value.trim();
+            const status = document.getElementById('round-status-input').value === "true";
+            if (!roundNum || !teamName) return;
+            const btn = document.getElementById('btn-save-round');
+            btn.disabled = true; btn.innerText = "กำลังบันทึก...";
+            try {
+                const batch = writeBatch(db);
+                if (status === true) {
+                    window.appState.rounds.forEach(r => { if (r.id !== id && r.MBTI_Status === true) batch.update(doc(db, getPath('MBTI_Round'), r.id), { MBTI_Status: false }); });
+                }
+                const data = { MBTI_Round: roundNum, MBTI_Team: teamName, MBTI_Status: status, updatedAt: serverTimestamp() };
+                if (id) batch.update(doc(db, getPath('MBTI_Round'), id), data);
+                else batch.set(doc(collection(db, getPath('MBTI_Round'))), { ...data, createdAt: serverTimestamp() });
+                await batch.commit(); window.closeRoundModal();
+            } catch (e) { console.error("Save Error:", e); } finally { btn.disabled = false; btn.innerText = "บันทึกข้อมูล"; }
+        };
+
+        window.toggleRoundSort = () => {
+            window.appState.roundSortDesc = !window.appState.roundSortDesc;
+            window.updateRoundsUI();
+        };
+
+        window.updateRoundsUI = () => {
+            const tbody = document.getElementById('table-rounds-body');
+            if (!tbody) return;
+            const sorted = [...window.appState.rounds].sort((a,b) => {
+                const valA = parseInt(a.MBTI_Round) || 0; const valB = parseInt(b.MBTI_Round) || 0;
+                return window.appState.roundSortDesc ? valB - valA : valA - valB;
+            });
+            const total = sorted.length;
+            const pages = Math.ceil(total / window.appState.roundLimit);
+            const start = (window.appState.roundPage - 1) * window.appState.roundLimit;
+            const paged = sorted.slice(start, start + window.appState.roundLimit);
+            if (total === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="p-12 text-center text-stone-400 italic">ยังไม่มีข้อมูลรอบกิจกรรม</td></tr>';
+                return;
+            }
+            tbody.innerHTML = paged.map((r, i) => `
+                <tr class="hover:bg-stone-50 transition-colors">
+                    <td class="text-center text-stone-400 font-medium">${start + i + 1}</td>
+                    <td class="text-center font-bold text-stone-700">${r.MBTI_Round || '-'}</td>
+                    <td class="font-medium text-stone-600">${r.MBTI_Team || '-'}</td>
+                    <td class="text-center"><span class="px-3 py-0.5 rounded-full text-[11px] font-bold ${r.MBTI_Status === true ? 'bg-emerald-100 text-emerald-700' : 'bg-stone-100 text-stone-400'}">${r.MBTI_Status === true ? 'Active' : 'Inactive'}</span></td>
+                    <td class="text-center">
+                        <div class="flex justify-center gap-2">
+                            <button onclick="window.openRoundModal('${r.id}')" class="p-1.5 text-stone-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"><i data-lucide="edit" class="w-4 h-4"></i></button>
+                            <button onclick="window.openRoundDeleteModal('${r.id}')" class="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            document.getElementById('rounds-page-info').innerText = `แสดง ${total === 0 ? 0 : start + 1}-${Math.min(start + window.appState.roundLimit, total)} จาก ${total}`;
+            let pgHtml = '';
+            for (let i = 1; i <= pages; i++) pgHtml += `<button onclick="window.jumpToRoundPage(${i})" class="px-3 py-1 text-xs font-bold rounded-lg ${i === window.appState.roundPage ? 'bg-[#0056ff] text-white' : 'bg-stone-100'}">${i}</button>`;
+            document.getElementById('rounds-pages-container').innerHTML = pgHtml;
+            const roundSortIcon = document.getElementById('round-sort-icon');
+            if (roundSortIcon) roundSortIcon.setAttribute('data-lucide', window.appState.roundSortDesc ? 'arrow-down' : 'arrow-up');
+            lucide.createIcons();
+        };
+
+        window.jumpToRoundPage = (p) => { window.appState.roundPage = p; window.updateRoundsUI(); };
+        window.changeRoundsPage = (dir) => { const next = window.appState.roundPage + dir; if (next >= 1 && next <= Math.ceil(window.appState.rounds.length / window.appState.roundLimit)) { window.appState.roundPage = next; window.updateRoundsUI(); } };
+
+        // --- AUTH & INIT ---
+        onAuthStateChanged(auth, (user) => {
+            window.appState.user = user;
+            if (user) {
+                document.getElementById('connection-status').innerText = "LIVE: MBTI DATABASE SYNCED";
+                document.getElementById('connection-status').className = "text-[11px] text-emerald-500 uppercase font-bold";
+                startSync();
+            } else {
+                document.getElementById('connection-status').innerText = "DISCONNECTED";
+                document.getElementById('connection-status').className = "text-[11px] text-red-400 uppercase font-bold";
+            }
+        });
+
+        const initAuth = async () => { try { if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token); else await signInAnonymously(auth); } catch (err) { console.error("Auth Error:", err); } };
+        window.onload = () => { initAuth(); navigate('members'); };
+    </script>
+</body>
+</html>
