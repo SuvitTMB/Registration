@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingo Online System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Library สำหรับจุดพลุ -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body { font-family: 'Kanit', sans-serif; }
+        .bingo-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+        .bingo-cell {
+            aspect-ratio: 1/1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            border: 2px solid #f1f5f9;
+        }
+        .modal-backdrop {
+            background-color: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(4px);
+        }
+        .animate-pop { animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        /* แอนิเมชันขอบสลับสีส้ม-เขียว เมื่อเลขนั้นถูกสุ่มออกมาแล้ว */
+        @keyframes borderFlash {
+            0% { border-color: #f97316; box-shadow: 0 0 8px rgba(249, 115, 22, 0.5); }
+            50% { border-color: #22c55e; box-shadow: 0 0 8px rgba(34, 197, 94, 0.5); }
+            100% { border-color: #f97316; box-shadow: 0 0 8px rgba(249, 115, 22, 0.5); }
+        }
+        .cell-drawn-match {
+            animation: borderFlash 1.5s infinite;
+            border-width: 4px !important;
+        }
+
+        /* เมื่อผู้ใช้คลิกเลือก (Mark) ปรับเป็นสีเขียว */
+        .cell-marked {
+            background-color: #22c55e !important; 
+            color: white !important;
+            border-color: #16a34a !important;
+        }
+
+        /* เมื่อ Bingo ให้แถวที่ชนะเป็นสีส้ม */
+        .cell-winner {
+            background-color: #f97316 !important; /* สีส้ม */
+            color: white !important;
+            border-color: #ea580c !important;
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <!-- ตัวโหลดหน้าหลัก -->
+    <div id="globalLoader" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white">
+        <div class="w-12 h-12 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+        <p class="text-slate-500 animate-pulse">กำลังเตรียมระบบ Bingo...</p>
+    </div>
+
+    <!-- Lightbox รอบกิจกรรมและการลงทะเบียน -->
+    <div id="registrationModal" class="fixed inset-0 z-[160] modal-backdrop flex items-center justify-center p-6 hidden">
+        <div class="bg-white w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl animate-pop text-center">
+            <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="party-popper" class="w-10 h-10"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">ยินดีต้อนรับเข้าสู่กิจกรรม!</h2>
+            <p class="text-slate-500 text-sm mb-6">กรุณากรอกข้อมูลเพื่อรับใบ Bingo ของคุณ</p>
+            
+            <div class="text-left space-y-4 mb-8">
+                <div class="bg-green-50 rounded-2xl p-4 border border-green-100">
+                    <p class="text-[10px] font-bold text-green-600 uppercase mb-1">รอบกิจกรรม</p>
+                    <p id="modalRoundName" class="text-lg font-bold text-green-700 leading-tight">กำลังดึงข้อมูล...</p>
+                    <div class="flex items-center gap-2 mt-1">
+                        <span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
+                        <p class="text-[11px] text-green-600 font-medium">เปิดรับลงทะเบียน</p>
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[12px] font-bold text-slate-400 uppercase ml-1 mb-1 block">ชื่อ-นามสกุลผู้ร่วมกิจกรรม</label>
+                    <input type="text" id="inputUserFullName" placeholder="ระบุชื่อจริงและนามสกุล" class="w-full px-6 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                </div>
+            </div>
+
+            <button id="btnConfirmReg" onclick="submitRegistration()" class="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-lg hover:bg-blue-700 transition-all transform active:scale-95 flex items-center justify-center gap-2">
+                <span id="btnRegText">ยืนยันและรับใบ Bingo</span>
+                <i id="btnRegIcon" data-lucide="arrow-right" class="w-5 h-5"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Lightbox แสดงความยินดีกับผู้ชนะ -->
+    <div id="winnerModal" class="fixed inset-0 z-[200] modal-backdrop flex items-center justify-center p-6 hidden">
+        <div class="bg-white w-full max-w-sm rounded-[3rem] p-10 shadow-2xl animate-pop text-center relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-orange-400 via-yellow-400 to-orange-400"></div>
+            <div class="w-24 h-24 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                <i data-lucide="trophy" class="w-12 h-12"></i>
+            </div>
+            <h2 class="text-3xl font-bold text-slate-800 mb-2 italic">BINGO!</h2>
+            <p class="text-slate-600 font-medium mb-1">ยินดีด้วยคุณคือ ผู้ชนะ การแข่งขัน</p>
+            <p class="text-slate-400 text-sm mb-8">ความพยายามและโชคเป็นของคุณในรอบนี้</p>
+            
+            <button onclick="closeWinnerModal()" class="w-full py-4 bg-slate-800 text-white rounded-2xl font-bold shadow-lg hover:bg-slate-900 transition-all transform active:scale-95">
+                ปิดหน้าต่างนี้
+            </button>
+        </div>
+    </div>
+
+    <!-- ส่วนแสดงเนื้อหาหลัก -->
+    <div id="app" class="max-w-md mx-auto min-h-screen flex flex-col hidden">
+        <header class="bg-blue-600 p-6 text-white shadow-lg rounded-b-[2.5rem]">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h1 class="text-2xl font-bold flex items-center gap-2">
+                        <i data-lucide="gamepad-2"></i> BINGO GAME
+                    </h1>
+                    <p id="roundDisplay" class="text-blue-100 text-sm opacity-80 mt-1">กำลังตรวจสอบรอบกิจกรรม...</p>
+                </div>
+                <div id="userInfo" class="text-right hidden">
+                    <p id="userName" class="font-medium text-sm"></p>
+                    <button onclick="handleLogout()" class="text-[10px] bg-white/20 px-2 py-1 rounded-full mt-1">ออกจากระบบ</button>
+                </div>
+            </div>
+            <!-- ส่วนแสดงสถานะกิจกรรม -->
+            <div id="statusBadge" class="bg-white/10 border border-white/20 rounded-2xl p-4 text-center transition-all duration-500">
+                <p id="statusText" class="text-sm font-medium">รอการเริ่มต้นรอบใหม่...</p>
+            </div>
+        </header>
+
+        <main class="flex-1 p-6 flex flex-col gap-6">
+            <div id="bingoCardContainer" class="bg-white p-4 rounded-[2rem] shadow-xl border border-slate-100">
+                <div class="flex justify-between items-center mb-4 px-2">
+                    <h3 class="font-bold text-slate-700 flex items-center gap-2">
+                        <i data-lucide="grid-3x3" class="w-4 h-4"></i> ใบ Bingo ของคุณ
+                    </h3>
+                    <div id="editBadge" class="hidden bg-amber-100 text-amber-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase">โหมดกำหนดเอง</div>
+                </div>
+                <div id="bingoGrid" class="bingo-grid mb-6"></div>
+                
+                <div id="gridControls" class="grid grid-cols-2 gap-3">
+                    <button id="randomBtn" onclick="generateRandomCard()" class="flex flex-col items-center justify-center gap-1 bg-slate-100 hover:bg-slate-200 p-4 rounded-2xl transition-all group">
+                        <i data-lucide="refresh-cw" class="w-5 h-5 text-slate-500 group-hover:rotate-180 transition-transform duration-500"></i>
+                        <span class="text-xs font-semibold text-slate-600">สุ่มเลือกใหม่</span>
+                    </button>
+                    <button id="customBtn" onclick="toggleCustomMode()" class="flex flex-col items-center justify-center gap-1 bg-slate-100 hover:bg-slate-200 p-4 rounded-2xl transition-all group">
+                        <i data-lucide="edit-3" id="customIcon" class="w-5 h-5 text-slate-500"></i>
+                        <span id="customBtnText" class="text-xs font-semibold text-slate-600">ออกแบบเอง</span>
+                    </button>
+                </div>
+
+                <!-- ปุ่ม Bingo ที่จะแสดงตอนแข่งขัน -->
+                <div id="bingoActionContainer" class="hidden mt-2">
+                    <button id="bingoWinBtn" onclick="handleBingoWin()" disabled class="w-full py-5 bg-slate-200 text-slate-400 rounded-2xl font-bold text-xl shadow-md transition-all flex items-center justify-center gap-3">
+                        <i data-lucide="crown"></i>
+                        <span id="bingoWinBtnText">BINGO</span>
+                    </button>
+                </div>
+            </div>
+            <div id="gameInstructions" class="bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                <p id="instructionText" class="text-[11px] text-blue-600 text-center leading-relaxed">
+                    คุณสามารถกดสุ่มตัวเลขใหม่ หรือ ออกแบบหน้า Bingo ของคุณได้เอง
+                </p>
+            </div>
+        </main>
+
+        <footer class="p-6 text-center text-slate-400 text-[10px] uppercase tracking-widest font-medium">
+            &copy; 2026 Bingo Online System Real-time
+        </footer>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = { 
+            apiKey: "AIzaSyAciknEYhZU7AwOdfYytC1t_AnW2Ee11us", 
+            authDomain: "faifah-ttb.firebaseapp.com", 
+            projectId: "faifah-ttb", 
+            storageBucket: "faifah-ttb.appspot.com", 
+            messagingSenderId: "842980876200", 
+            appId: "1:842980876200:web:f33bfad2ccbf263075079d" 
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const COLLECTION_ROUND = "Bingo_Round";
+        const COLLECTION_MEMBER = "Bingo_Member";
+
+        let currentRound = null;
+        let currentUser = null;
+        let bingoNumbers = Array(25).fill(0);
+        let drawnNumbers = []; 
+        let markedIndices = []; 
+        let winIndices = []; // เก็บตำแหน่งที่ทำให้ชนะ (0-24)
+        let isEditing = false;
+        let isRegistered = false;
+        let isWinner = false;
+
+        window.onload = () => {
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    await signInAnonymously(auth);
+                } else {
+                    currentUser = user;
+                    setupRealtimeListeners();
+                }
+            });
+            lucide.createIcons();
+        };
+
+        // ปรับตัวเลขสุ่มให้เป็น 1-99
+        function getNewRandomNumbers() {
+            const nums = [];
+            while (nums.length < 25) {
+                const r = Math.floor(Math.random() * 99) + 1;
+                if (!nums.includes(r)) nums.push(r);
+            }
+            return nums;
+        }
+
+        async function getUserIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                return "unknown";
+            }
+        }
+
+        function setupRealtimeListeners() {
+            if (!currentUser) return;
+            const roundsCollection = collection(db, COLLECTION_ROUND);
+            onSnapshot(roundsCollection, (snapshot) => {
+                const rounds = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const activeRound = rounds.find(r => String(r.Bingo_Status) === "true");
+                
+                if (activeRound) {
+                    currentRound = activeRound;
+                    drawnNumbers = (activeRound.Bingo_Drawn || []).map(n => Number(n)); 
+                    
+                    updateRoundUI(activeRound);
+                    
+                    // แสดงชื่อรอบกิจกรรมจากฟิลด์ Bingo_Round แทนข้อความตรวจสอบเดิม
+                    const roundDisplay = document.getElementById('roundDisplay');
+                    if (roundDisplay) {
+                        roundDisplay.innerText = activeRound.Bingo_Round || "รอบกิจกรรมทั่วไป";
+                    }
+
+                    const modalRoundDisplay = document.getElementById('modalRoundName');
+                    if (modalRoundDisplay) {
+                        modalRoundDisplay.innerText = activeRound.Bingo_Round || activeRound.Bingo_Name || "รอบกิจกรรมทั่วไป";
+                    }
+
+                    const isStarted = String(activeRound.Bingo_Start) === "true";
+                    toggleControls(!isStarted);
+
+                    checkUserParticipation();
+                    renderBingoGrid(isEditing);
+                } else {
+                    currentRound = null;
+                    updateStatusBadge(null, false);
+                    document.getElementById('registrationModal').classList.add('hidden');
+                    const roundDisplay = document.getElementById('roundDisplay');
+                    if (roundDisplay) roundDisplay.innerText = "กำลังตรวจสอบรอบกิจกรรม...";
+                }
+                document.getElementById('globalLoader').classList.add('hidden');
+                document.getElementById('app').classList.remove('hidden');
+            });
+        }
+
+        function toggleControls(enabled) {
+            const gridControls = document.getElementById('gridControls');
+            const gameInstructions = document.getElementById('gameInstructions');
+            const bingoActionContainer = document.getElementById('bingoActionContainer');
+
+            if (gridControls && gameInstructions && bingoActionContainer) {
+                if (!enabled) {
+                    gridControls.classList.add('hidden');
+                    gameInstructions.classList.add('hidden');
+                    bingoActionContainer.classList.remove('hidden');
+                } else {
+                    gridControls.classList.remove('hidden');
+                    gameInstructions.classList.remove('hidden');
+                    bingoActionContainer.classList.add('hidden');
+                }
+            }
+        }
+
+        function updateRoundUI(round) {
+            const isActive = String(round.Bingo_Status) === "true";
+            const isStarted = String(round.Bingo_Start) === "true";
+            updateStatusBadge(isActive, isStarted);
+        }
+
+        function updateStatusBadge(isActive, isStarted) {
+            const statusBadge = document.getElementById('statusBadge');
+            const statusText = document.getElementById('statusText');
+            
+            if (!isActive) {
+                statusBadge.className = "bg-white/10 border border-white/20 rounded-2xl p-4 text-center";
+                statusText.innerText = "ขณะนี้ยังไม่มีรอบกิจกรรมที่เปิดรับ";
+                return;
+            }
+
+            if (!isStarted) {
+                statusBadge.className = "bg-green-500 border border-green-600 rounded-2xl p-4 text-center shadow-lg";
+                statusText.innerText = "เปิดให้ทำการเลือก Bingo ที่คุณต้องการ";
+            } else {
+                statusBadge.className = "bg-red-600 border border-red-700 rounded-2xl p-4 text-center shadow-lg shadow-red-200/50";
+                statusText.innerText = "กำลังอยู่ระหว่างการแข่งขัน Bingo";
+            }
+        }
+
+        async function checkUserParticipation() {
+            if (!currentUser || !currentRound) return;
+            
+            const memberDocRef = doc(db, COLLECTION_MEMBER, currentUser.uid);
+            const memberDoc = await getDoc(memberDocRef);
+
+            if (memberDoc.exists()) {
+                const data = memberDoc.data();
+                
+                if (data.Bingo_id !== currentRound.id) {
+                    isRegistered = false; 
+                    isWinner = false;
+                    markedIndices = [];
+                    winIndices = [];
+                    if (String(currentRound.Bingo_Status) === "true") {
+                        document.getElementById('registrationModal').classList.remove('hidden');
+                    }
+                    return;
+                }
+
+                isRegistered = true;
+                isWinner = data.Bingo_Game || false;
+                currentUser.fullName = data.Bingo_User;
+                bingoNumbers = (data.Bingo_Random || []).map(n => Number(n)); 
+                markedIndices = data.Bingo_Marked || []; 
+                showUserInfo(data.Bingo_User);
+                
+                checkBingoStatus();
+                document.getElementById('registrationModal').classList.add('hidden');
+            } else {
+                if (!isRegistered && String(currentRound.Bingo_Status) === "true") {
+                    document.getElementById('registrationModal').classList.remove('hidden');
+                }
+            }
+        }
+
+        window.markNumber = async (index) => {
+            if (isEditing || !isRegistered || isWinner || (currentRound && String(currentRound.Bingo_Start) !== "true")) return;
+
+            const idxPos = markedIndices.indexOf(index);
+            if (idxPos === -1) {
+                markedIndices.push(index); 
+            } else {
+                markedIndices.splice(idxPos, 1); 
+            }
+
+            try {
+                const memberDocRef = doc(db, COLLECTION_MEMBER, currentUser.uid);
+                await updateDoc(memberDocRef, {
+                    Bingo_Marked: markedIndices,
+                    updatedAt: serverTimestamp()
+                });
+                
+                renderBingoGrid(false);
+                checkBingoStatus();
+            } catch (e) {
+                console.error("Error updating mark:", e);
+            }
+        };
+
+        function checkBingoStatus() {
+            if (!isRegistered || isEditing) return;
+
+            const bingoBtn = document.getElementById('bingoWinBtn');
+            const bingoBtnText = document.getElementById('bingoWinBtnText');
+
+            const result = evaluateBingo(markedIndices, bingoNumbers, drawnNumbers);
+            winIndices = result.winIndices; 
+
+            if (isWinner) {
+                bingoBtn.disabled = true;
+                bingoBtn.className = "w-full py-5 bg-green-100 text-green-600 rounded-2xl font-bold text-sm shadow-md flex items-center justify-center gap-3";
+                bingoBtnText.innerText = "ยินดีด้วยคุณคือ ผู้ชนะ การแข่งขัน";
+                renderBingoGrid(false); 
+                return;
+            }
+
+            if (result.isBingo) {
+                bingoBtn.disabled = false;
+                bingoBtn.className = "w-full py-5 bg-orange-500 text-white rounded-2xl font-bold text-xl shadow-lg hover:bg-orange-600 transition-all transform active:scale-95 flex items-center justify-center gap-3 animate-bounce";
+            } else {
+                bingoBtn.disabled = true;
+                bingoBtn.className = "w-full py-5 bg-slate-200 text-slate-400 rounded-2xl font-bold text-xl shadow-md flex items-center justify-center gap-3";
+            }
+            renderBingoGrid(false);
+        }
+
+        window.handleBingoWin = async () => {
+            if (isWinner) return;
+
+            try {
+                document.getElementById('globalLoader').classList.remove('hidden');
+                
+                const memberDocRef = doc(db, COLLECTION_MEMBER, currentUser.uid);
+                await updateDoc(memberDocRef, {
+                    Bingo_Game: true,
+                    winTimestamp: serverTimestamp()
+                });
+
+                isWinner = true;
+                document.getElementById('winnerModal').classList.remove('hidden');
+                triggerFireworks();
+                checkBingoStatus();
+
+            } catch (e) {
+                alert("เกิดข้อผิดพลาดในการบันทึกข้อมูลผู้ชนะ");
+            } finally {
+                document.getElementById('globalLoader').classList.add('hidden');
+            }
+        };
+
+        window.closeWinnerModal = () => {
+            document.getElementById('winnerModal').classList.add('hidden');
+        };
+
+        function evaluateBingo(marked, numbers, drawn) {
+            const size = 5;
+            const gridStatus = new Array(25).fill(false);
+            marked.forEach(idx => {
+                if (drawn.includes(Number(numbers[idx]))) {
+                    gridStatus[idx] = true;
+                }
+            });
+
+            let winningIndices = [];
+
+            for (let i = 0; i < size; i++) {
+                let row = [];
+                for (let j = 0; j < size; j++) row.push(i * size + j);
+                if (row.every(idx => gridStatus[idx])) {
+                    winningIndices = winningIndices.concat(row);
+                }
+            }
+
+            for (let i = 0; i < size; i++) {
+                let col = [];
+                for (let j = 0; j < size; j++) col.push(i + j * size);
+                if (col.every(idx => gridStatus[idx])) {
+                    winningIndices = winningIndices.concat(col);
+                }
+            }
+
+            let d1 = [0, 6, 12, 18, 24];
+            if (d1.every(idx => gridStatus[idx])) {
+                winningIndices = winningIndices.concat(d1);
+            }
+
+            let d2 = [4, 8, 12, 16, 20];
+            if (d2.every(idx => gridStatus[idx])) {
+                winningIndices = winningIndices.concat(d2);
+            }
+
+            winningIndices = [...new Set(winningIndices)];
+
+            return {
+                isBingo: winningIndices.length > 0,
+                winIndices: winningIndices
+            };
+        }
+
+        function triggerFireworks() {
+            const duration = 7 * 1000;
+            const animationEnd = Date.now() + duration;
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                confetti({ 
+                    particleCount: 50, 
+                    spread: 80, 
+                    origin: { y: 0.6 }, 
+                    colors: ['#f97316', '#22c55e', '#ffffff', '#3b82f6'],
+                    zIndex: 300 
+                });
+            }, 300);
+        }
+
+        function showUserInfo(name) {
+            document.getElementById('userInfo').classList.remove('hidden');
+            document.getElementById('userName').innerText = name;
+        }
+
+        async function syncJoinCountToRound() {
+            if (!currentRound) return;
+            try {
+                const memberSnap = await getDocs(collection(db, COLLECTION_MEMBER));
+                const currentRoundMembers = memberSnap.docs.filter(d => d.data().Bingo_id === currentRound.id);
+                const count = currentRoundMembers.length;
+
+                const roundDocRef = doc(db, COLLECTION_ROUND, currentRound.id);
+                await updateDoc(roundDocRef, {
+                    Bingo_join: count
+                });
+            } catch (error) {
+                console.error("Error syncing join count:", error);
+            }
+        }
+
+        window.submitRegistration = async () => {
+            const name = document.getElementById('inputUserFullName').value.trim();
+            if (!name) return alert("กรุณากรอกชื่อ-นามสกุล");
+            if (!currentRound) return alert("ไม่พบรอบกิจกรรม");
+
+            const btn = document.getElementById('btnConfirmReg');
+            const btnText = document.getElementById('btnRegText');
+            const btnIcon = document.getElementById('btnRegIcon');
+            
+            btn.disabled = true;
+            btnText.innerText = "กำลังจัดการลงทะเบียน...";
+            btnIcon.setAttribute('data-lucide', 'loader-2');
+            btnIcon.classList.add('animate-spin');
+            lucide.createIcons();
+            
+            try {
+                const userIP = await getUserIP();
+                const initialNumbers = getNewRandomNumbers();
+                
+                await setDoc(doc(db, COLLECTION_MEMBER, currentUser.uid), {
+                    Bingo_id: currentRound.id, 
+                    Bingo_User: name,          
+                    Bingo_Random: initialNumbers,
+                    Bingo_IP: userIP,
+                    Bingo_Reward: false,
+                    Bingo_Game: false,
+                    Bingo_Marked: [],
+                    timestamp: serverTimestamp()
+                });
+
+                await syncJoinCountToRound();
+
+                currentUser.fullName = name;
+                isRegistered = true;
+                bingoNumbers = initialNumbers;
+                markedIndices = [];
+                winIndices = [];
+                
+                document.getElementById('registrationModal').classList.add('hidden');
+                showUserInfo(name);
+                renderBingoGrid(false);
+            } catch (error) {
+                alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล");
+                btn.disabled = false;
+                btnText.innerText = "ยืนยันและรับใบ Bingo";
+                btnIcon.setAttribute('data-lucide', 'arrow-right');
+                btnIcon.classList.remove('animate-spin');
+                lucide.createIcons();
+            }
+        };
+
+        window.handleLogout = async () => {
+            if (!confirm("คุณต้องการออกจากระบบและล้างข้อมูลการลงทะเบียนเพื่อเริ่มใหม่ใช่หรือไม่?")) return;
+            try {
+                document.getElementById('globalLoader').classList.remove('hidden');
+                if (currentUser) {
+                    const memberDocRef = doc(db, COLLECTION_MEMBER, currentUser.uid);
+                    await deleteDoc(memberDocRef);
+                    await syncJoinCountToRound();
+                }
+                await signOut(auth);
+                location.reload();
+            } catch (e) { location.reload(); }
+        };
+
+        async function syncNumbersToDB() {
+            if (!currentUser || !isRegistered) return;
+            try {
+                const memberDocRef = doc(db, COLLECTION_MEMBER, currentUser.uid);
+                await updateDoc(memberDocRef, {
+                    Bingo_Random: bingoNumbers,
+                    Bingo_Marked: [], 
+                    updatedAt: serverTimestamp()
+                });
+                markedIndices = [];
+                winIndices = [];
+            } catch (e) {}
+        }
+
+        window.generateRandomCard = async () => {
+            if (!isRegistered || (currentRound && String(currentRound.Bingo_Start) === "true")) return;
+            bingoNumbers = getNewRandomNumbers();
+            renderBingoGrid(isEditing);
+            await syncNumbersToDB();
+        };
+
+        window.toggleCustomMode = async () => {
+            if (!isRegistered || (currentRound && String(currentRound.Bingo_Start) === "true")) return;
+            const btnText = document.getElementById('customBtnText');
+            const icon = document.getElementById('customIcon');
+            const badge = document.getElementById('editBadge');
+            
+            if (!isEditing) {
+                isEditing = true;
+                bingoNumbers = Array(25).fill(0);
+                btnText.innerText = "กำหนดเอง";
+                icon.setAttribute('data-lucide', 'check-circle');
+                badge.classList.remove('hidden');
+            } else {
+                if (bingoNumbers.some(n => n === 0 || n === "")) return alert("กรุณากรอกตัวเลขให้ครบทุกช่อง");
+                if (new Set(bingoNumbers).size !== 25) return alert("พบตัวเลขซ้ำกันในตาราง");
+                isEditing = false;
+                btnText.innerText = "ออกแบบเอง";
+                icon.setAttribute('data-lucide', 'edit-3');
+                badge.classList.add('hidden');
+                await syncNumbersToDB();
+            }
+            renderBingoGrid(isEditing);
+            lucide.createIcons();
+        };
+
+        function renderBingoGrid(editable) {
+            const grid = document.getElementById('bingoGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            
+            bingoNumbers.forEach((num, index) => {
+                const cell = document.createElement('div');
+                const isDrawn = drawnNumbers.includes(Number(num));
+                const isMarked = markedIndices.includes(index);
+                const isWinCell = winIndices.includes(index);
+                
+                let cellClasses = `bingo-cell shadow-sm ${editable ? 'bg-slate-50 border-slate-300' : 'bg-white text-blue-600'}`;
+                
+                if (isDrawn && !editable) {
+                    cellClasses += " cell-drawn-match";
+                }
+                
+                if (isMarked && !editable) {
+                    cellClasses += " cell-marked";
+                }
+
+                if (isWinCell && !editable) {
+                    cellClasses += " cell-winner";
+                }
+
+                cell.className = cellClasses;
+                
+                if (editable) {
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.value = num === 0 ? '' : num;
+                    input.className = "w-full h-full bg-transparent text-center font-bold focus:outline-none focus:bg-blue-50 rounded-xl";
+                    input.placeholder = "?";
+                    input.onblur = (e) => {
+                        const val = parseInt(e.target.value);
+                        if (isNaN(val)) return bingoNumbers[index] = 0;
+                        
+                        // ตรวจสอบช่วงตัวเลข 1-99
+                        if (val < 1 || val > 99) {
+                            alert("กรุณากรอกตัวเลขระหว่าง 1 ถึง 99");
+                            e.target.value = '';
+                            bingoNumbers[index] = 0;
+                            return;
+                        }
+
+                        if (bingoNumbers.some((n, i) => i !== index && n === val)) {
+                            alert(`ตัวเลข ${val} ซ้ำในตาราง`);
+                            e.target.value = '';
+                            bingoNumbers[index] = 0;
+                        } else {
+                            bingoNumbers[index] = val;
+                        }
+                    };
+                    cell.appendChild(input);
+                } else {
+                    cell.innerText = num || "?";
+                    cell.onclick = () => markNumber(index);
+                }
+                grid.appendChild(cell);
+            });
+        }
+    </script>
+</body>
+</html>
