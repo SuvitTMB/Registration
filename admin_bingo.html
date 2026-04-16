@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PK System Admin - Advanced Management</title>
+    <!-- Fonts: Kanit -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Canvas Confetti for Fireworks -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body { font-family: 'Kanit', sans-serif; background-color: #fafaf9; color: #44403c; }
+        
+        @font-face {
+            font-family: 'Kanit';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+        }
+
+        :root {
+            --primary-color: #0056ff;
+            --neutral-mute: #aebad2;
+        }
+
+        .tab-active {
+            background-color: var(--primary-color);
+            color: white !important;
+            box-shadow: 0 4px 12px -2px rgba(0, 86, 255, 0.4);
+        }
+
+        .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+        .modal-bg {
+            background: rgba(28, 25, 23, 0.7);
+            backdrop-filter: blur(4px);
+        }
+
+        .rounded-table-container { border-radius: 15px; overflow: hidden; border: 1px solid #e2e8f0; }
+        
+        th { 
+            font-size: 12px !important; 
+            font-weight: 700; 
+            color: #475569; 
+            text-transform: uppercase; 
+            letter-spacing: 0.05em; 
+            background-color: #e2e8f0; 
+            padding: 0.75rem 1rem !important;
+        } 
+        
+        /* ตารางรอบกิจกรรมสูง 30px */
+        #table-rounds-main td { 
+            height: 30px; 
+            padding-top: 0 !important; 
+            padding-bottom: 0 !important; 
+            font-size: 0.85rem; 
+            color: #334155; 
+        }
+
+        /* ตารางอื่นๆ */
+        .content-section:not(#section-rounds) td { font-size: 0.9rem; color: #334155; padding: 0.75rem 1rem !important; }
+
+        select, input[type="text"], input[type="number"] {
+            background-color: #f0f9ff !important;
+            color: #1e293b !important;
+            border: 1px solid rgba(7, 89, 133, 0.3) !important;
+            border-radius: 0.5rem !important;
+        }
+
+        .bingo-number-big {
+            font-size: 8rem;
+            line-height: 1;
+            font-weight: 800;
+            color: var(--primary-color);
+            text-shadow: 0 10px 25px rgba(0, 86, 255, 0.2);
+        }
+        
+        .qr-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 2rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            max-width: 500px; /* เพิ่มความกว้าง container เพื่อรองรับ QR 90% */
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        .status-card {
+            background: white;
+            padding: 1.25rem;
+            border-radius: 1.5rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 0.5rem;
+        }
+
+        /* Winner Modal specific styles */
+        .winner-gradient {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- ส่วนหัวและการนำทาง -->
+    <header class="bg-stone-100 border-b border-stone-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-[#0056ff] rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg">A</div>
+                    <div>
+                        <h1 class="font-bold text-stone-800 leading-tight text-lg">Admin Manager</h1>
+                        <p id="connection-status" class="text-[12px] text-slate-400 uppercase tracking-widest font-bold italic">Checking Connection...</p>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-1" id="main-nav">
+                    <button onclick="navigate('qrcode')" id="nav-qrcode" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all">QR Code</button>
+                    <button onclick="navigate('rounds')" id="nav-rounds" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all">รอบกิจกรรม</button>
+                    <button onclick="navigate('registration')" id="nav-registration" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all">สมาชิกลงทะเบียน</button>
+                    <button onclick="navigate('tracking')" id="nav-tracking" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all">ระบบ Bingo</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        
+        <!-- SECTION: QR Code -->
+        <section id="section-qrcode" class="content-section fade-in space-y-6 hidden">
+            <div class="text-center space-y-2">
+                <h2 class="text-2xl font-bold text-stone-800">QR Code สำหรับเข้าสู่เกม</h2>
+                <p class="text-stone-500">ให้ผู้เล่นสแกน QR Code นี้เพื่อเข้าร่วมสนุกกับ Bingo รอบปัจจุบัน</p>
+            </div>
+            <div class="qr-container space-y-6 border border-stone-100">
+                <!-- ปรับ QR Code กว้าง 90% และใช้ลิงก์ที่กำหนด -->
+                <div class="w-[90%] aspect-square bg-stone-100 mx-auto rounded-xl flex items-center justify-center border-4 border-white shadow-inner overflow-hidden">
+                    <img id="qr-display" src="https://firebasestorage.googleapis.com/v0/b/faifah-ttb.appspot.com/o/game%2FQR-Bingo.png?alt=media&token=36073711-6755-4788-8341-e5a3d1e7abd9" alt="QR Code" class="w-full h-full object-contain">
+                </div>
+                <div class="space-y-1">
+                    <p class="font-bold text-stone-700">สแกนเพื่อเล่น</p>
+                    <p class="text-xs text-stone-400">Scan to Join the Game</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: ROUNDS (รอบกิจกรรม) -->
+        <section id="section-rounds" class="content-section fade-in space-y-6 hidden">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-stone-800">รอบกิจกรรม</h2>
+                    <p class="text-stone-500 text-sm">จัดการรอบการเล่นเกมและกำหนดสถานะการใช้งาน (Bingo_Round)</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="window.openResetModal()" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-xl text-sm font-bold shadow-lg transition-all flex items-center gap-2">
+                        <i data-lucide="refresh-ccw" class="w-4 h-4"></i> Reset Data
+                    </button>
+                    <button onclick="window.openRoundModal()" class="bg-[#0056ff] hover:bg-blue-700 text-white px-6 py-2 rounded-xl text-sm font-bold shadow-lg transition-all flex items-center gap-2">
+                        <i data-lucide="plus" class="w-4 h-4"></i> เพิ่มรอบใหม่
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-table-container shadow-sm overflow-hidden border border-stone-200">
+                <table class="w-full text-left" id="table-rounds-main">
+                    <thead>
+                        <tr class="bg-stone-100">
+                            <th class="px-4 py-3">รอบ</th>
+                            <th class="px-4 py-3 text-center">สถานะ</th>
+                            <th class="px-4 py-3 text-center">ผู้แข่งขัน</th>
+                            <th class="px-4 py-3 text-center">เลขที่สุ่ม</th>
+                            <th class="px-4 py-3 text-center w-32">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-rounds-body" class="divide-y divide-stone-100">
+                        <tr><td colspan="5" class="p-12 text-center text-stone-400 italic">กำลังโหลดข้อมูล...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="rounds-pagination" class="flex flex-col md:flex-row items-center justify-between bg-white px-4 py-3 border border-stone-200 rounded-15 shadow-sm gap-4">
+                <div class="text-[12px] text-stone-500 font-medium" id="rounds-page-info">แสดงรายการที่ 0-0 จาก 0 รายการ</div>
+                <div class="flex items-center gap-2">
+                    <button onclick="window.changeRoundsPage(-1)" id="rounds-prev-btn" class="p-2 border rounded-lg hover:bg-stone-100 disabled:opacity-30 disabled:cursor-not-allowed"><i data-lucide="chevron-left" class="w-4 h-4 text-stone-600"></i></button>
+                    <div id="rounds-pages-container" class="flex gap-1"></div>
+                    <button onclick="window.changeRoundsPage(1)" id="rounds-next-btn" class="p-2 border rounded-lg hover:bg-stone-100 disabled:opacity-30 disabled:cursor-not-allowed"><i data-lucide="chevron-right" class="w-4 h-4 text-stone-600"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: สมาชิกลงทะเบียน -->
+        <section id="section-registration" class="content-section fade-in space-y-6 hidden">
+            <div class="flex flex-col md:flex-row justify-between items-end gap-4">
+                <div class="space-y-4 flex-1">
+                    <h2 class="text-xl font-bold text-stone-800">สมาชิกลงทะเบียน</h2>
+                    <div class="bg-white px-6 py-4 rounded-2xl border border-stone-200 shadow-sm flex justify-between items-center max-w-sm">
+                        <h3 class="font-bold text-stone-700">จำนวนสมาชิกที่เข้าร่วมกิจกรรม</h3>
+                        <span id="reg-total-count" class="bg-blue-50 text-[#0056ff] px-4 py-1 rounded-full font-black text-xl">0</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 pb-2">
+                    <label class="text-xs font-bold text-stone-400 uppercase tracking-wider">แสดงข้อมูล:</label>
+                    <select onchange="window.handleRegPerPageChange(this.value)" class="text-xs font-bold py-1 px-3 border border-stone-200 rounded-lg outline-none">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30" selected>30</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-table-container shadow-sm border border-stone-200 overflow-hidden">
+                <table class="w-full text-left" id="table-registration-main">
+                    <thead class="bg-stone-50">
+                        <tr>
+                            <th class="px-4 py-3 text-center w-16">ลำดับ</th>
+                            <th class="px-4 py-3">ชื่อสมาชิก</th>
+                            <th class="px-4 py-3 text-center">รางวัล</th>
+                            <th class="px-4 py-3">เลขในบัตร Bingo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-registration-body" class="divide-y divide-stone-100 text-[13px]">
+                        <tr><td colspan="4" class="p-12 text-center text-stone-400 italic">กรุณารอสักครู่...</td></tr>
+                    </tbody>
+                </table>
+                <div class="p-4 bg-stone-50 border-t flex justify-between items-center">
+                    <span id="reg-page-info" class="text-[12px] text-stone-500 font-bold">หน้า 0 / 0</span>
+                    <div class="flex gap-2">
+                        <button onclick="changeRegPage(-1)" class="p-2 border rounded-lg bg-white hover:bg-stone-100"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                        <button onclick="changeRegPage(1)" class="p-2 border rounded-lg bg-white hover:bg-stone-100"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: ระบบ Bingo -->
+        <section id="section-tracking" class="content-section fade-in space-y-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="status-card">
+                    <span class="text-[10px] font-bold text-stone-400 uppercase tracking-widest">รอบที่กำลังเปิด</span>
+                    <p id="bingo-system-round-name" class="text-xl font-black text-stone-800">-</p>
+                </div>
+                <div class="status-card">
+                    <span class="text-[10px] font-bold text-stone-400 uppercase tracking-widest">สถานะเปิดรอบ</span>
+                    <div id="bingo-system-status-btn-container"></div>
+                </div>
+                <div class="status-card">
+                    <span class="text-[10px] font-bold text-stone-400 uppercase tracking-widest">เริ่มเกม Bingo</span>
+                    <div id="bingo-system-start-container"></div>
+                </div>
+                <div class="status-card">
+                    <span class="text-[10px] font-bold text-stone-400 uppercase tracking-widest">จำนวนสมาชิก</span>
+                    <p id="bingo-system-member-count" class="text-2xl font-black text-blue-600">0</p>
+                </div>
+            </div>
+
+            <div id="randomizer-container" class="w-full hidden">
+                <div class="bg-white p-8 rounded-3xl border border-stone-200 shadow-sm text-center space-y-6">
+                    <h2 class="text-xl font-bold text-stone-800">ระบบสุ่ม Bingo</h2>
+                    <div class="flex flex-col items-center justify-center py-8">
+                        <div id="last-drawn-number" class="bingo-number-big">-</div>
+                        <p class="text-stone-400 font-bold uppercase tracking-widest mt-2">เลขที่สุ่มได้ล่าสุด</p>
+                    </div>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <div class="flex items-center gap-2 bg-stone-100 px-4 py-2 rounded-xl">
+                            <span class="text-xs font-bold text-stone-500 uppercase">หน่วงเวลา (วินาที):</span>
+                            <input type="number" id="auto-interval-input" value="10" min="1" class="w-16 px-2 py-1 text-center font-bold">
+                        </div>
+                        <button id="btn-auto-draw" onclick="toggleAutoDraw()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-2xl font-bold shadow-lg transition-all flex items-center gap-2">
+                            <i data-lucide="play" class="w-5 h-5"></i> อัตโนมัติ
+                        </button>
+                        <button onclick="drawNextNumber()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-2xl font-bold shadow-lg transition-all flex items-center gap-2">
+                            <i data-lucide="fast-forward" class="w-5 h-5"></i> ตัวเลขต่อไป
+                        </button>
+                    </div>
+                    <div class="pt-6 border-t border-stone-100 text-left">
+                        <h4 class="text-xs font-bold text-stone-400 uppercase mb-3">ประวัติการสุ่ม (เรียงจากล่าสุด):</h4>
+                        <div id="drawn-history" class="flex flex-wrap gap-2"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pool-frequency-container" class="w-full hidden">
+                <div class="bg-white p-6 rounded-3xl border border-stone-200 shadow-sm space-y-4">
+                    <div class="flex items-center gap-2 text-stone-800 border-b border-stone-100 pb-3">
+                        <i data-lucide="bar-chart-2" class="w-5 h-5 text-blue-500"></i>
+                        <h2 class="text-lg font-bold">รายการตัวเลขที่จะสุ่มและจำนวนบัตรที่มี (เรียงจากน้อยไปมาก)</h2>
+                    </div>
+                    <div id="pool-frequency-list" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-3"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal ยืนยันเริ่มเกม Bingo -->
+    <div id="modal-start-game-confirm" class="fixed inset-0 z-[150] hidden flex items-center justify-center p-4">
+        <div class="modal-bg absolute inset-0" onclick="window.closeStartGameConfirmModal()"></div>
+        <div class="modal-content-area w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden relative fade-in p-6 text-center space-y-4 border-2 border-emerald-100">
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 mx-auto rounded-full flex items-center justify-center">
+                <i data-lucide="play-circle" class="w-8 h-8"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-xl font-bold text-stone-800">ยืนยันการเริ่มเกม Bingo?</h3>
+                <p class="text-sm text-stone-500 leading-relaxed">เมื่อกดแล้วสมาชิกที่ยังไม่ได้บัตร Bingo จะไม่สามารถเข้าร่วมกิจกรรมรอบนี้ได้</p>
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="window.closeStartGameConfirmModal()" class="flex-1 py-2 rounded-xl text-stone-500 font-bold hover:bg-stone-100 transition-all border border-stone-200">ยกเลิก</button>
+                <button onclick="window.confirmStartGame()" id="btn-confirm-start-game" class="flex-1 py-2 bg-emerald-500 text-white font-bold rounded-xl shadow-lg hover:bg-emerald-600 transition-all">ยืนยันเริ่มเกม</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal ผู้ชนะ Bingo -->
+    <div id="modal-winner" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-4">
+        <div class="modal-bg absolute inset-0"></div>
+        <div class="modal-content-area w-full max-w-md bg-white rounded-[2.5rem] shadow-2xl overflow-hidden relative fade-in text-center p-8 space-y-6">
+            <div class="w-24 h-24 winner-gradient mx-auto rounded-full flex items-center justify-center text-white shadow-lg animate-bounce">
+                <i data-lucide="party-popper" class="w-12 h-12"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-3xl font-black text-stone-800 uppercase italic">Bingo!</h3>
+                <p class="text-xl font-bold text-stone-500">ขอแสดงความยินดีกับ</p>
+                <div class="bg-blue-50 p-4 rounded-2xl border-2 border-blue-100">
+                    <p id="winner-name-display" class="text-2xl font-black text-[#0056ff]">-</p>
+                </div>
+            </div>
+            <p class="text-stone-400 text-sm font-medium">คุณคือผู้ชนะในรอบกิจกรรมนี้</p>
+            <button onclick="window.closeWinnerModal()" class="w-full py-4 bg-stone-800 text-white font-bold rounded-2xl shadow-xl hover:bg-stone-900 transition-all">ปิดหน้าต่าง</button>
+        </div>
+    </div>
+
+    <!-- Modal Reset Data -->
+    <div id="modal-reset" class="fixed inset-0 z-[150] hidden flex items-center justify-center p-4">
+        <div class="modal-bg absolute inset-0" onclick="window.closeResetModal()"></div>
+        <div class="modal-content-area w-full max-w-sm bg-white rounded-3xl shadow-2xl overflow-hidden relative fade-in p-6 text-center space-y-4">
+            <div class="w-16 h-16 bg-red-100 text-red-600 mx-auto rounded-full flex items-center justify-center">
+                <i data-lucide="alert-triangle" class="w-8 h-8"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-xl font-bold text-stone-800">ยืนยันการ Reset ข้อมูล?</h3>
+                <p class="text-sm text-stone-500 leading-relaxed">ระบบจะทำการลบข้อมูลรอบกิจกรรมและผู้แข่งขันทั้งหมด เพื่อเริ่มต้นใหม่ ไม่สามารถกู้คืนได้</p>
+            </div>
+            <div class="space-y-2">
+                <p class="text-xs font-bold text-stone-400 uppercase tracking-widest">พิมพ์ "Delete" เพื่อยืนยัน</p>
+                <input type="text" id="reset-confirm-input" placeholder="พิมพ์ที่นี่..." class="w-full px-4 py-2 border rounded-xl text-center font-bold outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+            <div class="flex gap-3 pt-2">
+                <button onclick="window.closeResetModal()" class="flex-1 py-2 rounded-xl text-stone-500 font-bold hover:bg-stone-100 transition-all border border-stone-200">ยกเลิก</button>
+                <button onclick="window.performReset()" id="btn-confirm-reset" class="flex-1 py-2 bg-red-500 text-white font-bold rounded-xl shadow-lg hover:bg-red-600 transition-all">ยืนยันการลบ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal เพิ่ม/แก้ไขรอบ -->
+    <div id="modal-round" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="modal-bg absolute inset-0" onclick="window.closeRoundModal()"></div>
+        <div class="modal-content-area w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden relative fade-in">
+            <div class="p-6 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 id="modal-round-title" class="text-xl font-bold text-stone-800">จัดการรอบกิจกรรม</h3>
+                    <button onclick="window.closeRoundModal()" class="text-stone-400 hover:text-stone-600"><i data-lucide="x" class="w-6 h-6"></i></button>
+                </div>
+                <input type="hidden" id="round-id-input">
+                <div class="space-y-4">
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-stone-500 uppercase">ชื่อรอบ (Bingo_Round)</label>
+                        <input type="text" id="round-name-input" placeholder="เช่น รอบเช้า..." class="w-full px-4 py-2 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-stone-500 uppercase">สถานะ (Bingo_Status)</label>
+                        <select id="round-status-input" class="w-full px-4 py-2 border rounded-xl outline-none">
+                            <option value="true">เปิดใช้งาน (Active)</option>
+                            <option value="false" selected>ปิดใช้งาน (Inactive)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex gap-3 pt-2">
+                    <button onclick="window.closeRoundModal()" class="flex-1 py-2 rounded-xl text-stone-500 font-bold hover:bg-stone-100 transition-all border border-stone-200">ยกเลิก</button>
+                    <button onclick="window.saveRound()" id="btn-save-round" class="flex-1 py-2 bg-[#0056ff] text-white font-bold rounded-xl shadow-lg hover:bg-blue-700 transition-all">บันทึกข้อมูล</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase & Logic Scripts -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, serverTimestamp, query, getDocs, writeBatch, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const manualFirebaseConfig = {
+            apiKey: "AIzaSyAciknEYhZU7AwOdfYytC1t_AnW2Ee11us",
+            authDomain: "faifah-ttb.firebaseapp.com",
+            projectId: "faifah-ttb",
+            storageBucket: "faifah-ttb.appspot.com",
+            messagingSenderId: "842980876200",
+            appId: "1:842980876200:web:f33bfad2ccbf263075079d"
+        };
+
+        const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : manualFirebaseConfig;
+        const app = initializeApp(config);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const getPath = (colName) => {
+            const sandboxId = typeof __app_id !== 'undefined' ? __app_id : null;
+            if (sandboxId) return `artifacts/${sandboxId}/public/data/${colName}`;
+            return colName;
+        };
+
+        window.appState = {
+            members: [],
+            rounds: [], 
+            user: null,
+            syncStarted: false,
+            roundsCurrentPage: 1,
+            roundsPerPage: 30,
+            regCurrentPage: 1,
+            regPerPage: 30,
+            autoDrawTimer: null,
+            isAutoDrawing: false,
+            lastWinnerAlerted: null,
+            wasDrawingBeforeWinner: false,
+            pendingRoundId: null
+        };
+
+        window.navigate = (sectionId) => {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
+            const target = document.getElementById(`section-${sectionId}`);
+            if (target) target.classList.remove('hidden');
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('tab-active');
+                b.classList.add('text-slate-500', 'hover:bg-stone-200');
+            });
+            const navBtn = document.getElementById(`nav-${sectionId}`);
+            if (navBtn) navBtn.classList.add('tab-active');
+            if (sectionId === 'registration') window.updateRegistrationUI();
+            if (sectionId === 'tracking') window.updateBingoSystemUI();
+            if (sectionId === 'rounds') window.updateRoundsUI();
+            lucide.createIcons();
+        };
+
+        const startSync = () => {
+            if (!window.appState.user || window.appState.syncStarted) return;
+            window.appState.syncStarted = true;
+            ['Bingo_Member', 'Bingo_Round'].forEach(colName => {
+                onSnapshot(collection(db, getPath(colName)), (snap) => {
+                    const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+                    if (colName === 'Bingo_Round') {
+                        window.appState.rounds = docs;
+                        window.updateRoundsUI();
+                        window.updateBingoSystemUI();
+                    } else if (colName === 'Bingo_Member') {
+                        window.appState.members = docs; 
+                        window.updateBingoSystemUI();
+                        window.updateRegistrationUI();
+                        window.checkBingoWinner();
+                    }
+                }, (err) => console.error("Sync Error:", colName, err));
+            });
+        };
+
+        window.checkBingoWinner = () => {
+            const activeRound = window.appState.rounds.find(r => r.Bingo_Status === true);
+            if (!activeRound) return;
+            const winner = window.appState.members.find(m => m.Bingo_id === activeRound.id && m.Bingo_Game === true);
+            if (winner && window.appState.lastWinnerAlerted !== winner.id) {
+                window.appState.lastWinnerAlerted = winner.id;
+                if (window.appState.isAutoDrawing) {
+                    window.appState.wasDrawingBeforeWinner = true;
+                    window.stopAutoDraw();
+                }
+                window.showWinnerModal(winner.Bingo_User || winner.name || "ผู้เข้าแข่งขัน");
+            }
+        };
+
+        window.showWinnerModal = (name) => {
+            document.getElementById('winner-name-display').innerText = name;
+            document.getElementById('modal-winner').classList.remove('hidden');
+            const duration = 5 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 300 };
+            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+            const interval = setInterval(function() {
+              const timeLeft = animationEnd - Date.now();
+              if (timeLeft <= 0) return clearInterval(interval);
+              const particleCount = 50 * (timeLeft / duration);
+              confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+              confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+            }, 250);
+        };
+
+        window.closeWinnerModal = () => {
+            document.getElementById('modal-winner').classList.add('hidden');
+            if (window.appState.wasDrawingBeforeWinner) {
+                window.appState.wasDrawingBeforeWinner = false;
+                window.startAutoDraw();
+            }
+        };
+
+        window.updateBingoSystemUI = () => {
+            const activeRound = window.appState.rounds.find(r => r.Bingo_Status === true);
+            const roundNameEl = document.getElementById('bingo-system-round-name');
+            const statusBtnContainer = document.getElementById('bingo-system-status-btn-container');
+            const startBtnContainer = document.getElementById('bingo-system-start-container');
+            const memberCountEl = document.getElementById('bingo-system-member-count');
+            const randomizer = document.getElementById('randomizer-container');
+            const poolFreqContainer = document.getElementById('pool-frequency-container');
+            if (!activeRound) {
+                roundNameEl.innerText = "ไม่มีรอบที่เปิดใช้งาน";
+                statusBtnContainer.innerHTML = `<button class="bg-red-500 text-white px-4 py-1.5 rounded-xl text-xs font-bold shadow-lg">ปิดรอบกิจกรรม</button>`;
+                startBtnContainer.innerHTML = `<span class="text-stone-300 font-bold">-</span>`;
+                memberCountEl.innerText = "0";
+                randomizer.classList.add('hidden');
+                poolFreqContainer.classList.add('hidden');
+                return;
+            }
+            roundNameEl.innerText = activeRound.Bingo_Round || "-";
+            statusBtnContainer.innerHTML = `<button onclick="window.toggleRoundStatus('${activeRound.id}', true)" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm">เปิดรอบกิจกรรม</button>`;
+            if (activeRound.Bingo_Start === true) {
+                startBtnContainer.innerHTML = `<span class="bg-emerald-50 text-emerald-600 border border-emerald-200 px-4 py-1.5 rounded-xl text-xs font-black">อยู่ระหว่างการแข่งขัน</span>`;
+                randomizer.classList.remove('hidden');
+                poolFreqContainer.classList.remove('hidden');
+                const drawn = activeRound.Bingo_Drawn || [];
+                document.getElementById('last-drawn-number').innerText = drawn.length > 0 ? drawn[drawn.length-1] : "-";
+                const historyEl = document.getElementById('drawn-history');
+                historyEl.innerHTML = [...drawn].reverse().map(num => `<span class="bg-blue-100 text-[#0056ff] w-10 h-10 flex items-center justify-center rounded-lg font-bold text-sm shadow-sm border border-blue-200">${num}</span>`).join('');
+                const poolFreqList = document.getElementById('pool-frequency-list');
+                const freqMap = activeRound.Bingo_Random || {};
+                const sortedNums = Object.keys(freqMap).map(Number).sort((a,b) => a - b);
+                if (sortedNums.length > 0) {
+                    poolFreqList.innerHTML = sortedNums.map(num => {
+                        const isDrawn = drawn.includes(num);
+                        const bgClass = isDrawn ? 'bg-orange-500 border-orange-600 text-white shadow-orange-100 shadow-md' : 'bg-stone-50 border-stone-200 text-stone-700';
+                        const countTextClass = isDrawn ? 'text-orange-100' : 'text-blue-500';
+                        return `<div class="flex flex-col items-center justify-center border rounded-xl p-2 shadow-sm transition-all ${bgClass}"><span class="text-lg font-black">${num}</span><span class="text-[9px] font-bold ${countTextClass}">${freqMap[num]} บัตร</span></div>`;
+                    }).join('');
+                } else { poolFreqList.innerHTML = `<p class="col-span-full text-stone-400 italic text-sm text-center">รอกดเริ่มเกมเพื่อประมวลผลตัวเลข</p>`; }
+            } else {
+                startBtnContainer.innerHTML = `<button onclick="window.openStartGameConfirmModal('${activeRound.id}')" class="bg-red-500 hover:bg-red-600 text-white px-6 py-1.5 rounded-xl text-xs font-bold shadow-sm transition-all">รอผู้แข่งขัน</button>`;
+                randomizer.classList.add('hidden');
+                poolFreqContainer.classList.add('hidden');
+                stopAutoDraw();
+            }
+            const participants = window.appState.members.filter(m => m.Bingo_id === activeRound.id);
+            memberCountEl.innerText = participants.length;
+            lucide.createIcons();
+        };
+
+        window.toggleRoundStatus = async (id, currentStatus) => {
+            if (!confirm("คุณต้องการเปลี่ยนสถานะรอบนี้ใช่หรือไม่?")) return;
+            try { const ref = doc(db, getPath('Bingo_Round'), id); await updateDoc(ref, { Bingo_Status: !currentStatus, updatedAt: serverTimestamp() }); } catch (e) { console.error(e); }
+        };
+
+        window.openStartGameConfirmModal = (roundId) => { window.appState.pendingRoundId = roundId; document.getElementById('modal-start-game-confirm').classList.remove('hidden'); };
+        window.closeStartGameConfirmModal = () => { window.appState.pendingRoundId = null; document.getElementById('modal-start-game-confirm').classList.add('hidden'); };
+        window.confirmStartGame = async () => {
+            if (!window.appState.pendingRoundId) return;
+            const btn = document.getElementById('btn-confirm-start-game');
+            btn.disabled = true;
+            btn.innerText = "กำลังเริ่มเกม...";
+            await window.startGameSession(window.appState.pendingRoundId);
+            btn.disabled = false;
+            btn.innerText = "ยืนยันเริ่มเกม";
+            window.closeStartGameConfirmModal();
+        };
+
+        window.openResetModal = () => { document.getElementById('reset-confirm-input').value = ""; document.getElementById('modal-reset').classList.remove('hidden'); };
+        window.closeResetModal = () => { document.getElementById('modal-reset').classList.add('hidden'); };
+        window.performReset = async () => {
+            const input = document.getElementById('reset-confirm-input').value.trim();
+            if (input !== "Delete") { alert("กรุณาพิมพ์ 'Delete' เพื่อยืนยัน"); return; }
+            const btn = document.getElementById('btn-confirm-reset');
+            btn.disabled = true;
+            btn.innerText = "กำลังลบข้อมูล...";
+            try {
+                const roundSnap = await getDocs(collection(db, getPath('Bingo_Round')));
+                const roundBatch = writeBatch(db);
+                roundSnap.forEach(d => roundBatch.delete(doc(db, getPath('Bingo_Round'), d.id)));
+                await roundBatch.commit();
+                const memberSnap = await getDocs(collection(db, getPath('Bingo_Member')));
+                const memberBatch = writeBatch(db);
+                memberSnap.forEach(d => memberBatch.delete(doc(db, getPath('Bingo_Member'), d.id)));
+                await memberBatch.commit();
+                alert("ลบข้อมูลสำเร็จ");
+                window.closeResetModal();
+            } catch (e) { console.error("Reset Error:", e); alert("เกิดข้อผิดพลาดในการลบข้อมูล"); } finally { btn.disabled = false; btn.innerText = "ยืนยันการลบ"; }
+        };
+
+        window.updateRegistrationUI = () => {
+            const activeRound = window.appState.rounds.find(r => r.Bingo_Status === true);
+            const tbody = document.getElementById('table-registration-body');
+            const totalCountEl = document.getElementById('reg-total-count');
+            if (!activeRound) { tbody.innerHTML = '<tr><td colspan="4" class="p-12 text-center text-stone-400 italic">กรุณาเปิดใช้งานรอบกิจกรรมเพื่อดูข้อมูลลงทะเบียน</td></tr>'; totalCountEl.innerText = "0"; return; }
+            const members = window.appState.members.filter(m => m.Bingo_id === activeRound.id);
+            totalCountEl.innerText = members.length;
+            if (members.length === 0) { tbody.innerHTML = '<tr><td colspan="4" class="p-12 text-center text-stone-400 italic">ยังไม่มีผู้ลงทะเบียนในรอบนี้</td></tr>'; document.getElementById('reg-page-info').innerText = "หน้า 0 / 0"; return; }
+            const pages = Math.ceil(members.length / window.appState.regPerPage);
+            if (window.appState.regCurrentPage > pages) window.appState.regCurrentPage = pages;
+            const start = (window.appState.regCurrentPage - 1) * window.appState.regPerPage;
+            const paged = members.slice(start, start + window.appState.regPerPage);
+            tbody.innerHTML = paged.map((m, i) => `<tr class="hover:bg-stone-50 transition-colors"><td class="px-4 py-3 text-center text-stone-400 font-medium">${start + i + 1}</td><td class="px-4 py-3 font-bold text-stone-700">${m.Bingo_User || m.name || 'ไม่ระบุชื่อ'}</td><td class="px-4 py-3 text-center"><span class="px-3 py-1 rounded-full text-[10px] font-bold ${m.Bingo_Game === true ? 'bg-amber-100 text-amber-700' : 'text-stone-300'}">${m.Bingo_Game === true ? 'Bingo' : '-'}</span></td><td class="px-4 py-3 font-medium text-blue-600">${Array.isArray(m.Bingo_Random) ? m.Bingo_Random.join(', ') : (m.Bingo_Random || '-')}</td></tr>`).join('');
+            document.getElementById('reg-page-info').innerText = `หน้า ${window.appState.regCurrentPage} / ${pages}`;
+            lucide.createIcons();
+        };
+
+        window.handleRegPerPageChange = (val) => { window.appState.regPerPage = parseInt(val); window.appState.regCurrentPage = 1; window.updateRegistrationUI(); };
+        window.changeRegPage = (dir) => {
+            const activeRound = window.appState.rounds.find(r => r.Bingo_Status === true);
+            if (!activeRound) return;
+            const members = window.appState.members.filter(m => m.Bingo_id === activeRound.id);
+            const totalPages = Math.ceil(members.length / window.appState.regPerPage);
+            const next = window.appState.regCurrentPage + dir;
+            if (next >= 1 && next <= totalPages) { window.appState.regCurrentPage = next; updateRegistrationUI(); }
+        };
+
+        window.startGameSession = async (roundId) => {
+            const round = window.appState.rounds.find(r => r.id === roundId);
+            if (!round) return;
+            const participants = window.appState.members.filter(m => m.Bingo_id === round.id);
+            if (participants.length === 0) { alert("ยังไม่มีสมาชิกเข้าร่วมในรอบนี้ ไม่สามารถเริ่มเกมได้"); return; }
+            let frequencyMap = {};
+            participants.forEach(p => {
+                let cardNumbers = [];
+                const source = p.Bingo_Random; 
+                if (Array.isArray(source)) cardNumbers = source;
+                else if (typeof source === 'string') cardNumbers = source.split(',').map(n => n.trim()).filter(n => n !== "");
+                cardNumbers.forEach(num => { const n = Number(num); if (!isNaN(n)) frequencyMap[n] = (frequencyMap[n] || 0) + 1; });
+            });
+            if (Object.keys(frequencyMap).length === 0) { alert("ไม่พบข้อมูลตัวเลขในบัตรสมาชิกเพื่อประมวลผล"); return; }
+            try { const ref = doc(db, getPath('Bingo_Round'), roundId); await updateDoc(ref, { Bingo_Random: frequencyMap, Bingo_Drawn: [], Bingo_Start: true, updatedAt: serverTimestamp() }); } catch (e) { console.error("Start Game Error:", e); }
+        };
+
+        window.drawNextNumber = async () => {
+            const activeRound = window.appState.rounds.find(r => r.Bingo_Status === true);
+            if (!activeRound || !activeRound.Bingo_Random) return;
+            const pool = Object.keys(activeRound.Bingo_Random).map(Number);
+            const drawn = activeRound.Bingo_Drawn || [];
+            const available = pool.filter(n => !drawn.includes(n));
+            if (available.length === 0) { alert("สุ่มครบทุกตัวเลขที่มีในระบบแล้ว!"); window.stopAutoDraw(); return; }
+            const nextNum = available[Math.floor(Math.random() * available.length)];
+            try { const ref = doc(db, getPath('Bingo_Round'), activeRound.id); await updateDoc(ref, { Bingo_Drawn: [...drawn, nextNum], updatedAt: serverTimestamp() }); } catch (e) { console.error("Draw Error:", e); window.stopAutoDraw(); }
+        };
+
+        window.toggleAutoDraw = () => { if (window.appState.isAutoDrawing) window.stopAutoDraw(); else window.startAutoDraw(); };
+        window.startAutoDraw = () => {
+            const intervalSec = parseInt(document.getElementById('auto-interval-input').value) || 10;
+            window.appState.isAutoDrawing = true;
+            const btn = document.getElementById('btn-auto-draw');
+            btn.innerHTML = `<i data-lucide="square" class="w-5 h-5"></i> หยุดอัตโนมัติ`;
+            btn.className = "bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-2xl font-bold shadow-lg transition-all flex items-center gap-2";
+            lucide.createIcons();
+            window.drawNextNumber();
+            window.appState.autoDrawTimer = setInterval(() => { window.drawNextNumber(); }, intervalSec * 1000);
+        };
+        window.stopAutoDraw = () => {
+            window.appState.isAutoDrawing = false;
+            if (window.appState.autoDrawTimer) { clearInterval(window.appState.autoDrawTimer); window.appState.autoDrawTimer = null; }
+            const btn = document.getElementById('btn-auto-draw');
+            if (btn) {
+                btn.innerHTML = `<i data-lucide="play" class="w-5 h-5"></i> อัตโนมัติ`;
+                btn.className = "bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-2xl font-bold shadow-lg transition-all flex items-center gap-2";
+                lucide.createIcons();
+            }
+        };
+
+        window.openRoundModal = (editId = null) => {
+            const modal = document.getElementById('modal-round');
+            const title = document.getElementById('modal-round-title');
+            const idInput = document.getElementById('round-id-input');
+            const nameInput = document.getElementById('round-name-input');
+            const statusInput = document.getElementById('round-status-input');
+            modal.classList.remove('hidden');
+            if (editId) {
+                const round = window.appState.rounds.find(r => r.id === editId);
+                title.innerText = "แก้ไขรอบกิจกรรม";
+                idInput.value = editId;
+                nameInput.value = round.Bingo_Round || "";
+                statusInput.value = String(round.Bingo_Status);
+            } else { title.innerText = "เพิ่มรอบกิจกรรมใหม่"; idInput.value = ""; nameInput.value = ""; statusInput.value = "false"; }
+        };
+        window.closeRoundModal = () => { document.getElementById('modal-round').classList.add('hidden'); };
+        window.saveRound = async () => {
+            const id = document.getElementById('round-id-input').value;
+            const name = document.getElementById('round-name-input').value.trim();
+            const status = document.getElementById('round-status-input').value === 'true';
+            if (!name) return alert("กรุณากรอกชื่อรอบ");
+            const btn = document.getElementById('btn-save-round');
+            btn.disabled = true;
+            btn.innerText = "กำลังบันทึก...";
+            try {
+                const batch = writeBatch(db);
+                if (status) {
+                    window.appState.rounds.forEach(r => { if (r.id !== id && r.Bingo_Status === true) batch.update(doc(db, getPath('Bingo_Round'), r.id), { Bingo_Status: false }); });
+                }
+                const data = { Bingo_Round: name, Bingo_Status: status, updatedAt: serverTimestamp() };
+                if (id) batch.update(doc(db, getPath('Bingo_Round'), id), data);
+                else batch.set(doc(collection(db, getPath('Bingo_Round'))), { ...data, Bingo_join: 0, Bingo_Start: false, createdAt: serverTimestamp() });
+                await batch.commit();
+                window.closeRoundModal();
+            } catch (e) { console.error(e); } finally { btn.disabled = false; btn.innerText = "บันทึกข้อมูล"; }
+        };
+        window.deleteRound = async (id) => { if (!confirm("ลบรอบกิจกรรมนี้?")) return; try { await deleteDoc(doc(db, getPath('Bingo_Round'), id)); } catch (e) { console.error(e); } };
+        window.updateRoundsUI = () => {
+            const tbody = document.getElementById('table-rounds-body');
+            if (!tbody) return;
+            const sorted = [...window.appState.rounds].sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+            const total = sorted.length;
+            const pages = Math.ceil(total / window.appState.roundsPerPage);
+            if (window.appState.roundsCurrentPage > pages && pages > 0) window.appState.roundsCurrentPage = pages;
+            const start = (window.appState.roundsCurrentPage - 1) * window.appState.roundsPerPage;
+            const paged = sorted.slice(start, start + window.appState.roundsPerPage);
+            tbody.innerHTML = paged.map(r => `<tr class="hover:bg-stone-50 transition-colors"><td class="px-4 font-bold text-stone-700">${r.Bingo_Round || '-'}</td><td class="px-4 text-center"><span class="px-3 py-1 rounded-full text-[10px] font-bold ${r.Bingo_Status ? 'bg-emerald-100 text-emerald-700' : 'bg-stone-100 text-stone-400'}">${r.Bingo_Status ? 'Active' : 'Inactive'}</span></td><td class="px-4 text-center font-bold text-blue-600">${r.Bingo_join || 0} คน</td><td class="px-4 text-center font-medium text-stone-500 truncate max-w-[150px]">${r.Bingo_Random && typeof r.Bingo_Random === 'object' ? Object.keys(r.Bingo_Random).length + ' ตัวเลข' : (r.Bingo_Random || '-')}</td><td class="px-4 text-center"><div class="flex justify-center gap-2"><button onclick="window.openRoundModal('${r.id}')" class="p-1.5 text-stone-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"><i data-lucide="edit" class="w-4 h-4"></i></button><button onclick="window.deleteRound('${r.id}')" class="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div></td></tr>`).join('');
+            document.getElementById('rounds-page-info').innerText = `แสดง ${total === 0 ? 0 : start + 1}-${Math.min(start + window.appState.roundsPerPage, total)} จาก ${total}`;
+            let pgHtml = '';
+            for (let i = 1; i <= pages; i++) pgHtml += `<button onclick="window.jumpToRoundsPage(${i})" class="px-3 py-1 text-xs font-bold rounded-lg ${i === window.appState.roundsCurrentPage ? 'bg-[#0056ff] text-white' : 'bg-stone-100'}">${i}</button>`;
+            document.getElementById('rounds-pages-container').innerHTML = pgHtml;
+            document.getElementById('rounds-prev-btn').disabled = window.appState.roundsCurrentPage <= 1;
+            document.getElementById('rounds-next-btn').disabled = window.appState.roundsCurrentPage >= pages;
+            lucide.createIcons();
+        };
+        window.jumpToRoundsPage = (p) => { window.appState.roundsCurrentPage = p; window.updateRoundsUI(); };
+        window.changeRoundsPage = (dir) => { window.appState.roundsCurrentPage += dir; window.updateRoundsUI(); };
+        onAuthStateChanged(auth, (user) => { window.appState.user = user; if (user) { document.getElementById('connection-status').innerText = "LIVE: CLOUD SYNCING"; document.getElementById('connection-status').className = "text-[12px] text-emerald-500 uppercase font-bold"; startSync(); } });
+        const initAuth = async () => { if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) await signInWithCustomToken(auth, __initial_auth_token); else await signInAnonymously(auth); };
+        initAuth();
+        window.onload = () => { navigate('qrcode'); lucide.createIcons(); };
+    </script>
+</body>
+</html>
