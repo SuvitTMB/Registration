@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ttb AI Virtual Branch - Executive Experience</title>
+    <!-- นำเข้าฟอนต์ Kanit -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ttb-blue: #0056FF;
+            --ttb-orange: #FF6A00;
+            --ttb-navy: #002D63;
+            --ttb-white: #FFFFFF;
+            --ttb-glass-dark: rgba(0, 26, 61, 0.85);
+            --ttb-border: rgba(255, 255, 255, 0.2);
+            --status-green: #10B981;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Kanit', sans-serif;
+            margin: 0; padding: 0;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 45, 99, 0.4), rgba(0, 45, 99, 0.4)), 
+                        url('https://www.silomcomplex.co.th/stocks/shopping/c1280x800/mi/70/ovuemi70pgh/C-ttb-Desktop-banner-image-2560X1600.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            height: 100vh;
+            color: var(--ttb-white);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        header {
+            background: rgba(0, 45, 99, 0.9);
+            backdrop-filter: blur(15px);
+            padding: 10px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--ttb-border);
+            z-index: 100;
+        }
+
+        .logo { font-size: 20px; font-weight: 700; color: white; text-decoration: none; }
+        .logo span { color: var(--ttb-orange); }
+
+        .mailbox-container {
+            position: relative;
+            cursor: pointer;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            color: var(--ttb-orange);
+        }
+        .mailbox-container:hover { background: rgba(255,255,255,0.2); transform: scale(1.05); }
+        
+        .mailbox-badge {
+            position: absolute;
+            top: -5px; right: -5px;
+            background: #ef4444;
+            color: white;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 4px;
+            border-radius: 10px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            border: 2px solid #002d63;
+        }
+
+        /* --- Layout Grid --- */
+        .main-view {
+            display: grid;
+            grid-template-columns: 25% 50% 25%;
+            width: 100%;
+            height: calc(100vh - 180px);
+            padding: 15px 2%;
+            align-items: start;
+            flex: 1;
+        }
+
+        .side-column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .panel {
+            background: var(--ttb-glass-dark);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--ttb-border);
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        .panel-header {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ttb-orange);
+            margin-bottom: 8px;
+            border-bottom: 1px solid var(--ttb-border);
+            padding-bottom: 4px;
+            display: flex;
+            align-items: center; gap: 8px;
+        }
+
+        .data-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        .data-table td { padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .val-hl { font-weight: 600; text-align: right; color: var(--status-green); }
+        .val-nm { font-weight: 600; text-align: right; }
+
+        /* Spotlight & Promo Styling */
+        .p-link-btn {
+            display: block; width: 100%; background: var(--ttb-orange); color: white;
+            text-decoration: none; padding: 8px; border-radius: 8px; text-align: center;
+            font-size: 12px; font-weight: 600; margin-top: 8px; transition: 0.2s;
+        }
+        .p-link-btn:hover { background: #E65A00; transform: scale(1.02); }
+        .promo-desc { font-size: 11.5px; line-height: 1.6; color: rgba(255,255,255,0.95); margin-bottom: 10px; min-height: 90px; }
+
+        /* AI Avatar */
+        .ai-center { display: flex; justify-content: center; align-items: flex-end; height: 100%; }
+        .ai-wrapper { width: 100%; max-width: 440px; position: relative; }
+        .ai-staff-svg { width: 100%; filter: drop-shadow(0 10px 40px rgba(0,0,0,0.5)); }
+
+        /* --- Floating Console (Bottom 5%) --- */
+        .console-container {
+            position: fixed;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 1050px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            padding: 12px 20px;
+            display: flex;
+            gap: 15px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+            color: var(--ttb-navy);
+            align-items: center;
+            z-index: 500;
+        }
+
+        .chat-view {
+            flex: 1; height: 130px; 
+            overflow-y: auto; background: #f8fafc;
+            border-radius: 12px; padding: 12px 15px; font-size: 14px; line-height: 1.5; border: 1px solid #e2e8f0;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+
+        /* --- Chat Bubbles Colors --- */
+        .msg-user {
+            align-self: flex-end; background: var(--ttb-blue); color: white;
+            padding: 8px 12px; border-radius: 12px 12px 0 12px; max-width: 80%;
+            font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .msg-ai {
+            align-self: flex-start; background: var(--ttb-orange); color: white;
+            padding: 8px 12px; border-radius: 12px 12px 12px 0; max-width: 80%;
+            font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .controls { display: flex; flex-direction: column; gap: 8px; min-width: 350px; }
+        .input-row { display: flex; gap: 8px; width: 100%; }
+        .input-row input { flex: 1; padding: 10px 15px; border-radius: 10px; border: 1px solid #cbd5e1; outline: none; font-size: 14px; }
+        .btn-act { background: var(--ttb-blue); color: white; border: none; padding: 0 15px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 13px; }
+        
+        .action-links { display: flex; gap: 10px; align-items: center; justify-content: flex-end; }
+        .btn-consult { 
+            background: white; color: var(--ttb-blue); border: 1.5px solid var(--ttb-blue); 
+            padding: 6px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 12px;
+            transition: 0.3s;
+        }
+        .btn-consult:hover { background: var(--ttb-blue); color: white; }
+
+        .btn-mic {
+            width: 48px; height: 48px; background: var(--ttb-orange); border: none; border-radius: 50%;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 15px rgba(255,106,0,0.3); flex-shrink: 0;
+        }
+        .btn-mic.active { background: #ef4444; animation: mic-pulse 1.5s infinite; }
+
+        @keyframes mic-pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        /* Modals */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; z-index: 2000;
+        }
+        .modal-content {
+            background: white; width: 90%; max-width: 450px; border-radius: 20px; padding: 25px;
+            color: var(--ttb-navy); box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .side-panel {
+            position: fixed; top: 0; right: -420px; width: 400px; height: 100vh;
+            background: white; z-index: 1500; box-shadow: -10px 0 40px rgba(0,0,0,0.2);
+            padding: 25px; transition: 0.4s; color: var(--ttb-navy); display: flex; flex-direction: column;
+        }
+        .side-panel.open { right: 0; }
+        .mailbox-item { background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--ttb-orange); }
+
+        #starter {
+            position: fixed; inset: 0; background: var(--ttb-navy); z-index: 3000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="starter">
+        <h1 style="font-size: 36px; margin-bottom: 5px;">ttb <span style="color:var(--ttb-orange)">AI Virtual Branch</span></h1>
+        <p style="opacity: 0.8; font-weight: 300;">ที่ปรึกษาอัจฉริยะที่พร้อมปิดทุกความกังวลใจทางการเงิน</p>
+        <button onclick="initApp()" style="background:var(--ttb-orange); color:white; border:none; padding:15px 45px; border-radius:30px; font-size:18px; font-weight:600; cursor:pointer; margin-top:25px;">เริ่มการสนทนา</button>
+    </div>
+
+    <header>
+        <a href="#" class="logo">ttb <span>Branch</span></a>
+        <div class="header-actions">
+            <div style="font-size: 12px; font-weight: 500;"><span style="color: var(--status-green);">●</span> Advisor Active (Personalized Mode)</div>
+            <div class="mailbox-container" onclick="toggleMailbox()" title="ดูรายการที่บันทึกไว้">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <div class="mailbox-badge" id="leadBadge">0</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-view">
+        <!-- Left: Interest & Spotlight -->
+        <div class="side-column">
+            <div class="panel">
+                <div class="panel-header">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+                    อัตราดอกเบี้ย
+                </div>
+                <table class="data-table">
+                    <tr><td>ttb No Fixed (สูงสุด)</td><td class="val-hl">1.72%</td></tr>
+                    <tr><td>ttb ME Save (สูงสุด)</td><td class="val-hl">2.20%</td></tr>
+                    <tr><td>สินเชื่อบ้าน (MRR)</td><td class="val-nm">7.30%</td></tr>
+                </table>
+            </div>
+
+            <!-- Spotlight: Focus on Insurance & Context -->
+            <div class="panel" id="spotlightPanel" style="display: none; border-color: var(--ttb-orange);">
+                <div class="panel-header" style="color: var(--ttb-orange);">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42l15.12 15.12"/></svg>
+                    Product Spotlight
+                </div>
+                <div id="pContent" style="font-size: 11px; line-height: 1.5; margin-bottom: 10px;"></div>
+                <div id="pLinks"></div>
+            </div>
+        </div>
+
+        <!-- Center: AI Agent -->
+        <div class="ai-center">
+            <div class="ai-wrapper">
+                <svg class="ai-staff-svg" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="skin" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FFDDC1" /><stop offset="100%" style="stop-color:#FFCCAA" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M50 80 Q45 20 100 15 Q155 20 150 80 Q160 140 145 160 Q130 130 120 155 Q100 150 80 155 Q70 130 55 160 Q40 140 50 80" fill="#3A2618" />
+                    <path d="M40 240 Q100 210 160 240 L160 190 Q100 175 40 190 Z" fill="var(--ttb-blue)" />
+                    <path d="M85 190 L115 190 L105 210 L95 210 Z" fill="white" />
+                    <path d="M65 85 Q65 160 100 160 Q135 160 135 85 Q135 40 100 40 Q65 40 65 85" fill="url(#skin)" />
+                    <circle cx="85" cy="95" r="4.2" fill="#222" /><circle cx="115" cy="95" r="4.2" fill="#222" />
+                    <path id="aiMouth" d="M88 128 Q100 138 112 128" stroke="#E57373" stroke-width="2.5" fill="none" stroke-linecap="round" />
+                    <circle cx="130" cy="205" r="4.5" fill="var(--ttb-orange)" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Right: FX & Promotion -->
+        <div class="side-column">
+            <div class="panel">
+                <div class="panel-header">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                    อัตราแลกเปลี่ยน
+                </div>
+                <table class="data-table">
+                    <tr><td>USD (สหรัฐฯ)</td><td class="val-nm">35.32</td><td class="val-nm">35.58</td></tr>
+                    <tr><td>EUR (ยูโร)</td><td class="val-nm">38.05</td><td class="val-nm">38.42</td></tr>
+                    <tr><td>JPY (ญี่ปุ่น 100)</td><td class="val-nm">23.32</td><td class="val-nm">23.65</td></tr>
+                    <tr><td>CNY (จีน)</td><td class="val-nm">4.88</td><td class="val-nm">5.02</td></tr>
+                </table>
+            </div>
+
+            <div class="panel" id="promoPanel">
+                <div class="panel-header">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/></svg>
+                    Promotion
+                </div>
+                <div id="promoContent" style="transition: opacity 0.5s ease;">
+                    <div id="promoName" style="font-weight: 700; font-size: 13px; color: var(--ttb-orange); margin-bottom: 5px;">...</div>
+                    <p id="promoDesc" class="promo-desc">กำลังโหลดโปรโมชั่น...</p>
+                    <a id="promoLink" href="#" target="_blank" class="p-link-btn" style="margin-top: 0;">เปิดดูโปรโมชั่น</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Floating Console -->
+    <div class="console-container">
+        <div class="chat-view" id="chatDisplay">
+            <!-- Messages go here -->
+        </div>
+        <div class="controls">
+            <div class="input-row">
+                <input type="text" id="userInput" placeholder="พิมพ์ชื่อของคุณหรือคุยกับน้ำใจ..." onkeypress="if(event.key==='Enter') processInput()">
+                <button class="btn-act" onclick="processInput()">ส่ง</button>
+            </div>
+            <div class="action-links">
+                <button class="btn-consult" onclick="openConsultModal()">ปรึกษาเจ้าหน้าที่ ttb เพิ่มเติม</button>
+                <button class="btn-mic" id="micBtn" onclick="toggleVoice()">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox Form -->
+    <div class="modal-overlay" id="consultModal">
+        <div class="modal-content">
+            <h2 style="font-size: 18px; color: var(--ttb-blue); margin-bottom: 20px;">แจ้งความประสงค์รับคำปรึกษา</h2>
+            <div style="margin-bottom: 12px;">
+                <label style="display:block; font-size:12px; margin-bottom:5px;">ชื่อของคุณลูกค้า</label>
+                <input type="text" id="leadName" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+            </div>
+            <div style="margin-bottom: 12px;">
+                <label style="display:block; font-size:12px; margin-bottom:5px;">เบอร์โทรศัพท์ติดต่อ</label>
+                <input type="text" id="leadPhone" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 25px;">
+                <button onclick="closeConsultModal()" style="flex:1; padding:10px; border-radius:8px; border:1px solid #ddd; background:white; cursor:pointer;">ยกเลิก</button>
+                <button onclick="submitLead()" style="background:var(--ttb-orange); color:white; border:none; padding:10px; border-radius:10px; flex:2; font-weight:600; cursor:pointer;">บันทึกรายการ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mailbox Sidebar -->
+    <div class="side-panel" id="mailboxPanel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h3 style="color:var(--ttb-navy)">Mailbox: ข้อมูลที่บันทึก</h3>
+            <button onclick="toggleMailbox()" style="border:none; background:none; font-size:24px; cursor:pointer; color: #999;">&times;</button>
+        </div>
+        <div id="mailboxContent" style="flex:1; overflow-y:auto;"></div>
+    </div>
+
+    <script>
+        const apiKey = "AIzaSyAB3QF29aRLQQpeaUeYlDFSIWu2Q7icrYE"; 
+        const chatDisplay = document.getElementById('chatDisplay');
+        const micBtn = document.getElementById('micBtn');
+        const mouth = document.getElementById('aiMouth');
+        const userInput = document.getElementById('userInput');
+        const spotlightPanel = document.getElementById('spotlightPanel');
+        const pLinks = document.getElementById('pLinks');
+        const pContent = document.getElementById('pContent');
+        const leadBadge = document.getElementById('leadBadge');
+
+        let userName = ""; 
+        let isListening = false;
+        let isSpeaking = false;
+        let audioQueue = [];
+        let leads = [];
+
+        // รายการโปรโมชั่นที่ยังไม่หมดอายุ
+        const promotions = [
+            { name: "ttb All Free", desc: "เปิดบัญชีวันนี้ ฟรีประกันอุบัติเหตุ และกดโอนจ่ายฟรีทั่วโลก\nลดภาระค่าธรรมเนียมซ้ำซ้อน\nคุ้มครองอุบัติเหตุ 20 เท่าของเงินฝาก\nไม่จำกัดขั้นต่ำ\nสมัครผ่าน ttb touch ได้ทันที", url: "https://www.ttbbank.com/th/personal/deposits/savings-account/ttb-all-free", expiry: "2026-12-31" },
+            { name: "ttb Smart Port", desc: "ลงทุนง่ายๆ ผ่านพอร์ตอัจฉริยะที่ดูแลโดยมืออาชีพ\nปรับสัดส่วนให้อัตโนมัติในทุกสภาวะตลาด\nมีให้เลือก 5 รูปแบบตามความเสี่ยง\nเริ่มต้นเพียง 1 บาทผ่านแอป ttb touch", url: "https://www.ttbbank.com/th/personal/investments/ttb-smart-port", expiry: "2027-01-01" }
+        ].filter(p => new Date(p.expiry) >= new Date());
+        let promoIdx = 0;
+
+        const productDirectory = [
+            { 
+                keywords: ["ประกัน", "ชีวิต", "สุขภาพ", "อุบัติเหตุ", "pa", "มรดก", "ออมทรัพย์"], 
+                name: "ttb Insurance Solutions", 
+                desc: "ttb พร้อมดูแลคุณด้วยแผนประกันที่ครอบคลุมทุกด้าน ทั้งประกันชีวิตเพื่อความมั่นคง ประกันสุขภาพชั้นนำ ประกันอุบัติเหตุที่คุ้มครองทันที และประกันสะสมทรัพย์ที่ให้ผลตอบแทนคุ้มค่า เรามุ่งมั่นสร้าง Well-being ทางการเงินและการป้องกันความเสี่ยงที่เหมาะสมกับคุณ", 
+                url: "https://www.ttbbank.com/th/personal/insurance" 
+            },
+            { 
+                keywords: ["all free", "ออลฟรี", "บัญชี"], 
+                name: "ttb All Free", 
+                desc: "บัญชีที่ให้คุณใช้ชีวิตฟรีรอบตัว ไม่ต้องเสียค่าธรรมเนียม กด โอน จ่าย ได้ทั่วโลก พร้อมรับประกันอุบัติเหตุฟรี 20 เท่าของเงินฝาก สูงสุด 3 ล้านบาท สมัครง่ายผ่านแอป ttb touch",
+                url: "https://www.ttbbank.com/th/personal/deposits/savings-account/ttb-all-free" 
+            },
+            { 
+                keywords: ["no fixed", "โนฟิกซ์", "ออมเงิน"], 
+                name: "ttb No Fixed", 
+                desc: "บัญชีฝากไม่ประจำที่ให้ดอกเบี้ยสูงถึง 1.72% ต่อปี ตั้งแต่บาทแรก ถอนเมื่อไหร่ก็ได้ ไม่จำกัดจำนวนครั้ง เหมาะสำหรับพักเงินเพื่อรอกระจายการลงทุนหรือเป็นเงินสำรองฉุกเฉิน",
+                url: "https://www.ttbbank.com/th/personal/deposits/savings-account/ttb-no-fixed" 
+            },
+            { 
+                keywords: ["บ้าน", "กู้บ้าน", "รีไฟแนนซ์"], 
+                name: "สินเชื่อบ้าน ttb", 
+                desc: "สานฝันเรื่องบ้านให้เป็นจริงด้วยดอกเบี้ยต่ำ ผ่อนนานสูงสุด 35 ปี อนุมัติไวใน 3 วันทำการหลังเอกสารครบ พร้อมรับสิทธิพิเศษฟรีค่าประเมินราคาและฟรีเบี้ยประกันอัคคีภัย",
+                url: "https://www.ttbbank.com/th/personal/loans/home-loan/home-loan" 
+            },
+            { 
+                keywords: ["บัตร", "เครดิต"], 
+                name: "บัตรเครดิต ttb", 
+                desc: "เลือกบัตรที่ตอบโจทย์ไลฟ์สไตล์คุณ ไม่ว่าจะเป็น So Smart (เงินคืน 1%) หรือ So Fast (สะสมแต้มไว) และบริการแบ่งจ่าย 0% 3 เดือนได้ทุกรายการ ทราบผลใน 30 นาที",
+                url: "https://www.ttbbank.com/th/personal/cards/credit-cards" 
+            }
+        ];
+
+        function initApp() { 
+            document.getElementById('starter').style.display = 'none'; 
+            initVoice(); 
+            startCycle(); 
+            addLog("พนักงาน: สวัสดีค่ะ ยินดีต้อนรับสู่ ttb ค่ะ ดิฉันชื่อ 'น้ำใจ' ค่ะ ขอทราบชื่อเล่นของคุณลูกค้าหน่อยได้ไหมคะ?", "ai");
+            speakTurbo("สวัสดีค่ะ ยินดีต้อนรับสู่ ทีทีบี ค่ะ ดิฉันชื่อน้ำใจค่ะ ขอทราบชื่อเล่นของคุณลูกค้าหน่อยได้ไหมคะ?"); 
+        }
+
+        function startCycle() {
+            const update = () => {
+                const el = document.getElementById('promoContent'); el.style.opacity = "0";
+                setTimeout(() => {
+                    const p = promotions[promoIdx];
+                    document.getElementById('promoName').innerText = p.name;
+                    document.getElementById('promoDesc').innerText = p.desc;
+                    document.getElementById('promoLink').href = p.url;
+                    el.style.opacity = "1";
+                    promoIdx = (promoIdx + 1) % promotions.length;
+                }, 500);
+            };
+            update(); setInterval(update, 20000);
+        }
+
+        async function fetchWithRetry(url, payload, retries = 5) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (res.ok) return await res.json();
+                } catch (e) {}
+                await new Promise(r => setTimeout(r, Math.pow(2, i) * 600));
+            }
+            return null;
+        }
+
+        function initVoice() {
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (SR) {
+                recognition = new SR(); recognition.lang = 'th-TH';
+                recognition.onstart = () => { isListening = true; micBtn.classList.add('active'); };
+                recognition.onresult = (e) => { userInput.value = e.results[0][0].transcript; processInput(); };
+                recognition.onend = () => { isListening = false; micBtn.classList.remove('active'); };
+            }
+        }
+
+        function toggleVoice() { if (!recognition) return; if (isListening) recognition.stop(); else recognition.start(); }
+
+        async function processInput() {
+            const val = userInput.value.trim(); if (!val) return;
+            addLog("คุณ: " + val, "user"); userInput.value = "";
+
+            if (!userName) {
+                userName = val.replace(/ชื่อ|ผม|ดิฉัน|คือ|ครับ|ค่ะ|เรียก/g, "").trim();
+                const reply = `ยินดีที่ได้รู้จักค่ะคุณ ${userName} วันนี้มีธุรกรรมด้านใดให้ช่วยดูแลดีคะ? เช่น อยากปรึกษาเรื่องประกัน สินเชื่อบ้าน หรือเปิดบัญชีดีคะ?`;
+                addLog("พนักงาน: " + reply, "ai"); speakTurbo(reply); return;
+            }
+
+            const sys = `คุณคือ 'คุณน้ำใจ' ที่ปรึกษา ttb ตอบสั้นกระชับ เป็นกันเองกับคุณ ${userName} 
+            - สีกล่องข้อความ AI ส้ม ลูกค้า น้ำเงิน
+            - ห้ามใช้เครื่องหมายดอกจัน (*)
+            - หากคุยเรื่อง "ประกัน" (ชีวิต/สุขภาพ/อุบัติเหตุ) ให้เน้นนำเสนอประกันทุกประเภทของ ttb และอธิบายความคุ้มครองเบื้องต้น
+            - เน้นการปิดการขาย: สอบถามข้อกังวลและพาไปหน้าสมัครบริการทันที
+            - หากถามนอกเรื่อง ttb: บอกว่าข้อมูลไม่อยู่ในขอบข่ายและแนะนำปรึกษาเจ้าหน้าที่`;
+            
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const data = await fetchWithRetry(url, { contents: [{ parts: [{ text: val }] }], systemInstruction: { parts: [{ text: sys }] } });
+            
+            if (data?.candidates?.[0]?.content) {
+                let reply = data.candidates[0].content.parts[0].text.replace(/\*/g, '');
+                addLog("พนักงาน: " + reply, "ai"); updateSpotlight(val + " " + reply); speakTurbo(reply);
+            }
+        }
+
+        function updateSpotlight(text) {
+            const lowText = text.toLowerCase();
+            let matched = null;
+            
+            // Prioritize Insurance if keyword found
+            if (lowText.includes("ประกัน") || lowText.includes("ชีวิต") || lowText.includes("สุขภาพ")) {
+                matched = productDirectory.find(p => p.name.includes("Insurance"));
+            } else {
+                productDirectory.forEach(p => { if (p.keywords.some(k => lowText.includes(k))) matched = p; });
+            }
+
+            if (matched) {
+                pContent.innerText = matched.desc;
+                pLinks.innerHTML = `<a href="${matched.url}" target="_blank" class="p-link-btn">สมัคร/รายละเอียด ${matched.name}</a>`;
+                spotlightPanel.style.display = "block";
+            } else if (!lowText.includes("ดอกเบี้ย") && !lowText.includes("เงิน")) {
+                spotlightPanel.style.display = "none";
+            }
+        }
+
+        function addLog(m, type) { 
+            const div = document.createElement('div'); 
+            div.className = type === "ai" ? "msg-ai" : "msg-user";
+            div.innerText = m; 
+            chatDisplay.appendChild(div); 
+            chatDisplay.scrollTop = chatDisplay.scrollHeight; 
+        }
+
+        async function speakTurbo(text) {
+            audioQueue = []; const cleanText = text.replace(/\*/g, '');
+            const chunks = cleanText.split(/[,।\n]|\s{2,}/).filter(c => c.trim().length > 0);
+            for (const chunk of chunks) await fetchTTS(chunk);
+        }
+
+        async function fetchTTS(txt) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+            try {
+                const data = await fetchWithRetry(url, { contents: [{ parts: [{ text: "Say politely: " + txt }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Kore" } } } } });
+                if (data?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data) {
+                    audioQueue.push(data.candidates[0].content.parts[0].inlineData.data);
+                    if (!isSpeaking) playQueue();
+                }
+            } catch (e) {}
+        }
+
+        function playQueue() {
+            if (audioQueue.length === 0) { isSpeaking = false; return; }
+            isSpeaking = true; const b64 = audioQueue.shift(); 
+            const audio = new Audio("data:audio/wav;base64," + pcmToWav(b64));
+            audio.onplay = () => animateMouth(true); audio.onended = () => { animateMouth(false); playQueue(); };
+            audio.play().catch(() => playQueue());
+        }
+
+        function pcmToWav(b64) {
+            const bin = atob(b64); const pcm = new Int16Array(bin.length / 2);
+            for(let i=0; i<bin.length; i+=2) pcm[i/2] = (bin.charCodeAt(i+1)<<8) | bin.charCodeAt(i);
+            const sr = 24000; const buf = new ArrayBuffer(44 + pcm.length * 2); const view = new DataView(buf);
+            const wStr = (v, o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+            wStr(view, 0, 'RIFF'); view.setUint32(4, 32 + pcm.length * 2, true); wStr(view, 8, 'WAVE');
+            wStr(view, 12, 'fmt '); view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
+            view.setUint32(24, sr, true); view.setUint32(28, sr * 2, true); view.setUint16(32, 2, true); view.setUint16(34, 16, true);
+            wStr(view, 36, 'data'); view.setUint32(40, pcm.length * 2, true);
+            for (let i = 0; i < pcm.length; i++) view.setInt16(44 + i * 2, pcm[i], true);
+            let bStr = ''; const bytes = new Uint8Array(buf);
+            for (let i = 0; i < bytes.length; i++) bStr += String.fromCharCode(bytes[i]);
+            return btoa(bStr);
+        }
+
+        let mInt;
+        function animateMouth(s) {
+            if (s) mInt = setInterval(() => mouth.setAttribute('d', `M88 128 Q100 ${128+Math.random()*12} 112 128`), 100);
+            else { clearInterval(mInt); mouth.setAttribute('d', 'M88 128 Q100 138 112 128'); }
+        }
+
+        function openConsultModal() { document.getElementById('consultModal').style.display = 'flex'; if(userName) document.getElementById('leadName').value = userName; }
+        function closeConsultModal() { document.getElementById('consultModal').style.display = 'none'; }
+        function toggleMailbox() { document.getElementById('mailboxPanel').classList.toggle('open'); }
+        
+        function submitLead() {
+            const n = document.getElementById('leadName').value; const p = document.getElementById('leadPhone').value;
+            if(!n || !p) return alert("กรุณาระบุข้อมูลให้ครบถ้วน");
+            leads.unshift({ n, p, time: new Date().toLocaleString('th-TH') });
+            document.getElementById('leadBadge').innerText = leads.length;
+            document.getElementById('mailboxContent').innerHTML = leads.map(l => `<div class="mailbox-item"><h4>คุณ ${l.n}</h4><p>โทร: ${l.p}</p><p style="font-size:10px; opacity:0.6;">บันทึก: ${l.time}</p></div>`).join('');
+            closeConsultModal(); alert("บันทึกสำเร็จ");
+        }
+    </script>
+</body>
+</html>
